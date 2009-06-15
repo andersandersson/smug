@@ -8,6 +8,7 @@
 *.so.dbg
 *.bin
 *.gz
+*.bz2
 
 # Top level files
 #

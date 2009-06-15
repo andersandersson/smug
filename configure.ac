@@ -40,11 +40,11 @@ AC_ARG_WITH([glfw],
 		[with_glfw=no])
 
 # Provide --enable-win32 to set win32 specific libraries
-AC_ARG_ENABLE([win32], 
-		[AS_HELP_STRING([--enable-win32], 
-				[enable if you are building on windows])], 
+AC_ARG_WITH([win32], 
+		[AS_HELP_STRING([--with-win32], 
+				[use this if you are building on windows])], 
 		[], 
-		[enable_win32=no])
+		[with_win32=no])
 
 
 ###
@@ -60,7 +60,7 @@ AC_STRIP_SLASHES([with_glfw])
 # 	for shared libraries at runtime
 #
 AS_IF([test "x$with_glfw" != xno],
-	    [AS_IF([test "x$enable_win32" != xyes],
+	    [AS_IF([test "x$with_win32" == xno],
 		[AC_SUBST([LIBGLFWLDFLAGS],[-L$with_glfw/lib/x11\ -Xlinker\ -rpath\ $with_glfw/lib/x11])],
 		[AC_SUBST([LIBGLFWLDFLAGS],[-L$with_glfw/lib/win32\ -Xlinker\ -rpath\ $with_glfw/lib/win32])])]
 	    [AC_SUBST([LIBGLFWCFLAGS],[-I$with_glfw/include])])
@@ -69,7 +69,7 @@ AS_IF([test "x$with_glfw" != xno],
 # Set different libraries depending on if we are in 
 # windows or *nix
 
-AS_IF([test "x$enable_win32" != xyes],
+AS_IF([test "x$with_win32" == xno],
 	    # Posix libs
 	    [AC_SUBST([LIBGLFW], [-lglfw])]
 	    [AC_SUBST([LIBGL], [-lGL])]
