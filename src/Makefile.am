@@ -8,10 +8,12 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+AM_LDFLAGS = $(LIBGLFWLDFLAGS) $(LIBGLFW)
+
 SUBDIRS = graphics physics
 
 bin_PROGRAMS = smug
 
 smug_SOURCES = main.c
-smug_LDADD  = graphics/libgraphics.a
+smug_LDADD = graphics/libgraphics.a
 smug_LDADD += physics/libphysics.a

@@ -8,6 +8,8 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+AM_CFLAGS = $(LIBGLFWCFLAGS)
+
 noinst_LIBRARIES = libgraphics.a
 
 libgraphics_a_SOURCES = graphics.c graphics.h
