@@ -19,6 +19,7 @@ README
 aclocal.m4
 autom4te.cache
 compile
+config.h
 config.guess
 config.h.in
 config.log
