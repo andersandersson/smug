@@ -25,6 +25,8 @@ AC_CONFIG_FILES([
    doc/Makefile
    m4/Makefile
    src/Makefile
+   src/graphics/Makefile
+   src/physics/Makefile
 ])
 
 AC_OUTPUT

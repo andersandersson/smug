@@ -8,10 +8,6 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = graphics physics
+noinst_LIBRARIES = libgraphics.a
 
-bin_PROGRAMS = smug
-
-smug_SOURCES = main.c
-smug_LDADD  = graphics/libgraphics.a
-smug_LDADD += physics/libphysics.a
+libgraphics_a_SOURCES = graphics.c graphics.h
