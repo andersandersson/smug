@@ -3,11 +3,12 @@ smug -- History of visible changes.
 Copyright (C) 2009, Anders Andersson <finrist@gmail.com>
 See the end for copying conditions.
 
-Please send smug bug reports to finrist@gmail.com.
+Visit our website for documentation, bug reporting and more:
+http://compjotr.se/smug/
 
-Version 0.1
-
-* List your features here
+Version 0.0.0, Initial commit
+ * New repository to rewrite much of the code in. Also
+   we are now using GNU Autotools to do the build.
 
 -------------------------------------------------------
 Copying information:
