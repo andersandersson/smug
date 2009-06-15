@@ -1,0 +1,40 @@
+# Normal file endings
+#
+.*
+*.o
+*.o.*
+*.a
+*.so
+*.so.dbg
+*.bin
+*.gz
+
+# Top level files
+#
+README
+!.gitignore
+
+# Build generated files
+#
+aclocal.m4
+autom4te.cache
+compile
+config.guess
+config.h.in
+config.log
+config.status
+config.sub
+configure
+depcomp
+libtool
+install-sh
+ltmain.sh
+missing
+stamp-h1
+ 
+Makefile.in
+Makefile
+
+# Editor backups
+#
+*~
