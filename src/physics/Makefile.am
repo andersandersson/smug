@@ -10,4 +10,4 @@
 
 noinst_LIBRARIES = libphysics.a
 
-libphysics_a_SOURCES = physics.c physics.h
+libphysics_a_SOURCES = physics.c physics.h Vector.c Vector.h
