@@ -14,6 +14,19 @@
 # or, if the path is empty, set it to '.'
 #
 
+
+# Special init commands for Linux
+#
+AC_DEFUN([AC_INIT_LINUX],
+	 [echo "Setting LINUX"])
+
+# Special init commands for Windows
+#
+# E.g. LIBS=-lsystem32
+#
+AC_DEFUN([AC_INIT_WIN32],
+	 [echo "Setting WIN32"])
+
 # Default init parameters
 AC_INIT([smug],
         [0.0.1],
@@ -21,10 +34,11 @@ AC_INIT([smug],
         [smug])
 
 AC_CONFIG_AUX_DIR(config)
-
 AM_CONFIG_HEADER(config.h)
-
 AM_INIT_AUTOMAKE([dist-bzip2])
+
+# Guess the hos system (win32, etc)
+AC_CANONICAL_BUILD
 
 # Check for C compiler
 AC_PROG_CC
@@ -42,6 +56,12 @@ AC_GLFW_DEVEL([2.6.0])
 LIBS="$LIBS $GLFW_LIBS $PYTHON_EXTRA_LIBS"
 CFLAGS="$CFLAGS $GLFW_CFLAGS $PYTHON_CPPFLAGS"
 LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $PYTHON_LDFLAGS $PYTHON_EXTRA_LDFLAGS"
+
+# Check the OS and run corresponding init script
+case $build_os in
+     linux*) AC_INIT_LINUX() ;;
+     *) AC_INIT_WIN32() ;;
+esac
 
 # Specifu output files
 AC_CONFIG_FILES([
