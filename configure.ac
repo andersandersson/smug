@@ -13,12 +13,6 @@
 # This macro will strip any trailing slashes from a path
 # or, if the path is empty, set it to '.'
 #
-AC_DEFUN([AC_STRIP_SLASHES], 
-[case ":[$]$1:" in 
-      ::) 	   $1='.' ;;
-      :*[[\\/]]:)  $1=`echo "[$]$1" | sed 's,[[\\/]]*[$],,'` ;;
-      :*:) ;;
-esac])
 
 # Default init parameters
 AC_INIT([smug],
@@ -42,7 +36,7 @@ AC_PROG_RANLIB
 AC_PYTHON_DEVEL([>= 2.5])
 
 # Check for GLFW
-AC_GLFW_DEVEL([>= 1.2])
+AC_GLFW_DEVEL([2.6.0])
 
 # Append Python and GLFW flags to default flags
 LIBS="$LIBS $GLFW_LIBS $PYTHON_EXTRA_LIBS"
