@@ -47,7 +47,7 @@ AC_PROG_CC
 AC_PROG_RANLIB
 
 # Check for Python
-# AC_PYTHON_DEVEL([>= 2.5])
+AC_PYTHON_DEVEL([>= 2.5])
 
 # Check for GLFW
 AC_GLFW_DEVEL([2.6.0])
