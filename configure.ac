@@ -66,7 +66,6 @@ esac
 # Specifu output files
 AC_CONFIG_FILES([
    Makefile
-   README
    doc/Makefile
    m4/Makefile
    src/Makefile
