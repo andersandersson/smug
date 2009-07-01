@@ -14,10 +14,11 @@ AC_DEFUN([AC_GLFW_DEVEL],[
 	
 	# Check the OS used and set Libs corresponding to this
 	case $build_os in
-	     *-cygwin) glfw_os=win32 ;;
-	     *-uwin) glfw_os=win32 ;;
-	     *) glfw_os=x11 
-     		GLFW_LIBS=[-lglfw\ -lX11\ -lpthread\ -lm\ -lGL\ -lXrandr]
+	     *cygwin*) glfw_os=win32
+	               GLFW_LIBS=[-lglfw\ -lopengl32]
+	        ;;	        
+	     *linux*)  glfw_os=x11 
+     		       GLFW_LIBS=[-lglfw\ -lX11\ -lpthread\ -lm\ -lGL\ -lXrandr]
 	     	;;
 	esac
 
