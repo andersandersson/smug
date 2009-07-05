@@ -38,7 +38,7 @@ AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE([dist-bzip2])
 
 # Guess the hos system (win32, etc)
-AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
 
 # Check for C compiler
 AC_PROG_CC
@@ -58,7 +58,7 @@ CFLAGS="$CFLAGS $GLFW_CFLAGS $PYTHON_CPPFLAGS"
 LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $PYTHON_LDFLAGS $PYTHON_EXTRA_LDFLAGS"
 
 # Check the OS and run corresponding init script
-case $build_os in
+case $host_os in
      linux*) AC_INIT_LINUX() ;;
      *) AC_INIT_WIN32() ;;
 esac
