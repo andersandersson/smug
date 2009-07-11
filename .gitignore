@@ -12,7 +12,6 @@
 
 # Top level files
 #
-README
 !.gitignore
 
 # Build generated files

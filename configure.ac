@@ -13,12 +13,19 @@
 # This macro will strip any trailing slashes from a path
 # or, if the path is empty, set it to '.'
 #
-AC_DEFUN([AC_STRIP_SLASHES], 
-[case ":[$]$1:" in 
-      ::) 	   $1='.' ;;
-      :*[[\\/]]:)  $1=`echo "[$]$1" | sed 's,[[\\/]]*[$],,'` ;;
-      :*:) ;;
-esac])
+
+
+# Special init commands for Linux
+#
+AC_DEFUN([AC_INIT_LINUX],
+	 [echo "Setting LINUX"])
+
+# Special init commands for Windows
+#
+# E.g. LIBS=-lsystem32
+#
+AC_DEFUN([AC_INIT_WIN32],
+	 [echo "Setting WIN32"])
 
 # Default init parameters
 AC_INIT([smug],
@@ -27,10 +34,11 @@ AC_INIT([smug],
         [smug])
 
 AC_CONFIG_AUX_DIR(config)
-
 AM_CONFIG_HEADER(config.h)
-
 AM_INIT_AUTOMAKE([dist-bzip2])
+
+# Guess the hos system (win32, etc)
+AC_CANONICAL_BUILD
 
 # Check for C compiler
 AC_PROG_CC
@@ -42,17 +50,22 @@ AC_PROG_RANLIB
 AC_PYTHON_DEVEL([>= 2.5])
 
 # Check for GLFW
-AC_GLFW_DEVEL([>= 1.2])
+AC_GLFW_DEVEL([2.6.0])
 
 # Append Python and GLFW flags to default flags
 LIBS="$LIBS $GLFW_LIBS $PYTHON_EXTRA_LIBS"
 CFLAGS="$CFLAGS $GLFW_CFLAGS $PYTHON_CPPFLAGS"
 LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $PYTHON_LDFLAGS $PYTHON_EXTRA_LDFLAGS"
 
-# Specifu output files
+# Check the OS and run corresponding init script
+case $build_os in
+     linux*) AC_INIT_LINUX() ;;
+     *) AC_INIT_WIN32() ;;
+esac
+
+# Specify output files
 AC_CONFIG_FILES([
    Makefile
-   README
    doc/Makefile
    m4/Makefile
    src/Makefile
