@@ -8,21 +8,13 @@
 typedef unsigned char BOOL;
 #define TRUE  1
 #define FALSE 0
-#define NULL  0
 
 #ifndef DISABLE_ASSERTS
-    void smug_assert(BOOL result, int line)
-    {
-        if(TRUE != result)
-        {
-            //fprintf(stderr, "Assert: Failed at line %d", line);
-			printf("Assert: Failed at line %d", line);
-        }
-    }
-
+    void smug_assert(BOOL result, int line);
     #define assert(x) smug_assert(x, __LINE)
 #else
     #define assert(x)
 #endif
 
-#endif // COMMON_h
+#endif // COMMON_H
+
