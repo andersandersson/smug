@@ -26,7 +26,7 @@ AC_DEFUN([AC_INIT_LINUX],
 #
 AC_DEFUN([AC_INIT_WIN32],
 	 [echo "Setting WIN32"])
-
+	
 # Default init parameters
 AC_INIT([smug],
         [0.0.1],
@@ -38,7 +38,7 @@ AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE([dist-bzip2])
 
 # Guess the hos system (win32, etc)
-AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
 
 # Check for C compiler
 AC_PROG_CC
@@ -58,10 +58,21 @@ CFLAGS="$CFLAGS $GLFW_CFLAGS $PYTHON_CPPFLAGS"
 LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $PYTHON_LDFLAGS $PYTHON_EXTRA_LDFLAGS"
 
 # Check the OS and run corresponding init script
-case $build_os in
+case $host_os in
      linux*) AC_INIT_LINUX() ;;
      *) AC_INIT_WIN32() ;;
 esac
+
+# Allow the user to disable use of asserts
+AC_ARG_ENABLE([asserts], 
+			  [AS_HELP_STRING([--disable-asserts], 
+		          [Disable the use of asserts])],
+			  [],
+			  [enable_asserts=yes])
+
+if test "x$enable_asserts" != "xyes"; then
+	AC_DEFINE([DISABLE_ASSERTS], [1], [Disable use of asserts])
+fi
 
 # Specify output files
 AC_CONFIG_FILES([

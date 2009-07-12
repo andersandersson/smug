@@ -9,6 +9,7 @@
 *.bin
 *.gz
 *.bz2
+*.exe
 
 # Top level files
 #

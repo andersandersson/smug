@@ -9,5 +9,4 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 noinst_LIBRARIES = libphysics.a
-
-libphysics_a_SOURCES = physics.c physics.h Vector.c Vector.h
+libphysics_a_SOURCES = physics.c physics.h Vector.c Vector.h utils.h
