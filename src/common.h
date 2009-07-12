@@ -1,3 +1,6 @@
+#ifndef COMMON_H
+#define COMMON_H
+
 #ifdef HAS_CONFIG_H
     #include "config.h"
 #endif
@@ -20,3 +23,5 @@ typedef unsigned char BOOL;
 #else
     #define assert(x)
 #endif
+
+#endif // COMMON_h

@@ -1,24 +1,26 @@
+/* -*- tab-width: 4 -*- */ 
+
 #include "GL/glfw.h"
 #include "graphics/graphics.h"
 #include "physics/physics.h"
+#include "signal.h"
 
 int main(char argc, char* argv[])
 {
-  char running = 0;
-
-  glfwInit();
-
-  Physics_Init();
-  Graphics_Init(640, 480, 0);
-
-  do
-    {
+   glfwInit();
+   Graphics_Init(640, 480, 0);
+   
+   
+   while( TRUE != Signal_Check(SIG_EXIT) )
+   {
       glfwSwapBuffers();      
-
-      running = !glfwGetKey( GLFW_KEY_ESC ) &&
-	glfwGetWindowParam( GLFW_OPENED );
-    }
-  while( running );
-  
-  return 0;
+      
+      if(glfwGetKey( GLFW_KEY_ESC ) || !glfwGetWindowParam( GLFW_OPENED ))
+         {
+            Signal_Send(SIG_EXIT);
+         }
+   }
+   
+   glfwTerminate();
+   return 0;
 }

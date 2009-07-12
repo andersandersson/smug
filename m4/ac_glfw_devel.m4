@@ -10,10 +10,10 @@
 
 AC_DEFUN([AC_GLFW_DEVEL],[
 	# Required to check which OS we are running
-	AC_REQUIRE([AC_CANONICAL_BUILD])
+	AC_REQUIRE([AC_CANONICAL_HOST])
 	
 	# Check the OS used and set Libs corresponding to this
-	case $build_os in
+	case $host_os in
 	     *cygwin*) glfw_os=win32
 	               GLFW_LIBS=[-lglfw\ -lopengl32]
 	        ;;	        
