@@ -82,7 +82,6 @@ AC_CONFIG_FILES([
    src/Makefile
    src/graphics/Makefile
    src/physics/Makefile
-   src/platform/Makefile
 ])
 
 AC_OUTPUT

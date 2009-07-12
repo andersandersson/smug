@@ -8,11 +8,10 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = platform graphics physics
+SUBDIRS = graphics physics
 
 bin_PROGRAMS = smug
 
 smug_SOURCES = main.c signal.c signal.h common.h
 smug_LDADD = graphics/libgraphics.a
 smug_LDADD += physics/libphysics.a
-smug_LDADD += platform/libplatform.a
