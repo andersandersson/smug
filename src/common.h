@@ -11,11 +11,12 @@ typedef unsigned char BOOL;
 #define NULL  0
 
 #ifndef DISABLE_ASSERTS
-    void smug_assert(BOOL result, line)
+    void smug_assert(BOOL result, int line)
     {
         if(TRUE != result)
         {
-            fprintf(stderr, "Assert: Failed at line %d", line);
+            //fprintf(stderr, "Assert: Failed at line %d", line);
+			printf("Assert: Failed at line %d", line);
         }
     }
 
