@@ -12,6 +12,10 @@ SUBDIRS = graphics physics
 
 bin_PROGRAMS = smug
 
-smug_SOURCES = main.c signal.c signal.h common.c common.h
+smug_SOURCES = main.c \
+signal.c signal.h \
+common.c common.h \
+console.c console.h
+
 smug_LDADD = graphics/libgraphics.a
 smug_LDADD += physics/libphysics.a

@@ -4,6 +4,7 @@
 #include "graphics/graphics.h"
 #include "physics/physics.h"
 #include "signal.h"
+#include "console.h"
 
 int main(char argc, char* argv[])
 {
