@@ -5,6 +5,7 @@
 #include "physics/physics.h"
 #include "signal.h"
 #include "console.h"
+#include "log.h"
 
 int main(char argc, char* argv[])
 {

@@ -15,7 +15,8 @@ bin_PROGRAMS = smug
 smug_SOURCES = main.c \
 signal.c signal.h \
 common.c common.h \
-console.c console.h
+console.c console.h \
+log.c log.h
 
 smug_LDADD = graphics/libgraphics.a
 smug_LDADD += physics/libphysics.a
