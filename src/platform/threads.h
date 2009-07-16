@@ -29,44 +29,44 @@ typedef struct ConditionVariable
 
 
 // Create a new thread and set it in a waiting state
-Thread* Thread_New();
+Thread* Thread_new();
 
 // Join and destroy the thread
-void Thread_Delete(Thread* thread);
+void Thread_delete(Thread* thread);
 
 // Set the callback function of a sleeping thread and wake it up
-void Thread_Call(Thread* thread, void (*callback)(void*), void* param);
+void Thread_call(Thread* thread, void (*callback)(void*), void* param);
 
 // Wait for the callback function to finish
-void Thread_Join(Thread* thread);
+void Thread_join(Thread* thread);
 
 
 // Create a new mutex
-Mutex* Mutex_New();
+Mutex* Mutex_new();
 
 // Destroy a mutex
-void Mutex_Delete(Mutex* mutex);
+void Mutex_delete(Mutex* mutex);
 
 // Lock a mutex
-void Mutex_Lock(Mutex* mutex);
+void Mutex_lock(Mutex* mutex);
 
 // Unlock a mutex
-void Mutex_Unlock(Mutex* mutex);
+void Mutex_unlock(Mutex* mutex);
 
 
 // Create a new condition variable
-ConditionVariable* ConditionVariable_New();
+ConditionVariable* ConditionVariable_new();
 
 // Destroy a condition variable
-void ConditionVariable_Delete(ConditionVariable* cond);
+void ConditionVariable_delete(ConditionVariable* cond);
 
 // Wait for a condition variable
-void ConditionVariable_Wait(ConditionVariable* cond, Mutex* mutex, double timeout);
+void ConditionVariable_wait(ConditionVariable* cond, Mutex* mutex, double timeout);
 
 // Notify one waiting thread
-void ConditionVariable_Notify(ConditionVariable* cond);
+void ConditionVariable_notify(ConditionVariable* cond);
 
 // Notify all waiting threads
-void ConditionVariable_NotifyAll(ConditionVariable* cond);
+void ConditionVariable_notifyAll(ConditionVariable* cond);
 
 #endif // THREAD_H

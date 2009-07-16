@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
-Vector Vector_Create2d(double x, double y)
+Vector Vector_create2d(double x, double y)
 {
   Vector v;
 
@@ -16,13 +16,13 @@ Vector Vector_Create2d(double x, double y)
 }
 
 
-Vector Vector_CrossProduct2d(Vector v)
+Vector Vector_crossProduct2d(Vector v)
 {
-  return Vector_Create2d(-v.x[1], v.x[0]);
+  return Vector_create2d(-v.x[1], v.x[0]);
 }
 
 
-Vector Vector_Add(Vector v, Vector w)
+Vector Vector_add(Vector v, Vector w)
 {
   int i;
   Vector u;
@@ -37,7 +37,7 @@ Vector Vector_Add(Vector v, Vector w)
 }
 
 
-Vector Vector_Sub(Vector v, Vector w)
+Vector Vector_sub(Vector v, Vector w)
 {
   int i;
   Vector u;
@@ -52,7 +52,7 @@ Vector Vector_Sub(Vector v, Vector w)
 }
 
 
-Vector Vector_Multiply(Vector v, double k)
+Vector Vector_multiply(Vector v, double k)
 {
   int i;
   Vector u;
@@ -67,7 +67,7 @@ Vector Vector_Multiply(Vector v, double k)
 }
 
 
-double Vector_DotProduct(Vector v, Vector w)
+double Vector_dotProduct(Vector v, Vector w)
 {
   int i;
   double m = 0;
@@ -81,7 +81,7 @@ double Vector_DotProduct(Vector v, Vector w)
 }
 
 
-Vector Vector_Normalize(Vector v)
+Vector Vector_normalize(Vector v)
 {
   Vector u;
   int i;
@@ -98,12 +98,12 @@ Vector Vector_Normalize(Vector v)
 }
 
 
-Vector Vector_Projection(Vector v, Vector n)
+Vector Vector_projection(Vector v, Vector n)
 {
-  return Vector_Sub(v, Vector_Multiply(n, Vector_DotProduct(v, n)));
+  return Vector_sub(v, Vector_multiply(n, Vector_DotProduct(v, n)));
 }
 
-void Vector_Print(Vector v)
+void Vector_print(Vector v)
 {
   int i;
 

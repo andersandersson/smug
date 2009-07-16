@@ -1,8 +1,10 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include "Vector.h"
+#include "engine/common.h"
 
-int Physics_Init();
+
+int Physics_init();
+void Physics_terminate();
 
 #endif
