@@ -8,5 +8,5 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-noinst_LIBRARIES = libphysics.a
-libphysics_a_SOURCES = physics.c physics.h Vector.c Vector.h
+noinst_LIBRARIES = libutils.a
+libutils_a_SOURCES = LinkedList.c LinkedList.h

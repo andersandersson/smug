@@ -7,7 +7,7 @@ void smug_assert(BOOL result, int line)
 {
 	if(TRUE != result)
 	{
-		fprintf(stderr, "Assert: Failed at line %d", line);
+		fprintf(stderr, "Assertion failed at line %d", line);
 	}
 }
 #endif

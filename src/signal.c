@@ -10,7 +10,7 @@ void Signal_Send(int signal)
 }
 
 
-char Signal_Check(int signal)
+BOOL Signal_Check(int signal)
 {
    if( signal == (gSignals & signal) )
       {
