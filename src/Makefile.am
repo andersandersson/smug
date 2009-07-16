@@ -20,3 +20,4 @@ log.c log.h
 
 smug_LDADD = graphics/libgraphics.a
 smug_LDADD += physics/libphysics.a
+smug_LDADD += platform/libplatform.a

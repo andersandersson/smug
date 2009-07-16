@@ -109,6 +109,9 @@ void Thread_Delete(Thread* thread)
 
    glfwDestroyMutex(thread->_loopMutex);
    glfwDestroyCond(thread->_loopCond);
+   glfwDestroyThread(thread->id);
+
+   free(thread);
 }
 
 void GLFWCALL Thread_Loop(void* arg)
@@ -184,6 +187,8 @@ ConditionVariable* ConditionVariable_New()
 void ConditionVariable_Delete(ConditionVariable* cond)
 {
    glfwDestroyCond(cond->_cond);
+
+   free(cond);
 }
 
 

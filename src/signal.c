@@ -1,6 +1,5 @@
 #include "signal.h"
 
-
 static int gSignals = 0;
 
 
