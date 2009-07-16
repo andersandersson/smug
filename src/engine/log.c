@@ -8,7 +8,7 @@
 static int gCurrentLogLevel = LOG_DEBUG;
 
 
-void Log_Write(int level, char* prefix, char* file, int line, char* fmt, ...)
+void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
 {
    char buffer[CONSOLE_PRINT_BUFFER_SIZE];
    char buffer2[CONSOLE_PRINT_BUFFER_SIZE];
@@ -26,14 +26,14 @@ void Log_Write(int level, char* prefix, char* file, int line, char* fmt, ...)
          sprintf(buffer2, "[%s:%d] %s - %s\n", file, line, prefix, buffer);
 
          // Send buffer 2 to the console
-         Console_Write(buffer2);
+         Console_write(buffer2);
       }
 
    va_end(vl);
 }
 
 
-void Log_SetLevel(int level)
+void Log_setLevel(int level)
 {
    gCurrentLogLevel = level;
 }

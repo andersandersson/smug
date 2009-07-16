@@ -1,46 +1,15 @@
 /* -*- tab-width: 4 -*- */ 
 
-#include "GL/glfw.h"
-#include "graphics/graphics.h"
-#include "physics/physics.h"
-#include "platform/platform.h"
-#include "signal.h"
-#include "console.h"
-#include "log.h"
+#include "engine/engine.h"
 
 int main(char argc, char* argv[])
 {
-	Thread* console_thread;
-
-	glfwInit();
-	Graphics_Init(640, 480, 0);
-
-	// Create a new thread for the console
-	console_thread = Thread_New();
-
-	// Run the console main loop in a new thread
-	Thread_Call(console_thread, Console_Run, NULL);
-
-
-	// Run main loop and wait for ESC or window close.
-	while( TRUE != Signal_Check(SIG_EXIT) )
+	if (Engine_init())
 	{
-		glfwSwapBuffers();
-
-		if(glfwGetKey( GLFW_KEY_ESC ) || !glfwGetWindowParam( GLFW_OPENED ))
-		{
-			Signal_Send(SIG_EXIT);
-		}
+		Engine_run();
 	}
-
-	// Do not wait for console thread to end as getc() will
-	// block until input is received. Instead, kill the thread.
-
-	//Thread_Join(console_thread);
-	//Thread_Delete(console_thread); 
-	glfwDestroyThread(console_thread->id);
-
-	glfwTerminate();
+	
+	Engine_terminate();
 	return 0;
 }
 

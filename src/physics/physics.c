@@ -1,6 +1,13 @@
 #include "physics.h"
 
-int Physics_Init()
+#include "vector.h"
+
+int Physics_init()
 {
-  return 0;
+  return 1;
+}
+
+void Physics_terminate()
+{
+
 }

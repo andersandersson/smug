@@ -10,11 +10,13 @@ typedef unsigned char BOOL;
 #define FALSE 0
 
 #ifndef DISABLE_ASSERTS
-    void smug_assert(BOOL result, int line);
-    #define assert(x) smug_assert(x, __LINE)
+    void Smug_assert(BOOL result, int line);
+    #define assert(x) Smug_assert(x, __LINE)
 #else
     #define assert(x)
 #endif
+
+typedef double Time;
 
 #endif // COMMON_H
 

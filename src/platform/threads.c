@@ -8,20 +8,20 @@
 // outside threads.c
 
 // The function that will wait for callbacks to run
-static void GLFWCALL Thread_Loop(void* arg);
+static void GLFWCALL Thread_loop(void* arg);
 
 // Signal the _loopCond variable
-static void Thread_Signal(Thread* thread);
+static void Thread_signal(Thread* thread);
 
 // Lock the _loopMutex
-static void Thread_Lock(Thread* thread);
+static void Thread_lock(Thread* thread);
 
 // Release the _loopMutex
-static void Thread_Release(Thread* thread);
+static void Thread_release(Thread* thread);
 
 
 
-Thread* Thread_New(char* name)
+Thread* Thread_new(char* name)
 {
    Thread* thread = malloc(sizeof(Thread));
    
@@ -33,7 +33,7 @@ Thread* Thread_New(char* name)
    thread->_loopMutex = glfwCreateMutex();
 
    // Create a new thread and have it run the Thread_Loop
-   thread->id = glfwCreateThread(Thread_Loop, (void*) thread);
+   thread->id = glfwCreateThread(Thread_loop, (void*) thread);
    
    // Acquire the loop lock
    glfwLockMutex(thread->_loopMutex);
@@ -51,61 +51,61 @@ Thread* Thread_New(char* name)
 }
 
 
-void Thread_Signal(Thread* thread)
+void Thread_signal(Thread* thread)
 {
    glfwSignalCond(thread->_loopCond);
 }
 
 
-void Thread_Lock(Thread* thread)
+void Thread_lock(Thread* thread)
 {
    glfwLockMutex(thread->_loopMutex);
 }
 
 
-void Thread_Release(Thread* thread)
+void Thread_release(Thread* thread)
 {
    glfwUnlockMutex(thread->_loopMutex);
 }
 
 
-void Thread_Join(Thread* thread)
+void Thread_join(Thread* thread)
 {
-   Thread_Lock(thread);
+   Thread_lock(thread);
   
    while(1 == thread->_awake) {
-      Thread_Signal(thread);
+      Thread_signal(thread);
       glfwWaitCond(thread->_loopCond, thread->_loopMutex, GLFW_INFINITY);
    }
   
-   Thread_Release(thread);
+   Thread_release(thread);
 }
 
 
-void Thread_Call(Thread* thread, void (*callback)(void*), void* param)
+void Thread_call(Thread* thread, void (*callback)(void*), void* param)
 {
-   Thread_Lock(thread);
+   Thread_lock(thread);
    thread->_callback = callback;
    thread->_callbackParam = param;
    thread->_awake = 1;
-   Thread_Release(thread);
-   Thread_Signal(thread);
+   Thread_release(thread);
+   Thread_signal(thread);
 }
 
 
-void Thread_Delete(Thread* thread)
+void Thread_delete(Thread* thread)
 {
-   Thread_Lock(thread);
+   Thread_lock(thread);
 
    thread->_alive = 0;
    thread->_awake = 1;
 
-   Thread_Signal(thread);
+   Thread_signal(thread);
 
    glfwWaitCond(thread->_loopCond, thread->_loopMutex, GLFW_INFINITY);
    glfwWaitThread(thread->id, GLFW_INFINITY);
 
-   Thread_Release(thread);
+   Thread_release(thread);
 
    glfwDestroyMutex(thread->_loopMutex);
    glfwDestroyCond(thread->_loopCond);
@@ -114,7 +114,7 @@ void Thread_Delete(Thread* thread)
    free(thread);
 }
 
-void GLFWCALL Thread_Loop(void* arg)
+void GLFWCALL Thread_loop(void* arg)
 {
    Thread* thread = (Thread*) arg;
 
@@ -127,7 +127,7 @@ void GLFWCALL Thread_Loop(void* arg)
 
    while(1 == thread->_alive) {    
       while(0 == thread->_awake) {
-         Thread_Signal(thread);
+         Thread_signal(thread);
          glfwWaitCond(thread->_loopCond, thread->_loopMutex, GLFW_INFINITY);
       }
 
@@ -138,13 +138,13 @@ void GLFWCALL Thread_Loop(void* arg)
       thread->_awake = 0;    
    }
 
-   Thread_Signal(thread);
+   Thread_signal(thread);
    glfwUnlockMutex(thread->_loopMutex);
 }
 
 
 
-Mutex* Mutex_New()
+Mutex* Mutex_new()
 {
    Mutex* mutex = malloc(sizeof(Mutex));
 
@@ -152,7 +152,7 @@ Mutex* Mutex_New()
 }
 
 
-void Mutex_Delete(Mutex* mutex)
+void Mutex_delete(Mutex* mutex)
 {
    glfwDestroyMutex(mutex->_mutex);
 
@@ -160,13 +160,13 @@ void Mutex_Delete(Mutex* mutex)
 }
 
 
-void Mutex_Lock(Mutex* mutex)
+void Mutex_lock(Mutex* mutex)
 {
    glfwLockMutex(mutex->_mutex);
 }
 
 
-void Mutex_Unlock(Mutex* mutex)
+void Mutex_unlock(Mutex* mutex)
 {
    glfwUnlockMutex(mutex->_mutex);
 }
@@ -174,7 +174,7 @@ void Mutex_Unlock(Mutex* mutex)
 
 
 
-ConditionVariable* ConditionVariable_New()
+ConditionVariable* ConditionVariable_new()
 {
    ConditionVariable* cond = malloc(sizeof(ConditionVariable));
 
@@ -184,7 +184,7 @@ ConditionVariable* ConditionVariable_New()
 }
 
 
-void ConditionVariable_Delete(ConditionVariable* cond)
+void ConditionVariable_delete(ConditionVariable* cond)
 {
    glfwDestroyCond(cond->_cond);
 
@@ -192,19 +192,19 @@ void ConditionVariable_Delete(ConditionVariable* cond)
 }
 
 
-void ConditionVariable_Wait(ConditionVariable* cond, Mutex* mutex, double timeout)
+void ConditionVariable_wait(ConditionVariable* cond, Mutex* mutex, double timeout)
 {
    glfwWaitCond(cond->_cond, mutex->_mutex, timeout);
 }
 
 
-void ConditionVariable_Notify(ConditionVariable* cond)
+void ConditionVariable_notify(ConditionVariable* cond)
 {
    glfwSignalCond(cond->_cond);
 }
 
 
-void ConditionVariable_NotifyAll(ConditionVariable* cond)
+void ConditionVariable_notifyAll(ConditionVariable* cond)
 {
    glfwBroadcastCond(cond->_cond);
 }

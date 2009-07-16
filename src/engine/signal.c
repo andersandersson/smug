@@ -3,13 +3,12 @@
 static int gSignals = 0;
 
 
-void Signal_Send(int signal)
+void Signal_send(int signal)
 {
    gSignals = gSignals | signal;
 }
 
-
-BOOL Signal_Check(int signal)
+BOOL Signal_check(int signal)
 {
    if( signal == (gSignals & signal) )
       {

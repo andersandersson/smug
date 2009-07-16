@@ -3,7 +3,7 @@
 #include "stdio.h"
 
 #ifndef DISABLE_ASSERTS
-void smug_assert(BOOL result, int line)
+void Smug_assert(BOOL result, int line)
 {
 	if(TRUE != result)
 	{

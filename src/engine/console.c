@@ -7,20 +7,20 @@
 
 
 // Internal function for printing a character
-static char Console_GetChar()
+static char Console_getChar()
 {
    return getc(stdin);
 }
 
 
 // Internal function for reading a character
-static void Console_PutChar(char c)
+static void Console_putChar(char c)
 {
    putc(c, stderr);
 }
 
 
-void Console_Write(char* fmt, ...)
+void Console_write(char* fmt, ...)
 {
    // Counter for writing characters
    int i = 0;
@@ -40,7 +40,7 @@ void Console_Write(char* fmt, ...)
    // Iterate over the string and print each character until
    // the end of string is reach, or the buffer size limit.
    while(buffer[i] != '\0' && i < CONSOLE_PRINT_BUFFER_SIZE) {
-      Console_PutChar(buffer[i]);
+      Console_putChar(buffer[i]);
       i++;
    }
 
@@ -49,7 +49,7 @@ void Console_Write(char* fmt, ...)
 }
 
 
-unsigned int Console_Read(char* dest, unsigned int maxlength)   
+unsigned int Console_read(char* dest, unsigned int maxlength)   
 {
    int i = 0;
    char c = 0;
@@ -57,7 +57,7 @@ unsigned int Console_Read(char* dest, unsigned int maxlength)
    // Read characters until newline or maxlength is reached
    while(i < maxlength-1 && c != '\n')
       {
-         c = Console_GetChar();
+         c = Console_getChar();
          dest[i] = c;
          i++;
       }
@@ -69,39 +69,39 @@ unsigned int Console_Read(char* dest, unsigned int maxlength)
 }
 
 
-void Console_Run()
+void Console_run()
 {
    char buffer[1024];
 
-   while(!Signal_Check(SIG_EXIT))
+   while(!Signal_check(SIG_EXIT))
       {
          // Print console prompt
-         Console_Write("> ");
+         Console_write("> ");
 
          // Read next command
-         Console_Read(buffer, 1024);
+         Console_read(buffer, 1024);
 
          // Parse next command
-         Console_ParseCommand(buffer);
+         Console_parseCommand(buffer);
       }
 }
 
 
-void Console_ParseCommand(char* cmd)
+void Console_parseCommand(char* cmd)
 {
    // If no parser would handle the command, print
    // an error message
-   if(TRUE != Console_DefaultParser(cmd))
+   if(TRUE != Console_defaultParser(cmd))
       {
-         Console_Write("Unknown command: %s\n", cmd);
+         Console_write("Unknown command: %s\n", cmd);
       }
 }
 
 
-BOOL Console_DefaultParser(char* cmd)
+BOOL Console_defaultParser(char* cmd)
 {
    // exit - Send exit signal
    if(0 == strcmp("exit", cmd)) {
-      Signal_Send(SIG_EXIT);
+      Signal_send(SIG_EXIT);
    }
 }

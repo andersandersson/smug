@@ -19,13 +19,13 @@
   *
   * Use the macros DEBUG(char*, ...), WANRING(char*, ...) and ERROR(char*, ...) instead.
   */
-void Log_Write(int level, char* prefix, char* file, int line, char* fmt, ...);
+void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...);
 
 
 /** Set the log level to be written by Log_Write.
   *
   * @param level One of the constants LOG_DEBUG, LOG_WARNING or LOG_ERROR
   */
-void Log_SetLevel(int level);
+void Log_setLevel(int level);
 
 #endif // LOG_H

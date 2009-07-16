@@ -81,7 +81,8 @@ AC_CONFIG_FILES([
    m4/Makefile
    src/Makefile
    src/graphics/Makefile
-   src/physics/Makefile
+   src/physics/Makefile 
+   src/engine/Makefile
    src/platform/Makefile
    src/utils/Makefile
 ])

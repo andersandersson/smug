@@ -11,12 +11,11 @@
   */
 #define CONSOLE_PRINT_BUFFER_SIZE 1024
 
-
 /** Write text to the console
  *
  * @param fmt printf styled format string.
  */
-void Console_Write(char* fmt, ...);
+void Console_write(char* fmt, ...);
 
 
 /** Read input to buffer.
@@ -28,8 +27,7 @@ void Console_Write(char* fmt, ...);
  * @param dest The destination buffer to place input in
  * @param maxlength Do not exceed this length when writing to the buffer
  */
-unsigned int Console_Read(char* dest, unsigned int maxlength);
-
+unsigned int Console_read(char* dest, unsigned int maxlength);
 
 /** Start a console loop.
  *
@@ -38,7 +36,7 @@ unsigned int Console_Read(char* dest, unsigned int maxlength);
  *
  * This function will end on SIG_EXIT.
  */
-void Console_Run();
+void Console_run();
 
 
 /** Receive a command and parse it. 
@@ -48,7 +46,7 @@ void Console_Run();
  *
  * @param cmd The command to parse
  */
-void Console_ParseCommand(char* cmd);
+void Console_parseCommand(char* cmd);
 
 
 /** Default parser for commands.
@@ -59,6 +57,6 @@ void Console_ParseCommand(char* cmd);
  * @param cmd The command to parse
  * @return TRUE if the command was handled, FALSE otherwise
  */
-BOOL Console_DefaultParser(char* cmd);
+BOOL Console_defaultParser(char* cmd);
 
 #endif

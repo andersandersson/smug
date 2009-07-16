@@ -1,6 +1,11 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-int Graphics_Init(int width, int height, char fullscreen);
+#include "engine/common.h"
+
+int Graphics_init(int width, int height, BOOL fullscreen);
+void Graphics_refresh();
+void Graphics_terminate();
 
 #endif // GRAPHICS_H
+
