@@ -8,7 +8,7 @@
 #include "common.h" // Using BOOL
 
 /** The maximum size of a line to print to the console
- */
+  */
 #define CONSOLE_PRINT_BUFFER_SIZE 1024
 
 
