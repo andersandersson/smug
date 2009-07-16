@@ -1,8 +1,15 @@
+/** @file threads.h
+  * @brief Contains functions for multithreading.
+  */
+
 #ifndef THREAD_H
 #define THREAD_H
 
-// Data holder for a thread
-typedef struct Thread 
+/** Data holder for a thread.
+  *
+  * @sa ::Mutex, ::ConditionVariable
+  */
+typedef struct Thread
 {
    GLFWthread id;
 
@@ -15,58 +22,101 @@ typedef struct Thread
    int _awake;
 } Thread;
 
-// Hide the GLFW mutex in our own
+/** Hide the GLFW mutex in our own.
+  *
+  * @sa ::Thread, ::ConditionVariable
+  */
 typedef struct Mutex
 {
    GLFWmutex _mutex;
 } Mutex;
 
-// Hide the GLFW condition variable in our own
-typedef struct ConditionVariable 
+/** Hide the GLFW condition variable in our own.
+  * 
+  * @sa ::Thread, ::Mutex
+  */
+typedef struct ConditionVariable
 {
-   GLFWcond _cond;
+	GLFWcond _cond;
 } ConditionVariable;
 
 
-// Create a new thread and set it in a waiting state
+/** Create a new thread and set it in a waiting state.
+  * 
+  * @relatesalso Thread
+  */
 Thread* Thread_new();
 
-// Join and destroy the thread
+/** Join and destroy the thread.
+  * 
+  * @relatesalso Thread
+  */
 void Thread_delete(Thread* thread);
 
-// Set the callback function of a sleeping thread and wake it up
+/** Set the callback function of a sleeping thread and wake it up.
+  * 
+  * @relatesalso Thread
+  */
 void Thread_call(Thread* thread, void (*callback)(void*), void* param);
 
-// Wait for the callback function to finish
+/** Wait for the callback function to finish.
+  * 
+  * @relatesalso Thread
+  */
 void Thread_join(Thread* thread);
 
-
-// Create a new mutex
+/** Create a new mutex.
+  * 
+  * @relatesalso Mutex
+  */
 Mutex* Mutex_new();
 
-// Destroy a mutex
+/** Destroy a mutex.
+  * 
+  * @relatesalso Mutex
+  */
 void Mutex_delete(Mutex* mutex);
 
-// Lock a mutex
+/** Lock a mutex.
+  * 
+  * @relatesalso Mutex
+  */
 void Mutex_lock(Mutex* mutex);
 
-// Unlock a mutex
+/** Unlock a mutex.
+  * 
+  * @relatesalso Mutex
+  */
 void Mutex_unlock(Mutex* mutex);
 
-
-// Create a new condition variable
+/** Create a new condition variable.
+  * 
+  * @relatesalso ConditionVariable
+  */
 ConditionVariable* ConditionVariable_new();
 
-// Destroy a condition variable
+/** Destroy a condition variable.
+  * 
+  * @relatesalso ConditionVariable
+  */
 void ConditionVariable_delete(ConditionVariable* cond);
 
-// Wait for a condition variable
+/** Wait for a condition variable.
+  * 
+  * @relatesalso ConditionVariable
+  */
 void ConditionVariable_wait(ConditionVariable* cond, Mutex* mutex, double timeout);
 
-// Notify one waiting thread
+/** Notify one waiting thread.
+  * 
+  * @relatesalso ConditionVariable
+  */
 void ConditionVariable_notify(ConditionVariable* cond);
 
-// Notify all waiting threads
+/** Notify all waiting threads.
+  * 
+  * @relatesalso ConditionVariable
+  */
 void ConditionVariable_notifyAll(ConditionVariable* cond);
 
 #endif // THREAD_H

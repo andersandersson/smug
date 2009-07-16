@@ -12,3 +12,16 @@ int main(char argc, char* argv[])
 	Engine_terminate();
 	return 0;
 }
+
+/*! @mainpage Smug - Scripted Multithreaded Utility for Games
+ *
+ * @section intro_sec Introduction
+ *
+ * This is the introduction.
+ *
+ * @section install_sec Installation
+ *
+ * @subsection step1 Step 1: Opening the box
+ *  
+ * etc...
+ */
