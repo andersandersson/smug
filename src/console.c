@@ -1,5 +1,7 @@
 #include "console.h"
 
+#include "signal.h"
+
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -64,4 +66,42 @@ unsigned int Console_Read(char* dest, unsigned int maxlength)
    dest[i-1] = '\0';
 
    return i;
+}
+
+
+void Console_Run()
+{
+   char buffer[1024];
+
+   while(!Signal_Check(SIG_EXIT))
+      {
+         // Print console prompt
+         Console_Write("> ");
+
+         // Read next command
+         Console_Read(buffer, 1024);
+
+         // Parse next command
+         Console_ParseCommand(buffer);
+      }
+}
+
+
+void Console_ParseCommand(char* cmd)
+{
+   // If no parser would handle the command, print
+   // an error message
+   if(TRUE != Console_DefaultParser(cmd))
+      {
+         Console_Write("Unknown command: %s\n", cmd);
+      }
+}
+
+
+BOOL Console_DefaultParser(char* cmd)
+{
+   // exit - Send exit signal
+   if(0 == strcmp("exit", cmd)) {
+      Signal_Send(SIG_EXIT);
+   }
 }
