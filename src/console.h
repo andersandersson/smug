@@ -1,10 +1,13 @@
+/** @file console.h
+  * @brief Defines a debug console
+  */
+
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
 #include "common.h" // Using BOOL
 
-/** 
- * The maximum size of a line to print to the console 
+/** The maximum size of a line to print to the console
  */
 #define CONSOLE_PRINT_BUFFER_SIZE 1024
 
@@ -23,7 +26,7 @@ void Console_Write(char* fmt, ...);
  * of read bytes.
  *
  * @param dest The destination buffer to place input in
- * @param maxlength Do not exceed this length when writing to the buffer1
+ * @param maxlength Do not exceed this length when writing to the buffer
  */
 unsigned int Console_Read(char* dest, unsigned int maxlength);
 
