@@ -33,7 +33,7 @@ Thread* Thread_new(char* name)
    thread->_loopMutex = glfwCreateMutex();
 
    // Create a new thread and have it run the Thread_Loop
-   thread->id = glfwCreateThread(Thread_Loop, (void*) thread);
+   thread->id = glfwCreateThread(Thread_loop, (void*) thread);
    
    // Acquire the loop lock
    glfwLockMutex(thread->_loopMutex);
@@ -109,6 +109,9 @@ void Thread_delete(Thread* thread)
 
    glfwDestroyMutex(thread->_loopMutex);
    glfwDestroyCond(thread->_loopCond);
+   glfwDestroyThread(thread->id);
+
+   free(thread);
 }
 
 void GLFWCALL Thread_loop(void* arg)
@@ -184,6 +187,8 @@ ConditionVariable* ConditionVariable_new()
 void ConditionVariable_delete(ConditionVariable* cond)
 {
    glfwDestroyCond(cond->_cond);
+
+   free(cond);
 }
 
 
