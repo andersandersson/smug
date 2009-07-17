@@ -1,5 +1,16 @@
 #include "GL/glfw.h"
 #include "graphics.h"
+#include "../utils/rectangle.h"
+
+Color Color_create(float r, float g, float b, float a)
+{
+	Color c;
+	c.r = r;
+	c.g = g;
+	c.b = b;
+	c.a = a;
+	return c;
+}
 
 int Graphics_init(int width, int height, BOOL fullscreen)
 {
@@ -14,4 +25,9 @@ void Graphics_refresh()
 void Graphics_terminate()
 {
 
+}
+
+void Graphics_fillRect(Rectangle* rect, Color* color)
+{
+	
 }
