@@ -14,9 +14,9 @@ bin_PROGRAMS = smug
 
 smug_SOURCES = main.c
 
-smug_LDADD = engine/libsmug.a
-smug_LDADD += graphics/libgraphics.a
-smug_LDADD += physics/libphysics.a
-smug_LDADD += platform/libplatform.a
-smug_LDADD += utils/libutils.a
+smug_LDADD = engine/libsmug.la
+smug_LDADD += graphics/libgraphics.la
+smug_LDADD += physics/libphysics.la
+smug_LDADD += platform/libplatform.la
+smug_LDADD += utils/libutils.la
 

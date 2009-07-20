@@ -10,6 +10,6 @@
 
 AM_CFLAGS = $(LIBGLFWCFLAGS) -I..
 
-noinst_LIBRARIES = libplatform.a
+noinst_LTLIBRARIES = libplatform.la
 
-libplatform_a_SOURCES = threads.c threads.h platform.h
+libplatform_la_SOURCES = threads.c threads.h platform.h

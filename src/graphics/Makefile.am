@@ -10,6 +10,6 @@
 
 AM_CFLAGS = $(LIBGLFWCFLAGS)  -I..
 
-noinst_LIBRARIES = libgraphics.a
+noinst_LTLIBRARIES = libgraphics.la
 
-libgraphics_a_SOURCES = graphics.c graphics.h
+libgraphics_la_SOURCES = graphics.c graphics.h

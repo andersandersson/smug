@@ -4,6 +4,8 @@
 *.o
 *.o.*
 *.a
+*.la
+*.lo
 *.so
 *.so.dbg
 *.bin

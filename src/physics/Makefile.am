@@ -10,5 +10,5 @@
 
 AM_CFLAGS = -I..
 
-noinst_LIBRARIES = libphysics.a
-libphysics_a_SOURCES = physics.c physics.h vector.c vector.h
+noinst_LTLIBRARIES = libphysics.la
+libphysics_la_SOURCES = physics.c physics.h vector.c vector.h
