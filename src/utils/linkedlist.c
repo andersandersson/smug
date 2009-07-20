@@ -1,4 +1,4 @@
-#include "LinkedList.h"
+#include "linkedlist.h"
 
 #include <stdlib.h>
 
@@ -113,7 +113,7 @@ void LinkedList_remove(LinkedList* list, Node* node)
 	Node_destroy(node);		
 }
 
-void LinkedList_traverse(LinkedList* list, void (*func)(void*))
+void LinkedList_doList(LinkedList* list, void (*func)(void*))
 {
 	Node* node = list->first;
 	while(NULL != node)
@@ -121,6 +121,74 @@ void LinkedList_traverse(LinkedList* list, void (*func)(void*))
 		func(node->item);
 		node = node->next;
 	}
+}
+
+void LinkedList_doListIf(LinkedList* list, void (*func)(void*), BOOL(*pred)(void*))
+{
+	Node* node = list->first;
+	while(NULL != node)
+	{
+		if (pred(node->item))
+		{
+			func(node->item);
+		}
+		node = node->next;
+	}
+}
+
+LinkedList* LinkedList_getThose(LinkedList* list, BOOL(*pred)(void*))
+{
+	LinkedList* newList = LinkedList_new();
+	Node* node = list->first;
+	while (NULL != node)
+	{
+		if (pred(node->item))
+		{
+			LinkedList_add(newList, node->item);
+		}
+		node = node->next;
+	}
+	return newList;
+}
+
+LinkedList* LinkedList_map(LinkedList* list, void* (*func)(void*))
+{
+	LinkedList* newList = LinkedList_new();
+	Node* node = list->first;
+	while (NULL != node)
+	{
+		LinkedList_add(newList, func(node->item));
+		node = node->next;
+	}
+	return newList;	
+}
+
+BOOL LinkedList_forAll(LinkedList* list, BOOL(*pred)(void*))
+{
+	Node* node = list->first;
+	while(NULL != node)
+	{
+		if (!pred(node->item))
+		{
+			return FALSE;
+		}
+		node = node->next;
+	}
+	return TRUE;
+}
+
+BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*))
+{
+	Node* node = list->first;
+	while(NULL != node)
+	{
+		if (pred(node->item))
+		{
+			return TRUE;
+		}
+		node = node->next;
+	}
+	return FALSE;
 }
 
 void LinkedList_deleteContents(LinkedList* list, void (*deleter)(void*))

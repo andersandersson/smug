@@ -10,6 +10,6 @@
 
 AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
 
-noinst_LIBRARIES = libsmug.a
+noinst_LTLIBRARIES = libsmug.la
 
-libsmug_a_SOURCES = engine.c engine.h
+libsmug_la_SOURCES = engine.c engine.h

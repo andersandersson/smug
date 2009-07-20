@@ -9,7 +9,10 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #!/bin/sh
+
 rm -f config.cache
+echo "- libtoolize"
+libtoolize -i -c -f -q
 echo "- aclocal."
 aclocal -I m4
 echo "- autoconf."

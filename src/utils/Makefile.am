@@ -11,4 +11,4 @@
 AM_CFLAGS = -I..
 
 noinst_LIBRARIES = libutils.a
-libutils_a_SOURCES = linkedlist.c linkedlist.h
+libutils_a_SOURCES = linkedlist.c linkedlist.h rectangle.h rectangle.c

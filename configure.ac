@@ -8,13 +8,6 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-## Strip trailing slashes from path 
-# 
-# This macro will strip any trailing slashes from a path
-# or, if the path is empty, set it to '.'
-#
-
-
 # Special init commands for Linux
 #
 AC_DEFUN([AC_INIT_LINUX],
@@ -34,7 +27,10 @@ AC_INIT([smug],
         [smug])
 
 AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_MACRO_DIR([m4])
+
 AM_CONFIG_HEADER(config.h)
+
 AM_INIT_AUTOMAKE([dist-bzip2])
 
 # Guess the hos system (win32, etc)
@@ -44,7 +40,7 @@ AC_CANONICAL_HOST
 AC_PROG_CC
 
 # Check for library function
-AC_PROG_RANLIB
+AC_PROG_LIBTOOL
 
 # Check for Python
 AC_PYTHON_DEVEL([>= 2.5])
