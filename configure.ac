@@ -8,13 +8,6 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-## Strip trailing slashes from path 
-# 
-# This macro will strip any trailing slashes from a path
-# or, if the path is empty, set it to '.'
-#
-
-
 # Special init commands for Linux
 #
 AC_DEFUN([AC_INIT_LINUX],

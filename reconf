@@ -18,6 +18,4 @@ echo "- autoheader."
 autoheader
 echo "- automake."
 automake -a
-echo "- libtoolize"
-libtoolize -i -c -f -q
 exit
