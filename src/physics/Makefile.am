@@ -8,7 +8,7 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_CFLAGS = -I..
+AM_CFLAGS = -I.. -I../common
 
 noinst_LIBRARIES = libphysics.a
 libphysics_a_SOURCES = physics.c physics.h vector.c vector.h

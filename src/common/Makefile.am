@@ -8,8 +8,8 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
+AM_CFLAGS = $(LIBGLFWCFLAGS) -I..
 
-noinst_LIBRARIES = libsmug.a
+noinst_LIBRARIES = libcommon.a
 
-libsmug_a_SOURCES = engine.c engine.h
+libcommon_a_SOURCES = signal.c signal.h common.c common.h console.c console.h log.c log.h

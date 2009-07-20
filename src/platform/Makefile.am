@@ -8,7 +8,7 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_CFLAGS = $(LIBGLFWCFLAGS) -I..
+AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
 
 noinst_LIBRARIES = libplatform.a
 

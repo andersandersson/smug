@@ -4,7 +4,8 @@
 
 int Physics_init()
 {
-  return 1;
+	Console_writeLine("Initializing physics");
+	return 1;
 }
 
 void Physics_terminate()

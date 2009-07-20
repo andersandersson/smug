@@ -8,15 +8,20 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = utils platform graphics physics engine
+AM_CFLAGS =
+
+SUBDIRS = utils common platform graphics physics script engine
 
 bin_PROGRAMS = smug
 
 smug_SOURCES = main.c
 
-smug_LDADD = engine/libsmug.a
+#It kind of matters a whole lot which order these are in, reverse dependecy order seems to work, FIX THIS!
+
+smug_LDADD = script/libscript.a
+smug_LDADD += engine/libsmug.a
+smug_LDADD += common/libcommon.a
 smug_LDADD += graphics/libgraphics.a
 smug_LDADD += physics/libphysics.a
 smug_LDADD += platform/libplatform.a
 smug_LDADD += utils/libutils.a
-

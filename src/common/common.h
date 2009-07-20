@@ -13,7 +13,7 @@ typedef unsigned char BOOL;
     void Smug_assert(BOOL result, int line);
     #define assert(x) Smug_assert(x, __LINE)
 #else
-    #define assert(x)
+    #define assert(x) x
 #endif
 
 typedef double Time;

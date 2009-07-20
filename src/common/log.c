@@ -1,11 +1,11 @@
 #include "log.h"
-#include "console.h"
+#include "common/console.h"
 
 #include <stdarg.h>
 #include <stdio.h>
 
 // As default, include all log output
-static int gCurrentLogLevel = LOG_DEBUG;
+static int gCurrentLogLevel = LOG_ALL;
 
 
 void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
@@ -17,7 +17,7 @@ void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
    va_start(vl, fmt);
 
    // Only print log if correct log level is set
-   if(gCurrentLogLevel <= level) 
+   if(gCurrentLogLevel & level) 
       {
          // Print formatted string to buffer 1
          vsprintf(buffer, fmt, vl);

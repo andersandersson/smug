@@ -225,14 +225,18 @@ EOD`
 		then
 			# use the official shared library
 			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
-			PYTHON_LDFLAGS="-L$ac_python_libdir -l$ac_python_library"
+			PYTHON_LDFLAGS="-L$ac_python_libdir"
+			# TODO: Verify this line - joel
+			PYTHON_EXTRA_LIBS="$PYTHON_EXTRA_LIBS -l$ac_python_library"
 		else
 			# old way: use libpython from python_configdir
 			ac_python_libdir=`$PYTHON -c \
 			  "from distutils.sysconfig import get_python_lib as f; \
 			  import os; \
 			  print (os.path.join(f(plat_specific=1, standard_lib=1), 'config'));"`
-			PYTHON_LDFLAGS="-L$ac_python_libdir -lpython$ac_python_version"
+			PYTHON_LDFLAGS="-L$ac_python_libdir"
+			# TODO: Verify this line - joel
+			PYTHON_EXTRA_LIBS="$PYTHON_EXTRA_LIBS -lpython$ac_python_version"
 		fi
 
 		if test -z "PYTHON_LDFLAGS"; then

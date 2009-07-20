@@ -6,14 +6,16 @@
 #define LOG_H
 
 // Predefined log levels
-#define LOG_DEBUG    1
-#define LOG_WARNING  2
-#define LOG_ERROR    3
+#define LOG_NOTIFICATION   0
+#define LOG_DEBUG   1
+#define LOG_WARNING 2
+#define LOG_ERROR   4
+#define LOG_ALL  	7
 
 // Define macros for the Log_Write function
-#define DEBUG(x, ...) Log_Write(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, x, __VA_ARGS__)
-#define WARNING(x, ...) Log_Write(LOG_WARNING, "WARNING", __FILE__, __LINE__, x, __VA_ARGS__)
-#define ERROR(x, ...) Log_Write(LOG_ERROR, "ERROR", __FILE__, __LINE__, x, __VA_ARGS__)
+#define DEBUG(...) Log_write(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, __VA_ARGS__)
+#define WARNING(x, ...) Log_write(LOG_WARNING, "WARNING", __FILE__, __LINE__, __VA_ARGS__)
+#define ERROR(x, ...) Log_write(LOG_ERROR, "ERROR", __FILE__, __LINE__, __VA_ARGS__)
 
 /** Write a log entry.
   *
@@ -24,7 +26,7 @@ void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...);
 
 /** Set the log level to be written by Log_Write.
   *
-  * @param level One of the constants LOG_DEBUG, LOG_WARNING or LOG_ERROR
+  * @param level A flagset consisting of LOG_DEBUG, LOG_WARNING and/or LOG_ERROR
   */
 void Log_setLevel(int level);
 

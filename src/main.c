@@ -1,15 +1,29 @@
 /* -*- tab-width: 4 -*- */ 
 
+#include "common/common.h"
 #include "engine/engine.h"
+#include "common/log.h"
+
+#include "stdio.h"
 
 int main(char argc, char* argv[])
 {
-	if (Engine_init())
+	if (argc != 2)
 	{
-		Engine_run();
+		//ERROR("Please provide script file\n");
+		return 0;	
 	}
 	
-	Engine_terminate();
+	if (!Script_init(argv[1]))
+	{
+		//ERROR("Could not initialize script, exiting...\n");
+		Script_terminate();
+		return 0;
+	}
+
+	Script_run();
+	Script_terminate();
+	
 	return 0;
 }
 
