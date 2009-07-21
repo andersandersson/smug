@@ -13,13 +13,13 @@
 #define LOG_ALL  	7
 
 // Define macros for the Log_Write function
-#define DEBUG(fmt, ...) Log_write(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define WARNING(fmt, ...) Log_write(LOG_WARNING, "WARNING", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define ERROR(fmt, ...) Log_write(LOG_ERROR, "ERROR", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define DEBUG(...) Log_write(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, __VA_ARGS__)
+#define WARNING(x, ...) Log_write(LOG_WARNING, "WARNING", __FILE__, __LINE__, __VA_ARGS__)
+#define ERROR(x, ...) Log_write(LOG_ERROR, "ERROR", __FILE__, __LINE__, __VA_ARGS__)
 
 /** Write a log entry.
   *
-  * Use the macros DEBUG(char*, ...), WARNING(char*, ...) and ERROR(char*, ...) instead.
+  * Use the macros DEBUG(char*, ...), WANRING(char*, ...) and ERROR(char*, ...) instead.
   */
 void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...);
 

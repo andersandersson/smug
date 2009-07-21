@@ -1,10 +1,10 @@
 #include "physics.h"
+
 #include "vector.h"
-#include "log.h"
 
 int Physics_init()
 {
-	DEBUG("  Initializing physics");
+	Console_writeLine("Initializing physics");
 	return 1;
 }
 

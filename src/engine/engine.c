@@ -16,8 +16,10 @@ static BOOL gInitialized = FALSE;
 
 int Engine_init()
 {
-	DEBUG("Initializing engine:");
-	DEBUG("  Initializing platform layer");
+	Console_writeLine("Initializing engine:");
+	Console_indent();
+	
+	Console_writeLine("Initializing platform layer");
 	if (!glfwInit())
 		return 0;
 
@@ -27,14 +29,15 @@ int Engine_init()
 	if (!Physics_init())
 		return 0;
 
-	DEBUG("  Initializing console thread");
+	Console_writeLine("Initializing console thread");
 	// Create a new thread for the console
 	gConsoleThread = Thread_new();
 
 	// Run the console main loop in a new thread
 	Thread_call(gConsoleThread, Console_run, NULL);	
 	
-	DEBUG("  Engine Initialized.");
+	Console_dedent();
+	Console_writeLine("Engine Initialized.");
 	
 	gInitialized = TRUE;
 	return 1;
@@ -42,16 +45,18 @@ int Engine_init()
 
 void Engine_terminate()
 {
-	DEBUG("Terminating engine");
+	Console_writeLine("Terminating engine");
+	Console_indent();
 	
 	Physics_terminate();
 	
 	Graphics_terminate();
 	
-	DEBUG("  Terminating platform layer");
+	Console_writeLine("Terminating platform layer");
 	glfwTerminate();
 	
-	DEBUG("Engine terminated,\n");
+	Console_dedent();
+	Console_writeLine("Engine terminated,\n");
 	
 	// Do not wait for console thread to end as getc() will
 	// block until input is received. Instead, kill the thread.
@@ -65,7 +70,8 @@ void Engine_run()
 	if (!gInitialized)
 		return;
 		
-	DEBUG("Running engine...");		
+	Console_writeLine("Running engine...");		
+	Console_indent();
 	
 	double lastFpsCheck = glfwGetTime();	
 	int fps = 0;
@@ -101,7 +107,7 @@ void Engine_run()
 		
 		if (glfwGetTime() - lastFpsCheck >= 1.0)
 		{
-			DEBUG("  Fps: %i", fps);
+			Console_writeLine("Fps: %i", fps);
 			fps = 0;
 			lastFpsCheck = glfwGetTime();
 		}
@@ -110,5 +116,6 @@ void Engine_run()
 		glfwSleep(nexttime - time);
 	}
 	
-	DEBUG("Engine stopped.\n");			
+	Console_dedent();
+	Console_writeLine("Engine stopped.\n");			
 }
