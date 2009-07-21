@@ -10,7 +10,7 @@
 
 AM_CFLAGS = $(LIBGLFWCFLAGS)  -I.. #Why cannot this be included as well? -I../common
 
-noinst_LIBRARIES = libscript.a
+noinst_LTLIBRARIES = libscript.la
 
-libscript_a_SOURCES =  python/pyscript.c script.h \
+libscript_la_SOURCES =  python/pyscript.c script.h \
 	python/module.c python/module.c
