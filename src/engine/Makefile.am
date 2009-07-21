@@ -12,4 +12,4 @@ AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
 
 noinst_LTLIBRARIES = libsmug.la
 
-libsmug_la_SOURCES = engine.c engine.h
+libsmug_la_SOURCES = engine.c engine.h gameobject.c gameobject.h world.c world.h

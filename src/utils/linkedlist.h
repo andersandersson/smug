@@ -1,4 +1,4 @@
-/** @file LinkedList.h
+/** @file linkedlist.h
   * @brief Defines a regular linked list type (and a node type for it).
   */
 

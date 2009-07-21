@@ -10,13 +10,13 @@ int main(char argc, char* argv[])
 {
 	if (argc != 2)
 	{
-		//ERROR("Please provide script file\n");
+		ERROR("Please provide script file\n", "fult");
 		return 0;	
 	}
 	
 	if (!Script_init(argv[1]))
 	{
-		//ERROR("Could not initialize script, exiting...\n");
+		ERROR("Could not initialize script, exiting...\n", "fulare");
 		Script_terminate();
 		return 0;
 	}

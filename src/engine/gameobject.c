@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "gameobject.h"
 
 GameObject* GameObject_new()
