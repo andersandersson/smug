@@ -4,11 +4,10 @@
 
 int Physics_init()
 {
-	Console_writeLine("Initializing physics");
-	return 1;
+    NOTIFY("Initializing physics");
+    return 1;
 }
 
 void Physics_terminate()
-{
-
+{   
 }
