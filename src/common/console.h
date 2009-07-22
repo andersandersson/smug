@@ -24,30 +24,6 @@ void Console_write(char* fmt, ...);
  */
 void Console_writeLine(char* fmt, ...);
 
-/** Set the indentation level
- *
- * @param indent Number of tabs to indent.
- */
-void Console_setIndentation(unsigned int indent);
-
-/** Decrease the indentation level
- *
- * @param indent Decrease indentation by one.
- */
-void Console_dedent();
-
-/** Increase the indentation level
- *
- * @param indent Increase indentation by one.
- */
-void Console_indent();
-
-/** Set the indentation tab width
- *
- * @param width Set the tab width used for indentation.
- */
-void Console_setTabWidth(unsigned int width);
-
 /** Read input to buffer.
  *
  * Read input to dest and return the number of read

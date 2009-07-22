@@ -10,7 +10,7 @@ void LinkedList_clear(LinkedList* list)
 	while(NULL != node) 
 	{
 		next_node = node->next;
-		Node_destroy(node);
+		Node_delete(node);
 		node = next_node;
 	}
 
@@ -83,6 +83,24 @@ void LinkedList_addLast(LinkedList* list, void* item)
 	node->item = item;
 }
 
+void LinkedList_addFirst(LinkedList* list, void* item)
+{
+	Node* node = Node_new();
+  
+	if (list->first)
+	{
+		node->next = list->first;
+		list->first->prev = node;
+	}
+	else
+	{
+		list->last = node;
+	}
+	
+	list->first = node;
+	node->item = item;
+}
+
 void LinkedList_remove(LinkedList* list, Node* node)
 {
 	// if (node == NULL) WARNING("LinkedList_remove: 'node' is NULL.")
@@ -110,7 +128,7 @@ void LinkedList_remove(LinkedList* list, Node* node)
 		node->next->prev = node->prev;
 	}	
 	
-	Node_destroy(node);		
+	Node_delete(node);
 }
 
 void LinkedList_doList(LinkedList* list, void (*func)(void*))
@@ -144,7 +162,7 @@ LinkedList* LinkedList_getThose(LinkedList* list, BOOL(*pred)(void*))
 	{
 		if (pred(node->item))
 		{
-			LinkedList_add(newList, node->item);
+			LinkedList_addLast(newList, node->item);
 		}
 		node = node->next;
 	}
@@ -157,7 +175,7 @@ LinkedList* LinkedList_map(LinkedList* list, void* (*func)(void*))
 	Node* node = list->first;
 	while (NULL != node)
 	{
-		LinkedList_add(newList, func(node->item));
+		LinkedList_addLast(newList, func(node->item));
 		node = node->next;
 	}
 	return newList;	
@@ -193,6 +211,6 @@ BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*))
 
 void LinkedList_deleteContents(LinkedList* list, void (*deleter)(void*))
 {
-	LinkedList_traverse(list, deleter);
+	//LinkedList_traverse(list, deleter);
 	LinkedList_clear(list);
 }

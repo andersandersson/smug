@@ -21,43 +21,6 @@ static void Console_putChar(char c)
    putc(c, stderr);
 }
 
-// Internal, prints a tab
-static void printTab()
-{
-	int i;
-	for (i = 0;i < gTabWidth; i++)
-		putc(' ', stderr);
-}
-
-// Internal, prints indentation for a new line
-static void printIndentation()
-{
-	int i;
-	for (i = 0; i < gIndent; i++)
-		printTab();
-}
-
-void Console_setIndentation(unsigned int indent)
-{
-	gIndent = indent;
-}
-
-void Console_indent()
-{
-	gIndent++;
-}
-
-void Console_dedent()
-{
-	if (gIndent != 0)
-		gIndent--;
-}
-
-void Console_setTabWidth(unsigned int width)
-{
-	gTabWidth = width;
-}
-
 void Console_write(char* fmt, ...)
 {
    // Counter for writing characters
@@ -102,9 +65,6 @@ void Console_writeLine(char* fmt, ...)
 
 	// Print formatted string to buffer
 	vsprintf(buffer, fmt, vl);
-
-	// Print indentation
-	printIndentation();
 
 	// Iterate over the string and print each character until
 	// the end of string is reach, or the buffer size limit.

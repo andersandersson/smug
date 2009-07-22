@@ -8,6 +8,8 @@
 
 int main(char argc, char* argv[])
 {
+    Log_init();   
+    
 	if (argc != 2)
 	{
 		ERROR("Please provide script file\n", "fult");
@@ -24,6 +26,7 @@ int main(char argc, char* argv[])
 	Script_run();
 	Script_terminate();
 	
+    Log_terminate();
 	return 0;
 }
 

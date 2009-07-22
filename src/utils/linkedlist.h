@@ -68,6 +68,14 @@ void LinkedList_delete(LinkedList* list);
   */
 void LinkedList_addLast(LinkedList* list, void* item);
 
+/** Adds the passed item to a new node at the beginning of the list.
+  *
+  * @relatesalso LinkedList
+  * @param list The list.
+  * @param item A pointer to the item to be added.
+  */
+void LinkedList_addFirst(LinkedList* list, void* item);
+
 /** Calls the passed function on every data item in the list.
   *
   * @relatesalso LinkedList
