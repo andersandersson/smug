@@ -10,5 +10,5 @@
 
 AM_CFLAGS = -I..
 
-noinst_LIBRARIES = libutils.a
-libutils_a_SOURCES = linkedlist.c linkedlist.h rectangle.h rectangle.c
+noinst_LTLIBRARIES = libutils.la
+libutils_la_SOURCES = linkedlist.c linkedlist.h rectangle.h rectangle.c
