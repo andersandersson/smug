@@ -10,6 +10,6 @@
 
 AM_CFLAGS = $(LIBGLFWCFLAGS) -I..
 
-noinst_LIBRARIES = libcommon.a
+noinst_LTLIBRARIES = libcommon.la
 
-libcommon_a_SOURCES = signal.c signal.h common.c common.h console.c console.h log.c log.h
+libcommon_la_SOURCES = signal.c signal.h common.c common.h console.c console.h log.c log.h
