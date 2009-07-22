@@ -10,6 +10,11 @@ int main(char argc, char* argv[])
 {
     Log_init();   
     
+    // Not the cutest solution, but works for me?
+    // Should probably be removed or replaced with some
+    // define from configure
+    putenv("PYTHONPATH=../python/tests:../python/games:../python/api");
+    
 	if (argc != 2)
 	{
 		ERROR("Please provide script file\n", "fult");
