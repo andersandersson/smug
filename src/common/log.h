@@ -5,6 +5,8 @@
 #ifndef LOG_H
 #define LOG_H
 
+#include "common/common.h"
+
 // Predefined log levels
 #define LOG_DEBUG           0x01
 #define LOG_WARNING         0x02

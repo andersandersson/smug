@@ -27,7 +27,7 @@ BOOL Log_init()
     gPrefixStack = LinkedList_new();
     
     // Set default format string
-    Log_setFormatString(LOG_NOTIFICATION, "[%file%:%line%] - %level% - %message%")
+    Log_setFormatString(LOG_NOTIFICATION, "[%file%:%line%] - %level% - %message%");
     
     // Set default indentation level
     Log_setIndentation(4);
