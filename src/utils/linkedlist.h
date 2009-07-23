@@ -76,6 +76,16 @@ void LinkedList_addLast(LinkedList* list, void* item);
   */
 void LinkedList_addFirst(LinkedList* list, void* item);
 
+BOOL LinkedList_isEmpty(LinkedList* list);
+
+/** Removes the passed node from the list. Does not delete the contents of the node!
+  *
+  * @relatesalso LinkedList
+  * @param list The list.
+  * @param node The node to remove.
+  */
+void LinkedList_remove(LinkedList* list, Node* node);
+
 /** Calls the passed function on every data item in the list.
   *
   * @relatesalso LinkedList
@@ -130,14 +140,6 @@ BOOL LinkedList_forAll(LinkedList* list, BOOL(*pred)(void*));
   * @param pred The predicate function.
   */
 BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*));
-
-/** Removes the passed node from the list. Does not delete the contents of the node!
-  *
-  * @relatesalso LinkedList
-  * @param list The list.
-  * @param node The node to remove.
-  */
-void LinkedList_remove(LinkedList* list, Node* node);
 
 /** Deletes the contents of the list.
   * 

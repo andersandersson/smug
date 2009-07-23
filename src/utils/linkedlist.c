@@ -2,6 +2,23 @@
 
 #include <stdlib.h>
 
+Node* Node_new()
+{
+	Node* node = malloc(sizeof(Node));
+
+	node->item = NULL;
+	node->next = NULL;
+	node->prev = NULL;
+
+	return node;
+}
+
+void Node_delete(Node* node)
+{
+	free(node);
+}
+
+// This is not declared in the h-file. Not needed publicly.
 void LinkedList_clear(LinkedList* list)
 {
 	Node* node = list->first;
@@ -18,23 +35,6 @@ void LinkedList_clear(LinkedList* list)
 	list->last = NULL;
 }
 
-Node* Node_new()
-{
-	Node* node = malloc(sizeof(Node));
-
-	node->item = NULL;
-	node->next = NULL;
-	node->prev = NULL;
-
-	return node;
-}
-
-void Node_delete(Node* node)
-{
-//	free(node->item);
-	free(node);
-}
-
 LinkedList* LinkedList_new()
 {
 	LinkedList* new_list;
@@ -49,18 +49,6 @@ LinkedList* LinkedList_new()
 
 void LinkedList_delete(LinkedList* list)
 {
-	// Node* node = list->first;
-	// Node* next_node;
-
-	// list->first = NULL;
-	// list->last = NULL;
-
-	// while(NULL != node) 
-	// {
-		// next_node = node->next;
-		// Node_destroy(node);
-		// node = next_node;
-	// }
 	LinkedList_clear(list);
 	free(list);	
 }
@@ -99,6 +87,11 @@ void LinkedList_addFirst(LinkedList* list, void* item)
 	
 	list->first = node;
 	node->item = item;
+}
+
+BOOL LinkedList_isEmpty(LinkedList* list)
+{
+	return ((NULL == list) || ((NULL == list->first) && (NULL == list->last)));
 }
 
 void LinkedList_remove(LinkedList* list, Node* node)

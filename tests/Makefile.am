@@ -8,11 +8,12 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-TESTS = test-vector
+TESTS = test-vector test-linkedlist
 
 AM_LDFLAGS = -L../src/ -lsmug
 AM_CFLAGS = -I../src/
 
-check_PROGRAMS = test-vector
+check_PROGRAMS = test-vector test-linkedlist
 
 test_vector_SOURCES = test-vector.c
+test_linkedlist_SOURCES = test-linkedlist.c
