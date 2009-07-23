@@ -50,6 +50,10 @@ int main()
 		*j = i;
 		LinkedList_addLast(l, j);
 	}
+	if (100 != LinkedList_length(l))
+	{
+		return 4;
+	}
 //	printf("LinkedList filled.\n");
 
 	l2 = LinkedList_getThose(l, isEven);
@@ -64,6 +68,10 @@ int main()
 	{
 		return 2;
 	}
+	if (50 != LinkedList_length(l2))
+	{
+		return 5;
+	}
 	
 	LinkedList_delete(l2);
 	LinkedList_deleteContents(l, intDeleter);
@@ -71,6 +79,21 @@ int main()
 	{
 		return 3;
 	}
+	
+	for (i = 0; i < 100; i++)
+	{
+		j = malloc(sizeof(int));
+		*j = i;
+		LinkedList_addFirst(l, j);
+	}
+	if (100 != LinkedList_length(l))
+	{
+		return 6;
+	}
+	
+	// TODO: Iterate over list and test remove
+	// Test doList, doListIf and map.
+	
 	LinkedList_delete(l);
 	
 	printf("\n");

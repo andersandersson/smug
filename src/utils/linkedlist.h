@@ -28,6 +28,7 @@ typedef struct Node {
 typedef struct LinkedList {
 	Node* first; /**< First node in list. */
 	Node* last; /**< Last node in list */
+	int length;
 } LinkedList;
 
 /** Creates and returns a new empty node.
@@ -77,6 +78,8 @@ void LinkedList_addLast(LinkedList* list, void* item);
 void LinkedList_addFirst(LinkedList* list, void* item);
 
 BOOL LinkedList_isEmpty(LinkedList* list);
+
+int LinkedList_length(LinkedList* list);
 
 /** Removes the passed node from the list. Does not delete the contents of the node!
   *

@@ -33,6 +33,7 @@ void LinkedList_clear(LinkedList* list)
 
 	list->first = NULL;
 	list->last = NULL;
+	list->length = 0;
 }
 
 LinkedList* LinkedList_new()
@@ -43,6 +44,7 @@ LinkedList* LinkedList_new()
 
 	new_list->first = NULL;
 	new_list->last = NULL;
+	new_list->length = 0;
 
 	return new_list;
 }
@@ -69,6 +71,7 @@ void LinkedList_addLast(LinkedList* list, void* item)
 	
 	list->last = node;
 	node->item = item;
+	list->length++;
 }
 
 void LinkedList_addFirst(LinkedList* list, void* item)
@@ -87,11 +90,34 @@ void LinkedList_addFirst(LinkedList* list, void* item)
 	
 	list->first = node;
 	node->item = item;
+	list->length++;
 }
 
 BOOL LinkedList_isEmpty(LinkedList* list)
 {
 	return ((NULL == list) || ((NULL == list->first) && (NULL == list->last)));
+	// OR: length == 0;
+}
+
+int LinkedList_length(LinkedList* list)
+{
+	// int i = 0;
+	// Node* n;
+	// if (NULL == list || NULL == list->first)
+	// {
+		// return 0;
+	// }
+	// else
+	// {
+		// n = list->first;
+		// while (NULL != n)
+		// {
+			// i++;
+			// n = n->next;
+		// }
+		// return 0;
+	// }
+	return list->length;
 }
 
 void LinkedList_remove(LinkedList* list, Node* node)
@@ -122,6 +148,7 @@ void LinkedList_remove(LinkedList* list, Node* node)
 	}	
 	
 	Node_delete(node);
+	list->length--;
 }
 
 void LinkedList_doList(LinkedList* list, void (*func)(void*))
