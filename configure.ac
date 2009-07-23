@@ -83,6 +83,7 @@ AC_CONFIG_FILES([
    src/utils/Makefile
    src/common/Makefile
    src/script/Makefile
+   tests/Makefile
 ])
 
 AC_OUTPUT

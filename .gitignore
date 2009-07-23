@@ -12,6 +12,8 @@
 *.gz
 *.bz2
 *.exe
+*.pyc
+*.stackdump
 
 # Top level files
 #
@@ -39,6 +41,8 @@ doxygen-default
 
 Makefile.in
 Makefile
+
+m4/lt~obsolete.m4
 
 # Editor backups
 #

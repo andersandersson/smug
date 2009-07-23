@@ -8,5 +8,11 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-EXTRA_DIST = reconf configure
-SUBDIRS = m4 src doc tests
+TESTS = test-vector
+
+AM_LDFLAGS = -L../src/ -lsmug
+AM_CFLAGS = -I../src/
+
+check_PROGRAMS = test-vector
+
+test_vector_SOURCES = test-vector.c
