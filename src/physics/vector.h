@@ -6,8 +6,8 @@
  */
 typedef struct Vector2d
 {
-  int size;    //!< The dimension of the vector
-  double x[2]; //!< The elements of the vector
+    int size;    //!< The dimension of the vector
+    double x[2]; //!< The elements of the vector
 } Vector;
 
 

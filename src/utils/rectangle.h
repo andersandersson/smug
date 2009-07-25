@@ -10,10 +10,10 @@
   */
 typedef struct Rectangle
 {
-	double x;
-	double y;
-	double w;
-	double h;
+    double x;
+    double y;
+    double w;
+    double h;
 } Rectangle;
 
 /** Create a Rectangle struct

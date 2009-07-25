@@ -15,24 +15,24 @@ int main(char argc, char* argv[])
     // define from configure
     putenv("PYTHONPATH=../python/tests:../python/games:../python/api");
     
-	if (argc != 2)
-	{
-		ERROR("Please provide script file\n", "fult");
-		return 0;	
-	}
-	
-	if (!Script_init(argv[1]))
-	{
-		ERROR("Could not initialize script, exiting...\n", "fulare");
-		Script_terminate();
-		return 0;
-	}
+    if (argc != 2)
+    {
+        ERROR("Please provide script file\n", "fult");
+        return 0;    
+    }
+    
+    if (!Script_init(argv[1]))
+    {
+        ERROR("Could not initialize script, exiting...\n", "fulare");
+        Script_terminate();
+        return 0;
+    }
 
-	Script_run();
-	Script_terminate();
-	
+    Script_run();
+    Script_terminate();
+    
     Log_terminate();
-	return 0;
+    return 0;
 }
 
 /*! @mainpage Smug - Scripted Multithreaded Utility for Games

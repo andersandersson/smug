@@ -11,15 +11,15 @@
   */
 typedef struct Thread
 {
-   GLFWthread id;
+    GLFWthread id;
 
-   // "Private" data
-   void (*_callback)(void*);
-   void* _callbackParam;
-   GLFWcond _loopCond;
-   GLFWmutex _loopMutex;
-   int _alive;
-   int _awake;
+    // "Private" data
+    void (*_callback)(void*);
+    void* _callbackParam;
+    GLFWcond _loopCond;
+    GLFWmutex _loopMutex;
+    int _alive;
+    int _awake;
 } Thread;
 
 /** Hide the GLFW mutex in our own.
@@ -28,7 +28,7 @@ typedef struct Thread
   */
 typedef struct Mutex
 {
-   GLFWmutex _mutex;
+    GLFWmutex _mutex;
 } Mutex;
 
 /** Hide the GLFW condition variable in our own.
@@ -37,7 +37,7 @@ typedef struct Mutex
   */
 typedef struct ConditionVariable
 {
-	GLFWcond _cond;
+    GLFWcond _cond;
 } ConditionVariable;
 
 

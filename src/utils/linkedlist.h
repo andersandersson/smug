@@ -14,9 +14,9 @@
   * @sa ::LinkedList
   */
 typedef struct Node {
-	void* item; /**< Pointer to the actual data in the node. */
-	struct Node* next; /**< Next node in list. Null if end of list. */
-	struct Node* prev; /**< Previous node in list. Null if start of list */
+    void* item; /**< Pointer to the actual data in the node. */
+    struct Node* next; /**< Next node in list. Null if end of list. */
+    struct Node* prev; /**< Previous node in list. Null if start of list */
 } Node;
 
 /** A struct for a linked list.
@@ -26,9 +26,9 @@ typedef struct Node {
   * @sa ::Node
   */
 typedef struct LinkedList {
-	Node* first; /**< First node in list. */
-	Node* last; /**< Last node in list */
-	int length;
+    Node* first; /**< First node in list. */
+    Node* last; /**< Last node in list */
+    int length;
 } LinkedList;
 
 /** Creates and returns a new empty node.
@@ -158,7 +158,7 @@ void LinkedList_deleteContents(LinkedList* list, void (*deleter)(void*));
 /*
 Create the deleter function like this:
 ContentItem_destroy(void* contentItem) {
-	free((ContentItem*)contentItem);
+    free((ContentItem*)contentItem);
 }
 */
 #endif // LINKEDLIST_H

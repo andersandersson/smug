@@ -48,8 +48,8 @@ void GameObject_setDrawable(GameObject* obj, Drawable* d)
 void GameObject_render(GameObject* obj)
 {
     GameObject_invariant(obj);
-	if (NULL != obj->drawable && obj->visible)
-	{
-		Drawable_render(obj->drawable);
-	}
+    if (NULL != obj->drawable && obj->visible)
+    {
+        Drawable_render(obj->drawable);
+    }
 }

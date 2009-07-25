@@ -12,14 +12,14 @@
   */
 typedef struct GameObject
 {
-	float x;
-	float y;
-	
-	void* shape;
-	Drawable* drawable;
-	BOOL visible;
-	
-	char* tag;
+    float x;
+    float y;
+    
+    void* shape;
+    Drawable* drawable;
+    BOOL visible;
+    
+    char* tag;
 
 } GameObject;
 
@@ -37,8 +37,21 @@ GameObject* GameObject_new();
   */
 void GameObject_delete(void* obj);
 
+/** Assign a Drawable to the GameObject.
+  *
+  * @relatesalso GameObject
+  * @param obj A pointer to the GameObject.
+  * @param d A pointer to the Drawable.
+  */
 void GameObject_setDrawable(GameObject* obj, Drawable* d);
 
+/** Render the GameObject.
+  *
+  * If the GameObject is visible and has a Drawable, that drawable is rendered.
+  * 
+  * @relatesalso GameObject
+  * @param obj A pointer to the GameObject to render.
+  */
 void GameObject_render(GameObject* obj);
 
 #endif //GAMEOBJECT_H

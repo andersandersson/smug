@@ -5,7 +5,7 @@
   */
 typedef struct Sprite
 {
-	int placeholder;
+    int placeholder;
 } Sprite;
 
 Sprite* Sprite_new();

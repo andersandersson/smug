@@ -20,12 +20,11 @@ BOOL Signal_check(int signal)
 
 BOOL Signal_checkAndClear(int signal)
 { 
-	if(signal == (gSignals & signal))
-	{
-		gSignals = (gSignals & !signal);
-		return TRUE;
-	}
+    if(signal == (gSignals & signal))
+    {
+        gSignals = (gSignals & !signal);
+        return TRUE;
+    }
    
-	return FALSE;
+    return FALSE;
 }
-

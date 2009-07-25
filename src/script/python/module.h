@@ -4,4 +4,3 @@
 int initPythonModule();
 
 #endif
-

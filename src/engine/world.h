@@ -13,7 +13,7 @@
   */
 typedef struct World
 {
-	LinkedList* gameObjects;
+    LinkedList* gameObjects;
 
 } World;
 
