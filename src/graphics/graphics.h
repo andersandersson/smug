@@ -5,26 +5,11 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include "color.h"
 #include "common/common.h"
 #include "utils/rectangle.h"
 
-/** An RGBA Color type.
-  */
-typedef struct Color
-{
-	float r;
-	float g;
-	float b;
-	float a;
-} Color;
-
-/** Create a Color struct (on the stack)
-  *
-  * @relatesalso Color
-  */
-Color Color_(float r, float g, float b, float a);
-
-/** 
+/**
  * Initialize Graphics subsystem
  *
  * This will create a window of a given size and set it

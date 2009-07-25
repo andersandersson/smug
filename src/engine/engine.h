@@ -2,6 +2,7 @@
 #define ENGINE_H
 
 #include "common/common.h"
+#include "gameobject.h"
 
 /** 
  * Initialize Engine
@@ -23,5 +24,6 @@ void Engine_terminate();
  */
 void Engine_run();
 
+void Engine_addObject(GameObject* newObj);
 
 #endif

@@ -5,7 +5,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include "common.h"
+#include "common/common.h"
+#include "graphics/drawable.h"
 
 /** The GameObject struct.
   */
@@ -15,7 +16,8 @@ typedef struct GameObject
 	float y;
 	
 	void* shape;
-	void* sprite;
+	Drawable* drawable;
+	BOOL visible;
 	
 	char* tag;
 
@@ -34,5 +36,9 @@ GameObject* GameObject_new();
   * @param obj A pointer to the GameObject to be deleted.
   */
 void GameObject_delete(void* obj);
+
+void GameObject_setDrawable(GameObject* obj, Drawable* d);
+
+void GameObject_render(GameObject* obj);
 
 #endif //GAMEOBJECT_H

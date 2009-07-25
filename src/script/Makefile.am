@@ -14,3 +14,5 @@ noinst_LTLIBRARIES = libscript.la
 
 libscript_la_SOURCES =  python/pyscript.c script.h \
 	python/module.c python/module.c
+# \
+#	python/pystruct.c python/pystruct.h

@@ -1,21 +1,37 @@
 #include "rectangle.h"
 
-Rectangle Rectangle_(double x, double y, double w, double h)
+#include "common/common.h"
+#include <stdlib.h>
+
+static void Rectangle_invariant(Rectangle* r)
 {
-	Rectangle r;
-	r.x = x;
-	r.y = y;
-	r.w = w;
-	r.h = h;
-	return r;
+    assert(NULL != r);
 }
+
+//Rectangle Rectangle_(double x, double y, double w, double h)
+//{
+//    Rectangle r;
+//    r.x = x;
+//    r.y = y;
+//    r.w = w;
+//    r.h = h;
+//    return r;
+//}
+//
 
 Rectangle* Rectangle_new(double x, double y, double w, double h)
 {
-	Rectangle* r = malloc(sizeof(Rectangle));
-	r->x = x;
-	r->y = y;
-	r->w = w;
-	r->h = h;
-	return r;
+    Rectangle* r = malloc(sizeof(Rectangle));
+    r->x = x;
+    r->y = y;
+    r->w = w;
+    r->h = h;
+    Rectangle_invariant(r);
+    return r;
+}
+
+void Rectangle_delete(Rectangle* r)
+{
+    Rectangle_invariant(r);
+    free(r);
 }

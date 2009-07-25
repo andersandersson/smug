@@ -16,16 +16,16 @@ typedef struct Rectangle
 	double h;
 } Rectangle;
 
-/** Create a Rectangle struct (on the stack)
-  *
-  * @relatesalso Rectangle
-  */
-Rectangle Rectangle_(double x, double y, double w, double h);
-
-/** Create a Rectangle struct (on the heap)
+/** Create a Rectangle struct
   *
   * @relatesalso Rectangle
   */
 Rectangle* Rectangle_new(double x, double y, double w, double h);
+
+/** Delete a Rectangle struct created with Rectangle_new
+  *
+  * @relatesalso Rectangle
+  */
+void Rectangle_delete(Rectangle* r);
 
 #endif // RECTANGLE_H

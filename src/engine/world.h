@@ -34,7 +34,9 @@ World* World_new();
 void World_delete(void* world);
 
 /** Adds the passed GameObject to the world.
-  *
+  * 
+  * Objects added to the World are owned by the World. The World is responsible for deleting them.
+  * 
   * @relatesalso World
   * @param world The world.
   * @param obj A pointer to the GameObject to be added to the world.
@@ -51,5 +53,7 @@ void World_addObject(World* world, GameObject* obj);
   * @return A newly created LinkedList with any matching GameObject objects.
   */
 LinkedList* World_getObjectsByTag(World* world, char* tag);
+
+void World_render(World* world);
 
 #endif //WORLD_H

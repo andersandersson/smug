@@ -2,6 +2,7 @@
 #include "Python.h"
 
 #include "python/module.h"
+#include "common/log.h"
 
 PyObject* gName;
 PyObject* gModule;
@@ -19,6 +20,7 @@ int Script_init(const char* scriptfile)
 	
     if (!(gModule = PyImport_Import(gName)))
 	{
+		ERROR("Error importing python module.");
         PyErr_Print();
 		return 0;
 	}
