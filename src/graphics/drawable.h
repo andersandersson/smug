@@ -47,6 +47,6 @@ void Drawable_delete(void* d);
   *
   * @param d A pointer to a Drawable.
   */
-void Drawable_render(Drawable* d);
+void Drawable_render(Drawable* d, float x, float y);
 
 #endif //DRAWABLE_H

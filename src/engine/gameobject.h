@@ -37,6 +37,8 @@ GameObject* GameObject_new();
   */
 void GameObject_delete(void* obj);
 
+void GameObject_setPosition(GameObject* obj, float x, float y);
+
 /** Assign a Drawable to the GameObject.
   *
   * @relatesalso GameObject

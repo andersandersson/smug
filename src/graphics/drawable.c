@@ -43,16 +43,18 @@ Drawable* Drawable_newRect(Rectangle* r, Color* c)
     return d;
 }
 
-void Drawable_render(Drawable* d)
+void Drawable_render(Drawable* d, float x, float y)
 {
     Drawable_invariant(d);
     
     if (d->sprite)
     {
-        Sprite_draw(d->sprite);
+        Sprite_draw(d->sprite, x, y);
     }
     else
     {
+        d->rect->x = x;
+        d->rect->y = y;
         Graphics_fillRect(d->rect, d->color);
     }
 }

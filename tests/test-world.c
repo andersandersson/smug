@@ -23,15 +23,18 @@ int main()
     Rectangle_delete(area);
     
     go = GameObject_new();
-    rect = Rectangle_new(10.0f, 10.0f, 100.0f, 100.0f);
-    color = Color_new(0.5f, 0.5f, 0.5f, 1.0f);
+    rect = Rectangle_new(0.0f, 0.0f, 100.0f, 100.0f);
+    color = Color_new(1.0f, 1.0f, 0.0f, 1.0f);
     drawable = Drawable_newRect(rect, color);
     GameObject_setDrawable(go, drawable);
+    GameObject_setPosition(go, 50.0f, 50.0f);
     Engine_addObject(go);
     
     Engine_run();
 
     Engine_terminate();
 
+    GameObject_delete(go);
+    
     return 0;
 }

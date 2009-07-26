@@ -37,6 +37,13 @@ void GameObject_delete(void* obj)
     free(go);
 }
 
+void GameObject_setPosition(GameObject* obj, float x, float y)
+{
+    GameObject_invariant(obj);
+    obj->x = x;
+    obj->y = y;
+}
+
 void GameObject_setDrawable(GameObject* obj, Drawable* d)
 {
     GameObject_invariant(obj);
@@ -50,6 +57,6 @@ void GameObject_render(GameObject* obj)
     GameObject_invariant(obj);
     if (NULL != obj->drawable && obj->visible)
     {
-        Drawable_render(obj->drawable);
+        Drawable_render(obj->drawable, obj->x, obj->y);
     }
 }

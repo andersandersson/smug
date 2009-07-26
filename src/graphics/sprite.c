@@ -14,7 +14,7 @@ void Sprite_delete(Sprite* sprite)
     }
 }
 
-void Sprite_draw(Sprite* sprite)
+void Sprite_draw(Sprite* sprite, float x, float y)
 {
 
 }
