@@ -8,7 +8,9 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_CFLAGS = -I..
+SUBDIRS = . test
+
+AM_CFLAGS = -I.. -I../common
 
 noinst_LTLIBRARIES = libutils.la
 libutils_la_SOURCES = linkedlist.c linkedlist.h rectangle.h rectangle.c

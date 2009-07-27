@@ -8,9 +8,10 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+AM_CFLAGS =
 
-AM_CFLAGS = -I.. -I../common
+bin_PROGRAMS = pysmug
 
-noinst_LTLIBRARIES = libphysics.la
-libphysics_la_SOURCES = physics.c physics.h vector.c vector.h
+pysmug_SOURCES = main.c module.c module.h
+pysmug_LDFLAGS = -L../../src/ -lsmug
+pysmug_CFLAGS = -I../../src/

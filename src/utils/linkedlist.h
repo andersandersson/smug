@@ -5,7 +5,7 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-#include "common/common.h"
+#include "common.h"
 
 /** A struct for the node type in a linked list.
   *

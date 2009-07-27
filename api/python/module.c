@@ -1,8 +1,7 @@
 #include "module.h"
 #include "Python.h"
 
-#include "engine/engine.h"
-//#include "pystruct.h"
+#include "smug.h"
 
 /**** Exported Function Declarations ****/
 

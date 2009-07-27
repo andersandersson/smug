@@ -8,9 +8,11 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+TESTS = test-vector
 
-AM_CFLAGS = -I.. -I../common
+AM_LDFLAGS = -L../ -lphysics
+AM_CFLAGS = -I../ -I../../common
 
-noinst_LTLIBRARIES = libphysics.la
-libphysics_la_SOURCES = physics.c physics.h vector.c vector.h
+check_PROGRAMS = test-vector
+
+test_vector_SOURCES = test-vector.c
