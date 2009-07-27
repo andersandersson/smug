@@ -43,6 +43,7 @@ int main()
         }
     }
     
+    Image_free(image);
 
     return 0;
 }
