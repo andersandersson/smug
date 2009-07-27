@@ -8,15 +8,12 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+TESTS = test-image
 
-AM_CFLAGS = $(LIBGLFWCFLAGS)  -I..
+AM_LDFLAGS = -L../ -lgraphics -L../../common -lcommon -L../../utils -lutils
+AM_CFLAGS = -I../ -I../../common
 
-noinst_LTLIBRARIES = libgraphics.la
+check_PROGRAMS = test-image
 
-libgraphics_la_SOURCES = graphics.c graphics.h \
-drawable.c drawable.h \
-color.c color.h \
-sprite.c sprite.h \
-image/image.c image/image.h \
-image/lodepng/lodepng.c image/lodepng/lodepng.h
+test_image_SOURCES = test-image.c
+

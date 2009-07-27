@@ -78,6 +78,7 @@ AC_CONFIG_FILES([
    m4/Makefile
    src/Makefile
    src/graphics/Makefile
+   src/graphics/test/Makefile 
    src/physics/Makefile 
    src/physics/test/Makefile
    src/engine/Makefile

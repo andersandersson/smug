@@ -102,12 +102,6 @@ void Engine_run()
             {
                 Signal_send(SIG_EXIT);
             }
-            if(glfwGetKey( GLFW_KEY_F1 ))
-            {
-                Script_terminate();
-                Signal_send(SIG_EXIT);
-                Signal_send(SIG_TERM);
-            }
             
             // Render the world.
             World_render(gWorld);
