@@ -13,7 +13,7 @@ AM_CFLAGS =
 SUBDIRS = utils common platform graphics physics script engine
 
 bin_PROGRAMS = smug
-noinst_LTLIBRARIES = libsmug.la
+lib_LTLIBRARIES = libsmug.la
 
 smug_SOURCES = main.c
 smug_LDADD = libsmug.la

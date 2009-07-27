@@ -8,11 +8,11 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . tests
+TESTS = test-hooks
 
-AM_CFLAGS = -I..
+AM_LDFLAGS = -L../ -lutils
+AM_CFLAGS = -I../
 
-noinst_LTLIBRARIES = libutils.la
-libutils_la_SOURCES = linkedlist.c linkedlist.h\
-rectangle.h rectangle.c\
-hooks.c hooks.h
+check_PROGRAMS = test-hooks
+
+test_hooks_SOURCES = test-hooks.c

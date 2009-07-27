@@ -81,6 +81,7 @@ AC_CONFIG_FILES([
    src/engine/Makefile
    src/platform/Makefile
    src/utils/Makefile
+   src/utils/tests/Makefile
    src/common/Makefile
    src/script/Makefile
    tests/Makefile
