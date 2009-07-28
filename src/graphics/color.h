@@ -23,4 +23,8 @@ Color* Color_new(float r, float g, float b, float a);
   */
 void Color_delete(Color* c);
 
+Color Color_create();
+
+Color Color_createFromRgba(float r, float g, float b, float a);
+
 #endif // COLOR_H

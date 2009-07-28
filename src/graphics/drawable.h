@@ -34,7 +34,6 @@ Drawable* Drawable_newSprite(Sprite* s);
   *
   * Calling Drawable_draw on the returned object will render a filled rectangle of the specified color.
   *
-  * @param s A pointer to a valid Sprite object.
   * @return A pointer to a new Drawable.
   */
 Drawable* Drawable_newRect(Rectangle* r, Color* c);

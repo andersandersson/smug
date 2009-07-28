@@ -8,11 +8,11 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-TESTS = test-world
+TESTS = test-gameobject
 
 AM_LDFLAGS = -L../src/ -lsmug
 AM_CFLAGS = -I../src/
 
-check_PROGRAMS = test-world
+check_PROGRAMS = test-gameobject
 
-test_world_SOURCES = test-world.c
+test_gameobject_SOURCES = test-gameobject.c
