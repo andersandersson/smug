@@ -2,8 +2,8 @@
   * @brief Defines the World type.
   */
 
-#ifndef WORLD_H
-#define WORLD_H
+#ifndef SMUG_ENGINE_WORLD_H
+#define SMUG_ENGINE_WORLD_H
 
 #include "common.h"
 #include "utils/linkedlist.h"
@@ -56,4 +56,4 @@ LinkedList* World_getObjectsByTag(World* world, char* tag);
 
 void World_render(World* world);
 
-#endif //WORLD_H
+#endif //SMUG_ENGINE_WORLD_H

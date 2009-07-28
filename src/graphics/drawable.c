@@ -38,7 +38,16 @@ Drawable* Drawable_newRect(Rectangle* r, Color* c)
     Drawable* d = malloc(sizeof(Drawable));
     d->sprite = NULL;
     d->rect = r;
+    
     d->color = c;
+    //Color* newC;
+    //newC = Color_new(0.0f, 0.0f, 0.0f, 0.0f); //Well this is fugly. TODO: Should take 0 args. And Create Color_newFromRgba(f,f,f,f) instead.
+    //newC->r = c->r;
+    //newC->g = c->g;
+    //newC->b = c->b;
+    //newC->a = c->a;
+    //d->color = newC;
+
     Drawable_invariant(d);
     return d;
 }

@@ -2,8 +2,8 @@
   * @brief Defines the GameObject type.
   */
 
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#ifndef SMUG_ENGINE_GAMEOBJECT_H
+#define SMUG_ENGINE_GAMEOBJECT_H
 
 #include "common/common.h"
 #include "graphics/drawable.h"
@@ -56,4 +56,4 @@ void GameObject_setDrawable(GameObject* obj, Drawable* d);
   */
 void GameObject_render(GameObject* obj);
 
-#endif //GAMEOBJECT_H
+#endif //SMUG_ENGINE_GAMEOBJECT_H

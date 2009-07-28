@@ -1,5 +1,5 @@
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef SMUG_COMMON_COMMON_H
+#define SMUG_COMMON_COMMON_H
 
 #ifdef HAS_CONFIG_H
     #include "config.h"
@@ -18,4 +18,4 @@ typedef unsigned char BOOL;
 
 typedef double Time;
 
-#endif // COMMON_H
+#endif // SMUG_COMMON_COMMON_H
