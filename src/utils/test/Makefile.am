@@ -10,7 +10,7 @@
 
 TESTS = test-linkedlist test-hook
 
-AM_LDFLAGS = -L../ -lutils
+AM_LDFLAGS = -L../ -L../../common -lutils -lcommon
 AM_CFLAGS = -I../ -I../../common
 
 check_PROGRAMS = test-linkedlist test-hook
