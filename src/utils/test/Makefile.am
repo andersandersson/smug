@@ -8,11 +8,12 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-TESTS = test-linkedlist
+TESTS = test-linkedlist test-hook
 
 AM_LDFLAGS = -L../ -lutils
 AM_CFLAGS = -I../ -I../../common
 
-check_PROGRAMS = test-linkedlist
+check_PROGRAMS = test-linkedlist test-hook
 
 test_linkedlist_SOURCES = test-linkedlist.c
+test_hook_SOURCES = test-hook.c
