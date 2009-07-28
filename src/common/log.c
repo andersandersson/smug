@@ -11,13 +11,14 @@ static char* gFormatString = NULL;
 static char  gIndentString[1024] = "\0";
 static LinkedList* gPrefixStack = NULL;
 
-static void Log_writePrefixStack()
+static BOOL _isInitialized()
 {
-    if(NULL == gPrefixStack)
-    {
-        return;
-    }
-    
+    return NULL != gPrefixStack;
+}
+
+static void _writePrefixStack()
+{
+    // Local function: we can assume _isInitialized().
     LinkedList_doList(gPrefixStack, Console_write);
 }
 
@@ -35,40 +36,42 @@ BOOL Log_init()
 
 void Log_terminate()
 {
+    assert(_isInitialized());
     LinkedList_delete(gPrefixStack);
 }
 
 void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
 {
-   char* format;   
-   char message[CONSOLE_PRINT_BUFFER_SIZE];
-   char string[CONSOLE_PRINT_BUFFER_SIZE];
-   char flag[64];
-   int  c = 0;
-   int  c_max = 0;
-   int  flag_c = 0;
-   BOOL reading_flag = FALSE;
-   va_list vl;
-   
-   // Get the format string for the used log level
-   format = Log_getFormatString(level);
-   
-   // If no format string is set, don't print anything.
-   if(NULL == format) {
-       return;
-   }   
-
-   va_start(vl, fmt);
-
-   // Only print log if correct log level is set
-   if(gCurrentLogLevel & level) 
-      {
-         // Print formatted string to the message buffer
-         vsprintf(message, fmt, vl);
+    assert(_isInitialized());
+    char* format;   
+    char message[CONSOLE_PRINT_BUFFER_SIZE];
+    char string[CONSOLE_PRINT_BUFFER_SIZE];
+    char flag[64];
+    int  c = 0;
+    int  c_max = 0;
+    int  flag_c = 0;
+    BOOL reading_flag = FALSE;
+    va_list vl;
+    
+    // Get the format string for the used log level
+    format = Log_getFormatString(level);
+    
+    // If no format string is set, don't print anything.
+    if(NULL == format) {
+        return;
+    }   
+    
+    va_start(vl, fmt);
+    
+    // Only print log if correct log level is set
+    if(gCurrentLogLevel & level) 
+    {
+        // Print formatted string to the message buffer
+        vsprintf(message, fmt, vl);
          
-         // Iterate over each char in the format string and output
-         for(c=0,c_max=strlen(format); c<c_max; c++) 
-         {
+        // Iterate over each char in the format string and output
+        for(c=0,c_max=strlen(format); c<c_max; c++) 
+        {
             // Start reading a 'flag' when we hit an '%'
             if('%' == format[c] && FALSE == reading_flag)
             {
@@ -95,7 +98,7 @@ void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
                 // %message%
                 if(0 == strcmp("message", flag))
                 {
-                    Log_writePrefixStack();
+                    _writePrefixStack();
                     Console_write(message);
                 }
 
@@ -118,37 +121,41 @@ void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
             {
                 Console_write("%c", format[c]);
             }
-         } 
+        } 
          
-       // Finally, add a newline
-       Console_write("%c", '\n');
-      }
+    // Finally, add a newline
+    Console_write("%c", '\n');
+    }
 
-   va_end(vl);
+    va_end(vl);
 }
 
 
 void Log_setLevel(int level)
 {
-   gCurrentLogLevel = level;
+    assert(_isInitialized());
+    gCurrentLogLevel = level;
 }
 
 void Log_setFormatString(int level, char* format_string)
 {
+    assert(_isInitialized());
     gFormatString = format_string;
 }
 
 char* Log_getFormatString(int level)
 {
+    assert(_isInitialized());
     return gFormatString;
 }
 
 void Log_pushPrefix(char* prefix)
 {
-    if(NULL == gPrefixStack)
-    {
-        gPrefixStack = LinkedList_new();
-    }
+    assert(_isInitialized());
+    //if(NULL == gPrefixStack)
+    //{
+    //    gPrefixStack = LinkedList_new();
+    //}
     
     LinkedList_addFirst(gPrefixStack, prefix);
 }
@@ -156,11 +163,12 @@ void Log_pushPrefix(char* prefix)
 char* Log_popPrefix()
 {
     char* item = NULL;
+    assert(_isInitialized());
     
-    if(NULL == gPrefixStack)
-    {
-        return NULL;
-    }
+    //if(NULL == gPrefixStack)
+    //{
+    //    return NULL;
+    //}
  
     if(NULL == gPrefixStack->first)
     {

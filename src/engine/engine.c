@@ -20,6 +20,8 @@ World* gWorld = NULL;
 
 int Engine_init()
 {
+    Log_init();
+
     NOTIFY("Initializing engine:");
     Log_indent();
     
@@ -70,6 +72,8 @@ void Engine_terminate()
     // block until input is received. Instead, kill the thread.
     glfwDestroyThread(gConsoleThread->id);    
     
+    Log_terminate();
+    
     gInitialized = FALSE;
 }
 
@@ -112,7 +116,9 @@ void Engine_run()
         
         if (glfwGetTime() - lastFpsCheck >= 1.0)
         {
-            Console_writeLine("Fps: %i", fps);
+            //Console_writeLine("Fps: %i", fps);
+            //Log_write(LOG_NOTIFICATION, "FPSCK", "engine.c", 116, "%i", fps);
+            NOTIFY("Fps: %i", fps);
             fps = 0;
             lastFpsCheck = glfwGetTime();
         }
@@ -122,7 +128,7 @@ void Engine_run()
     }
     
     Log_dedent();
-    NOTIFY("Engine stopped.\n");
+    NOTIFY("Engine stopped.");
 }
 
 void Engine_addObject(GameObject* newObj)
