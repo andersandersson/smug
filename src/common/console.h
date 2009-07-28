@@ -2,8 +2,8 @@
   * @brief Defines a debug console
   */
 
-#ifndef CONSOLE_H
-#define CONSOLE_H
+#ifndef SMUG_COMMON_CONSOLE_H
+#define SMUG_COMMON_CONSOLE_H
 
 #include "common/common.h" // Using BOOL
 
@@ -65,4 +65,4 @@ void Console_parseCommand(char* cmd);
  */
 BOOL Console_defaultParser(char* cmd);
 
-#endif
+#endif // SMUG_COMMON_CONSOLE_H

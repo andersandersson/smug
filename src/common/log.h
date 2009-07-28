@@ -2,8 +2,8 @@
   * @brief Contains functions for logging engine messages.
   */
 
-#ifndef LOG_H
-#define LOG_H
+#ifndef SMUG_COMMON_LOG_H
+#define SMUG_COMMON_LOG_H
 
 #include "common/common.h"
 
@@ -88,4 +88,4 @@ void Log_dedent();
  */
 void Log_setIndentation(unsigned int indent);
 
-#endif // LOG_H
+#endif // SMUG_COMMON_LOG_H

@@ -1,5 +1,5 @@
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef SMUG_ENGINE_ENGINE_H
+#define SMUG_ENGINE_ENGINE_H
 
 #include "common/common.h"
 #include "gameobject.h"
@@ -26,4 +26,4 @@ void Engine_run();
 
 void Engine_addObject(GameObject* newObj);
 
-#endif
+#endif // SMUG_ENGINE_ENGINE_H

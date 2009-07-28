@@ -1,5 +1,5 @@
-#ifndef SIGNAL_H
-#define SIGNAL_H
+#ifndef SMUG_COMMON_SIGNAL_H
+#define SMUG_COMMON_SIGNAL_H
 
 #include "common/common.h"
 
@@ -10,4 +10,4 @@ void Signal_send(int signal);
 BOOL Signal_check(int signal);
 BOOL Signal_checkAndClear(int signal);
 
-#endif // SIGNAL_H
+#endif // SMUG_COMMON_SIGNAL_H
