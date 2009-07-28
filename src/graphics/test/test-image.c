@@ -9,6 +9,7 @@ unsigned char reference[4][4][4] = {{{0, 0, 0, 255 }, {255, 255, 255, 0 }, {255,
 
 int main()
 {
+    Log_init();
     Image* image = Image_new();
     
     if (!Image_loadFromFile(image, "test-image.png"))
@@ -44,6 +45,8 @@ int main()
     }
     
     Image_free(image);
+
+    Log_terminate();
 
     return 0;
 }
