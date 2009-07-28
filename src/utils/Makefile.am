@@ -15,4 +15,4 @@ AM_CFLAGS = -I.. -I../common
 noinst_LTLIBRARIES = libutils.la
 libutils_la_SOURCES = linkedlist.c linkedlist.h\
 rectangle.h rectangle.c\
-hooks.c hooks.h
+hook.c hook.h

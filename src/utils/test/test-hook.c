@@ -1,7 +1,7 @@
-#include "hooks.h"
-
 #include <stdio.h>
 #include <assert.h>
+
+#include "hook.h"
 
 int my_func(void* x, void* y)
 {
