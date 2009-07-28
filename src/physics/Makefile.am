@@ -8,6 +8,8 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+SUBDIRS = . test
+
 AM_CFLAGS = -I.. -I../common
 
 noinst_LTLIBRARIES = libphysics.la

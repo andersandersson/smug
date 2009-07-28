@@ -8,8 +8,15 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_CFLAGS = $(LIBGLFWCFLAGS)  -I.. -I../common
+SUBDIRS = . test
+
+AM_CFLAGS = $(LIBGLFWCFLAGS)  -I..
 
 noinst_LTLIBRARIES = libgraphics.la
 
-libgraphics_la_SOURCES = graphics.c graphics.h drawable.c drawable.h color.c color.h sprite.c sprite.h
+libgraphics_la_SOURCES = graphics.c graphics.h \
+drawable.c drawable.h \
+color.c color.h \
+sprite.c sprite.h \
+image/image.c image/image.h \
+image/lodepng/lodepng.c image/lodepng/lodepng.h

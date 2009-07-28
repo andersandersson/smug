@@ -8,11 +8,12 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+TESTS = test-image
 
-AM_CFLAGS = -I.. -I../common
+AM_LDFLAGS = -L../ -lgraphics -L../../common -lcommon -L../../utils -lutils
+AM_CFLAGS = -I../ -I../../common
 
-noinst_LTLIBRARIES = libutils.la
-libutils_la_SOURCES = linkedlist.c linkedlist.h\
-rectangle.h rectangle.c\
-hooks.c hooks.h
+check_PROGRAMS = test-image
+
+test_image_SOURCES = test-image.c
+

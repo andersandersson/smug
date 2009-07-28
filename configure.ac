@@ -38,6 +38,7 @@ AC_CANONICAL_HOST
 
 # Check for C compiler
 AC_PROG_CC
+AM_PROG_CC_C_O
 
 # Check for library function
 AC_PROG_LIBTOOL
@@ -77,14 +78,16 @@ AC_CONFIG_FILES([
    m4/Makefile
    src/Makefile
    src/graphics/Makefile
+   src/graphics/test/Makefile 
    src/physics/Makefile 
+   src/physics/test/Makefile
    src/engine/Makefile
    src/platform/Makefile
    src/utils/Makefile
-   src/utils/tests/Makefile
+   src/utils/test/Makefile
    src/common/Makefile
-   src/script/Makefile
-   tests/Makefile
+   test/Makefile
+   api/python/Makefile
 ])
 
 AC_OUTPUT

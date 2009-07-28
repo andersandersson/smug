@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "physics/vector.h"
+#include "vector.h"
 
 int main()
 {

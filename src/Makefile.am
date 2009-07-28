@@ -10,21 +10,26 @@
 
 AM_CFLAGS =
 
-SUBDIRS = utils common platform graphics physics script engine
+SUBDIRS = utils common platform graphics physics engine
 
-bin_PROGRAMS = smug
 lib_LTLIBRARIES = libsmug.la
 
-smug_SOURCES = main.c
-smug_LDADD = libsmug.la
+#It kind of matters a whole lot which order these are in, reverse dependecy order seems to work
 
-#It kind of matters a whole lot which order these are in, reverse dependecy order seems to work, FIX THIS!
+libsmug_ladir = $(includedir)/smug
+
+nobase_libsmug_la_HEADERS = \
+common/interface.h \
+engine/interface.h \
+graphics/interface.h \
+physics/interface.h \
+utils/interface.h \
+platform/interface.h
 
 libsmug_la_SOURCES =
-libsmug_la_LIBADD = script/libscript.la
-libsmug_la_LIBADD += engine/libsmug.la
-libsmug_la_LIBADD += common/libcommon.la
+libsmug_la_LIBADD = engine/libsmug.la
 libsmug_la_LIBADD += graphics/libgraphics.la
 libsmug_la_LIBADD += physics/libphysics.la
 libsmug_la_LIBADD += platform/libplatform.la
 libsmug_la_LIBADD += utils/libutils.la
+libsmug_la_LIBADD += common/libcommon.la

@@ -19,4 +19,3 @@ typedef unsigned char BOOL;
 typedef double Time;
 
 #endif // COMMON_H
-
