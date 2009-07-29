@@ -138,7 +138,7 @@ void _Log_print(int level, char* prefix, char* file, int line, char* fmt, int ne
     va_list vl;
     char buffer[1024];
 
-    va_start(vl, fmt);
+    va_start(vl, newline);
 
     vsprintf(buffer, fmt, vl);
 
