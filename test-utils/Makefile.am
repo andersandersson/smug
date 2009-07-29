@@ -8,10 +8,6 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+noinst_LTLIBRARIES = libtestutils.la
 
-AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
-
-noinst_LTLIBRARIES = libplatform.la
-
-libplatform_la_SOURCES = threads.c threads.h platform.h
+libtestutils_la_SOURCES = assert.c assert.h

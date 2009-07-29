@@ -5,6 +5,8 @@
 #ifndef THREAD_H
 #define THREAD_H
 
+#include <GL/glfw.h>
+
 /** Data holder for a thread.
   *
   * @sa ::Mutex, ::ConditionVariable

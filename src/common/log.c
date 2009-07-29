@@ -4,6 +4,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 // As default, include all log output
 static int   gCurrentLogLevel = LOG_ALL;

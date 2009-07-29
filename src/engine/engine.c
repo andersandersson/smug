@@ -94,7 +94,7 @@ void Engine_run()
     Time time;
     nexttime = glfwGetTime();
     
-    while(TRUE != Signal_checkAndClear(SIG_EXIT))
+    while(TRUE != Signal_check(SIG_EXIT))
     {
         time = glfwGetTime();
         

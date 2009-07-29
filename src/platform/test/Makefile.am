@@ -8,10 +8,11 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+TESTS = test-thread
 
-AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
+AM_LDFLAGS = -L../ -L../../utils/ -L../../common/ -L../../../test-utils/ -ltestutils -lcommon -lutils -lplatform
+AM_CFLAGS = -I../
 
-noinst_LTLIBRARIES = libplatform.la
+check_PROGRAMS = test-thread
 
-libplatform_la_SOURCES = threads.c threads.h platform.h
+test_thread_SOURCES = test-thread.c

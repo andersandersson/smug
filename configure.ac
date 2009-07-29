@@ -51,7 +51,7 @@ AC_GLFW_DEVEL([2.6.0])
 
 # Append Python and GLFW flags to default flags
 LIBS="$LIBS $GLFW_LIBS $PYTHON_EXTRA_LIBS $PYTHON_EXTRA_LDFLAGS"
-CFLAGS="$CFLAGS $GLFW_CFLAGS $PYTHON_CPPFLAGS"
+CFLAGS="$CFLAGS $GLFW_CFLAGS $PYTHON_CPPFLAGS -Wall -Werror=implicit-function-declaration"
 LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $PYTHON_LDFLAGS"
 
 # Check the OS and run corresponding init script
@@ -83,11 +83,14 @@ AC_CONFIG_FILES([
    src/physics/test/Makefile
    src/engine/Makefile
    src/platform/Makefile
+   src/platform/test/Makefile
    src/utils/Makefile
    src/utils/test/Makefile
    src/common/Makefile
+   src/common/test/Makefile
    test/Makefile
    api/python/Makefile
+   test-utils/Makefile
 ])
 
 AC_OUTPUT

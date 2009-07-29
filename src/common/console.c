@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 static unsigned int gIndent = 0;
 static unsigned int gTabWidth = 4;

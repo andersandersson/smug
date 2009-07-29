@@ -149,6 +149,8 @@ Mutex* Mutex_new()
    Mutex* mutex = malloc(sizeof(Mutex));
 
    mutex->_mutex = glfwCreateMutex();
+
+   return mutex;
 }
 
 
