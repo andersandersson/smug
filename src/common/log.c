@@ -181,7 +181,7 @@ void Log_pushPrefix(char* prefix)
     //    gPrefixStack = LinkedList_new();
     //}
     
-    LinkedList_addFirst(gPrefixStack, prefix);
+    LinkedList_addLast(gPrefixStack, prefix);
 }
 
 char* Log_popPrefix()

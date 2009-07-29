@@ -6,6 +6,7 @@ int main()
 
     Log_printLine("Anders leker");
     Log_indent();
+    Log_pushPrefix(": ");
     Log_printLine("Anders leker");
     Log_printLine("Anders leker");
     Log_indent();
@@ -13,6 +14,7 @@ int main()
     Log_printLine("Anders leker");
     Log_dedent();
     Log_dedent();
+    Log_popPrefix();
     Log_printLine("Anders leker");
 
     Log_setLevel(LOG_ALL);
