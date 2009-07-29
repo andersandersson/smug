@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <assert.h>
+#include "test-utils/assert.h"
 
 #include "hook.h"
 

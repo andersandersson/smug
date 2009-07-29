@@ -10,7 +10,7 @@
 
 TESTS = test-image
 
-AM_LDFLAGS = -L../ -lgraphics -L../../common -lcommon -L../../utils -lutils
+AM_LDFLAGS = -L../ -lgraphics -L../../common -lcommon -L../../utils -L../../platform -lutils -lplatform
 AM_CFLAGS = -I../ -I../../common
 
 check_PROGRAMS = test-image
