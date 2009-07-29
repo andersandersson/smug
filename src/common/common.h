@@ -9,6 +9,7 @@ typedef unsigned char BOOL;
 #define TRUE  1
 #define FALSE 0
 
+#undef assert
 #ifndef DISABLE_ASSERTS
     void Smug_assert(BOOL result, char* expresison, char* file, int line);
     #define assert(x) Smug_assert(x, #x, __FILE__, __LINE__)
