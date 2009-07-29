@@ -81,7 +81,9 @@ void Engine_run()
 {
     if (!gInitialized)
         return;
-        
+
+    Signal_clear(SIG_EXIT);
+
     NOTIFY("Running engine...");
     Log_indent();
     
