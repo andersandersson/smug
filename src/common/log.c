@@ -7,7 +7,7 @@
 #include <string.h>
 
 // As default, include all log output
-static int   gCurrentLogLevel = LOG_ALL;
+static int   gCurrentLogLevel = LOG_ALL ^ LOG_NOTIFICATION;
 static char* gFormatString = NULL;
 static char  gIndentString[1024] = "\0";
 static LinkedList* gPrefixStack = NULL;
@@ -33,6 +33,8 @@ BOOL Log_init()
     
     // Set default indentation level
     Log_setIndentation(4);
+
+    return NULL != gPrefixStack;
 }
 
 void Log_terminate()
@@ -41,12 +43,11 @@ void Log_terminate()
     LinkedList_delete(gPrefixStack);
 }
 
-void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
+void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
 {
     assert(_isInitialized());
     char* format;   
     char message[CONSOLE_PRINT_BUFFER_SIZE];
-    char string[CONSOLE_PRINT_BUFFER_SIZE];
     char flag[64];
     int  c = 0;
     int  c_max = 0;
@@ -99,7 +100,7 @@ void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
                 // %message%
                 if(0 == strcmp("message", flag))
                 {
-                    _writePrefixStack();
+                    //_writePrefixStack();
                     Console_write(message);
                 }
 
@@ -127,6 +128,28 @@ void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...)
     // Finally, add a newline
     Console_write("%c", '\n');
     }
+
+    va_end(vl);
+}
+
+
+void _Log_print(int level, char* prefix, char* file, int line, char* fmt, int newline, ...)
+{
+    va_list vl;
+    char buffer[1024];
+
+    va_start(vl, fmt);
+
+    vsprintf(buffer, fmt, vl);
+
+    Log_addEntry(level, prefix, file, line, buffer);
+
+    _writePrefixStack();
+    Console_write(buffer);
+    if(1 == newline)
+        {
+            Console_write("\n");
+        }
 
     va_end(vl);
 }

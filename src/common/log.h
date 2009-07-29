@@ -15,10 +15,12 @@
 #define LOG_ALL             0xFF
 
 // Define macros for the Log_Write function
-#define DEBUG(fmt, ...) Log_write(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define WARNING(fmt, ...) Log_write(LOG_WARNING, "WARNING", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define ERROR(fmt, ...) Log_write(LOG_ERROR, "ERROR", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define NOTIFY(fmt, ...) Log_write(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define DEBUG(fmt, ...) Log_addEntry(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define WARNING(fmt, ...) Log_addEntry(LOG_WARNING, "WARNING", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define ERROR(fmt, ...) Log_addEntry(LOG_ERROR, "ERROR", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define NOTIFY(fmt, ...) Log_addEntry(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define Log_print(fmt, ...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, 0, ##__VA_ARGS__)
+#define Log_printLine(fmt, ...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, 1, ##__VA_ARGS__)
 
 /** Initialize the log system (allocate memory, etc)
  */
@@ -32,7 +34,14 @@ void Log_terminate();
   *
   * Use the macros DEBUG(char*, ...), WARNING(char*, ...), ERROR(char*, ...), etc instead.
   */
-void Log_write(int level, char* prefix, char* file, int line, char* fmt, ...);
+void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...);
+
+
+/** Print log text to console
+  * 
+  * Use the macro Log_print(char*, ...) instead
+  */
+void _Log_print(int level, char* prefix, char* file, int line, char* fmt, int newline, ...);
 
 
 /** Set the log level to be written by Log_Write.
