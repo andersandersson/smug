@@ -18,7 +18,7 @@ lib_LTLIBRARIES = libsmug.la
 
 libsmug_ladir = $(includedir)/smug
 
-nobase_libsmug_la_HEADERS = \
+nobase_libsmug_la_HEADERS = smug.h \
 common/interface.h \
 engine/interface.h \
 graphics/interface.h \

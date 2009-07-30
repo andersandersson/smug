@@ -4,16 +4,25 @@
 
 #include "log.h"
 
-unsigned char reference[4][4][4] = {{{0, 0, 0, 255 }, {255, 255, 255, 0 }, {255, 255, 255, 0 }, {255, 0, 0, 255 }}, 
-                          {{255, 255, 255, 0 }, {255, 255, 255, 255 }, {255, 255, 255, 255 }, {255, 255, 255, 0 }},
-                          {{255, 255, 255, 0 }, {255, 255, 255, 255 }, {255, 255, 255, 255 }, {255, 255, 255, 0 }},
-                          {{0, 255, 0, 255 }, {255, 255, 255, 0 }, {255, 255, 255, 0 }, {0, 0, 255, 255 }}};
+unsigned char reference[4*4*4] = {0, 0, 0, 255,         255, 255, 255, 0,       255, 255, 255, 0,       255, 0, 0, 255, 
+                                  255, 255, 255, 0,     255, 255, 255, 255,     255, 255, 255, 255,     255, 255, 255, 0,
+                                  255, 255, 255, 0,     255, 255, 255, 255,     255, 255, 255, 255,     255, 255, 255, 0,
+                                  0, 255, 0, 255,       255, 255, 255, 0,       255, 255, 255, 0,       0, 0, 255, 255};
 
 int main()
 {
     Log_init();
-    Image* image = Image_new();
     
+    Image* myimage = Image_newFromData(reference, sizeof(reference), 4, 4, 4);
+    
+    if (!Image_saveToFile(myimage, "test-image.png"))
+    {
+        fprintf(stderr, "Saving image failed.\n");
+        Image_free(myimage);
+        return 1;
+    }
+    
+    Image* image = Image_new();
     if (!Image_loadFromFile(image, "test-image.png"))
     {
         fprintf(stderr, "Loading image failed.\n");
@@ -37,7 +46,7 @@ int main()
         {
             for(k = 0; k < image->channels; k++)
             {
-                if (image->data[(i * image->channels * image->width) + (j * image->channels) + k] != reference[i][j][k])
+                if (image->data[(i * image->channels * image->width) + (j * image->channels) + k] != reference[(i * image->channels * image->width) + (j * image->channels) + k])
                 {
                     fprintf(stderr, "Image loaded is not the same as refrence at (%i, %i, %i)\n", i, j, k);
                     return 1;

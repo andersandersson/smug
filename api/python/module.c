@@ -2,7 +2,6 @@
 #include "Python.h"
 
 #include "smug.h"
-#include "engine/engine.h"
 
 /**** Exported Function Declarations ****/
 

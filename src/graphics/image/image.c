@@ -1,6 +1,7 @@
 #include "image.h"
 
 #include "stdlib.h"
+#include "string.h"
 
 #include "lodepng/lodepng.h"
 #include "common/log.h"
@@ -14,11 +15,29 @@ Image* Image_new()
     ret->size = 0;
     ret->width = 0;
     ret->height = 0;
-    ret->bpp = 0;
     ret->channels = 0;
     
     return ret;
 }
+
+Image* Image_newFromData(unsigned char* data, unsigned int size, unsigned int width, unsigned int height, int channels)
+{
+    Image* ret = (Image*)malloc(sizeof(Image));
+    ret->size = size;
+    ret->channels = channels;      
+    ret->width = width;
+    ret->height = height;
+    if (ret->channels * ret->width * ret->height != ret->size)
+    {
+        WARNING("Size of data does not match dimensions of image."); 
+        DEBUG("Image width: %i, height: %i, channels: %i, size %i", ret->width, ret->height, ret->channels, ret->size);  
+    }   
+    ret->data = (unsigned char*)malloc(sizeof(unsigned char) * ret->size);
+    memcpy(ret->data, data, ret->size);
+    ret->file = NULL; 
+    return ret;
+}
+
 void Image_free(Image* image)
 {
     if (image->data)
@@ -35,9 +54,9 @@ void Image_free(Image* image)
     free(image);
 }
 
-unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
+static unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
 {
- 	FILE* file = fopen(filename,"r+b");
+ 	FILE* file = fopen(filename,"rb");
 	if (!file)
 	{
 		WARNING("Couldn't locate file '%s'.", filename);
@@ -65,7 +84,33 @@ unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
     return buffer;
 }
 
-BOOL _decodePNG(Image* image, unsigned char* buffer, unsigned int buffersize)
+static BOOL _saveFile(const char* filename, unsigned char* buffer, unsigned int buffersize)
+{
+ 	FILE* file = fopen(filename,"w+b");
+	if (!file)
+	{
+		WARNING("Couldn't locate or create file '%s'.", filename);
+		return FALSE;
+	}   
+    DEBUG("Successfully opened file '%s'.", filename);
+    
+    
+    DEBUG("Buffer length: '%i'.", buffersize);   
+    
+	if (fwrite(buffer, 1, buffersize, file) != buffersize)
+	{
+		ERROR("Did not write correct amount of bytes.");
+		fclose(file);
+        return FALSE;
+	}    
+    
+    fclose(file);
+
+    return TRUE;
+}
+
+
+static BOOL _decodePNG(Image* image, unsigned char* buffer, unsigned int buffersize)
 {     
     LodePNG_Decoder decoder;
     LodePNG_Decoder_init(&decoder);
@@ -79,7 +124,6 @@ BOOL _decodePNG(Image* image, unsigned char* buffer, unsigned int buffersize)
 
     image->width = decoder.infoPng.width;
     image->height = decoder.infoPng.height;
-    image->bpp = LodePNG_InfoColor_getBpp(&decoder.infoPng.color);
     image->channels = LodePNG_InfoColor_getChannels(&decoder.infoPng.color);
 
     LodePNG_Decoder_cleanup(&decoder);
@@ -87,10 +131,28 @@ BOOL _decodePNG(Image* image, unsigned char* buffer, unsigned int buffersize)
     return TRUE;
 }
 
+static BOOL _encodePNG(unsigned char** buffer, unsigned int* buffersize, Image* image)
+{     
+    LodePNG_Encoder encoder;
+    LodePNG_Encoder_init(&encoder);
+    LodePNG_encode(&encoder, buffer, buffersize, image->data, image->width, image->height);
+      
+    if(encoder.error) 
+    {   
+        ERROR("PNG decoding failed, error: %d\n", encoder.error);
+        return FALSE;
+    }
+    
+    LodePNG_Encoder_cleanup(&encoder);
+
+    return TRUE;
+}
 
 BOOL Image_loadFromFile(Image* image, const char* filename)
 {
     unsigned char* buffer = NULL;  
+    
+    DEBUG("Loading image from file '%s'", filename);
     
     unsigned int buffersize;
     buffer = _loadFile(filename, &buffersize);
@@ -100,10 +162,10 @@ BOOL Image_loadFromFile(Image* image, const char* filename)
         return FALSE;
     }
     
-    //if last three letters are png
+    // Decode according to file ending
     int len = strlen(filename);
     BOOL retval = FALSE;
-    if (0 == strncmp(&filename[len-4], "png", 3))
+    if (0 == strncmp(&filename[len-4], ".png", 3))
     {
         DEBUG("Decoding image as PNG");
         retval = _decodePNG(image, buffer, buffersize);
@@ -127,9 +189,31 @@ BOOL Image_loadFromFile(Image* image, const char* filename)
 BOOL Image_saveToFile(Image* image, const char* filename)
 {
     unsigned char* buffer = NULL;    
-
+    unsigned int buffersize;
+    DEBUG("Saving image to file '%s'", filename);
     
-    //TODO: add implementation
-    WARNING("Save image not yet implemented");
+    // Encode according to file ending
+    int len = strlen(filename);
+    BOOL retval = FALSE;
+    DEBUG("Comparing '%s' to known file endings", &filename[len-4]);
+    if (0 == strncmp(&filename[len-4], ".png", 3))
+    {
+        DEBUG("Encoding image as PNG");
+        retval = _encodePNG(&buffer, &buffersize, image);
+    }
+    else
+    {
+        DEBUG("No known file format, encoding image as PNG");
+        retval = _encodePNG(&buffer, &buffersize, image);
+    }
+        
+    if (!retval || NULL == buffer)
+    {
+        ERROR("Could not save image");
+        return FALSE;
+    }
 
+    retval = _saveFile(filename, buffer, buffersize);
+    
+    return retval;
 }

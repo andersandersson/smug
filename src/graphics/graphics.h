@@ -30,8 +30,7 @@ void Graphics_terminate();
 
 /** Set the part of the world that will be visible in the window.
   * 
-  * The Y-axis points upward.
-  * @internal Okay, I admit I'm confused about the Y axis. Up or down?
+  * The Y-axis points downward.
   * @param rect A rectangle 
   */
 void Graphics_setVisibleArea(Rectangle* rect);

@@ -55,7 +55,7 @@ void run()
 }
 
 
-int main(char argc, char* argv[])
+int main(int argc, char* argv[])
 {
     // Not the cutest solution, but works for me?
     // Should probably be removed or replaced with some
@@ -64,13 +64,13 @@ int main(char argc, char* argv[])
     
     if (argc != 2)
     {
-        fprintf(stderr, "Please provide script file\n", "fult");
+        fprintf(stderr, "Please provide script file\n");
         return 0;    
     }
     
     if (!init(argv[1]))
     {
-        fprintf(stderr, "Could not initialize script, exiting...\n", "fulare");
+        fprintf(stderr, "Could not initialize script, exiting...\n");
         terminate();
         return 0;
     }
@@ -93,3 +93,4 @@ int main(char argc, char* argv[])
  *  
  * etc...
  */
+

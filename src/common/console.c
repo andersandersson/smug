@@ -125,7 +125,6 @@ void Console_parseCommand(char* cmd)
     }
 }
 
-
 BOOL Console_defaultParser(char* cmd)
 {
     // exit - Send exit signal
@@ -133,4 +132,5 @@ BOOL Console_defaultParser(char* cmd)
     {
         Signal_send(SIG_EXIT);
     }
+    return TRUE;
 }
