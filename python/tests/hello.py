@@ -6,21 +6,34 @@
     either by manual exit (ESC) or the console command "exit".
     Before each run a welcoming message will be printed.
 '''
-
+import traceback
 import smug
 import time
 
 def main():
 
-    smug.initialize()
+    try:
+        smug.initialize()
+    except:
+        print "An error occured while initializing smug. Exiting."
+        traceback.print_exc()
+        return
 
     print "Hello World!"
-
-    smug.run()
-
-    print "Ahoy-hoy!"
-
-    smug.run()
     
-    smug.terminate()
+    try:
+        smug.run()
+    except:
+        print "An error occured while running smug. Exiting."
+        traceback.print_exc()
+        return
+            
+    
+    try:
+        smug.terminate()
+    except:
+        print "An error occured while terminating smug. Exiting."
+        traceback.print_exc()
+        return        
+
     
