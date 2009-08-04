@@ -10,9 +10,10 @@ static PyObject* Smug_initialize(PyObject* self, PyObject* args)
     if (!Engine_init())
     {
         fprintf(stderr, "Could not initialize engine, exiting...\n");
-        return NULL;
+        return Py_BuildValue("i", 0);
     }
-    return Py_BuildValue("");
+    
+    return Py_BuildValue("i", 1);
 }
 
 

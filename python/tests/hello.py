@@ -11,16 +11,18 @@ import smug
 import time
 
 def main():
+    x = smug.initialize()
 
-    smug.initialize()
+    if(1 == x):
+	print "Hello World!"	
 
-    print "Hello World!"
+	smug.run()
 
-    smug.run()
+	print "Ahoy-hoy!"
 
-    print "Ahoy-hoy!"
-
-    smug.run()
+	smug.run()
     
-    smug.terminate()
+	smug.terminate()
+    else:
+	print "Could not initialize smug"
     

@@ -35,6 +35,9 @@ int Engine_init()
     if (!Physics_init())
         return 0;
 
+    if (!Signal_init())
+        return 0;
+
     NOTIFY("Initializing console thread");
     // Create a new thread for the console
     gConsoleThread = Thread_new();
@@ -55,6 +58,8 @@ void Engine_terminate()
 {
     NOTIFY("Terminating engine");
     Log_indent();
+
+    Signal_terminate();
     
     Physics_terminate();
     
@@ -62,15 +67,15 @@ void Engine_terminate()
     
     World_delete(gWorld);
     
+    // Do not wait for console thread to end as getc() will
+    // block until input is received. Instead, kill the thread.
+    glfwDestroyThread(gConsoleThread->id);    
+    
     NOTIFY("Terminating platform layer");
     glfwTerminate();
     
     Log_dedent();
     NOTIFY("Engine terminated,\n");
-    
-    // Do not wait for console thread to end as getc() will
-    // block until input is received. Instead, kill the thread.
-    glfwDestroyThread(gConsoleThread->id);    
     
     Log_terminate();
     
