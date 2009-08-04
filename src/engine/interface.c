@@ -1,4 +1,4 @@
-//int (*smugInit)() = Engine_init;
+#include "interface.h"
 
 int smugInit()
 {

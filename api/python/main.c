@@ -12,7 +12,7 @@ int init(const char* scriptfile)
 {
     Py_Initialize();
     
-    initPythonModule();
+    initPysmug();
   
     gName = PyString_FromString(scriptfile);
     

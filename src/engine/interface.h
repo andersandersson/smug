@@ -1,7 +1,9 @@
 #ifndef SMUG_ENGINE_INTERFACE_H
 #define SMUG_ENGINE_INTERFACE_H
 
-//extern int (*smugInit)();
+/** 
+ * Initialize Engine
+ */
 int smugInit();
 
 /** 

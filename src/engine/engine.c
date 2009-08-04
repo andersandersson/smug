@@ -28,7 +28,10 @@ int Engine_init()
     NOTIFY("Initializing platform layer");
     if (!glfwInit())
         return 0;
-
+    
+    if (!Signal_init())
+        return 0;
+        
     if (!Graphics_init(640, 480, FALSE))
         return 0;
         
@@ -56,21 +59,23 @@ void Engine_terminate()
     NOTIFY("Terminating engine");
     Log_indent();
     
+    World_delete(gWorld);
+    
+    // Do not wait for console thread to end as getc() will
+    // block until input is received. Instead, kill the thread.
+    glfwDestroyThread(gConsoleThread->id);        
+    
     Physics_terminate();
     
     Graphics_terminate();
     
-    World_delete(gWorld);
+    Signal_terminate();
     
     NOTIFY("Terminating platform layer");
     glfwTerminate();
     
     Log_dedent();
     NOTIFY("Engine terminated,\n");
-    
-    // Do not wait for console thread to end as getc() will
-    // block until input is received. Instead, kill the thread.
-    glfwDestroyThread(gConsoleThread->id);    
     
     Log_terminate();
     

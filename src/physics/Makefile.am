@@ -13,4 +13,4 @@ SUBDIRS = . test
 AM_CFLAGS = -I.. -I../common
 
 noinst_LTLIBRARIES = libphysics.la
-libphysics_la_SOURCES = physics.c physics.h vector.c vector.h
+libphysics_la_SOURCES = interface.c interface.h physics.c physics.h vector.c vector.h

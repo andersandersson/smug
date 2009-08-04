@@ -14,7 +14,6 @@ SUBDIRS = utils common platform graphics physics engine
 
 lib_LTLIBRARIES = libsmug.la
 
-#It kind of matters a whole lot which order these are in, reverse dependecy order seems to work
 
 libsmug_ladir = $(includedir)/smug
 
@@ -25,6 +24,9 @@ graphics/interface.h \
 physics/interface.h \
 utils/interface.h \
 platform/interface.h
+
+
+#It kind of matters a whole lot which order these are in, reverse dependecy order seems to work
 
 libsmug_la_SOURCES =
 libsmug_la_LIBADD = engine/libsmug.la

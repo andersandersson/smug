@@ -14,7 +14,7 @@ AM_CFLAGS = $(LIBGLFWCFLAGS)  -I..
 
 noinst_LTLIBRARIES = libgraphics.la
 
-libgraphics_la_SOURCES = graphics.c graphics.h \
+libgraphics_la_SOURCES =  interface.c interface.h graphics.c graphics.h \
 drawable.c drawable.h \
 color.c color.h \
 sprite.c sprite.h \

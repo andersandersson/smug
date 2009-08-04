@@ -13,6 +13,6 @@ SUBDIRS = . test
 AM_CFLAGS = -I.. -I../common
 
 noinst_LTLIBRARIES = libutils.la
-libutils_la_SOURCES = linkedlist.c linkedlist.h\
+libutils_la_SOURCES = interface.c interface.h linkedlist.c linkedlist.h\
 rectangle.h rectangle.c\
 hook.c hook.h
