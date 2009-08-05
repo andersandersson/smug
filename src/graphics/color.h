@@ -1,5 +1,5 @@
-#ifndef COLOR_H
-#define COLOR_H
+#ifndef SMUG_GRAPHICS_COLOR_H
+#define SMUG_GRAPHICS_COLOR_H
 
 /** An RGBA Color type.
   */
@@ -27,4 +27,4 @@ Color Color_create();
 
 Color Color_createFromRgba(float r, float g, float b, float a);
 
-#endif // COLOR_H
+#endif // SMUG_GRAPHICS_COLOR_H

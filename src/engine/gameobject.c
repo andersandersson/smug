@@ -1,5 +1,7 @@
-#include <stdlib.h>
 #include "gameobject.h"
+#include <stdlib.h>
+
+#include "graphics/drawable/drawable.h"
 
 static void GameObject_invariant(GameObject* go)
 {

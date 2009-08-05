@@ -20,4 +20,4 @@ void Image_free(Image* image);
 BOOL Image_loadFromFile(Image* image, const char* filename);
 BOOL Image_saveToFile(Image* image, const char* filename);
 
-#endif
+#endif //SMUG_GRAPHICS_IMAGE_H

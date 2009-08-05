@@ -6,7 +6,8 @@
 #define SMUG_ENGINE_GAMEOBJECT_H
 
 #include "common/common.h"
-#include "graphics/drawable.h"
+#include "graphics/drawable/drawable.h"
+
 
 /** The GameObject struct.
   */

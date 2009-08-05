@@ -2,8 +2,8 @@
   * @brief Contains functions to control graphics.
   */
 
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#ifndef SMUG_GRAPHICS_GRAPHICS_H
+#define SMUG_GRAPHICS_GRAPHICS_H
 
 #include "color.h"
 #include "common/common.h"
@@ -44,4 +44,4 @@ void Graphics_setVisibleArea(Rectangle* rect);
 void Graphics_fillRect(Rectangle* rect, Color* color);
 
 
-#endif // GRAPHICS_H
+#endif // SMUG_GRAPHICS_GRAPHICS_H

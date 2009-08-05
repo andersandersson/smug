@@ -2,11 +2,11 @@
   * @brief Defines the Drawable type.
   */
 
-#ifndef DRAWABLE_H
-#define DRAWABLE_H
+#ifndef SMUG_GRAPHICS_DRAWABLE_H
+#define SMUG_GRAPHICS_DRAWABLE_H
 
 #include "sprite.h"
-#include "color.h"
+#include "graphics/color.h"
 #include "utils/rectangle.h"
 
 /** Something that can be rendered to the screen.
@@ -48,4 +48,4 @@ void Drawable_delete(void* d);
   */
 void Drawable_render(Drawable* d, float x, float y);
 
-#endif //DRAWABLE_H
+#endif //SMUG_GRAPHICS_DRAWABLE_H

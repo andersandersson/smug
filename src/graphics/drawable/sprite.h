@@ -1,5 +1,5 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#ifndef SMUG_GRAPHICS_SPRITE_H
+#define SMUG_GRAPHCIS_SPRITE_H
 
 /** Placeholder struct for Sprite type.
   */
@@ -14,4 +14,4 @@ void Sprite_delete(Sprite* sprite);
 
 void Sprite_draw(Sprite* sprite, float x, float y);
 
-#endif // SPRITE_H
+#endif // SMUG_GRAPHICS_SPRITE_H
