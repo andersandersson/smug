@@ -1,47 +1,46 @@
 #include "shape.h"
 
 #include <stdlib.h>
-#include <stdio.h>
 
-Polygon* Polygon_new()
+Vertex* Vertex_new()
 {
-    Polygon* polygon;
-
-    polygon = malloc(sizeof(Polygon));
-
-    polygon->vertices = LinkedList_new();
-    polygon->edges = LinkedList_new();
-    polygon->normals = LinkedList_new();
-
-    return polygon;
+    return Vertex_new2f(0.0, 0.0);
 }
 
-void Polygon_delete(Polygon* polygon)
+Vertex* Vertex_new2f(float x, float y)
 {
-    free(polygon->vertices);
-    free(polygon->edges);
-    free(polygon->normals);
-    free(polygon);
-}
-
-Polygon* Polygon_createRectangle(float w, float h)
-{
-    Polygon* polygon;
-
-    polygon = Polygon_new();
-
-    return polygon;
-}
-
-void Polygon_calculateEdges(Polygon* polygon)
-{
-}
-
-void Polygon_calculateNormals(Polygon* polygon)
-{
-}
-
-void Polygon_print(Polygon* polygon)
-{
+    Vertex* vertex = malloc(sizeof(Vertex));
     
+    vertex->next = vertex;
+    vertex->prev = vertex;
+    
+    vertex->x = Vector_new2f(x, y);
+
+    return vertex;
+}
+
+void Vertex_insertAfter(Vertex* dest, Vertex* v)
+{
+    v->prev = dest;
+    v->next = dest->next;
+    dest->next = v;
+}
+
+void Vertex_delete(Vertex* vertex)
+{
+    Vector_delete(vertex->x);
+    free(vertex);
+}
+
+void Vertex_deleteAll(Vertex* vertices)
+{
+    Vertex* vertex = vertices;
+    Vertex* node;
+
+    do
+        {
+            node = vertex;
+            vertex = vertex->next;            
+            Vertex_delete(node);
+        } while(vertex != vertices);
 }

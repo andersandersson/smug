@@ -1,121 +1,104 @@
 #include "vector.h"
 
+#include "common/common.h"
+
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
-Vector Vector_Create2d(double x, double y)
+
+
+Vector* Vector_new()
 {
-    Vector v;
+    return Vector_new2f(0.0, 0.0);
+}
 
-    v.size = 2;
-
-    v.x[0] = x;
-    v.x[1] = y;
+Vector* Vector_new2f(float x, float y)
+{
+    Vector* v = malloc(sizeof(Vector));
+    
+    v->size = 2;
+    v->x[0] = x;
+    v->x[1] = y;
 
     return v;
 }
 
-
-Vector Vector_CrossProduct2d(Vector v)
+void Vector_delete(Vector* v)
 {
-    return Vector_Create2d(-v.x[1], v.x[0]);
+    free(v);
 }
 
-
-Vector Vector_Add(Vector v, Vector w)
+float Vector_crossProduct2f(Vector* v, Vector* dest)
 {
-    int i;
-    Vector u;
-    u.size = v.size;
+    float r;
 
-    for(i=0; i < v.size; i++)
-    {
-        u.x[i] = v.x[i] + w.x[i];
-    }
+    dest->x[0] = - v->x[1];
+    dest->x[1] = v->x[0];
 
-    return u;
+    r = (v->x[0]*v->x[0]) + (v->x[1]*v->x[1]);
+
+    return r;
 }
 
-
-Vector Vector_Sub(Vector v, Vector w)
-{
-    int i;
-    Vector u;
-    u.size = v.size;
-
-    for(i=0; i < v.size; i++)
-    {
-        u.x[i] = v.x[i] - w.x[i];
-    }
-
-    return u;
-}
-
-
-Vector Vector_Multiply(Vector v, double k)
-{
-    int i;
-    Vector u;
-    u.size = v.size;
-
-    for(i=0; i < v.size; i++)
-    {
-        u.x[i] = k*v.x[i];
-    }
-
-    return u;
-}
-
-
-double Vector_DotProduct(Vector v, Vector w)
-{
-    int i;
-    double m = 0;
-
-    for(i=0; i < v.size; i++)
-    {
-        m += v.x[i] * w.x[i];
-    }
-
-    return m;
-}
-
-
-Vector Vector_Normalize(Vector v)
-{
-    Vector u;
-    int i;
-    double size = sqrt(Vector_DotProduct(v, v));
-
-    u.size = v.size;
-  
-    for(i=0; i < v.size; i++) 
-    {
-        u.x[i] = v.x[i] / size;
-    }
-
-    return u;
-}
-
-
-Vector Vector_Projection(Vector v, Vector n)
-{
-    return Vector_Sub(v, Vector_Multiply(n, Vector_DotProduct(v, n)));
-}
-
-void Vector_Print(Vector v)
+void Vector_add(Vector* v, Vector* w, Vector* dest)
 {
     int i;
 
-    fprintf(stderr, "[");
-  
-    for(i=0; i < v.size; i++) {
-        fprintf(stderr, "%.2f", v.x[i]);
+    assert(v->size == w->size);
+    assert(v->size == dest->size);
 
-        if(v.size - i > 1) {
-            fprintf(stderr, ", ");
+    for(i=0; i<v->size; i++)
+        {
+            dest->x[i] = v->x[i] + w->x[i];
         }
-    }
+}
 
-    fprintf(stderr, "]\n");
+void Vector_sub(Vector* v, Vector* w, Vector* dest)
+{
+}
+
+void Vector_multiply(Vector *v, float k, Vector* dest)
+{
+}
+
+float Vector_dotProduct(Vector* v, Vector* w)
+{
+    int i;
+    float p = 0.0;
+
+    assert(v->size == w->size);
+
+    for(i=0; i<v->size; i++)
+        {
+            p += v->x[i] * w->x[i];
+        }
+
+    return p;
+}
+
+void Vector_normalize(Vector* v, Vector* dest)
+{
+}
+
+void Vector_projection(Vector* v, Vector* n, Vector* dest)
+{
+}
+
+
+void Vector_print(Vector* v)
+{
+    int i;
+
+    fprintf(stderr, "(");
+    for(i=0; i<v->size; i++)
+        {
+            fprintf(stderr, "%f", v->x[i]);
+
+            if(v->size-i > 1)
+                {
+                    fprintf(stderr, ", ");
+                }
+        }
+    fprintf(stderr, ")\n");
 }

@@ -11,7 +11,7 @@ typedef struct Body
     Vector* position;
     Vector* offset;
     Polygon* shape;
-}
+} Body;
 
 int Physics_init();
 void Physics_terminate();

@@ -10,9 +10,12 @@
 
 TESTS = test-vector
 
-AM_LDFLAGS = -L../ -lphysics
-AM_CFLAGS = -I../ -I../../common
+AM_CFLAGS = -I../ -I../../
 
 check_PROGRAMS = test-vector
+noinst_PROGRAMS = test-polygon
 
 test_vector_SOURCES = test-vector.c
+test_vector_LDADD = ../libphysics.la ../../utils/libutils.la ../../common/libcommon.la ../../../test-utils/libtestutils.la
+test_polygon_SOURCES = test-polygon.c
+test_polygon_LDADD = ../libphysics.la ../../graphics/libgraphics.la ../../utils/libutils.la ../../common/libcommon.la

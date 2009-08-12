@@ -1,25 +1,32 @@
 #ifndef SMUG_PHYSICS_SHAPE_H
 #define SMUG_PHYSICS_SHAPE_H
 
-#include "linkedlist.h"
+#include "vector.h"
+
+typedef struct Vertex
+{
+    struct Vertex* next;
+    struct Vertex* prev;
+    
+    Vector* x;
+} Vertex;
 
 typedef struct Polygon
 {
-    LinkedList* vertices;
-    LinkedList* edges;
-    LinkedList* normals;
+    struct Polygon* next;
+    struct Polygon* prev;
+    Vertex* vertices;
 } Polygon;
 
-Polygon* Polygon_new();
+typedef struct Shape
+{
+    Polygon* polygons;
+} Shape;
 
-void Polygon_delete(Polygon* polygon);
-
-Polygon* Polygon_createRectangle(float w, float h);
-
-void Polygon_calculateEdges(Polygon* polygon);
-
-void Polygon_calculateNormals(Polygon* polygon);
-
-void Polygon_print(Polygon* polygon);
+Vertex* Vertex_new();
+Vertex* Vertex_new2f(float x, float y);
+void Vertex_insertAfter(Vertex* dest, Vertex* v);
+void Vertex_delete(Vertex* vertex);
+void Vertex_deleteAll(Vertex* vertices);
 
 #endif // SMUG_PHYSICS_SHAPE_H

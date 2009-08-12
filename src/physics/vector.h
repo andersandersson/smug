@@ -7,7 +7,7 @@
 typedef struct Vector2d
 {
     int size;    //!< The dimension of the vector
-    double x[2]; //!< The elements of the vector
+    float x[2]; //!< The elements of the vector
 } Vector;
 
 
@@ -15,72 +15,31 @@ typedef struct Vector2d
 // -------------------------------
 
 
-/**
- * Create a new 2 dimensional vector.
- */
-Vector Vector_Create2d(double x, double y);
+Vector* Vector_new();
 
+Vector* Vector_new2f(float x, float y);
 
-/**
- * Calculate the normal (2 dimensional cross product) 
- * for the Vector.
- */
-Vector Vector_CrossProduct2d(Vector v);
+void Vector_delete(Vector* v);
+
+float Vector_crossProduct2f(Vector* v, Vector* dest);
 
 
 // Dimension independent functions 
 // -------------------------------
 
 
-/**
- * Add to Vectors elements and return a new
- * Vector with the result.
- */
-Vector Vector_Add(Vector v, Vector w);
+void Vector_add(Vector* v, Vector* w, Vector* dest);
+
+void Vector_sub(Vector* v, Vector* w, Vector* dest);
+
+void Vector_multiply(Vector *v, float k, Vector* dest);
+
+float Vector_dotProduct(Vector* v, Vector* w);
+
+void Vector_normalize(Vector* v, Vector* dest);
+
+void Vector_projection(Vector* v, Vector* n, Vector* dest);
 
 
-/**
- * Subtract Vector w:s elements from Vector
- * v:s and return result in a new Vector.
- */
-Vector Vector_Sub(Vector v, Vector w);
-
-
-/**
- * Multiply the elements in v by k and
- * return a new Vector with the result. 
- */
-Vector Vector_Multiply(Vector v, double k);
-
-
-/**
- * Calculate the dot product. This is the sum
- * v[1]*w[1] + ... + v[n]*w[n].
- */
-double Vector_DotProduct(Vector v, Vector w);
-
-
-/**
- * Normalize a Vector and return the result as
- * a new Vector.
- */
-Vector Vector_Normalize(Vector v);
-
-
-/**
- * Calculate the projection of the Vector v
- * in the plane specified by the normal n.
- */
-Vector Vector_Projection(Vector v, Vector n);
-
-
-// Miscellaneous vector functions
-// ------------------------------
-
-
-/**
- * Print the vector to stderr
- */
-void Vector_Print(Vector v);
-
+void Vector_print(Vector* v);
 #endif
