@@ -6,8 +6,7 @@
 typedef struct Vertex
 {
     struct Vertex* next;
-    struct Vertex* prev;
-    
+    struct Vertex* prev;    
     Vector* x;
 } Vertex;
 
@@ -20,6 +19,7 @@ typedef struct Polygon
 
 typedef struct Shape
 {
+    unsigned int type;
     Polygon* polygons;
 } Shape;
 
@@ -28,5 +28,9 @@ Vertex* Vertex_new2f(float x, float y);
 void Vertex_insertAfter(Vertex* dest, Vertex* v);
 void Vertex_delete(Vertex* vertex);
 void Vertex_deleteAll(Vertex* vertices);
+
+Polygon* Polygon_new();
+
+Shape* Shape_newRectangle(float w, float h);
 
 #endif // SMUG_PHYSICS_SHAPE_H
