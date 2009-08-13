@@ -28,19 +28,59 @@ void Vertex_insertAfter(Vertex* dest, Vertex* v)
 
 void Vertex_delete(Vertex* vertex)
 {
-    Vector_delete(vertex->x);
-    free(vertex);
+    if(NULL != vertex)
+        {
+            Vector_delete(vertex->x);
+            free(vertex);
+        }
 }
 
 void Vertex_deleteAll(Vertex* vertices)
 {
-    Vertex* vertex = vertices;
-    Vertex* node;
-
-    do
+    if(NULL != vertices)
         {
-            node = vertex;
-            vertex = vertex->next;            
-            Vertex_delete(node);
-        } while(vertex != vertices);
+            Vertex* vertex = vertices;
+            Vertex* node;
+            
+            do
+                {
+                    node = vertex;
+                    vertex = vertex->next;            
+                    Vertex_delete(node);
+                } while(vertex != vertices);
+        }
+}
+
+Polygon* Polygon_new()
+{
+    Polygon* polygon;
+
+    polygon = malloc(sizeof(Polygon));
+    polygon->next = NULL;
+    polygon->prev = NULL;
+    polygon->vertices = NULL;
+}
+
+void Polygon_delete(Polygon* polygon)
+{
+    Vertex_deleteAll(polygon->vertices);
+    
+    if(NULL != polygon)
+        {
+            free(polygon);
+        }
+}
+
+
+Shape* Shape_new()
+{
+    
+}
+
+Shape* Shape_newRectangle(float w, float h)
+{
+}
+
+void Shape_delete(Shape* shape)
+{
 }

@@ -30,7 +30,10 @@ void Vertex_delete(Vertex* vertex);
 void Vertex_deleteAll(Vertex* vertices);
 
 Polygon* Polygon_new();
+void Polygon_delete(Polygon* polygon);
 
+Shape* Shape_new();
 Shape* Shape_newRectangle(float w, float h);
+void Shape_delete(Shape* shape);
 
 #endif // SMUG_PHYSICS_SHAPE_H

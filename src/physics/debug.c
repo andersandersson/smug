@@ -13,7 +13,7 @@ void Physics_drawLine(float x1, float y1, float x2, float y2, float r, float g, 
     glEnd();
 }
 
-void Physics_drawVertices(Vertex* vertices, float r, float g, float b)
+void Physics_drawVertices(Vertex* vertices, Vector* offset, float r, float g, float b)
 {
     Vertex* vertex = vertices;
     Vertex* prev = vertices;
@@ -22,7 +22,8 @@ void Physics_drawVertices(Vertex* vertices, float r, float g, float b)
         {
             vertex = vertex->next;            
             
-            Physics_drawLine(prev->x->x[0], prev->x->x[1], vertex->x->x[0], vertex->x->x[1], r, g, b);
+            Physics_drawLine(prev->x->x[0] + offset->x[0], prev->x->x[1] + offset->x[1], 
+                             vertex->x->x[0] + offset->x[0], vertex->x->x[1] + offset->x[1], r, g, b);
 
             prev = vertex;
         } while(vertex != vertices);

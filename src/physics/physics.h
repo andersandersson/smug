@@ -10,7 +10,7 @@ typedef struct Body
 {
     Vector* position;
     Vector* offset;
-    Polygon* shape;
+    Shape* shape;
 } Body;
 
 int Physics_init();
@@ -21,5 +21,5 @@ void Physics_removeBody(Body* body);
 
 Body* Body_new();
 void Body_delete(Body* body);
-
+void Body_setShape(Shape* shape);
 #endif
