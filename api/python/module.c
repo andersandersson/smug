@@ -80,3 +80,4 @@ int initPysmug()
     initsmug();
     return 0;
 }
+

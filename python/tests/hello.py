@@ -1,3 +1,4 @@
+
 '''
     Date: 20th July 2009
     This test ensures that the engine is able to run and shut down properly.
@@ -34,6 +35,5 @@ def main():
     except:
         print "An error occured while terminating smug. Exiting."
         traceback.print_exc()
-        return        
+        return
 
-    
