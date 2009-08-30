@@ -8,12 +8,13 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-TESTS = test-image
+TESTS = test-image test-renderer
 
 AM_LDFLAGS = -L../ -lgraphics -L../../common -lcommon -L../../utils -L../../platform -lutils -lplatform
-AM_CFLAGS = -I../ -I../../common
+AM_CFLAGS = -I../ -I../../ -I../../common
 
-check_PROGRAMS = test-image
+check_PROGRAMS = test-image test-renderer
 
 test_image_SOURCES = test-image.c
 
+test_renderer_SOURCES = test-renderer.c

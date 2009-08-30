@@ -38,7 +38,7 @@ Image* Image_newFromData(unsigned char* data, unsigned int size, unsigned int wi
     return ret;
 }
 
-void Image_free(Image* image)
+void Image_delete(Image* image)
 {
     if (image->data)
     {

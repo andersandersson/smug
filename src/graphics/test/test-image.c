@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "image/image.h"
+#include "graphics/image/image.h"
 
 #include "log.h"
 
@@ -11,6 +11,7 @@ unsigned char reference[4*4*4] = {0, 0, 0, 255,         255, 255, 255, 0,       
 
 int main()
 {
+    fprintf(stderr, "Testing image loading and saving.\n");
     Log_init();
     
     Image* myimage = Image_newFromData(reference, sizeof(reference), 4, 4, 4);
@@ -18,7 +19,7 @@ int main()
     if (!Image_saveToFile(myimage, "test-image.png"))
     {
         fprintf(stderr, "Saving image failed.\n");
-        Image_free(myimage);
+        Image_delete(myimage);
         return 1;
     }
     
@@ -26,7 +27,7 @@ int main()
     if (!Image_loadFromFile(image, "test-image.png"))
     {
         fprintf(stderr, "Loading image failed.\n");
-        Image_free(image);
+        Image_delete(image);
         return 1;
     }
     
@@ -55,7 +56,7 @@ int main()
         }
     }
     
-    Image_free(image);
+    Image_delete(image);
 
     Log_terminate();
 

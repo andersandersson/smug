@@ -5,6 +5,8 @@
 #include "common/common.h"
 #include <stdlib.h>
 
+/*
+
 static void Drawable_invariant(Drawable* d)
 {
     // The drawable is not null.
@@ -53,35 +55,17 @@ Drawable* Drawable_newRect(Rectangle* r, Color* c)
     Drawable_invariant(d);
     return d;
 }
+*/
 
-void Drawable_render(Drawable* d, float x, float y)
+
+int Drawable_writeBatchData(Drawable* d, RenderBatch* batch, unsigned int start)
 {
-    Drawable_invariant(d);
-    
-    if (d->sprite)
-    {
-        Sprite_draw(d->sprite, x, y);
-    }
-    else
-    {
-        d->rect->x = x;
-        d->rect->y = y;
-        Graphics_fillRect(d->rect, d->color);
-    }
+    if (NULL != ((Drawable*)d)->_writeBatchFunc)
+        ((Drawable*)d)->_writeBatchFunc(d, batch, start);
 }
 
 void Drawable_delete(void* d)
 {
-    Drawable* dr = (Drawable*)d;
-    Drawable_invariant(dr);
-    
-    if (dr->rect)
-    {
-        Rectangle_delete(dr->rect);
-        Color_delete(dr->color);
-    }
-    
-    // Intentionally NOT deleting Sprite, since sprites will probably be shared between objects.
-    
-    free((Drawable*)dr);
+    if (NULL != ((Drawable*)d)->_deleteFunc)
+        ((Drawable*)d)->_deleteFunc(d);
 }

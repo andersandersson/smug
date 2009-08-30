@@ -13,8 +13,3 @@ void Sprite_delete(Sprite* sprite)
         free(sprite);
     }
 }
-
-void Sprite_draw(Sprite* sprite, float x, float y)
-{
-
-}

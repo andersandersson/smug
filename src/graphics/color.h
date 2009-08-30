@@ -25,6 +25,6 @@ void Color_delete(Color* c);
 
 Color Color_create();
 
-Color Color_createFromRgba(float r, float g, float b, float a);
+Color Color_createFromRGBA(float r, float g, float b, float a);
 
 #endif // SMUG_GRAPHICS_COLOR_H

@@ -55,6 +55,12 @@ Thread* Thread_new();
   */
 void Thread_delete(Thread* thread);
 
+/** Forcibly kill the thread.
+  * 
+  * @relatesalso Thread
+  */
+void Thread_forceKill(Thread* thread);
+
 /** Set the callback function of a sleeping thread and wake it up.
   * 
   * @relatesalso Thread

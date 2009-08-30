@@ -14,4 +14,6 @@ AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
 
 noinst_LTLIBRARIES = libplatform.la
 
-libplatform_la_SOURCES = interface.c interface.h threads.c threads.h platform.h
+libplatform_la_SOURCES = interface.c interface.h threads.c threads.h platform.h platform.c
+#opengl/opengl.h opengl/GLee.c opengl/GLee.h
+

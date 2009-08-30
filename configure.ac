@@ -36,6 +36,8 @@ AM_INIT_AUTOMAKE([dist-bzip2])
 # Guess the hos system (win32, etc)
 AC_CANONICAL_HOST
 
+CFLAGS="$CFLAGS -mno-cygwin"
+
 # Check for C compiler
 AC_PROG_CC
 AM_PROG_CC_C_O
@@ -49,10 +51,13 @@ AC_PYTHON_DEVEL([>= 2.5])
 # Check for GLFW
 AC_GLFW_DEVEL([2.6.0])
 
+# Check for GLEW
+AC_GLEW_DEVEL([1.5.1])
+
 # Append Python and GLFW flags to default flags
-LIBS="$LIBS $GLFW_LIBS $PYTHON_EXTRA_LIBS $PYTHON_EXTRA_LDFLAGS"
-CFLAGS="$CFLAGS $GLFW_CFLAGS $PYTHON_CPPFLAGS -Wall"  #-Werror=implicit-function-declaration"
-LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $PYTHON_LDFLAGS"
+LIBS="$LIBS $GLFW_LIBS $GLEW_LIBS $PYTHON_LIBS"
+CFLAGS="$CFLAGS $GLFW_CFLAGS $GLEW_CFLAGS $PYTHON_CFLAGS -Wall -g -O0"  #-Werror=implicit-function-declaration"
+LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $GLEW_LDFLAGS $PYTHON_LDFLAGS"
 
 # Check the OS and run corresponding init script
 case $host_os in
@@ -91,6 +96,7 @@ AC_CONFIG_FILES([
    test/Makefile
    api/python/Makefile
    test-utils/Makefile
+   demo/Makefile
 ])
 
 AC_OUTPUT

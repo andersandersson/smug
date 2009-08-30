@@ -17,6 +17,6 @@ typedef unsigned char BOOL;
     #define assert(x) x
 #endif
 
-typedef double Time;
+typedef double TIME;
 
 #endif // SMUG_COMMON_COMMON_H

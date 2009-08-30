@@ -29,7 +29,7 @@ Color Color_create()
     return c;
 }
 
-Color Color_createFromRgba(float r, float g, float b, float a)
+Color Color_createFromRGBA(float r, float g, float b, float a)
 {
     Color c;
     c.r = r;

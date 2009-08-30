@@ -7,33 +7,32 @@
 
 #include "color.h"
 #include "common/common.h"
-#include "utils/rectangle.h"
+#include "physics/rectangle.h"
+#include "drawable/drawable.h"
+
+struct Drawable;
 
 /**
  * Initialize Graphics subsystem
  *
  * This will create a window of a given size and set it
  * in either fullscreen or windowed mode.
- * @param width The width of the window in pixels.
- * @param height The height of the window in pixels.
- * @param fullscreen Whether or not to run in fullscreen mode.
+ * @param width The width of the screen in pixels.
+ * @param height The height of the screen in pixels.
  */
-int Graphics_init(int width, int height, BOOL fullscreen);
+int Graphics_init(int width, int height);
 
-/** Refresh the screen.
+/** Render one frame.
   */
-void Graphics_refresh();
+void Graphics_render();
+
+/** Registers a drawable for rendering.
+  */
+void Graphics_addDrawable(Drawable* d);
 
 /** Terminate the graphics component of the engine.
   */
 void Graphics_terminate();
-
-/** Set the part of the world that will be visible in the window.
-  * 
-  * The Y-axis points downward.
-  * @param rect A rectangle 
-  */
-void Graphics_setVisibleArea(Rectangle* rect);
 
 /** Fill a rectangle with a color.
   *

@@ -2,7 +2,7 @@
 
 #include "engine/gameobject.h"
 
-#include "graphics/drawable.h"
+#include "graphics/drawable/drawable.h"
 #include "graphics/color.h"
 
 #include "utils/rectangle.h"

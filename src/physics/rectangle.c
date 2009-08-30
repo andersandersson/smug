@@ -19,7 +19,7 @@ static void Rectangle_invariant(Rectangle* r)
 //}
 //
 
-Rectangle* Rectangle_new(double x, double y, double w, double h)
+Rectangle* Rectangle_new(float x, float y, float w, float h)
 {
     Rectangle* r = malloc(sizeof(Rectangle));
     r->x = x;

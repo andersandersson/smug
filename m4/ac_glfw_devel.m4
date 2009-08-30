@@ -44,7 +44,7 @@ AC_DEFUN([AC_GLFW_DEVEL],[
 	# Set compiler flags to work with GLFW	
 	LDFLAGS=$GLFW_LDFLAGS
 	LIBS=$GLFW_LIBS
-	CFLAGS=$GLFW_CFLAGS
+	CFLAGS="$CFLAGS $GLFW_CFLAGS"
 
 	# Extract Major, Minor and Revision from version (e.g. 1.2.3 => 1, 2, 3)
 	ac_glfw_major=`echo $1 | sed -r 's/^([[0-9]]+)\\..*/\\1/'`

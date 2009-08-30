@@ -114,6 +114,12 @@ void Thread_delete(Thread* thread)
    free(thread);
 }
 
+void Thread_forceKill(Thread* thread)
+{
+   glfwDestroyThread(thread->id);
+   free(thread);
+}
+
 void GLFWCALL Thread_loop(void* arg)
 {
    Thread* thread = (Thread*) arg;

@@ -54,6 +54,7 @@ void GameObject_setDrawable(GameObject* obj, Drawable* d)
     obj->drawable = d;
 }
 
+/*
 void GameObject_render(GameObject* obj)
 {
     GameObject_invariant(obj);
@@ -61,4 +62,4 @@ void GameObject_render(GameObject* obj)
     {
         Drawable_render(obj->drawable, obj->x, obj->y);
     }
-}
+}*/

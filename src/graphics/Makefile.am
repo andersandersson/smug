@@ -10,7 +10,7 @@
 
 SUBDIRS = . test
 
-AM_CFLAGS = $(LIBGLFWCFLAGS)  -I..
+AM_CFLAGS = $(LIBGLFWCFLAGS)  -I.. -DWIN32
 
 noinst_LTLIBRARIES = libgraphics.la
 
@@ -18,6 +18,9 @@ libgraphics_la_SOURCES =  interface.c interface.h graphics.c graphics.h \
 color.c color.h \
 drawable/drawable.c drawable/drawable.h \
 drawable/sprite.c drawable/sprite.h \
+drawable/box.c drawable/box.h \
 renderer/renderer.c renderer/renderer.h \
+renderer/renderbatch.c renderer/renderbatch.h \
 image/image.c image/image.h \
 image/lodepng/lodepng.c image/lodepng/lodepng.h
+

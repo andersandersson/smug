@@ -2,7 +2,6 @@
 
 #include "stdio.h"
 
-#include "GL/glfw.h"
 #include "common/signal.h"
 #include "common/console.h"
 #include "platform/platform.h"
@@ -25,14 +24,16 @@ int Engine_init()
     NOTIFY("Initializing engine:");
     Log_indent();
     
-    NOTIFY("Initializing platform layer");
-    if (!glfwInit())
+
+    if (!Platform_init())
         return 0;
     
     if (!Signal_init())
         return 0;
         
-    if (!Graphics_init(640, 480, FALSE))
+    Platform_openWindow(640, 480, FALSE);    
+
+    if (!Graphics_init(640, 480))
         return 0;
         
     if (!Physics_init())
@@ -63,7 +64,7 @@ void Engine_terminate()
     
     // Do not wait for console thread to end as getc() will
     // block until input is received. Instead, kill the thread.
-    glfwDestroyThread(gConsoleThread->id);        
+    Thread_forceKill(gConsoleThread);        
     
     Physics_terminate();
     
@@ -71,8 +72,9 @@ void Engine_terminate()
     
     Signal_terminate();
     
-    NOTIFY("Terminating platform layer");
-    glfwTerminate();
+    Platform_closeWindow();   
+    
+    Platform_terminate();
     
     Log_dedent();
     NOTIFY("Engine terminated,\n");
@@ -92,46 +94,47 @@ void Engine_run()
     NOTIFY("Running engine...");
     Log_indent();
     
-    double lastFpsCheck = glfwGetTime();
+    TIME lastFpsCheck = Platform_getTime();
     int fps = 0;
     
     // Setup timing variables
-    Time delay = 1.0f/30.0f;
-    Time nexttime;
-    Time time;
-    nexttime = glfwGetTime();
+    TIME delay = 1.0f/30.0f;
+    TIME nexttime;
+    TIME time;
+    nexttime = Platform_getTime();
     
     while(TRUE != Signal_check(SIG_EXIT))
     {
-        time = glfwGetTime();
+        time = Platform_getTime();
         
         if (time >= nexttime)
         {
             nexttime+=delay;
         
-            if(glfwGetKey( GLFW_KEY_ESC ) || !glfwGetWindowParam( GLFW_OPENED ))
+            if(Platform_getKey(KEY_ESC) || !Platform_isWindowOpen())
             {
                 Signal_send(SIG_EXIT);
             }
             
             // Render the world.
-            World_render(gWorld);
-            Graphics_refresh();
+            //World_render(gWorld);
+            Graphics_render();
+            Platform_refreshWindow();
             
             fps++;
         }
         
-        if (glfwGetTime() - lastFpsCheck >= 1.0)
+        if (Platform_getTime() - lastFpsCheck >= 1.0)
         {
             //Console_writeLine("Fps: %i", fps);
             //Log_write(LOG_NOTIFICATION, "FPSCK", "engine.c", 116, "%i", fps);
             NOTIFY("Fps: %i", fps);
             fps = 0;
-            lastFpsCheck = glfwGetTime();
+            lastFpsCheck = Platform_getTime();
         }
         
         // TODO: add if-case: if nexttime-time > smallest_sleep_time
-        glfwSleep(nexttime - time);
+        Platform_sleep(nexttime - time);
     }
     
     Log_dedent();

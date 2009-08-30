@@ -57,7 +57,7 @@ void World_render(World* world)
     node = world->gameObjects->first;
     while (NULL != node)
     {
-        GameObject_render((GameObject*)node->item);
+        //GameObject_render((GameObject*)node->item);
         node = node->next;
     }
 }

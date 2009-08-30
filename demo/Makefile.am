@@ -8,11 +8,9 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+AM_LDFLAGS = -L../src/graphics -lgraphics -L../src/common -lcommon -L../src/utils -lutils -L../src/platform -lplatform
+AM_CFLAGS = -I../src/ -D__MINGW32__ -D_WIN32
 
-AM_CFLAGS = -I.. -I../
+EXTRA_PROGRAMS = demo-boxes
+demo_boxes_SOURCES = demo-boxes.c
 
-noinst_LTLIBRARIES = libutils.la
-libutils_la_SOURCES = interface.c interface.h linkedlist.c linkedlist.h \
-hook.c hook.h \
-vector.c vector.h

@@ -1,6 +1,6 @@
 #include "physics.h"
 
-#include "vector.h"
+#include "utils/vector.h"
 
 int Physics_init()
 {
