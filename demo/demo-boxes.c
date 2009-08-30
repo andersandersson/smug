@@ -53,52 +53,75 @@ int main()
     Point target;
     
     Log_print("Running\n");
-    TIME t;
+    TIME t = Platform_getTime();
     float dir = 1;
-    float deltadir = 0.002;
+    float deltadir = 0.002f;
     float color = 0;
-    while (!Platform_getKey(KEY_ESC))
+    TIME nexttime = t;
+    TIME lastFpsCheck = t;
+    TIME delay = 1.0f/60.0f;
+    int fps = 0;
+    while (1)
     {   
         t = Platform_getTime();
-        target = Point_createFromXY((SWIDTH / 2) * cosf(t*2) + SWIDTH / 2, (SHEIGHT / 2) * sinf(t*2) + SHEIGHT / 2);
-    
-        Node* p = objects->first;
-        while (p != NULL)
+             
+        if (t >= nexttime)
         {
-            ((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
-                                                            Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.003 + myRandom(0.02))));
-            ((Box*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.33);         
-            p = p->next;
-        }
- /*
-        fprintf(stderr, "was: r:%i, g:%i, b:%i\n", (int)(128+sinf((color*3+0)*1.3)*128), (int)(128+sinf((color*3+1)*1.3)*128), (int)(128+sinf((color*3+2)*1.3)*128), 0.01);
-        p = objects->first;
-        fprintf(stderr, "is:  r:%i, g:%i, b:%i\n", (int)(((Box*)p->item)->color.r * 255.0f), (int)(((Box*)p->item)->color.g * 255.0f), (int)(((Box*)p->item)->color.b * 255.0f));
-*/
-  
-        dir += deltadir;
-        if (dir < -0.7)
-        {
-            dir = -0.7;
-            deltadir = deltadir * -1;
-        }
-        if (dir > 1)
-        {
-            dir = 1;
-            deltadir = deltadir * -1;
-        }
-        
-        color+= 0.005;
-        if (color > 24)
-        {
-            color -= 24;
-            fprintf(stderr, "loool\n");
-        }
+            nexttime+=delay;
+
+            if (Platform_getKey(KEY_ESC))
+                break;
+                
+            // Stuff of interest    
+            {    
+                target = Point_createFromXY((SWIDTH / 2) * cosf(t*2) + SWIDTH / 2, (SHEIGHT / 2) * sinf(t*2) + SHEIGHT / 2);
             
+                Node* p = objects->first;
+                while (p != NULL)
+                {
+                    ((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
+                                                                    Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.003 + myRandom(0.02))));
+                    ((Box*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.33);         
+                    p = p->next;
+                }
+
+                dir += deltadir;
+                if (dir < -0.7)
+                {
+                    dir = -0.7;
+                    deltadir = deltadir * -1;
+                }
+                if (dir > 1)
+                {
+                    dir = 1;
+                    deltadir = deltadir * -1;
+                }
+                
+                color+= 0.005;
+                if (color > 24)
+                {
+                    color -= 24;
+                    fprintf(stderr, "loool\n");
+                }
+            }
+
+            Graphics_render();
+            Platform_refreshWindow();
+            
+            fps++;
+        }
+
+        if (t - lastFpsCheck >= 1.0)
+        {
+            //Console_writeLine("Fps: %i", fps);
+            //Log_write(LOG_NOTIFICATION, "FPSCK", "engine.c", 116, "%i", fps);
+            Log_printLine("Fps: %i", fps);
+            fps = 0;
+            lastFpsCheck = t;
+        }
         
-        Graphics_render();   
-        Platform_refreshWindow();
-        Platform_sleep(0.01);
+        // TODO: add if-case: if nexttime-time > smallest_sleep_time
+        Platform_sleep(nexttime - t);
     }
 
     Log_print("Stopped\n");
