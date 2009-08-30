@@ -66,7 +66,7 @@ int main()
         while (p != NULL)
         {
             ((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
-                                                            Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.003 + myRandom(0.009))));
+                                                            Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.003 + myRandom(0.02))));
             ((Box*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.33);         
             p = p->next;
         }
