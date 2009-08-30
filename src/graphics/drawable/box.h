@@ -4,7 +4,7 @@
 
 #include "drawable.h"
 #include "graphics/renderer/renderbatch.h"
-#include "physics/rectangle.h"
+#include "utils/rectangle.h"
 #include "utils/vector.h"
 
 // Inherits Drawable 
@@ -16,7 +16,7 @@ typedef struct Box
 } Box;
 
 Box* Box_new();
-Box* Box_newFromData(float x, float y, float w, float h);
+Box* Box_newFromPointRectangle(Point pos, Rectangle rect);
 
 void Box_delete(void* box);
 int Box_writeBatchData(Drawable* box, RenderBatch* batch, unsigned int start);

@@ -7,7 +7,7 @@
 typedef struct Vector2d
 {
     int size;    //!< The dimension of the vector
-    float* d;
+    float d[2];
 } Vector;
 
 
@@ -76,7 +76,6 @@ Vector Vector_projection(Vector v, Vector n);
 
 // Miscellaneous vector functions
 // ------------------------------
-
 
 /**
  * Print the vector to stderr

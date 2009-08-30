@@ -114,16 +114,22 @@ void Graphics_addDrawable(Drawable* d)
 
 void Graphics_fillRect(Rectangle* rect, Color* color)
 {
+    static float x1, y1, x2, y2;
     assert(NULL != rect);
     assert(NULL != color);
     
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glColor4f(color->r, color->g, color->b, color->a);
+    x1 = Rectangle_getX(rect);
+    y1 = Rectangle_getY(rect);
+    y2 = Rectangle_getX(rect) + Rectangle_getW(rect);
+    y2 = Rectangle_getY(rect) + Rectangle_getH(rect); 
+    
     glBegin(GL_QUADS);
-        glVertex3f(rect->x,           rect->y,           0.0f);
-        glVertex3f(rect->x + rect->w, rect->y,           0.0f);
-        glVertex3f(rect->x + rect->w, rect->y + rect->h, 0.0f);
-        glVertex3f(rect->x,           rect->y + rect->h, 0.0f);
+        glVertex2f(x1, y1);
+        glVertex2f(x1, y2);
+        glVertex2f(x2, y2);
+        glVertex2f(x2, y1);
     glEnd();
     glPopAttrib();
 }

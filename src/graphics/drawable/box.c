@@ -7,24 +7,20 @@ Box* Box_new()
     ret->base._deleteFunc = Box_delete;
     ret->base._writeBatchFunc = Box_writeBatchData;
     ret->base.layer = 0;
-    ret->rect.x = 0;
-    ret->rect.y = 0;
-    ret->rect.w = 0;    
-    ret->rect.h = 0;    
+    ret->base.pos = Point_createFromXY(0, 0);
+    ret->rect = Rectangle_createFromXYWH(0,0,0,0);
     
     return ret;
 }
 
-Box* Box_newFromData(float x, float y, float w, float h)
+Box* Box_newFromPointRectangle(Point pos, Rectangle rect)
 {
     Box* ret = (Box*)malloc(sizeof(Box));
     ret->base._deleteFunc = Box_delete;
     ret->base._writeBatchFunc = Box_writeBatchData;
     ret->base.layer = 0;
-    ret->rect.x = x;
-    ret->rect.y = y;
-    ret->rect.w = w;    
-    ret->rect.h = h;   
+    ret->base.pos = pos;
+    ret->rect = rect;
     
     return ret;
 }
@@ -39,15 +35,19 @@ void Box_delete(void* box)
 
 int Box_writeBatchData(Drawable* box, RenderBatch* batch, unsigned int start)
 {
-    unsigned int vertexstart = start*2;
-    unsigned int colorstart = start*4; 
-    unsigned int texturestart = start*2; 
+    static unsigned int vertexstart, colorstart, texturestart;
+    static float x1, x2, y1, y2;
+    static float r, g, b, a;
+
+    vertexstart = start*2;
+    colorstart = start*4; 
+    texturestart = start*2; 
     Box* thebox = (Box*)box;
     
-    float x1 = thebox->rect.x;
-    float x2 = thebox->rect.x + thebox->rect.w;
-    float y1 = thebox->rect.y;
-    float y2 = thebox->rect.y + thebox->rect.h;
+    x1 = Point_getX(&thebox->base.pos) + Rectangle_getX(&thebox->rect);
+    x2 = Point_getX(&thebox->base.pos) + Rectangle_getX(&thebox->rect) + Rectangle_getW(&thebox->rect);
+    y1 = Point_getY(&thebox->base.pos) + Rectangle_getY(&thebox->rect);
+    y2 = Point_getY(&thebox->base.pos) + Rectangle_getY(&thebox->rect) + Rectangle_getH(&thebox->rect);
    
     // write vertices in anti-clockwise order
     batch->vertexData[vertexstart + 0 * 2 + 0] = x1;
@@ -59,10 +59,10 @@ int Box_writeBatchData(Drawable* box, RenderBatch* batch, unsigned int start)
     batch->vertexData[vertexstart + 3 * 2 + 0] = x2;
     batch->vertexData[vertexstart + 3 * 2 + 1] = y1;   
     
-    float r = thebox->color.r;
-    float g = thebox->color.g;
-    float b = thebox->color.b;
-    float a = thebox->color.a;
+    r = thebox->color.r;
+    g = thebox->color.g;
+    b = thebox->color.b;
+    a = thebox->color.a;
     
     // write colordata
     batch->colorData[colorstart + 0 * 4 + 0] = r;

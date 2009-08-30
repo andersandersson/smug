@@ -81,7 +81,7 @@ void Renderer_render(Renderer* renderer)
     glDisableClientState(GL_VERTEX_ARRAY);	    
     //glDisableClientState(GL_TEXTURE_COORD_ARRAY);	 
 
-    glColor3f(1, 1, 1);
+    /*glColor4f(1, 1, 1, 0.01f);
     glBegin(GL_QUADS);
     {
         int i;
@@ -94,7 +94,7 @@ void Renderer_render(Renderer* renderer)
             //fprintf(stderr, "drawing box x1:%i, y1:%i x2:%i, y2:%i\n", currentBatch->vertexData[i * currentBatch->objectSize * 2 + 0], currentBatch->vertexData[i * currentBatch->objectSize * 2 + 1], currentBatch->vertexData[i * currentBatch->objectSize * 2 + 4], currentBatch->vertexData[i * currentBatch->objectSize * 2 + 5]);
         }
     }
-    glEnd();   
+    glEnd();   */
             
 }
 

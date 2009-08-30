@@ -15,4 +15,7 @@ AM_CFLAGS = -I.. -I../
 noinst_LTLIBRARIES = libutils.la
 libutils_la_SOURCES = interface.c interface.h linkedlist.c linkedlist.h \
 hook.c hook.h \
-vector.c vector.h
+vector.c vector.h \
+rectangle.h rectangle.c \
+point.h point.c
+

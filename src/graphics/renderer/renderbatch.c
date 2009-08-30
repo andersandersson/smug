@@ -59,9 +59,9 @@ void RenderBatch_delete(void* batch)
     ((RenderBatch*)batch)->colorData = NULL;
     ((RenderBatch*)batch)->textureData = NULL;   
     
-    freeBuffer(((RenderBatch*)batch)->vertexBufferIndex);
-    freeBuffer(((RenderBatch*)batch)->colorBufferIndex);
-    freeBuffer(((RenderBatch*)batch)->textureBufferIndex);
+    freeBuffer(&((RenderBatch*)batch)->vertexBufferIndex);
+    freeBuffer(&((RenderBatch*)batch)->colorBufferIndex);
+    freeBuffer(&((RenderBatch*)batch)->textureBufferIndex);
 }
 
 

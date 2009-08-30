@@ -8,12 +8,15 @@
 #include "graphics/color.h"
 #include "graphics/renderer/renderbatch.h"
 
+#include "utils/point.h"
+
 /** Something that can be rendered to the screen. A superclass for several different drawable types.
   *
   */
 typedef struct Drawable
 {
     int layer;
+    Point pos;
     //Texture texture; <- can be NULL for shapes
     void (*_deleteFunc)(void* obj);
     int (*_writeBatchFunc)(struct Drawable* d, RenderBatch* batch, unsigned int start);

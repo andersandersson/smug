@@ -7,10 +7,8 @@
 
 #include "color.h"
 #include "common/common.h"
-#include "physics/rectangle.h"
+#include "utils/rectangle.h"
 #include "drawable/drawable.h"
-
-struct Drawable;
 
 /**
  * Initialize Graphics subsystem
