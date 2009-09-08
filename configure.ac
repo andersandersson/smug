@@ -18,7 +18,8 @@ AC_DEFUN([AC_INIT_LINUX],
 # E.g. LIBS=-lsystem32
 #
 AC_DEFUN([AC_INIT_WIN32],
-	 [echo "Setting WIN32"])
+	 [echo "Setting WIN32"]
+         [CFLAGS="$CFLAGS -mno-cygwin"])
 	
 # Default init parameters
 AC_INIT([smug],
@@ -35,8 +36,6 @@ AM_INIT_AUTOMAKE([dist-bzip2])
 
 # Guess the hos system (win32, etc)
 AC_CANONICAL_HOST
-
-CFLAGS="$CFLAGS -mno-cygwin"
 
 # Check for C compiler
 AC_PROG_CC

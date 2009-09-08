@@ -18,7 +18,7 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
 	               PYTHON_LIBS=[-lpython26]
 	        ;;	        
 	     *linux*)  python_os=x11 
-     		       PYTHON_LIBS=[-lpython26]
+     		       PYTHON_LIBS=[-lpython2.6]
 	     	;;
 	esac
 
@@ -34,6 +34,9 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
 	if test "$with_python" != "no"; then
 	   PYTHON_LDFLAGS=[-L$with_python/libs\ -Xlinker\ -rpath\ $with_python/libs]
 	   PYTHON_CFLAGS=[-I$with_python/include]
+        else
+           PYTHON_LDFLAGS=[$(python-config --ldflags)]
+           PYTHON_CFLAGS=[$(python-config --cflags)]
 	fi	
     
 	# Temporarily save compiler flags
@@ -42,8 +45,8 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
 	ac_save_LDFLAGS="$LDFLAGS"
 
 	# Set compiler flags to work with GLEW	
-	LDFLAGS=$PYTHON_LDFLAGS
-	LIBS=$PYTHON_LIBS
+	LDFLAGS="$LDFLAGS $PYTHON_LDFLAGS"
+	LIBS="$LIBS $PYTHON_LIBS"
 	CFLAGS="$CFLAGS $PYTHON_CFLAGS"
 
 	# Try to run a simple PYTHON program
