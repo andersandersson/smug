@@ -74,13 +74,13 @@ int main()
                 
             // Stuff of interest    
             {    
-                target = Point_createFromXY((SWIDTH / 2) * cosf(t*2) + SWIDTH / 2, (SHEIGHT / 2) * sinf(t*2) + SHEIGHT / 2);
+                target = Point_createFromXY((SWIDTH) * cosf(t*2) + SWIDTH / 2, (SHEIGHT) * sinf(t*2) + SHEIGHT / 2);
             
                 Node* p = objects->first;
                 while (p != NULL)
                 {
                     ((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
-                                                                    Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.003 + myRandom(0.02))));
+                                                                    Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.003 + myRandom(0.035))));
                     ((Box*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.33);         
                     p = p->next;
                 }
@@ -97,7 +97,7 @@ int main()
                     deltadir = deltadir * -1;
                 }
                 
-                color+= 0.005;
+                color+= 0.0015;
                 if (color > 24)
                 {
                     color -= 24;

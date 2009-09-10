@@ -50,7 +50,7 @@ static void setupGL()
     }
 
     DEBUG("Checking for VBO support");
-	if(GLEW_ARB_vertex_buffer_object)
+	if(GL_ARB_vertex_buffer_object)
 	{   
         gVBOSupported = 1;
     }
