@@ -33,7 +33,7 @@ AC_DEFUN([AC_GLEW_DEVEL],[
 	# for libs and includes
 	if test "$with_glew" != "no"; then
 	   GLEW_LDFLAGS=[-L$with_glew/lib\ -Xlinker\ -rpath\ $with_glew/lib]
-	   GLEW_CFLAGS=[-I$with_glew/include]
+	   GLEW_CFLAGS=[-I$with_glew/include\ -DGLEW_STATIC]
 	fi	
 
 	# Temporarily save compiler flags
@@ -44,7 +44,7 @@ AC_DEFUN([AC_GLEW_DEVEL],[
 	# Set compiler flags to work with GLEW	
 	LDFLAGS="$LDFLAGS $GLEW_LDFLAGS"
 	LIBS="$LIBS $GLEW_LIBS"
-	CFLAGS="$CFLAGS $GLEW_CFLAGS -DGLEW_STATIC"
+	CFLAGS="$CFLAGS $GLEW_CFLAGS"
 
 	# Extract Major, Minor and Revision from version (e.g. 1.2.3 => 1, 2, 3)
 	ac_glew_major=`echo $1 | sed -r 's/^([[0-9]]+)\\..*/\\1/'`

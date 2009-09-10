@@ -44,6 +44,12 @@ AM_PROG_CC_C_O
 # Check for library function
 AC_PROG_LIBTOOL
 
+# Check the OS and run corresponding init script
+case $host_os in
+     linux*) AC_INIT_LINUX() ;;
+     *) AC_INIT_WIN32() ;;
+esac
+
 # Check for Python
 AC_PYTHON_DEVEL([>= 2.5])
 
@@ -51,8 +57,8 @@ AC_PYTHON_DEVEL([>= 2.5])
 
 # Check for GLEW on win32 otherwise check for gl 3.0
 case $host_os in
-     win32*) AC_GLEW_DEVEL([1.5.1]) ;;
-     *) ;; #AC_GL_DEVEL([3.0]);;
+     linux*) ;; #AC_GL_DEVEL([3.0]);;
+     *) AC_GLEW_DEVEL([1.5.1]) ;;
 esac
 
 # Check for GLFW
@@ -62,12 +68,6 @@ AC_GLFW_DEVEL([2.6.0])
 LIBS="$LIBS $GLFW_LIBS $GLEW_LIBS $PYTHON_LIBS"
 CFLAGS="$CFLAGS $GLFW_CFLAGS $GLEW_CFLAGS $PYTHON_CFLAGS -Wall -g -O0"  #-Werror=implicit-function-declaration"
 LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $GLEW_LDFLAGS $PYTHON_LDFLAGS"
-
-# Check the OS and run corresponding init script
-case $host_os in
-     linux*) AC_INIT_LINUX() ;;
-     *) AC_INIT_WIN32() ;;
-esac
 
 # Allow the user to disable use of asserts
 AC_ARG_ENABLE([asserts], 
