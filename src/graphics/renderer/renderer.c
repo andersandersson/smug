@@ -56,16 +56,16 @@ void Renderer_render(Renderer* renderer)
 
     if(gVBOSupported)
     {    
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, currentBatch->vertexBufferIndex);
-        glBufferDataARB(GL_ARRAY_BUFFER_ARB, renderer->drawables->length * currentBatch->objectSize*2*sizeof(float), currentBatch->vertexData, GL_STATIC_DRAW_ARB );
+        glBindBuffer(GL_ARRAY_BUFFER, currentBatch->vertexBufferIndex);
+        glBufferData(GL_ARRAY_BUFFER, renderer->drawables->length * currentBatch->objectSize*2*sizeof(float), currentBatch->vertexData, GL_STATIC_DRAW );
         glVertexPointer( 2, GL_FLOAT, 0, (char*) NULL );
 /*
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, currentBatch->textureBufferIndex);
-        glBufferDataARB(GL_ARRAY_BUFFER_ARB, BOXES*currentBatch->objectSize*2*sizeof(float), currentBatch->textureData, GL_STATIC_DRAW_ARB );
+        glBindBuffer(GL_ARRAY_BUFFER, currentBatch->textureBufferIndex);
+        glBufferData(GL_ARRAY_BUFFER, BOXES*currentBatch->objectSize*2*sizeof(float), currentBatch->textureData, GL_STATIC_DRAW );
         glTexCoordPointer( 2, GL_FLOAT, 0, (char*) NULL );
  */       
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, currentBatch->colorBufferIndex);
-        glBufferDataARB(GL_ARRAY_BUFFER_ARB, renderer->drawables->length * currentBatch->objectSize*4*sizeof(float), currentBatch->colorData, GL_STATIC_DRAW_ARB );
+        glBindBuffer(GL_ARRAY_BUFFER, currentBatch->colorBufferIndex);
+        glBufferData(GL_ARRAY_BUFFER, renderer->drawables->length * currentBatch->objectSize*4*sizeof(float), currentBatch->colorData, GL_STATIC_DRAW );
         glColorPointer(4, GL_FLOAT, 0, (char*) NULL );
      
     } else

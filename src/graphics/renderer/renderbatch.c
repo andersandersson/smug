@@ -13,8 +13,8 @@ static void generateBuffer(GLuint* idholder)
     *idholder = 0;
     if (gVBOSupported)
     {
-        glGenBuffersARB(1, idholder); 
-        if (!glIsBufferARB(*idholder))
+        glGenBuffers(1, idholder); 
+        if (!glIsBuffer(*idholder))
         {
             WARNING("Failed to create buffer, err: %i. Disabling VBOs.\n",  glGetError());
             gVBOSupported = 0;
@@ -25,8 +25,8 @@ static void generateBuffer(GLuint* idholder)
 
 static void freeBuffer(GLuint* idholder)
 {
-    if (glIsBufferARB(*idholder))
-        glDeleteBuffersARB(1, idholder);
+    if (glIsBuffer(*idholder))
+        glDeleteBuffers(1, idholder);
 }
 
 RenderBatch* RenderBatch_new(unsigned int objectSize, unsigned int vertices)

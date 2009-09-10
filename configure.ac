@@ -47,11 +47,16 @@ AC_PROG_LIBTOOL
 # Check for Python
 AC_PYTHON_DEVEL([>= 2.5])
 
+# Check for gl, glu and glext 3.0
+
+# Check for GLEW on win32 otherwise check for gl 3.0
+case $host_os in
+     win32*) AC_GLEW_DEVEL([1.5.1]) ;;
+     *) ;; #AC_GL_DEVEL([3.0]);;
+esac
+
 # Check for GLFW
 AC_GLFW_DEVEL([2.6.0])
-
-# Check for GLEW
-AC_GLEW_DEVEL([1.5.1])
 
 # Append Python and GLFW flags to default flags
 LIBS="$LIBS $GLFW_LIBS $GLEW_LIBS $PYTHON_LIBS"

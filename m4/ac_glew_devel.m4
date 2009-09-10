@@ -18,7 +18,7 @@ AC_DEFUN([AC_GLEW_DEVEL],[
 	               GLEW_LIBS=[-lglew32s\ -lopengl32]
 	        ;;	        
 	     *linux*)  glew_os=x11 
-     		       GLEW_LIBS=[-lGLEW\ -lX11\ -lpthread\ -lm\ -lGL] #-lXrandr
+     		       GLEW_LIBS=[-lX11\ -lpthread\ -lm\ -lGL] #-lXrandr
 	     	;;
 	esac
 

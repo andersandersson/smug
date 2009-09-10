@@ -10,7 +10,7 @@
 
 SUBDIRS = . test
 
-AM_CFLAGS = $(LIBGLFWCFLAGS)  -I.. -DWIN32
+AM_CFLAGS = $(LIBGLFWCFLAGS)  -I..
 
 noinst_LTLIBRARIES = libgraphics.la
 

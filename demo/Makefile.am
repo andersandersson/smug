@@ -9,7 +9,7 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 AM_LDFLAGS = -L../src/graphics -lgraphics -L../src/common -lcommon -L../src/utils -lutils -L../src/platform -lplatform
-AM_CFLAGS = -I../src/ -D__MINGW32__ -D_WIN32
+AM_CFLAGS = -I../src/
 
 EXTRA_PROGRAMS = demo-boxes
 demo_boxes_SOURCES = demo-boxes.c
