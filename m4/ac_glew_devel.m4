@@ -18,7 +18,7 @@ AC_DEFUN([AC_GLEW_DEVEL],[
 	               GLEW_LIBS=[-lglew32s\ -lopengl32]
 	        ;;	        
 	     *linux*)  glew_os=x11 
-     		       GLEW_LIBS=[-lglew\ -lX11\ -lpthread\ -lm\ -lGL\ -lXrandr]
+     		       GLEW_LIBS=[-lX11\ -lpthread\ -lm\ -lGL] #-lXrandr
 	     	;;
 	esac
 
@@ -33,18 +33,18 @@ AC_DEFUN([AC_GLEW_DEVEL],[
 	# for libs and includes
 	if test "$with_glew" != "no"; then
 	   GLEW_LDFLAGS=[-L$with_glew/lib\ -Xlinker\ -rpath\ $with_glew/lib]
-	   GLEW_CFLAGS=[-I$with_glew/include\ -DGLEW_STATIC]
+	   GLEW_CFLAGS=[-I$with_glew/include]
 	fi	
 
 	# Temporarily save compiler flags
-	ac_save_LIBS="$LIBS"
-	ac_save_CFLAGS="$CFLAGS"
-	ac_save_LDFLAGS="$LDFLAGS"
+	ac_save_LIBS=$LIBS
+	ac_save_CFLAGS=$CFLAGS
+	ac_save_LDFLAGS=$LDFLAGS
 
 	# Set compiler flags to work with GLEW	
-	LDFLAGS=$GLEW_LDFLAGS
-	LIBS=$GLEW_LIBS
-	CFLAGS="$CFLAGS $GLEW_CFLAGS"
+	LDFLAGS="$LDFLAGS $GLEW_LDFLAGS"
+	LIBS="$LIBS $GLEW_LIBS"
+	CFLAGS="$CFLAGS $GLEW_CFLAGS -DGLEW_STATIC"
 
 	# Extract Major, Minor and Revision from version (e.g. 1.2.3 => 1, 2, 3)
 	ac_glew_major=`echo $1 | sed -r 's/^([[0-9]]+)\\..*/\\1/'`

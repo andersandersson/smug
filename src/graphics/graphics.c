@@ -42,13 +42,15 @@ static void printGLError()
 
 static void setupGL()
 {
+#ifdef WIN32
     DEBUG("Initializing GLEW");
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
         ERROR("GLEW could not be initialized, errcode: %s", glewGetErrorString(err));
     }
-
+#endif //WIN32
+    
     DEBUG("Checking for VBO support");
 	if(GL_ARB_vertex_buffer_object)
 	{   

@@ -18,7 +18,7 @@ AC_DEFUN([AC_GLFW_DEVEL],[
 	               GLFW_LIBS=[-lglfw\ -lopengl32]
 	        ;;	        
 	     *linux*)  glfw_os=x11 
-     		       GLFW_LIBS=[-lglfw\ -lX11\ -lpthread\ -lm\ -lGL\ -lXrandr]
+     		       GLFW_LIBS=[-lglfw\ -lX11\ -lpthread\ -lm\ -lGL] #-lXrandr
 	     	;;
 	esac
 
@@ -37,13 +37,13 @@ AC_DEFUN([AC_GLFW_DEVEL],[
 	fi	
 
 	# Temporarily save compiler flags
-	ac_save_LIBS="$LIBS"
-	ac_save_CFLAGS="$CFLAGS"
-	ac_save_LDFLAGS="$LDFLAGS"
+	ac_save_LIBS=$LIBS
+	ac_save_CFLAGS=$CFLAGS
+	ac_save_LDFLAGS=$LDFLAGS
 
 	# Set compiler flags to work with GLFW	
-	LDFLAGS=$GLFW_LDFLAGS
-	LIBS=$GLFW_LIBS
+	LDFLAGS="$LDFLAGS $GLFW_LDFLAGS"
+	LIBS="$LIBS $GLFW_LIBS"
 	CFLAGS="$CFLAGS $GLFW_CFLAGS"
 
 	# Extract Major, Minor and Revision from version (e.g. 1.2.3 => 1, 2, 3)

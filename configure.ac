@@ -18,7 +18,8 @@ AC_DEFUN([AC_INIT_LINUX],
 # E.g. LIBS=-lsystem32
 #
 AC_DEFUN([AC_INIT_WIN32],
-	 [echo "Setting WIN32"])
+	 [echo "Setting WIN32"]
+         [CFLAGS="$CFLAGS -mno-cygwin"])
 	
 # Default init parameters
 AC_INIT([smug],
@@ -36,8 +37,6 @@ AM_INIT_AUTOMAKE([dist-bzip2])
 # Guess the hos system (win32, etc)
 AC_CANONICAL_HOST
 
-CFLAGS="$CFLAGS -mno-cygwin"
-
 # Check for C compiler
 AC_PROG_CC
 AM_PROG_CC_C_O
@@ -48,11 +47,16 @@ AC_PROG_LIBTOOL
 # Check for Python
 AC_PYTHON_DEVEL([>= 2.5])
 
+# Check for gl, glu and glext 3.0
+
+# Check for GLEW on win32 otherwise check for gl 3.0
+case $host_os in
+     win32*) AC_GLEW_DEVEL([1.5.1]) ;;
+     *) ;; #AC_GL_DEVEL([3.0]);;
+esac
+
 # Check for GLFW
 AC_GLFW_DEVEL([2.6.0])
-
-# Check for GLEW
-AC_GLEW_DEVEL([1.5.1])
 
 # Append Python and GLFW flags to default flags
 LIBS="$LIBS $GLFW_LIBS $GLEW_LIBS $PYTHON_LIBS"
