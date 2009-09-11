@@ -66,6 +66,21 @@ Vector Vector_multiply(Vector v, float k)
     return u;
 }
 
+Vector Vector_multiplyVector(Vector v, Vector w)
+{
+    int i;
+    Vector u;
+    u.size = v.size;
+
+    for(i=0; i < v.size; i++)
+    {
+        u.d[i] = w.d[i]*v.d[i];
+    }
+
+    return u;
+}
+
+
 
 float Vector_dotProduct(Vector v, Vector w)
 {

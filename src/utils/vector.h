@@ -52,6 +52,11 @@ Vector Vector_sub(Vector v, Vector w);
  */
 Vector Vector_multiply(Vector v, float k);
 
+/**
+ * Multiply Vectors v:s elements with vector w:s 
+ * and return a new Vector with the result.
+ */
+Vector Vector_multiplyVector(Vector v, Vector w);
 
 /**
  * Calculate the dot product. This is the sum
@@ -81,5 +86,7 @@ Vector Vector_projection(Vector v, Vector n);
  * Print the vector to stderr
  */
 void Vector_print(Vector v);
+
+
 
 #endif

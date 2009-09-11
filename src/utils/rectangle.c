@@ -39,3 +39,9 @@ void Rectangle_delete(Rectangle* r)
 {
     free(r);
 }
+
+
+Rectangle Rectangle_multiplyVector(Rectangle r, Vector s)
+{
+    return Rectangle_createFromXYWH(Point_getX(&r.pos) * s.d[0], Point_getX(&r.pos) * s.d[1], r.size.d[0] * s.d[0], r.size.d[1] * s.d[1]);
+}

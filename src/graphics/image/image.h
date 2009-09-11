@@ -1,7 +1,7 @@
 #ifndef SMUG_GRAPHICS_IMAGE_H
 #define SMUG_GRAPHICS_IMAGE_H
 
-#include "../common/common.h"
+#include "common/common.h"
 
 typedef struct Image
 {

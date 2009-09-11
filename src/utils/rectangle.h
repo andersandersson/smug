@@ -40,4 +40,7 @@ float Rectangle_getY(Rectangle* r);
 float Rectangle_getW(Rectangle* r);
 float Rectangle_getH(Rectangle* r);
 
+Rectangle Rectangle_multiplyVector(Rectangle r, Vector s);
+
+
 #endif // PHYSICS_RECTANGLE_H

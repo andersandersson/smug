@@ -69,3 +69,8 @@ void Drawable_delete(void* d)
     if (NULL != ((Drawable*)d)->_deleteFunc)
         ((Drawable*)d)->_deleteFunc(d);
 }
+
+void Drawable_setPos(Drawable* d, Point pos)
+{
+    d->pos = pos;
+}

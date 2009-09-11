@@ -71,13 +71,13 @@ static void setupGL()
 	glMatrixMode(GL_MODELVIEW);
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
     printGLError();
    
-    //glEnable( GL_TEXTURE_2D );
+    glEnable( GL_TEXTURE_2D );
 }
 
 int Graphics_init(int width, int height)

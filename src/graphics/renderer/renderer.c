@@ -8,6 +8,8 @@
 
 #define DEFAULT_BATCHSIZE 100
 
+#include "graphics/drawable/sprite.h"
+
 extern int gVBOSupported;
 
 Renderer* Renderer_new()
@@ -51,19 +53,18 @@ void Renderer_render(Renderer* renderer)
 
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);	
-    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);	   
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);	   
     
-
     if(gVBOSupported)
     {    
         glBindBuffer(GL_ARRAY_BUFFER, currentBatch->vertexBufferIndex);
         glBufferData(GL_ARRAY_BUFFER, renderer->drawables->length * currentBatch->objectSize*2*sizeof(float), currentBatch->vertexData, GL_STATIC_DRAW );
         glVertexPointer( 2, GL_FLOAT, 0, (char*) NULL );
-/*
+
         glBindBuffer(GL_ARRAY_BUFFER, currentBatch->textureBufferIndex);
-        glBufferData(GL_ARRAY_BUFFER, BOXES*currentBatch->objectSize*2*sizeof(float), currentBatch->textureData, GL_STATIC_DRAW );
+        glBufferData(GL_ARRAY_BUFFER, renderer->drawables->length * currentBatch->objectSize*2*sizeof(float), currentBatch->textureData, GL_STATIC_DRAW );
         glTexCoordPointer( 2, GL_FLOAT, 0, (char*) NULL );
- */       
+        
         glBindBuffer(GL_ARRAY_BUFFER, currentBatch->colorBufferIndex);
         glBufferData(GL_ARRAY_BUFFER, renderer->drawables->length * currentBatch->objectSize*4*sizeof(float), currentBatch->colorData, GL_STATIC_DRAW );
         glColorPointer(4, GL_FLOAT, 0, (char*) NULL );
@@ -79,22 +80,36 @@ void Renderer_render(Renderer* renderer)
     
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);	    
-    //glDisableClientState(GL_TEXTURE_COORD_ARRAY);	 
-
-    /*glColor4f(1, 1, 1, 0.01f);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);	 
+  
+/*
     glBegin(GL_QUADS);
     {
         int i;
         for (i = 0; i < renderer->drawables->length; i++)
         {
+            glColor4f(currentBatch->colorData[i * currentBatch->objectSize * 4 + 0], currentBatch->colorData[i * currentBatch->objectSize * 4 + 1], 
+                        currentBatch->colorData[i * currentBatch->objectSize * 4 + 2], currentBatch->colorData[i * currentBatch->objectSize * 4 + 3]);
+    
             glVertex2f(currentBatch->vertexData[i * currentBatch->objectSize * 2 + 0],currentBatch->vertexData[i * currentBatch->objectSize * 2 + 1]);
+            glTexCoord2f(currentBatch->textureData[i * currentBatch->objectSize * 2 + 0],currentBatch->textureData[i * currentBatch->objectSize * 2 + 1]);
+            
             glVertex2f(currentBatch->vertexData[i * currentBatch->objectSize * 2 + 2],currentBatch->vertexData[i * currentBatch->objectSize * 2 + 3]);
-            glVertex2f(currentBatch->vertexData[i * currentBatch->objectSize * 2 + 4],currentBatch->vertexData[i * currentBatch->objectSize * 2 + 5]);       
-            glVertex2f(currentBatch->vertexData[i * currentBatch->objectSize * 2 + 6],currentBatch->vertexData[i * currentBatch->objectSize * 2 + 7]);     
-            //fprintf(stderr, "drawing box x1:%i, y1:%i x2:%i, y2:%i\n", currentBatch->vertexData[i * currentBatch->objectSize * 2 + 0], currentBatch->vertexData[i * currentBatch->objectSize * 2 + 1], currentBatch->vertexData[i * currentBatch->objectSize * 2 + 4], currentBatch->vertexData[i * currentBatch->objectSize * 2 + 5]);
+            glTexCoord2f(currentBatch->textureData[i * currentBatch->objectSize * 2 + 2],currentBatch->textureData[i * currentBatch->objectSize * 2 + 3]);
+            
+            glVertex2f(currentBatch->vertexData[i * currentBatch->objectSize * 2 + 4],currentBatch->vertexData[i * currentBatch->objectSize * 2 + 5]); 
+            glTexCoord2f(currentBatch->textureData[i * currentBatch->objectSize * 2 + 4],currentBatch->textureData[i * currentBatch->objectSize * 2 + 5]);
+            
+            glVertex2f(currentBatch->vertexData[i * currentBatch->objectSize * 2 + 6],currentBatch->vertexData[i * currentBatch->objectSize * 2 + 7]); 
+            glTexCoord2f(currentBatch->textureData[i * currentBatch->objectSize * 2 + 6],currentBatch->textureData[i * currentBatch->objectSize * 2 + 7]);
+            
+            fprintf(stderr, "drawing box x1:%i, y1:%i x2:%i, y2:%i\n", (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 0], (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 1], (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 4], (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 5]);
+            fprintf(stderr, " with texture tx1:%i, ty1:%i tx2:%i, ty2:%i\n", (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 0], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 1], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 4], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 5]);
+        
         }
     }
-    glEnd();   */
+    glEnd();
+ */   
             
 }
 

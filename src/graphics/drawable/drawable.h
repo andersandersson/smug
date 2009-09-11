@@ -25,5 +25,6 @@ typedef struct Drawable
 
 void Drawable_delete(void* d);
 int Drawable_writeBatchData(Drawable* d, RenderBatch* batch, unsigned int start);
+void Drawable_setPos(Drawable* d, Point pos);
 
 #endif //SMUG_GRAPHICS_DRAWABLE_H

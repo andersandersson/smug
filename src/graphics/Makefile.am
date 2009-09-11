@@ -22,5 +22,5 @@ drawable/box.c drawable/box.h \
 renderer/renderer.c renderer/renderer.h \
 renderer/renderbatch.c renderer/renderbatch.h \
 image/image.c image/image.h \
-image/lodepng/lodepng.c image/lodepng/lodepng.h
-
+image/lodepng/lodepng.c image/lodepng/lodepng.h \
+texture/texture.h texture/texture.c
