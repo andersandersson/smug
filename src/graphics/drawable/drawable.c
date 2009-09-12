@@ -5,72 +5,44 @@
 #include "common/common.h"
 #include <stdlib.h>
 
-/*
-
-static void Drawable_invariant(Drawable* d)
+Drawable* Drawable_new(unsigned int vertexcount)
 {
-    // The drawable is not null.
-    assert(NULL != d);
-    
-    // The Drawable either has a Sprite OR a Color and a Rectangle, but not both.
-    if (NULL == d->sprite)  // No sprite, must have rectangle and color
-    {
-        assert(NULL != d->rect && NULL != d->color);
-    }
-    else                    // Has sprite, must not have rectangle or color.
-    {
-        assert(NULL == d->rect && NULL == d->color);
-    }
+    Drawable* ret = (Drawable*)malloc(sizeof(Drawable));
+    ret->layer = 0;
+    ret->pos = Point_createFromXY(0, 0);
+    ret->color = Color_create();
+    ret->vertexcount = vertexcount;
+    ret->vertices = (Vector*)malloc(sizeof(Vector) * vertexcount);
+    ret->sprite = NULL;
+    ret->type = 0;
+    return ret;
 }
-
-Drawable* Drawable_newSprite(Sprite* s)
-{
-    assert(NULL != s);
-    
-    Drawable* d = malloc(sizeof(Drawable));
-    d->sprite = s;
-    d->rect = NULL;
-    d->color = NULL;
-    Drawable_invariant(d);
-    return d;
-}
-
-Drawable* Drawable_newRect(Rectangle* r, Color* c)
-{
-    assert(NULL != r); assert(NULL != c);
-
-    Drawable* d = malloc(sizeof(Drawable));
-    d->sprite = NULL;
-    d->rect = r;
-    
-    d->color = c;
-    //Color* newC;
-    //newC = Color_new(0.0f, 0.0f, 0.0f, 0.0f); //Well this is fugly. TODO: Should take 0 args. And Create Color_newFromRgba(f,f,f,f) instead.
-    //newC->r = c->r;
-    //newC->g = c->g;
-    //newC->b = c->b;
-    //newC->a = c->a;
-    //d->color = newC;
-
-    Drawable_invariant(d);
-    return d;
-}
-*/
-
 
 int Drawable_writeBatchData(Drawable* d, RenderBatch* batch, unsigned int start)
 {
     if (NULL != ((Drawable*)d)->_writeBatchFunc)
-        ((Drawable*)d)->_writeBatchFunc(d, batch, start);
+        return ((Drawable*)d)->_writeBatchFunc(d, batch, start);
+        
+    return 0;
 }
 
 void Drawable_delete(void* d)
 {
-    if (NULL != ((Drawable*)d)->_deleteFunc)
-        ((Drawable*)d)->_deleteFunc(d);
+    free(((Drawable*)d)->vertices);
+    free(d); 
 }
 
 void Drawable_setPos(Drawable* d, Point pos)
 {
     d->pos = pos;
+}
+
+void Drawable_setSprite(Drawable* d, Sprite* sprite)
+{
+    d->sprite = sprite;
+}
+
+void Drawable_setLayer(Drawable* d, int layer)
+{
+    d->layer = layer;
 }

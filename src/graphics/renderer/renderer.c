@@ -8,7 +8,7 @@
 
 #define DEFAULT_BATCHSIZE 100
 
-#include "graphics/drawable/sprite.h"
+#include "graphics/sprite.h"
 
 extern int gVBOSupported;
 
@@ -40,9 +40,15 @@ void Renderer_render(Renderer* renderer)
     // Set the current batch capacity in vertices
     RenderBatch_setCapacity(currentBatch, renderer->drawables->length * currentBatch->objectSize);
     
+    
+    int tex = 0;
+    
     // write batch vertex data for all boxes
     Node* node;
-    node = renderer->drawables->first;
+    node = renderer->drawables->first;   
+    if (((Drawable*)node->item)->sprite)
+        tex = ((Drawable*)node->item)->sprite->texture->texid;
+    
     int writepos = 0;
     while (NULL != node)
     {
@@ -50,6 +56,9 @@ void Renderer_render(Renderer* renderer)
         
         node = node->next;
     }
+    
+    glBindTexture(GL_TEXTURE_2D, tex);
+    
 
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);	
@@ -104,12 +113,12 @@ void Renderer_render(Renderer* renderer)
             glTexCoord2f(currentBatch->textureData[i * currentBatch->objectSize * 2 + 6],currentBatch->textureData[i * currentBatch->objectSize * 2 + 7]);
             
             fprintf(stderr, "drawing box x1:%i, y1:%i x2:%i, y2:%i\n", (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 0], (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 1], (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 4], (int)currentBatch->vertexData[i * currentBatch->objectSize * 2 + 5]);
-            fprintf(stderr, " with texture tx1:%i, ty1:%i tx2:%i, ty2:%i\n", (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 0], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 1], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 4], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 5]);
-        
+            fprintf(stderr, " with texture:%i, tx1:%i, ty1:%i tx2:%i, ty2:%i\n", tex, (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 0], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 1], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 4], (int)currentBatch->textureData[i * currentBatch->objectSize * 2 + 5]);
+            
         }
     }
     glEnd();
- */   
+    */
             
 }
 

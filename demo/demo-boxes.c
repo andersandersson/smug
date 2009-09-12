@@ -13,7 +13,7 @@
 #include "graphics/graphics.h"
 #include "graphics/renderer/renderer.h"
 #include "graphics/drawable/drawable.h"
-#include "graphics/drawable/sprite.h"
+#include "graphics/sprite.h"
 #include "graphics/drawable/box.h"
 
 #include "graphics/texture/texture.h"
@@ -46,17 +46,20 @@ int main()
     Image* image = Image_new();
     Image_loadFromFile(image, "box.png");
     Texture* texture = Texture_newFromImage(image);    
-	glBindTexture(GL_TEXTURE_2D, texture->texid);
-    
+    Sprite* sprite = Sprite_newFromPixelCoords(texture, Rectangle_createFromXYWH(0, 0, 64,64), Vector_create2d(32,32));    
+
     LinkedList* objects = LinkedList_new();  
      
     int i = 0;
-    for (i = 0; i < 5000; i++)
+    for (i = 0; i < 10000; i++)
     {
         float r = myRandom(100);
-        Sprite* drawable = Sprite_newFromPixelCoords(texture, Rectangle_createFromXYWH(0, 0, 64,64), Vector_create2d(32,32));
-        //Box* drawable = Box_newFromPointRectangle(Point_createFromXY(0, 0), Rectangle_createFromXYWH(-8, -8, 32, 32));
-        Drawable_setPos((Drawable*)drawable, Point_createFromXY((SWIDTH * myRandom(3)) * cosf(r) + SWIDTH / 2, (SHEIGHT * myRandom(3)) * sinf(r) + SHEIGHT / 2)); 
+        float x = myRandom(28) + 5;
+        float y = myRandom(28) + 5;  
+ 
+        Drawable* drawable = Drawable_newBoxFromRectangle(Rectangle_createFromXYWH(-x, -y, x*2, y*2));
+        Drawable_setPos(drawable, Point_createFromXY((SWIDTH * myRandom(3)) * cosf(r) + SWIDTH / 2, (SHEIGHT * myRandom(3)) * sinf(r) + SHEIGHT / 2)); 
+        Drawable_setSprite(drawable, sprite);
         Graphics_addDrawable((Drawable*)drawable);   
         LinkedList_addLast(objects, drawable);
     }
@@ -92,9 +95,7 @@ int main()
                 {
                     ((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
                                                                     Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.02)));
-                    ((Sprite*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 1);         
-                    //((Box*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 1);         
-                   
+                    ((Drawable*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.33);         
                     p = p->next;
                 }
 
@@ -145,6 +146,7 @@ int main()
     LinkedList_deleteContents(objects, Drawable_delete);
     LinkedList_delete(objects);
     
+    Sprite_delete(sprite);
     Texture_delete(texture);
     Image_delete(image);
 
