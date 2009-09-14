@@ -82,14 +82,14 @@ int main()
     int i = 0;
     for (j = 0; j < 4; j++)
     {
-        for (i = 0; i < (4-j) * (4-j) * 20; i++)
+        for (i = 0; i < (4-j) * (4-j) * 60; i++)
         {   
         
             float r = myRandom(100);
             float x = myRandom((j+1) * 5) + (j+1) * 4;
         
             Drawable* drawable = Drawable_newBoxFromRectangle(Rectangle_createFromXYWH(-x, -x, x*2, x*2));
-            Drawable_setPos(drawable, Point_createFromXY((SWIDTH/2 * myRandom(1.2)) * cosf(r), (SHEIGHT/2 * myRandom(1.2)) * sinf(r))); 
+            Drawable_setPos(drawable, Point_createFromXY((SWIDTH/2 * myRandom(3.2)) * cosf(r), (SHEIGHT/2 * myRandom(3.2)) * sinf(r))); 
             Drawable_setSprite(drawable, sprite[j]);
             Drawable_setLayer(drawable, j);  
             Graphics_addDrawable((Drawable*)drawable);   
@@ -113,8 +113,11 @@ int main()
     Camera* camera = Graphics_getCamera();
     float rot = 0.0f;
     float zoom = 1.0f;
+    float dzoom = 0.01f;
     float cx = -SWIDTH/2;
     float cy = -SHEIGHT/2;
+    float cdx = 1.2f; 
+    float cdy = 0.9f;  
     while (1)
     {   
         t = Platform_getTime();
@@ -161,10 +164,41 @@ int main()
                 Camera_setPosition(camera, Point_createFromXY(cx, cy));
                 Camera_setZoom(camera, zoom);
                 Camera_setRotation(camera, rot);
-                zoom += 0.001f;
-                rot += 0.03f;
-                cx += 0.5f;
-                cy += 0.5f;
+                
+                rot += 0.06f;         
+                if (zoom >= 3)
+                {
+                    zoom = 3;
+                    dzoom = -dzoom;
+                }
+                if (zoom <= 0.75)
+                {
+                    zoom = 0.75;
+                    dzoom = -dzoom;
+                }            
+                zoom += dzoom;
+                if (cx >= SWIDTH/2)
+                {
+                    cx = SWIDTH/2;
+                    cdx = -cdx;
+                }
+                if (cx <= -SWIDTH/2)
+                {
+                    cx = -SWIDTH/2;
+                    cdx = -cdx;
+                } 
+                if (cy >= SHEIGHT/2)
+                {
+                    cy = SHEIGHT/2;
+                    cdy = -cdy;
+                }
+                if (cy <= -SHEIGHT/2)
+                {
+                    cy = -SHEIGHT/2;
+                    cdy = -cdy;
+                }     
+                cx += cdx;
+                cy += cdy;
             }
 
             Graphics_render();
