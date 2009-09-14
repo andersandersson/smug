@@ -19,8 +19,10 @@ color.c color.h \
 sprite.c sprite.h \
 drawable/drawable.c drawable/drawable.h \
 drawable/box.c drawable/box.h \
+renderer/batchdata.h  renderer/batchdata.c \
 renderer/renderer.c renderer/renderer.h \
 renderer/renderbatch.c renderer/renderbatch.h \
+renderer/layer.c renderer/layer.h \
 image/image.c image/image.h \
 image/lodepng/lodepng.c image/lodepng/lodepng.h \
 texture/texture.h texture/texture.c

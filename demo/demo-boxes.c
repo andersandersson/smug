@@ -51,7 +51,7 @@ int main()
     LinkedList* objects = LinkedList_new();  
      
     int i = 0;
-    for (i = 0; i < 10000; i++)
+    for (i = 0; i < 30000; i++)
     {
         float r = myRandom(100);
         float x = myRandom(28) + 5;
@@ -95,7 +95,7 @@ int main()
                 {
                     ((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
                                                                     Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.02)));
-                    ((Drawable*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.33);         
+                    ((Drawable*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.73);         
                     p = p->next;
                 }
 

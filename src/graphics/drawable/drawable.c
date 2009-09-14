@@ -18,31 +18,76 @@ Drawable* Drawable_new(unsigned int vertexcount)
     return ret;
 }
 
-int Drawable_writeBatchData(Drawable* d, RenderBatch* batch, unsigned int start)
+void Drawable_writeBatchData(Drawable* d, BatchData* batchdata, unsigned int start)
 {
-    if (NULL != ((Drawable*)d)->_writeBatchFunc)
-        return ((Drawable*)d)->_writeBatchFunc(d, batch, start);
+    assert(NULL != d);
+    if (NULL != ((Drawable*)d)->_writeBatchDataFunc)
+        ((Drawable*)d)->_writeBatchDataFunc(d, batchdata, start);
+}
+
+int Drawable_getDataSize(Drawable* d)
+{
+    assert(NULL != d);
+    if (NULL != ((Drawable*)d)->_getDataSizeFunc)
+        return ((Drawable*)d)->_getDataSizeFunc(d);
         
     return 0;
 }
 
 void Drawable_delete(void* d)
 {
+    assert(NULL != d);
     free(((Drawable*)d)->vertices);
     free(d); 
 }
 
 void Drawable_setPos(Drawable* d, Point pos)
 {
+    assert(NULL != d);
     d->pos = pos;
 }
 
 void Drawable_setSprite(Drawable* d, Sprite* sprite)
 {
+    assert(NULL != d);
     d->sprite = sprite;
 }
 
 void Drawable_setLayer(Drawable* d, int layer)
 {
+    assert(NULL != d);
     d->layer = layer;
 }
+
+
+unsigned int Drawable_getLayer(Drawable* d)
+{
+    assert(NULL != d);
+    return d->layer;
+}
+Texture* Drawable_getTexture(Drawable* d)
+{
+    assert(NULL != d);
+    if (NULL != d->sprite)
+    {
+        return d->sprite->texture;
+    }
+    return NULL;
+}
+
+unsigned int Drawable_getTextureID(Drawable* d)
+{
+    assert(NULL != d);
+    if (NULL != d->sprite)
+    {
+        return d->sprite->texture->texid;
+    }
+    return 0;
+}
+
+unsigned int Drawable_getObjectSize(Drawable* d)
+{
+    assert(NULL != d);
+    return d->vertexcount;
+}
+

@@ -1,7 +1,13 @@
 #include "box.h"
 #include <stdlib.h>
 
-static int writeBatchData(Drawable* drawable, RenderBatch* batch, unsigned int start)
+static int getDataSize(Drawable* drawable)
+{
+    // number of vertices that shall be written
+    return 4;
+}
+
+static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned int start)
 {
     static unsigned int vertexstart, colorstart, texturestart;
     static float x1, x2, y1, y2;
@@ -19,14 +25,14 @@ static int writeBatchData(Drawable* drawable, RenderBatch* batch, unsigned int s
     y1 = Point_getY(&drawable->pos) + drawable->vertices[0].d[1];
     y2 = Point_getY(&drawable->pos) + drawable->vertices[1].d[1];
    
-    batch->vertexData[vertexstart + 0 * 2 + 0] = x1;
-    batch->vertexData[vertexstart + 0 * 2 + 1] = y1;
-    batch->vertexData[vertexstart + 1 * 2 + 0] = x1;
-    batch->vertexData[vertexstart + 1 * 2 + 1] = y2; 
-    batch->vertexData[vertexstart + 2 * 2 + 0] = x2;
-    batch->vertexData[vertexstart + 2 * 2 + 1] = y2; 
-    batch->vertexData[vertexstart + 3 * 2 + 0] = x2;
-    batch->vertexData[vertexstart + 3 * 2 + 1] = y1;   
+    batchdata->vertexData[vertexstart + 0 * 2 + 0] = x1;
+    batchdata->vertexData[vertexstart + 0 * 2 + 1] = y1;
+    batchdata->vertexData[vertexstart + 1 * 2 + 0] = x1;
+    batchdata->vertexData[vertexstart + 1 * 2 + 1] = y2; 
+    batchdata->vertexData[vertexstart + 2 * 2 + 0] = x2;
+    batchdata->vertexData[vertexstart + 2 * 2 + 1] = y2; 
+    batchdata->vertexData[vertexstart + 3 * 2 + 0] = x2;
+    batchdata->vertexData[vertexstart + 3 * 2 + 1] = y1;   
  
     // write colordata   
     r = drawable->color.r;
@@ -34,51 +40,49 @@ static int writeBatchData(Drawable* drawable, RenderBatch* batch, unsigned int s
     b = drawable->color.b;
     a = drawable->color.a;
     
-    batch->colorData[colorstart + 0 * 4 + 0] = r;
-    batch->colorData[colorstart + 0 * 4 + 1] = g;
-    batch->colorData[colorstart + 0 * 4 + 2] = b;
-    batch->colorData[colorstart + 0 * 4 + 3] = a; 
-    batch->colorData[colorstart + 1 * 4 + 0] = r;
-    batch->colorData[colorstart + 1 * 4 + 1] = g;
-    batch->colorData[colorstart + 1 * 4 + 2] = b;
-    batch->colorData[colorstart + 1 * 4 + 3] = a;  
-    batch->colorData[colorstart + 2 * 4 + 0] = r;
-    batch->colorData[colorstart + 2 * 4 + 1] = g;
-    batch->colorData[colorstart + 2 * 4 + 2] = b;
-    batch->colorData[colorstart + 2 * 4 + 3] = a;    
-    batch->colorData[colorstart + 3 * 4 + 0] = r;
-    batch->colorData[colorstart + 3 * 4 + 1] = g;
-    batch->colorData[colorstart + 3 * 4 + 2] = b;
-    batch->colorData[colorstart + 3 * 4 + 3] = a;   
+    batchdata->colorData[colorstart + 0 * 4 + 0] = r;
+    batchdata->colorData[colorstart + 0 * 4 + 1] = g;
+    batchdata->colorData[colorstart + 0 * 4 + 2] = b;
+    batchdata->colorData[colorstart + 0 * 4 + 3] = a; 
+    batchdata->colorData[colorstart + 1 * 4 + 0] = r;
+    batchdata->colorData[colorstart + 1 * 4 + 1] = g;
+    batchdata->colorData[colorstart + 1 * 4 + 2] = b;
+    batchdata->colorData[colorstart + 1 * 4 + 3] = a;  
+    batchdata->colorData[colorstart + 2 * 4 + 0] = r;
+    batchdata->colorData[colorstart + 2 * 4 + 1] = g;
+    batchdata->colorData[colorstart + 2 * 4 + 2] = b;
+    batchdata->colorData[colorstart + 2 * 4 + 3] = a;    
+    batchdata->colorData[colorstart + 3 * 4 + 0] = r;
+    batchdata->colorData[colorstart + 3 * 4 + 1] = g;
+    batchdata->colorData[colorstart + 3 * 4 + 2] = b;
+    batchdata->colorData[colorstart + 3 * 4 + 3] = a;   
     
     
     // write texture data only if sprite exists
     if ((sprite = drawable->sprite) == NULL)
-        return 4;
+        return;
         
     tx1 = Rectangle_getX(&sprite->rect) * sprite->texture->px;
     ty1 = Rectangle_getY(&sprite->rect) * sprite->texture->py; 
     tx2 = tx1 + Rectangle_getW(&sprite->rect) * sprite->texture->px;
     ty2 = ty1 + Rectangle_getH(&sprite->rect) * sprite->texture->py;    
        
-    batch->textureData[texturestart + 0 * 2 + 0] = tx1;
-    batch->textureData[texturestart + 0 * 2 + 1] = ty1;
-    batch->textureData[texturestart + 1 * 2 + 0] = tx1;
-    batch->textureData[texturestart + 1 * 2 + 1] = ty2; 
-    batch->textureData[texturestart + 2 * 2 + 0] = tx2;
-    batch->textureData[texturestart + 2 * 2 + 1] = ty2; 
-    batch->textureData[texturestart + 3 * 2 + 0] = tx2;
-    batch->textureData[texturestart + 3 * 2 + 1] = ty1;      
-      
-    // number of vertices written
-    return 4;
+    batchdata->textureData[texturestart + 0 * 2 + 0] = tx1;
+    batchdata->textureData[texturestart + 0 * 2 + 1] = ty1;
+    batchdata->textureData[texturestart + 1 * 2 + 0] = tx1;
+    batchdata->textureData[texturestart + 1 * 2 + 1] = ty2; 
+    batchdata->textureData[texturestart + 2 * 2 + 0] = tx2;
+    batchdata->textureData[texturestart + 2 * 2 + 1] = ty2; 
+    batchdata->textureData[texturestart + 3 * 2 + 0] = tx2;
+    batchdata->textureData[texturestart + 3 * 2 + 1] = ty1;            
 }
 
 
 Drawable* Drawable_newBox()
 {
-    Drawable* ret = Drawable_new(2);
-    ret->_writeBatchFunc = writeBatchData;
+    Drawable* ret = Drawable_new(4);
+    ret->_writeBatchDataFunc = writeBatchData;
+    ret->_getDataSizeFunc = getDataSize;
     ret->vertices[0].d[0] = 0;
     ret->vertices[0].d[1] = 0;
     ret->vertices[1].d[0] = 0;
@@ -89,8 +93,9 @@ Drawable* Drawable_newBox()
 
 Drawable* Drawable_newBoxFromRectangle(Rectangle rect)
 {
-    Drawable* ret = Drawable_new(2);
-    ret->_writeBatchFunc = writeBatchData;
+    Drawable* ret = Drawable_new(4);
+    ret->_writeBatchDataFunc = writeBatchData;
+    ret->_getDataSizeFunc = getDataSize;
     ret->vertices[0].d[0] = Rectangle_getX(&rect);
     ret->vertices[0].d[1] = Rectangle_getY(&rect);
     ret->vertices[1].d[0] = Rectangle_getX(&rect) + Rectangle_getW(&rect);

@@ -7,7 +7,7 @@
 
 #include "graphics/color.h"
 #include "graphics/sprite.h"
-#include "graphics/renderer/renderbatch.h"
+#include "graphics/renderer/batchdata.h"
 
 #include "utils/point.h"
 #include "utils/vector.h"
@@ -25,16 +25,24 @@ typedef struct Drawable
     unsigned int vertexcount;
     Vector* vertices;
     
-    int (*_writeBatchFunc)(struct Drawable* d, RenderBatch* batch, unsigned int start);
+    void (*_writeBatchDataFunc)(struct Drawable* d, BatchData* batch, unsigned int start);
+    int (*_getDataSizeFunc)(struct Drawable* d);
     
 } Drawable;
 
 Drawable* Drawable_new(unsigned int vertexcount);
 void Drawable_delete(void* d);
-int Drawable_writeBatchData(Drawable* d, RenderBatch* batch, unsigned int start);
+void Drawable_writeBatchData(Drawable* d, BatchData* batchdata, unsigned int start);
+int Drawable_getDataSize(Drawable* d);
+
 void Drawable_setPos(Drawable* d, Point pos);
 void Drawable_setSprite(Drawable* d, Sprite* sprite);
 void Drawable_setLayer(Drawable* d, int layer);
 
+unsigned int Drawable_getLayer(Drawable* d);
+Texture* Drawable_getTexture(Drawable* d);
+unsigned int Drawable_getTextureID(Drawable* d);
+
+unsigned int Drawable_getObjectSize(Drawable* d);
 
 #endif //SMUG_GRAPHICS_DRAWABLE_H

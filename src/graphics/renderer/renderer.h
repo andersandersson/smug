@@ -1,7 +1,7 @@
 #ifndef SMUG_GRAPHICS_RENDERER_H
 #define SMUG_GRAPHICS_RENDERER_H
 
-#include "utils/linkedlist.h"
+#include "utils/arraylist.h"
 #include "graphics/drawable/drawable.h"
 
 
@@ -10,10 +10,9 @@
 
 typedef struct Renderer
 {
-    LinkedList* drawables;
-    int size;
-    LinkedList* quadBatches;
-    
+    ArrayList* layers;
+    unsigned int layercount;
+
 } Renderer;
 
 Renderer* Renderer_new();
@@ -21,7 +20,7 @@ void Renderer_delete(void* renderer);
 
 void Renderer_render(Renderer* renderer);
 
-void Renderer_addDrawable(Renderer* renderer, Drawable* d);
+void Renderer_addDrawable(Renderer* renderer, Drawable* drawable);
 
 
 
