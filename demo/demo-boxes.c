@@ -80,10 +80,11 @@ int main()
     LinkedList* objects = LinkedList_new();  
     
     int i = 0;
-    for (i = 0; i < 30; i++)
+    for (j = 0; j < 4; j++)
     {
-        for (j = 0; j < 4; j++)
-        {
+        for (i = 0; i < (4-j) * (4-j) * 20; i++)
+        {   
+        
             float r = myRandom(100);
             float x = myRandom((j+1) * 5) + (j+1) * 4;
         
@@ -112,8 +113,8 @@ int main()
     Camera* camera = Graphics_getCamera();
     float rot = 0.0f;
     float zoom = 1.0f;
-    float cx = 0.0f;
-    float cy = 0.0f;
+    float cx = -SWIDTH/2;
+    float cy = -SHEIGHT/2;
     while (1)
     {   
         t = Platform_getTime();
@@ -161,9 +162,9 @@ int main()
                 Camera_setZoom(camera, zoom);
                 Camera_setRotation(camera, rot);
                 zoom += 0.001f;
-                rot += 0.02f;
-                cx += 0.3f;
-                cy += 0.3f;
+                rot += 0.03f;
+                cx += 0.5f;
+                cy += 0.5f;
             }
 
             Graphics_render();
