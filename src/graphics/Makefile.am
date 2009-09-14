@@ -17,6 +17,7 @@ noinst_LTLIBRARIES = libgraphics.la
 libgraphics_la_SOURCES =  interface.c interface.h graphics.c graphics.h \
 color.c color.h \
 sprite.c sprite.h \
+camera.c camera.h \
 drawable/drawable.c drawable/drawable.h \
 drawable/box.c drawable/box.h \
 renderer/batchdata.h  renderer/batchdata.c \

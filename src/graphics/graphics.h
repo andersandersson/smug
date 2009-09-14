@@ -9,6 +9,7 @@
 #include "common/common.h"
 #include "utils/rectangle.h"
 #include "drawable/drawable.h"
+#include "graphics/camera.h"
 
 /**
  * Initialize Graphics subsystem
@@ -32,13 +33,12 @@ void Graphics_addDrawable(Drawable* d);
   */
 void Graphics_terminate();
 
-/** Fill a rectangle with a color.
-  *
-  * @param rect The rectangle to fill, in world coordinates.
-  * @param color The color to use for the fill.
-  * @internal Haven't been able to test if any of this works. Need tests directory NAO.
-  */
-void Graphics_fillRect(Rectangle* rect, Color* color);
+/** Gets the current camera
+ */
+Camera* Graphics_getCamera();
 
+/** Sets the properties of a layer
+ */
+void Graphics_setupLayer(unsigned int id, float parallax);
 
 #endif // SMUG_GRAPHICS_GRAPHICS_H

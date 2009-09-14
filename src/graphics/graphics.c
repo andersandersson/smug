@@ -4,7 +4,7 @@
 
 #include "common/log.h"
 
-Renderer* layerRenderer = NULL;
+Renderer* sceneRenderer = NULL;
 
 int gVBOSupported = 0;
 int gScreenWidth = 0;
@@ -88,7 +88,7 @@ int Graphics_init(int width, int height)
     
     setupGL();
    
-    layerRenderer = Renderer_new();
+    sceneRenderer = Renderer_new();
 
     return 1;
 }
@@ -96,7 +96,7 @@ int Graphics_init(int width, int height)
 void Graphics_terminate()
 {
 
-    Renderer_delete(layerRenderer);
+    Renderer_delete(sceneRenderer);
 }
 
 void Graphics_render()
@@ -104,34 +104,23 @@ void Graphics_render()
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    Renderer_render(layerRenderer);
+    Renderer_render(sceneRenderer);
 }
 
 
 void Graphics_addDrawable(Drawable* d)
 {
-    Renderer_addDrawable(layerRenderer, d);
+    Renderer_addDrawable(sceneRenderer, d);
 }
 
-
-void Graphics_fillRect(Rectangle* rect, Color* color)
+Camera* Graphics_getCamera()
 {
-    static float x1, y1, x2, y2;
-    assert(NULL != rect);
-    assert(NULL != color);
-    
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glColor4f(color->r, color->g, color->b, color->a);
-    x1 = Rectangle_getX(rect);
-    y1 = Rectangle_getY(rect);
-    y2 = Rectangle_getX(rect) + Rectangle_getW(rect);
-    y2 = Rectangle_getY(rect) + Rectangle_getH(rect); 
-    
-    glBegin(GL_QUADS);
-        glVertex2f(x1, y1);
-        glVertex2f(x1, y2);
-        glVertex2f(x2, y2);
-        glVertex2f(x2, y1);
-    glEnd();
-    glPopAttrib();
+    assert(NULL != sceneRenderer);
+    return Renderer_getCamera(sceneRenderer);
+
+}
+
+void Graphics_setupLayer(unsigned int id, float parallax)
+{
+    Renderer_setupLayer(sceneRenderer, id, parallax);
 }

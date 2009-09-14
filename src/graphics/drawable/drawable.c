@@ -53,7 +53,7 @@ void Drawable_setSprite(Drawable* d, Sprite* sprite)
     d->sprite = sprite;
 }
 
-void Drawable_setLayer(Drawable* d, int layer)
+void Drawable_setLayer(Drawable* d, unsigned int layer)
 {
     assert(NULL != d);
     d->layer = layer;

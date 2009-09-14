@@ -18,6 +18,7 @@
 
 #include "graphics/texture/texture.h"
 #include "graphics/image/image.h"
+#include "graphics/camera.h"
 
 
 #define SWIDTH 640
@@ -27,6 +28,9 @@ float myRandom(float f)
 {
     return f * ((float)rand() / (float)RAND_MAX);
 }
+
+
+
 
 
 int main()
@@ -43,26 +47,56 @@ int main()
     if (!Graphics_init(640, 480))
         return 0;
         
-    Image* image = Image_new();
-    Image_loadFromFile(image, "box.png");
-    Texture* texture = Texture_newFromImage(image);    
-    Sprite* sprite = Sprite_newFromPixelCoords(texture, Rectangle_createFromXYWH(0, 0, 64,64), Vector_create2d(32,32));    
+    Image* image[4];
 
-    LinkedList* objects = LinkedList_new();  
-     
-    int i = 0;
-    for (i = 0; i < 30000; i++)
+    image[0] = Image_new();
+    Image_loadFromFile(image[0], "box.png");
+    image[1] = Image_new();
+    Image_loadFromFile(image[1], "box2.png");
+    image[2] = Image_new();
+    Image_loadFromFile(image[2], "box3.png");
+    image[3] = Image_new();
+    Image_loadFromFile(image[3], "box4.png");
+    
+    Texture* texture[4];
+    Sprite* sprite[4];
+    
+    int j;
+    for (j = 0; j < 4; j++)
     {
-        float r = myRandom(100);
-        float x = myRandom(28) + 5;
-        float y = myRandom(28) + 5;  
- 
-        Drawable* drawable = Drawable_newBoxFromRectangle(Rectangle_createFromXYWH(-x, -y, x*2, y*2));
-        Drawable_setPos(drawable, Point_createFromXY((SWIDTH * myRandom(3)) * cosf(r) + SWIDTH / 2, (SHEIGHT * myRandom(3)) * sinf(r) + SHEIGHT / 2)); 
-        Drawable_setSprite(drawable, sprite);
-        Graphics_addDrawable((Drawable*)drawable);   
-        LinkedList_addLast(objects, drawable);
+        texture[j] = Texture_newFromImage(image[j]);   
     }
+    for (j = 0; j < 4; j++)
+    {
+        sprite[j] = Sprite_newFromPixelCoords(texture[j], Rectangle_createFromXYWH(0, 0, 64,64), Vector_create2d(32,32));    
+    }
+ 
+ 
+    Graphics_setupLayer(0, 0.6f);
+    Graphics_setupLayer(1, 0.8f);
+    Graphics_setupLayer(2, 1.0f);
+    Graphics_setupLayer(3, 1.2f);
+    
+    LinkedList* objects = LinkedList_new();  
+    
+    int i = 0;
+    for (i = 0; i < 30; i++)
+    {
+        for (j = 0; j < 4; j++)
+        {
+            float r = myRandom(100);
+            float x = myRandom((j+1) * 5) + (j+1) * 4;
+        
+            Drawable* drawable = Drawable_newBoxFromRectangle(Rectangle_createFromXYWH(-x, -x, x*2, x*2));
+            Drawable_setPos(drawable, Point_createFromXY((SWIDTH/2 * myRandom(1.2)) * cosf(r), (SHEIGHT/2 * myRandom(1.2)) * sinf(r))); 
+            Drawable_setSprite(drawable, sprite[j]);
+            Drawable_setLayer(drawable, j);  
+            Graphics_addDrawable((Drawable*)drawable);   
+            LinkedList_addLast(objects, drawable);
+        }
+    }
+    
+    
      
     Point target;
     
@@ -75,6 +109,11 @@ int main()
     TIME lastFpsCheck = t;
     TIME delay = 1.0f/60.0f;
     int fps = 0;
+    Camera* camera = Graphics_getCamera();
+    float rot = 0.0f;
+    float zoom = 1.0f;
+    float cx = 0.0f;
+    float cy = 0.0f;
     while (1)
     {   
         t = Platform_getTime();
@@ -88,17 +127,17 @@ int main()
                 
             // Stuff of interest    
             {    
-                target = Point_createFromXY((SWIDTH) * cosf(t*2) + SWIDTH / 2, (SHEIGHT) * sinf(t*2) + SHEIGHT / 2);
+                //target = Point_createFromXY((SWIDTH) * cosf(t*2) + SWIDTH / 2, (SHEIGHT) * sinf(t*2) + SHEIGHT / 2);
             
                 Node* p = objects->first;
                 while (p != NULL)
                 {
-                    ((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
-                                                                    Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.02)));
-                    ((Drawable*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.73);         
+                    //((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
+                                                                    //Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.02)));
+                    ((Drawable*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.50);         
                     p = p->next;
                 }
-
+                /*
                 dir += deltadir;
                 if (dir < -0.7)
                 {
@@ -110,13 +149,21 @@ int main()
                     dir = 1;
                     deltadir = deltadir * -1;
                 }
-                
+                */
                 color+= 0.0015;
                 if (color > 24)
                 {
                     color -= 24;
                     fprintf(stderr, "loool\n");
                 }
+                
+                Camera_setPosition(camera, Point_createFromXY(cx, cy));
+                Camera_setZoom(camera, zoom);
+                Camera_setRotation(camera, rot);
+                zoom += 0.001f;
+                rot += 0.02f;
+                cx += 0.3f;
+                cy += 0.3f;
             }
 
             Graphics_render();
@@ -146,10 +193,13 @@ int main()
     LinkedList_deleteContents(objects, Drawable_delete);
     LinkedList_delete(objects);
     
-    Sprite_delete(sprite);
-    Texture_delete(texture);
-    Image_delete(image);
-
+    for (j = 0; j < 4; j++)
+    {
+        Sprite_delete(sprite[j]);
+        Texture_delete(texture[j]);
+        Image_delete(image[j]);
+    }
+    
     Graphics_terminate();
     
     Platform_closeWindow();   
