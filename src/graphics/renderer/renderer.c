@@ -43,8 +43,9 @@ static void renderLayer(Renderer* renderer, Layer* layer)
     
     glTranslatef(camera->center.d[0], camera->center.d[1], 0.0f);
     glRotatef(renderer->camera->rot, 0.0f, 0.0f, 1.0f);
-    glTranslatef(-Point_getX(&camera->pos) * p, -Point_getY(&camera->pos) * p, 0.0f);
     glScalef(1.0f + (camera->scale.d[0] - 1.0f)  * p, 1.0f + (camera->scale.d[1] - 1.0f)  * p, 1.0f);
+    glTranslatef(-Point_getX(&camera->pos) * p, -Point_getY(&camera->pos) * p, 0.0f);
+
     
     Layer_render(layer); 
     
