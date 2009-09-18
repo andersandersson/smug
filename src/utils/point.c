@@ -33,6 +33,15 @@ float Point_getY(Point* p)
     return p->v.d[1];
 }
 
+void Point_setX(Point* p, float x)
+{
+    p->v.d[0] = x;
+}
+void Point_setY(Point* p, float y)
+{
+    p->v.d[1] = y;
+}
+
 void Point_delete(Point* p)
 {
     free(p);

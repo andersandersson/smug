@@ -151,6 +151,24 @@ void LinkedList_remove(LinkedList* list, Node* node)
     list->length--;
 }
 
+BOOL LinkedList_removeItem(LinkedList* list, void* item)
+{
+    Node* node = list->first;
+    while(NULL != node)
+    {
+        if (node->item == item)
+            {
+                LinkedList_remove(list, node);
+                return TRUE;
+            }
+        else 
+            {
+                node = node->next;
+            }        
+    }
+    return FALSE;
+}
+
 void LinkedList_doList(LinkedList* list, void (*func)(void*))
 {
     Node* node = list->first;
