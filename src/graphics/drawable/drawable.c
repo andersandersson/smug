@@ -59,6 +59,12 @@ void Drawable_setLayer(Drawable* d, unsigned int layer)
     d->layer = layer;
 }
 
+void Drawable_setColor(Drawable* d, Color color)
+{
+	assert(NULL != d);
+	d->color = color;
+}
+
 
 unsigned int Drawable_getLayer(Drawable* d)
 {

@@ -166,14 +166,14 @@ int main()
                 Camera_setRotation(camera, rot);
                 
                 rot += 0.06f;         
-                if (zoom >= 3)
+                if (zoom >= 1)
                 {
-                    zoom = 3;
+                    zoom = 1;
                     dzoom = -dzoom;
                 }
-                if (zoom <= 0.75)
+                if (zoom <= 0.1)
                 {
-                    zoom = 0.75;
+                    zoom = 0.1;
                     dzoom = -dzoom;
                 }            
                 zoom += dzoom;

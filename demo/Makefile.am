@@ -11,6 +11,7 @@
 AM_LDFLAGS = -L../src/graphics -lgraphics -L../src/common -lcommon -L../src/utils -lutils -L../src/platform -lplatform
 AM_CFLAGS = -I../src/
 
-EXTRA_PROGRAMS = demo-boxes
+EXTRA_PROGRAMS = demo-boxes demo-input
 demo_boxes_SOURCES = demo-boxes.c
+demo_input_SOURCES = demo-input.c
 
