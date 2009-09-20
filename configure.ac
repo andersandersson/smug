@@ -105,6 +105,7 @@ AC_CONFIG_FILES([
    api/python/Makefile
    test-utils/Makefile
    demo/Makefile
+   apps/Makefile
 ])
 
 AC_OUTPUT

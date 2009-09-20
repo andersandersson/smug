@@ -8,12 +8,9 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-SUBDIRS = . test
+AM_LDFLAGS = -L../src/graphics -lgraphics -L../src/common -lcommon -L../src/utils -lutils -L../src/platform -lplatform -L../src/physics -lphysics
+AM_CFLAGS = -I../src/
 
-AM_CFLAGS = -I.. -I../common
+EXTRA_PROGRAMS = shapes
+shapes_SOURCES = shapes.c
 
-noinst_LTLIBRARIES = libphysics.la
-libphysics_la_SOURCES = interface.c interface.h physics.c physics.h\
-shapes.c shapes.h\
-body.c body.h \
-debug.c debug.h

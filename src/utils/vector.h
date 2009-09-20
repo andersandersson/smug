@@ -28,6 +28,18 @@ Vector Vector_create2d(float x, float y);
 Vector Vector_crossProduct2d(Vector v);
 
 
+/**
+ * Set the X coordinate of the vector
+ */
+void Vector_setX(Vector* v, float x);
+
+
+/**
+ * Set the Y coordinate of the vector
+ */
+void Vector_setY(Vector* v, float y);
+
+
 // Dimension independent functions 
 // -------------------------------
 

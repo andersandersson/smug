@@ -89,6 +89,15 @@ int LinkedList_length(LinkedList* list);
   */
 void LinkedList_remove(LinkedList* list, Node* node);
 
+/** Removes the passed item from the list. Does not delete the actual item!
+  *
+  * @relatesalso LinkedList
+  * @param list The list.
+  * @param item The item to remove.
+  * @return TRUE if an item was removed.
+  */
+BOOL LinkedList_removeItem(LinkedList* list, void* item);
+
 /** Calls the passed function on every data item in the list.
   *
   * @relatesalso LinkedList

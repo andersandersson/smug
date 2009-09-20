@@ -55,5 +55,8 @@ Vector Point_distanceToPoint(Point p1, Point p2);
 float Point_getX(Point* p);
 float Point_getY(Point* p);
 
+void Point_setX(Point* p, float x);
+void Point_setY(Point* p, float y);
+
 #endif // PHYSICS_POINT_H
 

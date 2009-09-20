@@ -22,6 +22,18 @@ Vector Vector_crossProduct2d(Vector v)
 }
 
 
+void Vector_setX(Vector* v, float x)
+{
+    v->d[0] = x;
+}
+
+
+void Vector_setY(Vector* v, float y)
+{
+    v->d[1] = y;
+}
+
+
 Vector Vector_add(Vector v, Vector w)
 {
     int i;
