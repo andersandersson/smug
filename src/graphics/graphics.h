@@ -14,10 +14,10 @@
 /**
  * Initialize Graphics subsystem
  *
- * This will create a window of a given size and set it
- * in either fullscreen or windowed mode.
- * @param width The width of the screen in pixels.
- * @param height The height of the screen in pixels.
+ * This creates a view, mapping the given width
+ * and height to the current window.
+ * @param width The width of the view in pixels.
+ * @param height The height of the view in pixels.
  */
 int Graphics_init(int width, int height);
 
