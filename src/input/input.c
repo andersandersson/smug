@@ -10,6 +10,8 @@
 
 static BOOL isInitialized = FALSE;
 
+static ArrayList* controllers;
+
 static ArrayList* deviceArray;
 
 static INPUTSTATE* keyboardState;
@@ -68,6 +70,9 @@ int Input_init()
 	}
 
 	Platform_registerInputHandler(&inputHandler);
+	
+	controllers = ArrayList_new();
+	
 	isInitialized = TRUE;
 	return 1;
 }
@@ -81,10 +86,26 @@ void Input_terminate()
 {
 	ArrayList_deleteContents(deviceArray, &free);
 	ArrayList_delete(deviceArray);
+	ArrayList_delete(controllers);
+	
 	isInitialized = FALSE;
 }
 
+void Input_connectController(Controller* controller, unsigned int slot)
+{
+	ArrayList_set(controllers, slot, controller);
+	Controller_connect(controller, slot);
+}
 
+void Input_disconnectController(unsigned int slot)
+{
+	Controller* c = ArrayList_get(controllers, slot);
+	if (NULL != c)
+	{
+		Controller_disconnect(c);
+	}
+	ArrayList_set(controllers, slot, NULL);	
+}
 
 void Input_addKeyHook(unsigned int key, Hook* hook)
 {

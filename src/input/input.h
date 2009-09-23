@@ -5,7 +5,7 @@
 #include "utils/hook.h"
 #include "platform/platform.h"
 
-
+#include "controller.h"
 
 
 
@@ -31,6 +31,10 @@ INPUTSTATE Input_getMouseXRel();
 INPUTSTATE Input_getMouseYRel();
 INPUTSTATE Input_getMouseWheelRel();
 INPUTSTATE Input_getMouseButton(unsigned int button);
+
+void Input_connectController(Controller* controller, unsigned int slot);
+void Input_disconnectController(unsigned int slot);
+
 
 void Input_addKeyHook(unsigned int key, Hook* hook);
 void Input_addMouseMoveHook(unsigned int axis, Hook* hook);
