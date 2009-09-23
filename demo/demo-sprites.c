@@ -10,6 +10,8 @@
 #include "common/log.h"
 #include "common/common.h"
 
+#include "input/input.h"
+
 #include "graphics/graphics.h"
 #include "graphics/renderer/renderer.h"
 #include "graphics/drawable/drawable.h"
@@ -39,12 +41,12 @@ int main()
     Log_print("Initializing\n");
 
     Platform_openWindow(640, 480, FALSE);
- 
-    if (!Graphics_init(640, 480))
-        return 0;
     
 	if (!Input_init())
         return 0;	
+ 
+    if (!Graphics_init(640, 480))
+        return 0;
 		
     Image* image[4];
 
@@ -100,7 +102,7 @@ int main()
 	float color = 0;
     TIME nexttime = t;
     TIME lastFpsCheck = t;
-    TIME delay = 1.0f/5.0f;
+    TIME delay = 1.0f/60.0f;
     int fps = 0;
     Camera* camera = Graphics_getCamera();
     float rot = 0.0f;
@@ -214,6 +216,8 @@ int main()
     
     Graphics_terminate();
     
+	Input_terminate();
+	
     Platform_closeWindow();   
     
     Platform_terminate();

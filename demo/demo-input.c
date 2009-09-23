@@ -118,10 +118,10 @@ int main()
     
     Graphics_terminate();
     
+	Input_terminate();	
+	
     Platform_closeWindow();   
     
-	Input_terminate();
-	
     Platform_terminate();
     
     Log_print("Done\n");

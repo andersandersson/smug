@@ -36,7 +36,7 @@ static void inputHandler(int device, int trigger, INPUTSTATE state)
 	static INPUTSTATE* array;
 	array = ArrayList_get(deviceArray, device);
 	array[trigger] = state;
-	fprintf(stderr, "Got trigger: %i\n", trigger);
+	//fprintf(stderr, "Got trigger: %i\n", trigger);
 }
 
 static INPUTSTATE* newStateArray(unsigned int size)
@@ -107,7 +107,6 @@ void Input_addMouseButtonHook(unsigned int button, Hook* hook)
 INPUTSTATE Input_getKey(unsigned int key)
 {
 	assert(key >= KEY_BASE && key <= KEY_LAST);
-	fprintf(stderr, "Getting key %i, value: %i\n", key, (int)keyboardState[key]);
 	return keyboardState[key];
 }
 
