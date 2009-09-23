@@ -29,10 +29,6 @@ float myRandom(float f)
     return f * ((float)rand() / (float)RAND_MAX);
 }
 
-
-
-
-
 int main()
 {
     Log_init();
@@ -42,11 +38,14 @@ int main()
     
     Log_print("Initializing\n");
 
-    Platform_openWindow(640, 480, FALSE);    
-
+    Platform_openWindow(640, 480, FALSE);
+ 
     if (!Graphics_init(640, 480))
         return 0;
-        
+    
+	if (!Input_init())
+        return 0;	
+		
     Image* image[4];
 
     image[0] = Image_new();
@@ -70,8 +69,7 @@ int main()
     {
         sprite[j] = Sprite_newFromPixelCoords(texture[j], Rectangle_createFromXYWH(0, 0, 64,64), Vector_create2d(32,32));    
     }
- 
- 
+  
     Graphics_setupLayer(0, 0.6f);
     Graphics_setupLayer(1, 0.8f);
     Graphics_setupLayer(2, 1.0f);
@@ -97,18 +95,12 @@ int main()
         }
     }
     
-    
-     
-    Point target;
-    
     Log_print("Running\n");
     TIME t = Platform_getTime();
-    float dir = 1;
-    float deltadir = 0.002f;
-    float color = 0;
+	float color = 0;
     TIME nexttime = t;
     TIME lastFpsCheck = t;
-    TIME delay = 1.0f/60.0f;
+    TIME delay = 1.0f/5.0f;
     int fps = 0;
     Camera* camera = Graphics_getCamera();
     float rot = 0.0f;
@@ -120,41 +112,28 @@ int main()
     float cdy = 0.9f;  
     while (1)
     {   
+		Platform_update();
         t = Platform_getTime();
              
         if (t >= nexttime)
         {
             nexttime+=delay;
 
-            if (Platform_getKey(KEY_ESC))
-                break;
-                
+            if (Input_getKey(KEY_ESC))
+			{
+				fprintf(stderr, "GOT ESC!\n");
+				break;
+            }    
             // Stuff of interest    
             {    
-                //target = Point_createFromXY((SWIDTH) * cosf(t*2) + SWIDTH / 2, (SHEIGHT) * sinf(t*2) + SHEIGHT / 2);
-            
-                Node* p = objects->first;
+				Node* p = objects->first;
                 while (p != NULL)
                 {
-                    //((Drawable*)p->item)->pos = Point_addVector(((Drawable*)p->item)->pos, 
-                                                                    //Vector_multiply(Point_distanceToPoint(((Drawable*)p->item)->pos, target), dir * (0.02)));
                     ((Drawable*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.50);         
                     p = p->next;
                 }
-                /*
-                dir += deltadir;
-                if (dir < -0.7)
-                {
-                    dir = -0.7;
-                    deltadir = deltadir * -1;
-                }
-                if (dir > 1)
-                {
-                    dir = 1;
-                    deltadir = deltadir * -1;
-                }
-                */
-                color+= 0.0015;
+            
+				color+= 0.0015;
                 if (color > 24)
                 {
                     color -= 24;
@@ -209,8 +188,6 @@ int main()
 
         if (t - lastFpsCheck >= 1.0)
         {
-            //Console_writeLine("Fps: %i", fps);
-            //Log_write(LOG_NOTIFICATION, "FPSCK", "engine.c", 116, "%i", fps);
             Log_printLine("Fps: %i", fps);
             fps = 0;
             lastFpsCheck = t;

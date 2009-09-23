@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "platform/platform.h"
+#include "input/input.h"
 
 //#include "platform/opengl/opengl.h"
 
@@ -30,14 +31,20 @@ float myRandom(float f)
 
 int main()
 {
-    Log_init();
+    if (!Log_init())
+		return 0;
 
     if (!Platform_init())
         return 0;
     
     Log_print("Initializing\n");
 
+	
     Platform_openWindow(640, 480, FALSE);    
+
+	if (!Input_init())
+		return 0;
+
 
     if (!Graphics_init(640, 480))
         return 0;
@@ -66,13 +73,14 @@ int main()
     int fps = 0;
     while (1)
     {   
+		Platform_update();
         t = Platform_getTime();
              
         if (t >= nexttime)
         {
             nexttime+=delay;
 
-            if (Platform_getKey(KEY_ESC))
+            if (Input_getKey(KEY_ESC))
                 break;
                 
             // Stuff of interest    
@@ -112,6 +120,8 @@ int main()
     
     Platform_closeWindow();   
     
+	Input_terminate();
+	
     Platform_terminate();
     
     Log_print("Done\n");

@@ -6,12 +6,12 @@ int main()
 {
   Vector u, v, w;
 
-  v = Vector_Create2d(1, 1);
-  w = Vector_Create2d(2, 3);
+  v = Vector_create2d(1, 1);
+  w = Vector_create2d(2, 3);
 
-  u = Vector_Add(v, w);
+  u = Vector_add(v, w);
 
-  if(u.x[0] != 3 || u.x[1] != 4) {
+  if(u.d[0] != 3 || u.d[1] != 4) {
     printf("Vector addition failed.\n");
     return 1;
   }

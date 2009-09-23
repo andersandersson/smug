@@ -82,6 +82,9 @@ static void setupGL()
 
 int Graphics_init(int width, int height)
 {
+	assert(Platform_isInitialized());
+	assert(Platform_isWindowOpen());
+
     gScreenWidth = width;
     gScreenHeight = height;
     DEBUG("Graphics resolution set to %ix%i", width, height);

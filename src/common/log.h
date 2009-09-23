@@ -26,6 +26,10 @@
  */
 BOOL Log_init();
 
+/** Returns true if the system is initialized
+ */
+BOOL Log_isInitialized();
+
 /** Terminate the log system (free memory, etc)
  */
 void Log_terminate();

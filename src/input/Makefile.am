@@ -13,4 +13,5 @@ SUBDIRS = . test
 AM_CFLAGS = -I.. -I../common
 
 noinst_LTLIBRARIES = libinput.la
-libinput_la_SOURCES = interface.c interface.h input.c input.h
+libinput_la_SOURCES = interface.c interface.h input.c input.h \
+controller.c controller.h

@@ -37,6 +37,11 @@ BOOL Log_init()
     return NULL != gPrefixStack;
 }
 
+BOOL Log_isInitialized()
+{
+	return _isInitialized;
+}
+
 void Log_terminate()
 {
     assert(_isInitialized());

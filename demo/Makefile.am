@@ -8,10 +8,11 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_LDFLAGS = -L../src/graphics -lgraphics -L../src/common -lcommon -L../src/utils -lutils -L../src/platform -lplatform
+AM_LDFLAGS = -L../src/graphics -lgraphics -L../src/common -lcommon -L../src/utils -lutils -L../src/platform -lplatform \
+-L../src/input -linput
 AM_CFLAGS = -I../src/
 
-EXTRA_PROGRAMS = demo-boxes demo-input
-demo_boxes_SOURCES = demo-boxes.c
+EXTRA_PROGRAMS = demo-sprites demo-input
+demo_sprites_SOURCES = demo-sprites.c
 demo_input_SOURCES = demo-input.c
 

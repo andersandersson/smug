@@ -7,6 +7,7 @@
 #include "platform/platform.h"
 #include "graphics/graphics.h"
 #include "physics/physics.h"
+#include "input/input.h"
 #include "common/log.h"
 #include "world.h"
 #include "gameobject.h"
@@ -30,9 +31,12 @@ int Engine_init()
     
     if (!Signal_init())
         return 0;
-        
+		
     Platform_openWindow(640, 480, FALSE);    
 
+	if (!Input_init())
+		return 0;
+		
     if (!Graphics_init(640, 480))
         return 0;
         
@@ -70,10 +74,12 @@ void Engine_terminate()
     
     Graphics_terminate();
     
+	Input_terminate();
+	
     Signal_terminate();
     
     Platform_closeWindow();   
-    
+	
     Platform_terminate();
     
     Log_dedent();
@@ -111,7 +117,7 @@ void Engine_run()
         {
             nexttime+=delay;
         
-            if(Platform_getKey(KEY_ESC) || !Platform_isWindowOpen())
+            if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
             {
                 Signal_send(SIG_EXIT);
             }
