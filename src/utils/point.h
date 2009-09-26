@@ -35,7 +35,7 @@ Point Point_createFromVector(Vector v);
 
 /** Delete a Point struct created with Point_new
   *
-  * @relatesalso Rectangle
+  * @relatesalso Point
   */
 void Point_delete(Point* p);
 

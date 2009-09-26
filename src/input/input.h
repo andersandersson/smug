@@ -3,6 +3,7 @@
 
 #include "common/common.h"
 #include "utils/hook.h"
+#include "utils/point.h"
 #include "platform/platform.h"
 
 #include "controller.h"
@@ -23,21 +24,15 @@ BOOL Input_isInitialized();
   */
 void Input_terminate();
 
-INPUTSTATE Input_getKey(unsigned int key);
-INPUTSTATE Input_getMouseXPos();
-INPUTSTATE Input_getMouseYPos();
-INPUTSTATE Input_getMouseWheelPos();
-INPUTSTATE Input_getMouseXRel();
-INPUTSTATE Input_getMouseYRel();
-INPUTSTATE Input_getMouseWheelRel();
-INPUTSTATE Input_getMouseButton(unsigned int button);
+Point Input_getMousePos();
+
+BOOL Input_getKey(unsigned int key);
+INPUTSTATE Input_getInputState(int device, int id);
+BOOL Input_getMouseButton(unsigned int button);
 
 void Input_connectController(Controller* controller, unsigned int slot);
 void Input_disconnectController(unsigned int slot);
 
 
-void Input_addKeyHook(unsigned int key, Hook* hook);
-void Input_addMouseMoveHook(unsigned int axis, Hook* hook);
-void Input_addMouseButtonHook(unsigned int button, Hook* hook);
 
 #endif //SMUG_INPUT_H

@@ -12,14 +12,6 @@ static BOOL isInitialized = FALSE;
 
 static ArrayList* controllers;
 
-static ArrayList* deviceArray;
-
-static INPUTSTATE* keyboardState;
-static INPUTSTATE* mouseState;
-static INPUTSTATE* joystickState[DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE];
-
-
-
 static void assertDevice(unsigned int device)
 {
 //	ArrayList* buttons = ArrayList_get(devices, device);
@@ -35,39 +27,14 @@ static void assertDevice(unsigned int device)
 
 static void inputHandler(int device, int trigger, INPUTSTATE state)
 {
-	static INPUTSTATE* array;
-	array = ArrayList_get(deviceArray, device);
-	array[trigger] = state;
-	//fprintf(stderr, "Got trigger: %i\n", trigger);
+	fprintf(stderr, "Input: Got trigger: %i\n", trigger);
 }
 
-static INPUTSTATE* newStateArray(unsigned int size)
-{
-	INPUTSTATE* arr  = malloc(sizeof(INPUTSTATE) * (size));
-	int i;
-	for (i = 0; i < size; i++)
-	{
-		arr[i] = INPUTSTATE_RELEASED;
-	}
-	return arr;
-}
 
 int Input_init()
 {
 	assert(Platform_isInitialized());
 	assert(Platform_isWindowOpen());
-	
-	deviceArray = ArrayList_newFromCapacity(DEVICE_LAST + 1);
-	keyboardState = newStateArray(KEY_LAST + 1);
-	ArrayList_set(deviceArray, DEVICE_KEYBOARD, (void*)keyboardState);
-	mouseState = newStateArray(MOUSE_LAST + 1);
-	ArrayList_set(deviceArray, DEVICE_MOUSE, (void*)mouseState);
-	int i;
-	for (i = DEVICE_JOYSTICK_BASE; i < DEVICE_JOYSTICK_LAST; i++)
-	{
-		joystickState[i - DEVICE_JOYSTICK_BASE] = newStateArray(JOYSTICK_LAST + 1);
-		ArrayList_set(deviceArray, i, (void*)joystickState[i - DEVICE_JOYSTICK_BASE]);
-	}
 
 	Platform_registerInputHandler(&inputHandler);
 	
@@ -83,11 +50,7 @@ BOOL Input_isInitialized()
 }
 
 void Input_terminate()
-{
-	ArrayList_deleteContents(deviceArray, &free);
-	ArrayList_delete(deviceArray);
-	ArrayList_delete(controllers);
-	
+{	
 	isInitialized = FALSE;
 }
 
@@ -107,63 +70,28 @@ void Input_disconnectController(unsigned int slot)
 	ArrayList_set(controllers, slot, NULL);	
 }
 
-void Input_addKeyHook(unsigned int key, Hook* hook)
-{
-	//addHook(DEVICE_KEYBOARD, key, hook);
-
-}
-
-void Input_addMouseMoveHook(unsigned int axis, Hook* hook)
-{
-	//addHook(DEVICE_MOUSE, axis, hook);
-
-}
-
-void Input_addMouseButtonHook(unsigned int button, Hook* hook)
-{
-	//addHook(DEVICE_MOUSE, button, hook);	
-
-}
-
-INPUTSTATE Input_getKey(unsigned int key)
+BOOL Input_getKey(unsigned int key)
 {
 	assert(key >= KEY_BASE && key <= KEY_LAST);
-	return keyboardState[key];
+	return Platform_getInputState(DEVICE_KEYBOARD, key);
 }
 
-INPUTSTATE Input_getMouseXPos()
+Point Input_getMousePos()
 {
-	return mouseState[MOUSE_AXIS_ABSX];
+    Vector windowSize = Platform_getWindowSize();
+    return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_ABS_XPOS) - 
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_ABS_XNEG) * windowSize.d[0]),
+                                    (Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_ABS_YPOS) - 
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_ABS_YNEG) * windowSize.d[1]));
 }
 
-INPUTSTATE Input_getMouseYPos()
+INPUTSTATE Input_getInputState(int device, int id)
 {
-	return mouseState[MOUSE_AXIS_ABSY];
+	return Platform_getInputState(device, id);	
 }
 
-INPUTSTATE Input_getMouseWheelPos()
+BOOL Input_getMouseButton(unsigned int button)
 {
-	return mouseState[MOUSE_AXIS_ABSWHEEL];	
-}
-
-INPUTSTATE Input_getMouseXRel()
-{
-	return mouseState[MOUSE_AXIS_RELX];
-}
-
-INPUTSTATE Input_getMouseYRel()
-{
-	return mouseState[MOUSE_AXIS_RELY];
-}
-
-INPUTSTATE Input_getMouseWheelRel()
-{
-	return mouseState[MOUSE_AXIS_RELWHEEL];	
-}
-
-INPUTSTATE Input_getMouseButton(unsigned int button)
-{
-	assert(button >= MOUSE_BUTTON_BASE && button <= MOUSE_BUTTON_LAST);
-	return mouseState[button];
+	return Platform_getInputState(DEVICE_MOUSE, button) == INPUTSTATE_PRESSED;
 }
 

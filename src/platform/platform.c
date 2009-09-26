@@ -4,163 +4,387 @@
 #include "common/log.h"
 #include "stdlib.h"
 
+#include "stdio.h"
+
+typedef struct JoystickInfo
+{
+    int buttons;
+    int axes;
+    INPUTSTATE state[JOYSTICK_LAST - JOYSTICK_BASE];
+    BOOL connected;
+} JoystickInfo;
+
 static BOOL isInitialized = FALSE;
 
-static int keymap[GLFW_KEY_LAST];
-static int old_mousex = 0;
-static int old_mousey = 0;
-static int old_wheel = 0;
+static Vector windowSize;
+
+static INPUTSTATE keyState[KEY_LAST - KEY_BASE];
+static INPUTSTATE mouseState[MOUSE_LAST - MOUSE_BASE];
+static JoystickInfo joyState[DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE];
 
 static void (*inputHandler)(int device, int trigger, INPUTSTATE state) = NULL;
 
-static void mapKeys()
+static int convertKeyToTrigger(int key) { return KEY_BASE + key; }
+static int convertMouseButtonToTrigger(int button) { return MOUSE_BUTTON_BASE + button; }
+
+static void clearJoystickState(unsigned int joystick)
 {
-    int i;
-    for (i = 0; i < GLFW_KEY_SPECIAL; i++)
+    static int i;
+    static int j;
+    joyState[j].connected = FALSE;
+    joyState[j].axes = 0;
+    joyState[j].buttons = 0;
+    for (i = 0; i < JOYSTICK_LAST - JOYSTICK_BASE; i++)
     {
-        keymap[i] = i;
+        for (j = 0; j < DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE; j++)
+        {
+            joyState[i].state[j] = 0.0f;
+        }
     }
-  
-    keymap[GLFW_KEY_SPACE] = KEY_SPACE;  
-    keymap[GLFW_KEY_SPECIAL] = KEY_SPECIAL;  
-    keymap[GLFW_KEY_ESC] = KEY_ESC;  
-    keymap[GLFW_KEY_F1] = KEY_F1;  
-    keymap[GLFW_KEY_F2] = KEY_F2;  
-    keymap[GLFW_KEY_F3] = KEY_F3;  
-    keymap[GLFW_KEY_F4] = KEY_F4;  
-    keymap[GLFW_KEY_F5] = KEY_F5;  
-    keymap[GLFW_KEY_F6] = KEY_F6;  
-    keymap[GLFW_KEY_F7] = KEY_F7;  
-    keymap[GLFW_KEY_F8] = KEY_F8;  
-    keymap[GLFW_KEY_F9] = KEY_F9;  
-    keymap[GLFW_KEY_F10] = KEY_F10;  
-    keymap[GLFW_KEY_F11] = KEY_F11;  
-    keymap[GLFW_KEY_F12] = KEY_F12;  
-    keymap[GLFW_KEY_F13] = KEY_F13;  
-    keymap[GLFW_KEY_F14] = KEY_F14;  
-    keymap[GLFW_KEY_F15] = KEY_F15;  
-    keymap[GLFW_KEY_F16] = KEY_F16;  
-    keymap[GLFW_KEY_F17] = KEY_F17;  
-    keymap[GLFW_KEY_F18] = KEY_F18;  
-    keymap[GLFW_KEY_F19] = KEY_F19;  
-    keymap[GLFW_KEY_F20] = KEY_F20;  
-    keymap[GLFW_KEY_F21] = KEY_F21;  
-    keymap[GLFW_KEY_F22] = KEY_F22;  
-    keymap[GLFW_KEY_F23] = KEY_F23;  
-    keymap[GLFW_KEY_F24] = KEY_F24;  
-    keymap[GLFW_KEY_F25] = KEY_F25;    
-    keymap[GLFW_KEY_UP] = KEY_UP;  
-    keymap[GLFW_KEY_DOWN] = KEY_DOWN;  
-    keymap[GLFW_KEY_LEFT] = KEY_LEFT;  
-    keymap[GLFW_KEY_RIGHT] = KEY_RIGHT;  
-    keymap[GLFW_KEY_LSHIFT] = KEY_LSHIFT;  
-    keymap[GLFW_KEY_RSHIFT] = KEY_RSHIFT;  
-    keymap[GLFW_KEY_LCTRL] = KEY_LCTRL;  
-    keymap[GLFW_KEY_RCTRL] = KEY_RCTRL;  
-    keymap[GLFW_KEY_LALT] = KEY_LALT;  
-    keymap[GLFW_KEY_RALT] = KEY_RALT;  
-    keymap[GLFW_KEY_TAB] = KEY_TAB;  
-    keymap[GLFW_KEY_ENTER] = KEY_ENTER;  
-    keymap[GLFW_KEY_BACKSPACE] = KEY_BACKSPACE;  
-    keymap[GLFW_KEY_INSERT] = KEY_INSERT;  
-    keymap[GLFW_KEY_DEL] = KEY_DEL;  
-    keymap[GLFW_KEY_PAGEUP] = KEY_PAGEUP;  
-    keymap[GLFW_KEY_PAGEDOWN] = KEY_PAGEDOWN;  
-    keymap[GLFW_KEY_HOME] = KEY_HOME;  
-    keymap[GLFW_KEY_END] = KEY_END;  
-    keymap[GLFW_KEY_KP_0] = KEY_KP_0;  
-    keymap[GLFW_KEY_KP_1] = KEY_KP_1;
-    keymap[GLFW_KEY_KP_2] = KEY_KP_2;
-    keymap[GLFW_KEY_KP_3] = KEY_KP_3;
-    keymap[GLFW_KEY_KP_4] = KEY_KP_4;
-    keymap[GLFW_KEY_KP_5] = KEY_KP_5;
-    keymap[GLFW_KEY_KP_6] = KEY_KP_6;
-    keymap[GLFW_KEY_KP_7] = KEY_KP_7;
-    keymap[GLFW_KEY_KP_8] = KEY_KP_8;
-    keymap[GLFW_KEY_KP_9] = KEY_KP_9;
-    keymap[GLFW_KEY_KP_DIVIDE] = KEY_KP_DIVIDE;  
-    keymap[GLFW_KEY_KP_MULTIPLY] = KEY_KP_MULTIPLY;  
-    keymap[GLFW_KEY_KP_SUBTRACT] = KEY_KP_SUBTRACT;  
-    keymap[GLFW_KEY_KP_ADD] = KEY_KP_ADD;  
-    keymap[GLFW_KEY_KP_DECIMAL] = KEY_KP_DECIMAL;  
-    keymap[GLFW_KEY_KP_EQUAL] = KEY_KP_EQUAL;  
-    keymap[GLFW_KEY_KP_ENTER] = KEY_KP_ENTER;
 }
+
+static void clearInputState()
+{
+    static int i;
+    for (i = 0; i < KEY_LAST - KEY_BASE; i++)
+    {
+        keyState[i] = 0.0f;
+    }
+    for (i = 0; i < MOUSE_LAST - MOUSE_BASE; i++)
+    {
+        mouseState[i] = 0.0f;
+    }
+    for (i = 0; i < DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE; i++)
+    {
+        clearJoystickState(i);
+    }
+}
+
 
 static void GLFWCALL keyCallback(int key, int action)
 {
-	assert(NULL != inputHandler);
-	inputHandler(DEVICE_KEYBOARD, keymap[key], (INPUTSTATE)action);
+    assert(NULL != inputHandler);
+    static int trigger;
+    trigger = convertKeyToTrigger(key);
+    keyState[trigger] = (INPUTSTATE)action;
+    inputHandler(DEVICE_KEYBOARD, trigger, keyState[trigger]);
 }
 
 static void GLFWCALL mouseButtonCallback(int button, int action)
 {
-	assert(NULL != inputHandler);
-	inputHandler(DEVICE_MOUSE, MOUSE_BUTTON_BASE + button, (INPUTSTATE)action);
+    assert(NULL != inputHandler);
+    static int trigger;
+    trigger = convertMouseButtonToTrigger(button);
+    mouseState[trigger] = (INPUTSTATE)action;
+    inputHandler(DEVICE_MOUSE, trigger, mouseState[trigger]);
 }
 
 static void GLFWCALL mousePosCallback(int x, int y)
 {
-	assert(NULL != inputHandler);
-	if (x - old_mousex)
-	{
-		inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABSX, x);
-		inputHandler(DEVICE_MOUSE, MOUSE_AXIS_RELX, x - old_mousex);	
-		old_mousex = x;
-	}
-		
-	if (y - old_mousey)
-	{
-		inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABSY, y);
-		inputHandler(DEVICE_MOUSE, MOUSE_AXIS_RELY, y - old_mousey);
-		old_mousey = y;
-	}
+    assert(NULL != inputHandler);
+    static float absx;
+    static float absy;
+    static float abs_posx;
+    static float abs_posy;
+    static float abs_negx;
+    static float abs_negy;
+    static float rel_posx;
+    static float rel_posy;
+    static float rel_negx;
+    static float rel_negy;
+
+    // Calc centered position on window
+    absx = ((float)x - windowSize.d[0]/2) / windowSize.d[0];
+    absy = ((float)y - windowSize.d[1]/2) / windowSize.d[1];
+
+    // Clamp position to range -1.0 to 1.0
+    if (absx > 1.0f) absx = 1.0f;
+    if (absx < -1.0f) absx = -1.0f;
+    if (absy > 1.0f) absy = 1.0f;
+    if (absy < -1.0f) absy = -1.0f;
+
+    // Separate axes into pos/neg components
+    if (absx >= 0.0f)
+    {
+        abs_posx = absx;
+        abs_negx = 0.0f;
+    }
+    else
+    {
+        abs_posx = 0.0f;
+        abs_negx = -absx;
+    }
+    if (absy >= 0.0f)
+    {
+        abs_posy = absy;
+        abs_negy = 0.0f;
+    }
+    else
+    {
+        abs_posy = 0.0f;
+        abs_negy = -absy;
+    }
+
+    // Calculate relative movement
+    rel_posx = abs_posx - mouseState[MOUSE_AXIS_ABS_XPOS];
+    rel_posy = abs_posy - mouseState[MOUSE_AXIS_ABS_YPOS];
+    rel_negx = abs_negx - mouseState[MOUSE_AXIS_ABS_XNEG];
+    rel_negy = abs_negy - mouseState[MOUSE_AXIS_ABS_YNEG];
+
+    // Send trigger events
+    if (rel_posx)
+    {
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_XPOS, abs_posx);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_XPOS, rel_posx);
+        mouseState[MOUSE_AXIS_ABS_XPOS] = abs_posx;
+        mouseState[MOUSE_AXIS_REL_XPOS] = rel_posx;
+    }
+    else
+    {
+        if (rel_posx - mouseState[MOUSE_AXIS_REL_XPOS])
+        {
+            inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_XPOS, 0.0f);
+        }
+    }
+
+    if (rel_posy)
+    {
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_YPOS, abs_posy);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_YPOS, rel_posy);
+        mouseState[MOUSE_AXIS_ABS_YPOS] = abs_posy;
+        mouseState[MOUSE_AXIS_REL_YPOS] = rel_posy;
+    }
+    else
+    {
+        if (rel_posy - mouseState[MOUSE_AXIS_REL_YPOS])
+        {
+            inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_YPOS, 0.0f);
+        }
+    }
+
+    if (rel_negx)
+    {
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_XNEG, abs_negx);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_XNEG, rel_negx);
+        mouseState[MOUSE_AXIS_ABS_XNEG] = abs_negx;
+        mouseState[MOUSE_AXIS_REL_XNEG] = rel_negx;
+    }
+    else
+    {
+        if (rel_negx - mouseState[MOUSE_AXIS_REL_XNEG])
+        {
+            inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_XNEG, 0.0f);
+        }
+    }
+
+    if (rel_negy)
+    {
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_YNEG, abs_negy);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_YNEG, rel_negy);
+        mouseState[MOUSE_AXIS_ABS_YNEG] = abs_negy;
+        mouseState[MOUSE_AXIS_REL_YNEG] = rel_negy;
+    }
+    else
+    {
+        if (rel_negy - mouseState[MOUSE_AXIS_REL_YNEG])
+        {
+            inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_YNEG, 0.0f);
+        }
+    }
 }
 
 static void GLFWCALL mouseWheelCallback(int pos)
 {
-	assert(NULL != inputHandler);
-	if (pos - old_wheel)
-	{
-		inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABSWHEEL, pos);
-		inputHandler(DEVICE_MOUSE, MOUSE_AXIS_RELWHEEL, pos - old_wheel);
-		old_wheel = pos;
-	}
+    assert(NULL != inputHandler);
+    static float absw;
+    static float abs_posw;
+    static float abs_negw;
+    static float rel_posw;
+    static float rel_negw;
+
+    // Calc centered position on window
+    absw = pos;
+
+    // Clamp position to range -1.0 to 1.0
+    if (absw > 1.0f) absw = 1.0f;
+    if (absw < -1.0f) absw = -1.0f;
+    if (absw > 1.0f) absw = 1.0f;
+    if (absw < -1.0f) absw = -1.0f;
+
+    // Separate axes into pos/neg components
+    if (absw >= 0.0f)
+    {
+        abs_posw = absw;
+        abs_negw = 0.0f;
+    }
+    else
+    {
+        abs_posw = 0.0f;
+        abs_negw = -absw;
+    }
+    
+    // Calculate relative movement
+    rel_posw = abs_posw - mouseState[MOUSE_AXIS_ABS_WHEELPOS];
+    rel_negw = abs_negw - mouseState[MOUSE_AXIS_ABS_WHEELNEG];
+
+    // Send trigger events
+    if (rel_posw)
+    {
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_WHEELPOS, abs_posw);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_WHEELPOS, rel_posw);
+        mouseState[MOUSE_AXIS_ABS_WHEELPOS] = abs_posw;
+        mouseState[MOUSE_AXIS_REL_WHEELPOS] = rel_posw;
+    }
+    else
+    {
+        if (rel_posw - mouseState[MOUSE_AXIS_REL_WHEELPOS])
+        {
+            inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_WHEELPOS, 0.0f);
+        }
+    }
+
+    if (rel_negw)
+    {
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_WHEELNEG, abs_negw);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_WHEELNEG, rel_negw);
+        mouseState[MOUSE_AXIS_ABS_WHEELNEG] = abs_negw;
+        mouseState[MOUSE_AXIS_REL_WHEELNEG] = rel_negw;
+    }
+    else
+    {
+        if (rel_negw - mouseState[MOUSE_AXIS_REL_WHEELNEG])
+        {
+            inputHandler(DEVICE_MOUSE, MOUSE_AXIS_REL_WHEELNEG, 0.0f);
+        }
+    }
+}
+
+static void updateJoystick()
+{
+    static unsigned char buttons[JOYSTICK_BUTTON_LAST - JOYSTICK_BUTTON_BASE];
+    static float axes[JOYSTICK_BUTTON_LAST - JOYSTICK_BUTTON_BASE];
+
+    int j;
+    for (j = 0; j < DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE; j++)
+    {
+        if (joyState[j].connected)
+        {
+            glfwGetJoystickButtons(j, buttons, joyState[j].buttons);
+            glfwGetJoystickPos(j, axes, joyState[j].axes);
+
+            int i;
+            for (i = 0; i < JOYSTICK_BUTTON_LAST - JOYSTICK_BUTTON_BASE; i++)
+            {
+                if (joyState[j].state[JOYSTICK_BUTTON_BASE + i] != buttons[i])
+                {
+                    inputHandler(DEVICE_JOYSTICK_BASE + j, JOYSTICK_BUTTON_BASE + i, buttons[i]);
+                    joyState[j].state[JOYSTICK_BUTTON_BASE + i] = buttons[i];
+                }
+            }
+            for (i = 0; i < JOYSTICK_AXIS_LAST - JOYSTICK_AXIS_BASE; i++)
+            {
+                if (joyState[j].state[JOYSTICK_AXIS_BASE + i] != axes[i])
+                {
+                    static float apos;
+                    static float aneg;
+
+                    // Separate axis into pos/neg components
+                    if (axes[i] >= 0.0f)
+                    {
+                        apos = axes[i];
+                        aneg = 0.0f;
+                    }
+                    else
+                    {
+                        apos = 0.0f;
+                        aneg = -axes[i];
+                    }
+
+                    // Send trigger events
+                    if (joyState[j].state[JOYSTICK_AXIS_BASE + i*2 + 0] != apos)
+                    {
+                        inputHandler(DEVICE_JOYSTICK_BASE + j, JOYSTICK_AXIS_BASE + i*2 + 0, apos);
+                        joyState[j].state[JOYSTICK_AXIS_BASE + i*2 + 0] = apos;
+                    }
+
+                    if (joyState[j].state[JOYSTICK_AXIS_BASE + i*2 + 1] != aneg)
+                    {
+                        inputHandler(DEVICE_JOYSTICK_BASE + j, JOYSTICK_AXIS_BASE + i*2 + 1, aneg);
+                        joyState[j].state[JOYSTICK_AXIS_BASE + i*2 + 1] = aneg;
+                    }
+                }
+            }
+        }
+    }
+}
+
+static void detectJoysticks()
+{
+    int j;
+    for (j = 0; j < DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE; j++)
+    {
+        joyState[j].connected = (BOOL) glfwGetJoystickParam(j, GLFW_PRESENT);
+        if (joyState[j].connected)
+        {
+            joyState[j].buttons = glfwGetJoystickParam(j, GLFW_BUTTONS);
+            joyState[j].axes = glfwGetJoystickParam(j, GLFW_AXES);
+        }
+        else
+        {
+            clearJoystickState(j);
+        }
+    }
+}
+
+void dummyInputHandler(int device, int trigger, INPUTSTATE state)
+{
+    fprintf(stderr, "Got input event. Device: %i, trigger: %i, state: %f\n", device, trigger, state);
 }
 
 int Platform_init()
 {
     NOTIFY("Initializing platform layer");
     if (!glfwInit())
-	{
-		return 0;
-	}
-	
-    mapKeys();
-	
-	glfwDisable(GLFW_AUTO_POLL_EVENTS);
-	glfwEnable(GLFW_STICKY_KEYS);
-	glfwEnable(GLFW_STICKY_MOUSE_BUTTONS);	
-	
-	
-	isInitialized = TRUE;
-	return 1;
+    {
+        return 0;
+    }
+
+    glfwDisable(GLFW_AUTO_POLL_EVENTS);
+    glfwEnable(GLFW_STICKY_KEYS);
+    glfwEnable(GLFW_STICKY_MOUSE_BUTTONS);
+
+    // Initialize device state arrays
+    clearInputState();
+
+    // This must be set before setting callbacks
+    Platform_registerInputHandler(&dummyInputHandler);
+
+    // Set callbacks for input
+    glfwSetMouseButtonCallback(&mouseButtonCallback);
+    glfwSetMousePosCallback(&mousePosCallback);
+    glfwSetMouseWheelCallback(&mouseWheelCallback);
+    glfwSetKeyCallback(&keyCallback);
+
+
+    isInitialized = TRUE;
+    return 1;
 }
 
 BOOL Platform_isInitialized()
 {
-	return isInitialized;
+    return isInitialized;
 }
 
 void Platform_terminate()
 {
     NOTIFY("Terminating platform layer");
     glfwTerminate();
-	isInitialized = FALSE;
+    isInitialized = FALSE;
 }
 
 BOOL Platform_openWindow(int width, int height, BOOL fullscreen)
 {
+    windowSize = Vector_create2d(width, height);
     return glfwOpenWindow(width, height, 8, 8, 8, 8, 24, 0, fullscreen? GLFW_FULLSCREEN : GLFW_WINDOW);
 }
 
@@ -179,6 +403,11 @@ void Platform_refreshWindow()
     glfwSwapBuffers();
 }
 
+Vector Platform_getWindowSize()
+{
+    return windowSize;
+}
+
 TIME Platform_getTime()
 {
     return glfwGetTime();
@@ -191,21 +420,40 @@ void Platform_sleep(TIME seconds)
 
 void Platform_update()
 {
-	glfwPollEvents();
+    glfwPollEvents();
 
 }
 
 void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPUTSTATE state))
 {
-	assert(NULL != handler);	
+    assert(NULL != handler);
 
-	// This must be set before setting callbacks
-	inputHandler = handler;
-	
-	glfwSetMouseButtonCallback(&mouseButtonCallback);
-	glfwSetMousePosCallback(&mousePosCallback);
-	glfwSetMouseWheelCallback(&mouseWheelCallback);
-	glfwSetKeyCallback(&keyCallback);
+    inputHandler = handler;
 }
 
+INPUTSTATE Platform_getInputState(int device, int trigger)
+{
+    assert(device > DEVICE_FIRST && device < DEVICE_LAST);
+    switch (device)
+    {
+        case DEVICE_KEYBOARD:
+        {
+            assert(KEY_BASE <= trigger && KEY_LAST <= trigger);
+            return keyState[trigger];
+            break;
+        }
+        case DEVICE_MOUSE:
+        {
+            assert(MOUSE_BASE <= trigger && MOUSE_LAST <= trigger);
+            return mouseState[trigger];
+            break;
+        }
+        default:
+        {
+            assert(JOYSTICK_BASE <= trigger && JOYSTICK_LAST <= trigger);
+            return joyState[device - DEVICE_JOYSTICK_BASE].state[trigger];
+            break;
+        }
+    }
+}
 

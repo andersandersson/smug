@@ -8,6 +8,7 @@
 #include "color.h"
 #include "common/common.h"
 #include "utils/rectangle.h"
+#include "utils/vector.h"
 #include "drawable/drawable.h"
 #include "graphics/camera.h"
 
@@ -20,6 +21,16 @@
  * @param height The height of the view in pixels.
  */
 int Graphics_init(int width, int height);
+
+/**
+ * Returns true if system is initialized
+ */
+BOOL Graphics_isInitialized();
+
+/**
+ * Returns the current size of the screen
+ */
+Vector Graphics_getScreenSize(); 
 
 /** Render one frame.
   */

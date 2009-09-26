@@ -1,14 +1,16 @@
 #include "graphics.h"
 #include "platform/opengl/opengl.h"
 #include "renderer/renderer.h"
+#include "platform/platform.h"
 
 #include "common/log.h"
 
 Renderer* sceneRenderer = NULL;
 
 int gVBOSupported = 0;
-int gScreenWidth = 0;
-int gScreenHeight = 0;
+Vector screenSize;
+
+BOOL isInitialized = FALSE;
 
 static void printGLError()
 {
@@ -67,7 +69,7 @@ static void setupGL()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, gScreenWidth, gScreenHeight, 0, -1, 1);
+	glOrtho(0, screenSize.d[0], screenSize.d[1], 0, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
@@ -85,21 +87,33 @@ int Graphics_init(int width, int height)
 	assert(Platform_isInitialized());
 	assert(Platform_isWindowOpen());
 
-    gScreenWidth = width;
-    gScreenHeight = height;
+    screenSize = Vector_create2d(width, height);
+    
     DEBUG("Graphics resolution set to %ix%i", width, height);
     
     setupGL();
    
     sceneRenderer = Renderer_new();
 
+    isInitialized = TRUE;
     return 1;
+}
+
+
+BOOL Graphics_isInitialized()
+{   
+    return isInitialized;
+}
+
+Vector Graphics_getScreenSize()
+{
+    return screenSize;
 }
 
 void Graphics_terminate()
 {
-
     Renderer_delete(sceneRenderer);
+    isInitialized = FALSE;
 }
 
 void Graphics_render()
