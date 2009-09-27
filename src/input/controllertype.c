@@ -1,5 +1,5 @@
 #include "controllertype.h"
-l
+
 #include "stdlib.h"
 
 ControllerType* ControllerType_new(unsigned int buttons, unsigned int axes)

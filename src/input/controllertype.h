@@ -13,6 +13,4 @@ typedef struct ControllerType
 ControllerType* ControllerType_new(unsigned int buttons, unsigned int axes);
 
 
-
-
 #endif // SMUG_CONTROLLERTYPE_H

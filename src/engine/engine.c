@@ -26,13 +26,11 @@ int Engine_init()
     Log_indent();
     
 
-    if (!Platform_init())
+    if (!Platform_init(640, 480, FALSE))
         return 0;
     
     if (!Signal_init())
         return 0;
-		
-    Platform_openWindow(640, 480, FALSE);    
 
 	if (!Input_init())
 		return 0;
@@ -77,9 +75,7 @@ void Engine_terminate()
 	Input_terminate();
 	
     Signal_terminate();
-    
-    Platform_closeWindow();   
-	
+
     Platform_terminate();
     
     Log_dedent();

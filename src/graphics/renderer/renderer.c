@@ -7,6 +7,7 @@
 #include "stdio.h"
 
 #include "graphics/sprite.h"
+#include "graphics/graphics.h"
 
 #include "platform/opengl/opengl.h"
 
@@ -22,7 +23,7 @@ Renderer* Renderer_new()
     Renderer* ret = (Renderer*)malloc(sizeof(Renderer));
     ret->layers = ArrayList_new();
     ret->layercount = 0;
-    ret->camera = Camera_new(Vector_create2d(gScreenWidth / 2, gScreenHeight / 2));
+    ret->camera = Camera_new(Vector_multiply(Graphics_getScreenSize(), 2));
     
     return ret;
 }

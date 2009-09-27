@@ -42,7 +42,7 @@ static void printGLError()
 }
 
 
-static void setupGL()
+static int setupGL()
 {
 #ifdef WIN32
     DEBUG("Initializing GLEW");
@@ -50,6 +50,7 @@ static void setupGL()
     if (GLEW_OK != err)
     {
         ERROR("GLEW could not be initialized, errcode: %s", glewGetErrorString(err));
+        return 0;
     }
 #endif //WIN32
     
@@ -80,6 +81,8 @@ static void setupGL()
     printGLError();
    
     glEnable( GL_TEXTURE_2D );
+    
+    return 1;
 }
 
 int Graphics_init(int width, int height)
@@ -91,7 +94,8 @@ int Graphics_init(int width, int height)
     
     DEBUG("Graphics resolution set to %ix%i", width, height);
     
-    setupGL();
+    if (!setupGL())
+        return 0;
    
     sceneRenderer = Renderer_new();
 

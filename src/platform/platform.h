@@ -107,15 +107,9 @@ typedef float INPUTSTATE;
 #define MOUSE_AXIS_ABS_XNEG MOUSE_AXIS_BASE+1
 #define MOUSE_AXIS_ABS_YPOS MOUSE_AXIS_BASE+2
 #define MOUSE_AXIS_ABS_YNEG MOUSE_AXIS_BASE+3
-#define MOUSE_AXIS_REL_XPOS MOUSE_AXIS_BASE+4
-#define MOUSE_AXIS_REL_XNEG MOUSE_AXIS_BASE+5
-#define MOUSE_AXIS_REL_YPOS MOUSE_AXIS_BASE+6
-#define MOUSE_AXIS_REL_YNEG MOUSE_AXIS_BASE+7
-#define MOUSE_AXIS_ABS_WHEELPOS MOUSE_AXIS_BASE+8
-#define MOUSE_AXIS_ABS_WHEELNEG MOUSE_AXIS_BASE+9
-#define MOUSE_AXIS_REL_WHEELPOS MOUSE_AXIS_BASE+10
-#define MOUSE_AXIS_REL_WHEELNEG MOUSE_AXIS_BASE+11
-#define MOUSE_AXIS_LAST MOUSE_AXIS_REL_WHEELPOS
+#define MOUSE_AXIS_ABS_WHEELPOS MOUSE_AXIS_BASE+4
+#define MOUSE_AXIS_ABS_WHEELNEG MOUSE_AXIS_BASE+5
+#define MOUSE_AXIS_LAST MOUSE_AXIS_ABS_WHEELPOS
 
 #define MOUSE_BASE MOUSE_BUTTON_BASE
 #define MOUSE_LAST MOUSE_AXIS_LAST
@@ -187,7 +181,7 @@ typedef float INPUTSTATE;
 #define DEVICE_LAST DEVICE_JOYSTICK_LAST
 #define DEVICE_FIRST DEVICE_KEYBOARD
 
-int Platform_init();
+int Platform_init(int width, int height, BOOL fullscreen);
 
 /** Returns true if the system is initialized
  */
@@ -195,8 +189,6 @@ BOOL Platform_isInitialized();
 
 void Platform_terminate();
 
-BOOL Platform_openWindow(int width, int height, BOOL fullscreen);
-void Platform_closeWindow();
 BOOL Platform_isWindowOpen();
 void Platform_refreshWindow();
 
@@ -214,6 +206,6 @@ void Platform_update();
 void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPUTSTATE state));
 
 INPUTSTATE Platform_getInputState(int device, int trigger);
-
+void Platform_detectJoysticks();
 
 #endif // PLATFORM_H

@@ -34,14 +34,11 @@ int main()
     if (!Log_init())
 		return 0;
 
-    if (!Platform_init())
-        return 0;
-    
     Log_print("Initializing\n");
 
-	
-    Platform_openWindow(640, 480, FALSE);    
-
+    if (!Platform_init(640, 480, FALSE))
+        return 0;
+    
 	if (!Input_init())
 		return 0;
 
@@ -69,13 +66,13 @@ int main()
     TIME t = Platform_getTime();
     TIME nexttime = t;
     TIME lastFpsCheck = t;
-    TIME delay = 1.0f/60.0f;
+    TIME delay = 1.0f/20.0f;
     int fps = 0;
     while (1)
     {   
 		Platform_update();
         t = Platform_getTime();
-             
+  
         if (t >= nexttime)
         {
             nexttime+=delay;
@@ -91,8 +88,11 @@ int main()
             }
 
             Graphics_render();
+            
             Platform_refreshWindow();
             
+
+
             fps++;
         }
 
@@ -119,9 +119,6 @@ int main()
     Graphics_terminate();
     
 	Input_terminate();	
-	
-    Platform_closeWindow();   
-    
     Platform_terminate();
     
     Log_print("Done\n");
