@@ -18,7 +18,7 @@ Hook* Hook_newFromFunction(void* data, int (*function)(void*, void*))
     return hook;
 }
 
-void Hook_delete(Hook* hook)
+void Hook_delete(void* hook)
 {
     free(hook);
 }

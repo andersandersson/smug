@@ -9,6 +9,7 @@ Renderer* sceneRenderer = NULL;
 
 int gVBOSupported = 0;
 Vector screenSize;
+unsigned int gRenderMode = RENDER_NORMAL;
 
 BOOL isInitialized = FALSE;
 
@@ -144,4 +145,9 @@ Camera* Graphics_getCamera()
 void Graphics_setupLayer(unsigned int id, float parallax)
 {
     Renderer_setupLayer(sceneRenderer, id, parallax);
+}
+
+void Graphics_setRenderMode(unsigned int flags)
+{
+    gRenderMode = flags;
 }

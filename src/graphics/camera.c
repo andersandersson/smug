@@ -37,6 +37,12 @@ void Camera_setZoom(Camera* camera, float zoom)
 {
     assert(NULL != camera);
 
+    if (zoom <= 0)
+        zoom = 0.01;
+    if (zoom >= 100)
+       zoom = 99;
+        
     camera->scale = Vector_create2d(zoom, zoom);
+    
 }
 

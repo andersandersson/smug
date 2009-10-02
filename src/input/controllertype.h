@@ -7,7 +7,7 @@ typedef struct ControllerType
     unsigned int id;
     unsigned int num_of_buttons;
     unsigned int num_of_axes;
-    float threashold;
+    float threshold;
 } ControllerType;
 
 ControllerType* ControllerType_new(unsigned int buttons, unsigned int axes);

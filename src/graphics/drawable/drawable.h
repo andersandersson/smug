@@ -38,7 +38,7 @@ int Drawable_getDataSize(Drawable* d);
 void Drawable_setPos(Drawable* d, Point pos);
 void Drawable_setSprite(Drawable* d, Sprite* sprite);
 void Drawable_setLayer(Drawable* d, unsigned int layer);
-
+void Drawable_setColor(Drawable* d, Color color);
 
 unsigned int Drawable_getLayer(Drawable* d);
 Texture* Drawable_getTexture(Drawable* d);

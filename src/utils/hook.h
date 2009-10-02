@@ -47,7 +47,7 @@ Hook* Hook_newFromFunction(void* data, int (*function)(void*, void*));
 
 /** Free the memory used by a Hook
   */
-void Hook_delete(Hook* hook);
+void Hook_delete(void* hook);
 
 
 /** Call the hook with given parameter
@@ -68,7 +68,7 @@ int Hook_call(Hook* hook, void* arg);
   *
   * @return The value of the last called Hook.
   */
-int Hook_callAll(LinkedList* list, void* arg);
+int Hook_callAll(LinkedList* list, void* arg); // FIXFIX: Should this really use linkedlist? List already has "for each" functions. Consider new object 'HookList'.
 
 
 /** Call all Hooks in a list while a condition is true
@@ -79,7 +79,7 @@ int Hook_callAll(LinkedList* list, void* arg);
   *
   * @return The value of the last called Hook.
   */
-int Hook_callAllWhile(LinkedList* list, void* arg, int condition);
+int Hook_callAllWhile(LinkedList* list, void* arg, int condition); // FIXFIX: Same as above
 
 
 /** Call all Hooks in a list while a condition is false
@@ -89,6 +89,6 @@ int Hook_callAllWhile(LinkedList* list, void* arg, int condition);
   *
   * @return The value of the last called Hook.
   */
-int Hook_callAllWhileNot(LinkedList* list, void* arg, int condition);
+int Hook_callAllWhileNot(LinkedList* list, void* arg, int condition); // FIXFIX: Same as above
 
 #endif // UTILS_HOOK_H

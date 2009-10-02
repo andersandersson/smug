@@ -33,6 +33,7 @@ BOOL Input_getMouseButton(unsigned int button);
 void Input_connectController(Controller* controller, unsigned int slot);
 void Input_disconnectController(unsigned int slot);
 
+void Input_setTriggerControllerHook(unsigned int device, unsigned int trigger, void* object, int (*function)(void*, void*));
 
 
 #endif //SMUG_INPUT_H

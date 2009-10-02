@@ -35,12 +35,10 @@ int main()
 {
     Log_init();
 
-    if (!Platform_init())
+    if (!Platform_init(640, 480, FALSE))
         return 0;
     
     Log_print("Initializing\n");
-
-    Platform_openWindow(640, 480, FALSE);
     
 	if (!Input_init())
         return 0;	
@@ -48,6 +46,8 @@ int main()
     if (!Graphics_init(640, 480))
         return 0;
 		
+    Graphics_setRenderMode(RENDER_ALL);    
+        
     Image* image[4];
 
     image[0] = Image_new();
@@ -96,7 +96,7 @@ int main()
             LinkedList_addLast(objects, drawable);
         }
     }
-    
+   
     Log_print("Running\n");
     TIME t = Platform_getTime();
 	float color = 0;
@@ -107,11 +107,9 @@ int main()
     Camera* camera = Graphics_getCamera();
     float rot = 0.0f;
     float zoom = 1.0f;
-    float dzoom = 0.01f;
-    float cx = -SWIDTH/2;
-    float cy = -SHEIGHT/2;
-    float cdx = 1.2f; 
-    float cdy = 0.9f;  
+    float cx = 0.0f;
+    float cy = 0.0f;
+    Point old_mpos;
     while (1)
     {   
 		Platform_update();
@@ -131,7 +129,7 @@ int main()
 				Node* p = objects->first;
                 while (p != NULL)
                 {
-                    ((Drawable*)p->item)->color = Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.50);         
+                    Drawable_setColor((Drawable*)p->item, Color_createFromRGBA(0.5+sinf((color*3+0)*1.3)*0.5, 0.5+sinf((color*3+1)*1.3)*0.5, 0.5+sinf((color*3+2)*1.3)*0.5, 0.50));         
                     p = p->next;
                 }
             
@@ -142,44 +140,29 @@ int main()
                     fprintf(stderr, "loool\n");
                 }
                 
-                Camera_setPosition(camera, Point_createFromXY(cx, cy));
-                Camera_setZoom(camera, zoom);
-                Camera_setRotation(camera, rot);
+                Point mpos = Input_getMousePos();
+                if (Point_getX(&mpos) - Point_getX(&old_mpos) || Point_getY(&mpos) - Point_getY(&old_mpos))
+                {
+                    if (Input_getMouseButton(MOUSE_BUTTON_LEFT))
+                    {
+                        cx += 1 * (Point_getX(&mpos) - Point_getX(&old_mpos));
+                        cy += 1 * (Point_getY(&mpos) - Point_getY(&old_mpos));
+                    }
+                    else if (Input_getMouseButton(MOUSE_BUTTON_RIGHT))
+                    {
+                        zoom += 0.01 * (Point_getX(&mpos) - Point_getX(&old_mpos) + Point_getY(&mpos) - Point_getY(&old_mpos));
+                    }
+                    else if (Input_getMouseButton(MOUSE_BUTTON_MIDDLE))
+                    {
+                        rot += 1 * (Point_getX(&mpos) - Point_getX(&old_mpos) + Point_getY(&mpos) - Point_getY(&old_mpos));
+                    }
                 
-                rot += 0.06f;         
-                if (zoom >= 1)
-                {
-                    zoom = 1;
-                    dzoom = -dzoom;
+                    old_mpos = mpos;
+                    Camera_setPosition(camera, Point_createFromXY(-cx, -cy));
+                    Camera_setZoom(camera, zoom);
+                    Camera_setRotation(camera, rot);
                 }
-                if (zoom <= 0.1)
-                {
-                    zoom = 0.1;
-                    dzoom = -dzoom;
-                }            
-                zoom += dzoom;
-                if (cx >= SWIDTH/2)
-                {
-                    cx = SWIDTH/2;
-                    cdx = -cdx;
-                }
-                if (cx <= -SWIDTH/2)
-                {
-                    cx = -SWIDTH/2;
-                    cdx = -cdx;
-                } 
-                if (cy >= SHEIGHT/2)
-                {
-                    cy = SHEIGHT/2;
-                    cdy = -cdy;
-                }
-                if (cy <= -SHEIGHT/2)
-                {
-                    cy = -SHEIGHT/2;
-                    cdy = -cdy;
-                }     
-                cx += cdx;
-                cy += cdy;
+                
             }
 
             Graphics_render();
@@ -217,8 +200,6 @@ int main()
     Graphics_terminate();
     
 	Input_terminate();
-	
-    Platform_closeWindow();   
     
     Platform_terminate();
     

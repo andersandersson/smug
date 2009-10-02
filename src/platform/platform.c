@@ -86,8 +86,8 @@ static void GLFWCALL mousePosCallback(int x, int y)
     static float abs_negy;
     
     // Calc centered position on window
-    absx = ((float)x - windowSize.d[0]/2) / windowSize.d[0];
-    absy = ((float)y - windowSize.d[1]/2) / windowSize.d[1];
+    absx = ((float)x - windowSize.d[0]/2) / windowSize.d[0]*2;
+    absy = ((float)y - windowSize.d[1]/2) / windowSize.d[1]*2;
 
     // Clamp position to range -1.0 to 1.0
     if (absx > 1.0f) absx = 1.0f;
@@ -118,73 +118,51 @@ static void GLFWCALL mousePosCallback(int x, int y)
     }
 
     // Send trigger events
-    if (abs_posx - mouseState[MOUSE_AXIS_ABS_XPOS])
+    if (abs_posx - mouseState[MOUSE_AXIS_XPOS])
     {
-        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_XPOS, abs_posx);
-        mouseState[MOUSE_AXIS_ABS_XPOS] = abs_posx;
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_XPOS, abs_posx);
+        mouseState[MOUSE_AXIS_XPOS] = abs_posx;
     }
     
-    if (abs_posy - mouseState[MOUSE_AXIS_ABS_YPOS])
+    if (abs_posy - mouseState[MOUSE_AXIS_YPOS])
     {
-        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_YPOS, abs_posy);
-        mouseState[MOUSE_AXIS_ABS_YPOS] = abs_posy;
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_YPOS, abs_posy);
+        mouseState[MOUSE_AXIS_YPOS] = abs_posy;
     }
     
-    if (abs_negx - mouseState[MOUSE_AXIS_ABS_XNEG])
+    if (abs_negx - mouseState[MOUSE_AXIS_XNEG])
     {
-        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_XNEG, abs_negx);
-        mouseState[MOUSE_AXIS_ABS_XNEG] = abs_negx;
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_XNEG, abs_negx);
+        mouseState[MOUSE_AXIS_XNEG] = abs_negx;
     }
     
-    if (abs_negy - mouseState[MOUSE_AXIS_ABS_YNEG])
+    if (abs_negy - mouseState[MOUSE_AXIS_YNEG])
     {
-        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_YNEG, abs_negy);
-        mouseState[MOUSE_AXIS_ABS_YNEG] = abs_negy;
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_YNEG, abs_negy);
+        mouseState[MOUSE_AXIS_YNEG] = abs_negy;
     }
 }
 
 static void GLFWCALL mouseWheelCallback(int pos)
 {
     assert(NULL != inputHandler);
-    static float absw;
-    static float abs_posw;
-    static float abs_negw;
+    static int old_pos = 0;
     
-    // Calc centered position on wheel
-    absw = pos;
-
-    fprintf(stderr, "Mousewheel, pos:%i\n");
-
-    // Clamp position to range -1.0 to 1.0
-    if (absw > 1.0f) absw = 1.0f;
-    if (absw < -1.0f) absw = -1.0f;
-    if (absw > 1.0f) absw = 1.0f;
-    if (absw < -1.0f) absw = -1.0f;
-
-    // Separate axes into pos/neg components
-    if (absw >= 0.0f)
+    // Handle mousewheel as two digital triggers.
+    // Since we won't get an event for "trigger released" we have
+    // to send both pressed and released to simulate a tapped trigger.
+    if (pos - old_pos > 0)
     {
-        abs_posw = absw;
-        abs_negw = 0.0f;
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELPOS, INPUTSTATE_PRESSED);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELPOS, INPUTSTATE_RELEASED);
     }
     else
     {
-        abs_posw = 0.0f;
-        abs_negw = -absw;
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELNEG, INPUTSTATE_PRESSED);
+        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELNEG, INPUTSTATE_RELEASED);
     }
-
-    // Send trigger events
-    if (abs_posw - mouseState[MOUSE_AXIS_ABS_WHEELPOS])
-    {
-        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_WHEELPOS, abs_posw);
-        mouseState[MOUSE_AXIS_ABS_WHEELPOS] = abs_posw;
-    }
-
-    if (abs_negw - mouseState[MOUSE_AXIS_ABS_WHEELNEG])
-    {
-        inputHandler(DEVICE_MOUSE, MOUSE_AXIS_ABS_WHEELNEG, abs_negw);
-        mouseState[MOUSE_AXIS_ABS_WHEELNEG] = abs_negw;
-    }
+    
+    old_pos = pos;    
 }
 
 static void updateJoysticks()
@@ -347,7 +325,7 @@ void Platform_update()
 {
     glfwPollEvents();
 
-    //updateJoysticks();
+    updateJoysticks();
 }
 
 void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPUTSTATE state))
@@ -357,9 +335,14 @@ void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPU
     inputHandler = handler;
 }
 
+void Platform_unregisterInputHandler()
+{   
+    Platform_registerInputHandler(&dummyInputHandler);
+}
+
 INPUTSTATE Platform_getInputState(int device, int trigger)
 {
-    assert(device >= DEVICE_FIRST && device <= DEVICE_LAST);
+    assert(device >= DEVICE_BASE && device <= DEVICE_LAST);
     switch (device)
     {
         case DEVICE_KEYBOARD:

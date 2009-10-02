@@ -1,29 +1,28 @@
 #include "renderer.h"
 
+#include <math.h>
+
 #include "renderbatch.h"
 #include "layer.h"
 
 #include "stdlib.h"
 #include "stdio.h"
 
-#include "graphics/sprite.h"
 #include "graphics/graphics.h"
+#include "graphics/sprite.h"
 
 #include "platform/opengl/opengl.h"
 
 
 extern int gVBOSupported;
-
-extern int gScreenWidth;
-extern int gScreenHeight;
-
+extern unsigned int gRenderMode;
 
 Renderer* Renderer_new()
 {
     Renderer* ret = (Renderer*)malloc(sizeof(Renderer));
     ret->layers = ArrayList_new();
     ret->layercount = 0;
-    ret->camera = Camera_new(Vector_multiply(Graphics_getScreenSize(), 2));
+    ret->camera = Camera_new(Vector_multiply(Graphics_getScreenSize(), 0.5));
     
     return ret;
 }
@@ -39,39 +38,107 @@ static void renderLayer(Renderer* renderer, Layer* layer)
     Camera* camera = renderer->camera;
     float p = Layer_getParallax(layer);
 
-
     glPushMatrix();
-    
-    glTranslatef(camera->center.d[0], camera->center.d[1], 0.0f);
-    glRotatef(renderer->camera->rot, 0.0f, 0.0f, 1.0f);
+
     glScalef(1.0f + (camera->scale.d[0] - 1.0f)  * p, 1.0f + (camera->scale.d[1] - 1.0f)  * p, 1.0f);
     glTranslatef(-Point_getX(&camera->pos) * p, -Point_getY(&camera->pos) * p, 0.0f);
 
-    
     Layer_render(layer); 
     
+    glPopMatrix();    
+}
+
+static void renderDebugGrid(Renderer* renderer)
+{
+    Camera* camera = renderer->camera;
+
+    glPushMatrix();
+
+    float scalex = 1.0f + (camera->scale.d[0] - 1.0f);
+    float scaley = 1.0f + (camera->scale.d[1] - 1.0f);
+    glScalef(scalex, scaley, 1.0f);
+    glTranslatef(-Point_getX(&camera->pos), -Point_getY(&camera->pos), 0.0f);
+    Vector screenSize = Vector_multiply(Graphics_getScreenSize(), 0.5);
+    float gridsizex = 16.0f;
+    float gridsizey = 16.0f;
+    float cposx = Point_getX(&camera->pos);
+    float cposy = Point_getY(&camera->pos);
+    float offsetx = cposx - (((int)(cposx / gridsizex)) * gridsizex);
+    float offsety = cposy - (((int)(cposy / gridsizey)) * gridsizey);
+    float ratio = screenSize.d[0] / screenSize.d[1] - 1;
+    float cx = cposx - offsetx;
+    float cw = (screenSize.d[0]) / scalex;
+    float cy = cposy - offsety;
+    float ch = (screenSize.d[1]) / scaley;
     
+    // Draw grid outwards from the camera center.
+    // Adjust the size of the grid to cover the entire view.
+    // TODO: Compensate for screen ratio when rotated.
+    glDisable(GL_TEXTURE_2D);
+    glBegin(GL_LINES);
+    {
+        float i;
+        // Draw vertical lines from the middle to the right
+        for (i = cx; i <= cx + cw + gridsizex; i+=gridsizex)
+        {
+            glColor4f(1.0f - (abs(i)/32.0f),(abs(i)/32.0f),(abs(i)/640.0f),scalex/2.0f);
+            glVertex2f(i, cy - ch + offsety);
+            glVertex2f(i, cy + ch + offsety);
+        }
+        // Draw vertical lines from the middle to the left
+        for (i = cx - gridsizex; i >= cx - cw - gridsizex; i-=gridsizex)
+        {
+            glColor4f(1.0f - (abs(i)/32.0f),(abs(i)/32.0f),(abs(i)/640.0f),scalex/2.0f);
+            glVertex2f(i, cy - ch + offsety);
+            glVertex2f(i, cy + ch + offsety);
+        }
+        // Draw horizontal lines from the middle to the botton
+        for (i = cy; i <= cy + ch + gridsizex; i+=gridsizey)
+        {
+            glColor4f(1.0f - (abs(i)/32.0f),(abs(i)/32.0f),(abs(i)/640.0f),scaley/2.0f);
+            glVertex2f(cx - cw + offsetx, i);
+            glVertex2f(cx + cw + offsetx, i);
+        }
+        // Draw horizontal lines from the middle to the top
+        for (i = cy - gridsizey; i >= cy - ch - gridsizey; i-=gridsizey)
+        {
+            glColor4f(1.0f - (abs(i)/32.0f),(abs(i)/32.0f),(abs(i)/640.0f),scaley/2.0f);
+            glVertex2f(cx - cw + offsetx, i);
+            glVertex2f(cx + cw + offsetx, i);
+        }
+    }
+    glEnd();
+        
     glPopMatrix();    
 }
 
 void Renderer_render(Renderer* renderer)
 {
-    static float rot = 0;
-    
     glLoadIdentity();
-      
-    Layer* layer;
-    int i;
-    for (i = 0; i < renderer->layercount; i++)
+
+    Camera* camera = renderer->camera;
+    glTranslatef(camera->center.d[0], camera->center.d[1], 0.0f);
+    glRotatef(renderer->camera->rot, 0.0f, 0.0f, 1.0f);
+    
+    if (gRenderMode & RENDER_LAYERS)
     {
-        layer = ArrayList_get(renderer->layers, i);
-        if (NULL != layer)
+        Layer* layer;
+        int i;
+        for (i = 0; i < renderer->layercount; i++)
         {
-            renderLayer(renderer, layer); 
+            layer = ArrayList_get(renderer->layers, i);
+            if (NULL != layer)
+            {
+                renderLayer(renderer, layer); 
+            }
         }
     }
     
-    rot+=0.01f;
+    if (gRenderMode & RENDER_DEBUG_GRID)
+    {
+        renderDebugGrid(renderer);
+    }
+    
 }
 
 void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
