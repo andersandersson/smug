@@ -54,8 +54,8 @@ static void renderDebugGrid(Renderer* renderer)
 
     glPushMatrix();
 
-    float scalex = 1.0f + (camera->scale.d[0] - 1.0f);
-    float scaley = 1.0f + (camera->scale.d[1] - 1.0f);
+    float scalex = camera->scale.d[0];
+    float scaley = camera->scale.d[1];
     glScalef(scalex, scaley, 1.0f);
     glTranslatef(-Point_getX(&camera->pos), -Point_getY(&camera->pos), 0.0f);
     Vector screenSize = Vector_multiply(Graphics_getScreenSize(), 0.5);
@@ -70,13 +70,13 @@ static void renderDebugGrid(Renderer* renderer)
     float cw = (screenSize.d[0]) / scalex;
     float cy = cposy - offsety;
     float ch = (screenSize.d[1]) / scaley;
-    
+
     // Draw grid outwards from the camera center.
     // Adjust the size of the grid to cover the entire view.
     // TODO: Compensate for screen ratio when rotated.
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D); // TODO: dont allways disable textures here, try to check if its already disabled
     glBegin(GL_LINES);
-    {
+    {      
         float i;
         // Draw vertical lines from the middle to the right
         for (i = cx; i <= cx + cw + gridsizex; i+=gridsizex)

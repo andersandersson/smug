@@ -45,9 +45,7 @@ int main()
  
     if (!Graphics_init(640, 480))
         return 0;
-		
-    Graphics_setRenderMode(RENDER_ALL);    
-        
+
     Image* image[4];
 
     image[0] = Image_new();
@@ -107,9 +105,7 @@ int main()
     Camera* camera = Graphics_getCamera();
     float rot = 0.0f;
     float zoom = 1.0f;
-    float cx = 0.0f;
-    float cy = 0.0f;
-    Point old_mpos;
+    Vector cpos = Vector_create2d(0,0);
     while (1)
     {   
 		Platform_update();
@@ -120,10 +116,35 @@ int main()
             nexttime+=delay;
 
             if (Input_getKey(KEY_ESC))
-			{
-				fprintf(stderr, "GOT ESC!\n");
-				break;
-            }    
+                break;
+                
+            if (Input_getKey(KEY_F1))
+                Graphics_setRenderMode(RENDER_NORMAL);
+            if (Input_getKey(KEY_F2))
+                Graphics_setRenderMode(RENDER_ALL);
+                
+            // Camera controls    
+            Vector mchange = Input_getMouseScreenMovement();
+            if (Vector_squareLength(mchange))
+            {
+                if (Input_getMouseButton(MOUSE_BUTTON_LEFT))
+                {
+                    cpos = Vector_add(cpos, mchange);
+                }
+                else if (Input_getMouseButton(MOUSE_BUTTON_RIGHT))
+                {
+                    zoom += 0.05 * (Vector_getX(&mchange) + Vector_getY(&mchange));
+                }
+                else if (Input_getMouseButton(MOUSE_BUTTON_MIDDLE))
+                {
+                    rot += Vector_getX(&mchange) + Vector_getY(&mchange);
+                }
+            
+                Camera_setPosition(camera, Point_createFromVector(cpos));
+                Camera_setZoom(camera, zoom);
+                Camera_setRotation(camera, rot);
+            }
+
             // Stuff of interest    
             {    
 				Node* p = objects->first;
@@ -137,32 +158,7 @@ int main()
                 if (color > 24)
                 {
                     color -= 24;
-                    fprintf(stderr, "loool\n");
                 }
-                
-                Point mpos = Input_getMousePos();
-                if (Point_getX(&mpos) - Point_getX(&old_mpos) || Point_getY(&mpos) - Point_getY(&old_mpos))
-                {
-                    if (Input_getMouseButton(MOUSE_BUTTON_LEFT))
-                    {
-                        cx += 1 * (Point_getX(&mpos) - Point_getX(&old_mpos));
-                        cy += 1 * (Point_getY(&mpos) - Point_getY(&old_mpos));
-                    }
-                    else if (Input_getMouseButton(MOUSE_BUTTON_RIGHT))
-                    {
-                        zoom += 0.01 * (Point_getX(&mpos) - Point_getX(&old_mpos) + Point_getY(&mpos) - Point_getY(&old_mpos));
-                    }
-                    else if (Input_getMouseButton(MOUSE_BUTTON_MIDDLE))
-                    {
-                        rot += 1 * (Point_getX(&mpos) - Point_getX(&old_mpos) + Point_getY(&mpos) - Point_getY(&old_mpos));
-                    }
-                
-                    old_mpos = mpos;
-                    Camera_setPosition(camera, Point_createFromXY(-cx, -cy));
-                    Camera_setZoom(camera, zoom);
-                    Camera_setRotation(camera, rot);
-                }
-                
             }
 
             Graphics_render();

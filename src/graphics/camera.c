@@ -37,7 +37,7 @@ void Camera_setZoom(Camera* camera, float zoom)
 {
     assert(NULL != camera);
 
-    if (zoom <= 0)
+    if (zoom <= 0.01)
         zoom = 0.01;
     if (zoom >= 100)
        zoom = 99;

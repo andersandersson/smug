@@ -67,7 +67,7 @@ int main()
     TIME t = Platform_getTime();
     TIME nexttime = t;
     TIME lastFpsCheck = t;
-    TIME delay = 1.0f/60.0f;
+    TIME delay = 1.0f/20.0f;
     int fps = 0;
     Vector cpos = Vector_create2d(0,0);
     float zoom = 1;
@@ -92,11 +92,34 @@ int main()
             if (Input_getKey(KEY_F2))
                 Graphics_setRenderMode(RENDER_ALL);
                 
+            // Camera controls    
+            Vector mchange = Input_getMouseScreenMovement();
+            if (Vector_squareLength(mchange))
+            {
+                if (Input_getMouseButton(MOUSE_BUTTON_LEFT))
+                {
+                    cpos = Vector_add(cpos, mchange);
+                }
+                else if (Input_getMouseButton(MOUSE_BUTTON_RIGHT))
+                {
+                    zoom += 0.05 * (Vector_getX(&mchange) + Vector_getY(&mchange));
+                }
+                else if (Input_getMouseButton(MOUSE_BUTTON_MIDDLE))
+                {
+                    rot += Vector_getX(&mchange) + Vector_getY(&mchange);
+                }
+            
+                Camera_setPosition(camera, Point_createFromVector(cpos));
+                Camera_setZoom(camera, zoom);
+                Camera_setRotation(camera, rot);
+            }
+
+    
             // Stuff of interest    
             {    
                     
                 boxpos = Point_addVector(boxpos, Vector_create2d(Controller_getAxisValue(master, 0) * 8, 
-                                                                    Controller_getAxisValue(master, 1) * 8));   
+                                                                    Controller_getAxisValue(master, 1) * -8));   
                 
                 if (Controller_wasButtonTriggered(master, 0))
                 {
@@ -107,27 +130,6 @@ int main()
                 }
                                 
                 Drawable_setPos(box, boxpos);
-               
-                Vector mchange = Input_getMouseScreenMovement();
-                if (Vector_squareLength(mchange))
-                {
-                    if (Input_getMouseButton(MOUSE_BUTTON_LEFT))
-                    {
-                        cpos = Vector_add(cpos, mchange);
-                    }
-                    else if (Input_getMouseButton(MOUSE_BUTTON_RIGHT))
-                    {
-                        zoom += 0.05 * (Vector_getX(&mchange) + Vector_getY(&mchange));
-                    }
-                    else if (Input_getMouseButton(MOUSE_BUTTON_MIDDLE))
-                    {
-                        rot += Vector_getX(&mchange) + Vector_getY(&mchange);
-                    }
-                
-                    Camera_setPosition(camera, Point_createFromVector(cpos));
-                    Camera_setZoom(camera, zoom);
-                    Camera_setRotation(camera, rot);
-                }
             }
 
             Graphics_render();

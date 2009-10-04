@@ -80,7 +80,7 @@ static void setHook(unsigned int device, unsigned int trigger, void* data, int (
 static void inputHandler(int device, int trigger, INPUTSTATE state)
 {
     assert(NULL != hooks_devices);
-	fprintf(stderr, "Input: Got trigger: %i\n", trigger);
+	//fprintf(stderr, "Input: Got trigger: %i\n", trigger);
     
     // Call all  hooks connected to the trigger
     ArrayList* triggerarray = ArrayList_get(hooks_devices, device);
