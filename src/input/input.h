@@ -24,11 +24,14 @@ BOOL Input_isInitialized();
   */
 void Input_terminate();
 
-Point Input_getMousePos();
+INPUTSTATE Input_getKey(unsigned int key);
+INPUTSTATE Input_getMouseButton(unsigned int button);
+Vector Input_getMouseScreenMovement();
+Point Input_getMouseScreenPosition();
+Vector Input_getMouseMovement();
+Point Input_getMousePosition();
 
-BOOL Input_getKey(unsigned int key);
 INPUTSTATE Input_getInputState(int device, int id);
-BOOL Input_getMouseButton(unsigned int button);
 
 void Input_connectController(Controller* controller, unsigned int slot);
 void Input_disconnectController(unsigned int slot);

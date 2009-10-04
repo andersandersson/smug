@@ -40,6 +40,18 @@ void Vector_setX(Vector* v, float x);
 void Vector_setY(Vector* v, float y);
 
 
+/**
+ * Get the X coordinate of the vector
+ */
+float Vector_getX(Vector* v);
+
+
+/**
+ * Get the Y coordinate of the vector
+ */
+float Vector_getY(Vector* v);
+
+
 // Dimension independent functions 
 // -------------------------------
 
@@ -89,6 +101,17 @@ Vector Vector_normalize(Vector v);
  * in the plane specified by the normal n.
  */
 Vector Vector_projection(Vector v, Vector n);
+
+
+/**
+ * Calculate the length of the Vector v.
+ */
+float Vector_length(Vector v);
+
+/**
+ * Calculate the square length of the Vector v.
+ */
+float Vector_squareLength(Vector v);
 
 
 // Miscellaneous vector functions

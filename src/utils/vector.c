@@ -27,11 +27,19 @@ void Vector_setX(Vector* v, float x)
     v->d[0] = x;
 }
 
-
 void Vector_setY(Vector* v, float y)
 {
     v->d[1] = y;
 }
+float Vector_getX(Vector* v)
+{
+    return v->d[0];
+}
+float Vector_getY(Vector* v)
+{
+    return v->d[1];
+}
+
 
 
 Vector Vector_add(Vector v, Vector w)
@@ -112,13 +120,13 @@ Vector Vector_normalize(Vector v)
 {
     Vector u;
     int i;
-    float size = sqrt(Vector_dotProduct(v, v));
+    float length = sqrt(Vector_dotProduct(v, v));
 
     u.size = v.size;
   
     for(i=0; i < v.size; i++) 
     {
-        u.d[i] = v.d[i] / size;
+        u.d[i] = v.d[i] / length;
     }
 
     return u;
@@ -128,6 +136,16 @@ Vector Vector_normalize(Vector v)
 Vector Vector_projection(Vector v, Vector n)
 {
     return Vector_sub(v, Vector_multiply(n, Vector_dotProduct(v, n)));
+}
+
+float Vector_length(Vector v)
+{
+    return sqrt(Vector_dotProduct(v, v));
+}
+
+float Vector_squareLength(Vector v)
+{
+    return Vector_dotProduct(v, v);
 }
 
 void Vector_print(Vector v)

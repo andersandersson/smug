@@ -7,6 +7,7 @@
 #include "utils/linkedlist.h"
 #include "utils/hook.h"
 
+#include "graphics/graphics.h"
 #include "platform/platform.h"
 
 static BOOL isInitialized = FALSE;
@@ -145,7 +146,7 @@ void Input_disconnectController(unsigned int slot)
 	ArrayList_set(controllers, slot, NULL);	
 }
 
-BOOL Input_getKey(unsigned int key)
+INPUTSTATE Input_getKey(unsigned int key)
 {
 	assert(key >= KEY_BASE && key <= KEY_LAST);
 	return Platform_getInputState(DEVICE_KEYBOARD, key);
@@ -160,13 +161,52 @@ Point Input_getMousePos()
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YNEG)) * windowSize.d[1]);
 }
 
+
+INPUTSTATE Input_getMouseButton(unsigned int button)
+{
+	return Platform_getInputState(DEVICE_MOUSE, button) == INPUTSTATE_PRESSED;
+}
+
+Vector Input_getMouseScreenMovement()
+{
+    static Point last_pos;
+    Point pos = Input_getMouseScreenPosition();
+    Vector retval = Point_distanceToPoint(pos, last_pos);
+    last_pos = pos;
+    return retval;
+}
+
+Point Input_getMouseScreenPosition()
+{
+    Vector screenSize = Graphics_getScreenSize();
+    return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XNEG)) * Vector_getX(&screenSize) * 0.5f,
+                                    (Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) - 
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YNEG)) * Vector_getY(&screenSize) * 0.5f);
+}
+
+Vector Input_getMouseMovement()
+{
+    static Point last_pos;
+    Point pos = Input_getMousePosition();
+    Vector retval = Point_distanceToPoint(pos, last_pos);
+    last_pos = pos;
+    return retval;
+}
+
+Point Input_getMousePosition()
+{
+    return Point_createFromXY(Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XNEG),
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) - 
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YNEG));
+}
+
+
+
+
 INPUTSTATE Input_getInputState(int device, int id)
 {
 	return Platform_getInputState(device, id);	
-}
-
-BOOL Input_getMouseButton(unsigned int button)
-{
-	return Platform_getInputState(DEVICE_MOUSE, button) == INPUTSTATE_PRESSED;
 }
 
