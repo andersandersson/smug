@@ -6,6 +6,7 @@
 
 #include "stdio.h"
 
+// Holds information of physical joystick
 typedef struct JoystickInfo
 {
     int buttons;
@@ -16,17 +17,28 @@ typedef struct JoystickInfo
 
 static BOOL isInitialized = FALSE;
 
+// Size of window in pixels
 static Vector windowSize;
 
+// State array for keyboard
 static INPUTSTATE keyState[KEY_LAST - KEY_BASE];
+
+// State array for mouse
 static INPUTSTATE mouseState[MOUSE_LAST - MOUSE_BASE];
+
+// State array for joysticks
 static JoystickInfo joyState[DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE];
 
+// Holds the current input handler
 static void (*inputHandler)(int device, int trigger, INPUTSTATE state) = NULL;
 
+// Converts a platform key id to a trigger id
 static int convertKeyToTrigger(int key) { return KEY_BASE + key; }
+
+// Converts a platform moouse button id to a trigger id
 static int convertMouseButtonToTrigger(int button) { return MOUSE_BUTTON_BASE + button; }
 
+// Reset the state of a joystick
 static void clearJoystickState(unsigned int joystick)
 {
     static int i;
@@ -39,6 +51,7 @@ static void clearJoystickState(unsigned int joystick)
     }
 }
 
+// Reset the state of all input
 static void clearInputState()
 {
     static int i;
@@ -56,7 +69,7 @@ static void clearInputState()
     }
 }
 
-
+// Callback for platform key events
 static void GLFWCALL keyCallback(int key, int action)
 {
     assert(NULL != inputHandler);
@@ -66,6 +79,7 @@ static void GLFWCALL keyCallback(int key, int action)
     inputHandler(DEVICE_KEYBOARD, trigger, keyState[trigger]);
 }
 
+// Callback for platform mousebutton events
 static void GLFWCALL mouseButtonCallback(int button, int action)
 {
     assert(NULL != inputHandler);
@@ -75,6 +89,7 @@ static void GLFWCALL mouseButtonCallback(int button, int action)
     inputHandler(DEVICE_MOUSE, trigger, mouseState[trigger]);
 }
 
+// Callback for platform mouse move events
 static void GLFWCALL mousePosCallback(int x, int y)
 {
     assert(NULL != inputHandler);
@@ -143,6 +158,7 @@ static void GLFWCALL mousePosCallback(int x, int y)
     }
 }
 
+// Callback for platform mouse wheel events
 static void GLFWCALL mouseWheelCallback(int pos)
 {
     assert(NULL != inputHandler);
@@ -165,6 +181,7 @@ static void GLFWCALL mouseWheelCallback(int pos)
     old_pos = pos;    
 }
 
+// Update the state of all connected joysticks
 static void updateJoysticks()
 {
     static unsigned char buttons[JOYSTICK_BUTTON_LAST - JOYSTICK_BUTTON_BASE];
@@ -242,6 +259,7 @@ void Platform_detectJoysticks()
     }
 }
 
+// A placeholder for an inputhandler
 static void dummyInputHandler(int device, int trigger, INPUTSTATE state)
 {
     fprintf(stderr, "Got input event. Device: %i, trigger: %i, state: %f\n", device, trigger, state);

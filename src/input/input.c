@@ -10,17 +10,24 @@
 #include "graphics/graphics.h"
 #include "platform/platform.h"
 
+// System init value
 static BOOL isInitialized = FALSE;
 
+// List of connected controllers
 static ArrayList* controllers = NULL;
 
-static ArrayList* hooks_devices = NULL; // a 2d array with linked lists, holds [device][trigger][hooks]
+// A 2d table with linked lists, holds [device][trigger][list of hooks]
+static ArrayList* hooks_devices = NULL; 
 
+// Initialize the array that holds all trigger hooks 
 static void initHookArray()
 {
+    // Dimension 1 of devices
     hooks_devices = ArrayList_newFromCapacity(DEVICE_COUNT);
     int i;
     ArrayList* triggerList;
+    
+    // Setup trigger lists for keyboard
     triggerList = ArrayList_newFromCapacity(KEY_COUNT);
     ArrayList_set(hooks_devices, DEVICE_KEYBOARD - DEVICE_BASE, triggerList);    
     for (i = 0; i < KEY_COUNT; i++)
@@ -28,6 +35,7 @@ static void initHookArray()
         ArrayList_set(triggerList, i, LinkedList_new());
     }
 
+    // Setup trigger lists for mouse
     triggerList = ArrayList_newFromCapacity(MOUSE_COUNT);
     ArrayList_set(hooks_devices, DEVICE_MOUSE - DEVICE_BASE, triggerList);    
     for (i = 0; i < MOUSE_COUNT; i++)
@@ -35,6 +43,7 @@ static void initHookArray()
         ArrayList_set(triggerList, i, LinkedList_new());
     }
 
+    // Setup trigger lists for joystick
     int j;
     for (j = 0; j < JOYSTICK_COUNT; j++)
     {
@@ -47,6 +56,7 @@ static void initHookArray()
     }
 }
 
+// A helper function for freeing trigger hook table
 static void freeHooksPart(void* hooklist)
 {
     assert(NULL != hooklist);
@@ -55,6 +65,7 @@ static void freeHooksPart(void* hooklist)
     LinkedList_delete(list);
 }
 
+// A helper function for freeing trigger hook table
 static void freeTriggersPart(void* triggerarray)
 {
     assert(NULL != triggerarray);
@@ -62,6 +73,7 @@ static void freeTriggersPart(void* triggerarray)
     ArrayList_delete(triggerarray);
 }
 
+// Free the hook table
 static void freeHookArray()
 {
     assert(NULL != hooks_devices);
@@ -70,6 +82,7 @@ static void freeHookArray()
     hooks_devices = NULL;
 }
 
+// Connect a hook to a specific input trigger
 static void setHook(unsigned int device, unsigned int trigger, void* data, int (*hook)(void*, void*))
 {
     ArrayList* triggerarray = ArrayList_get(hooks_devices, device);
@@ -77,12 +90,13 @@ static void setHook(unsigned int device, unsigned int trigger, void* data, int (
     LinkedList_addLast(hooklist, Hook_newFromFunction(data, hook));
 }
 
+// Handle incoming input events
 static void inputHandler(int device, int trigger, INPUTSTATE state)
 {
     assert(NULL != hooks_devices);
 	//fprintf(stderr, "Input: Got trigger: %i\n", trigger);
     
-    // Call all  hooks connected to the trigger
+    // Call all hooks connected to the trigger
     ArrayList* triggerarray = ArrayList_get(hooks_devices, device);
     LinkedList* hooklist = ArrayList_get(triggerarray, trigger);
     Hook* hook;
@@ -100,6 +114,7 @@ int Input_init()
 	assert(Platform_isInitialized());
 	assert(Platform_isWindowOpen());
 
+    // Register this system as a handler for incoming events
 	Platform_registerInputHandler(&inputHandler);
 	
 	controllers = ArrayList_new();

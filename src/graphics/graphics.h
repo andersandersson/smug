@@ -34,10 +34,10 @@
 /**
  * Initialize Graphics subsystem
  *
- * This creates a view, mapping the given width
+ * This creates a view, mapping a screen of the given width
  * and height to the current window.
- * @param width The width of the view in pixels.
- * @param height The height of the view in pixels.
+ * @param width The width of the screen in pixels.
+ * @param height The height of the screen in pixels.
  */
 int Graphics_init(int width, int height);
 
@@ -48,26 +48,34 @@ BOOL Graphics_isInitialized();
 
 /**
  * Returns the current size of the screen
+ * @return Vector the current screen size
  */
 Vector Graphics_getScreenSize(); 
 
-/** Render one frame.
-  */
+/** 
+ * Render one frame.
+ */
 void Graphics_render();
 
-/** Registers a drawable for rendering.
-  */
+/**
+ * Registers a drawable for rendering.
+ */
 void Graphics_addDrawable(Drawable* d);
 
-/** Terminate the graphics component of the engine.
-  */
+/**
+ * Terminate the graphics component of the engine.
+ */
 void Graphics_terminate();
 
-/** Gets the current camera
+/** 
+ * Gets the current camera
  */
 Camera* Graphics_getCamera();
 
-/** Sets the properties of a layer
+/** 
+ * Sets the properties of a layer
+ * @param id the layer id
+ * @param parallax value
  */
 void Graphics_setupLayer(unsigned int id, float parallax);
 

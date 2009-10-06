@@ -6,6 +6,10 @@
 #include "utils/point.h"
 #include "utils/vector.h"
 
+/**
+ * Camera
+ * A versatile camera for viewing the world.
+ */
 typedef struct Camera
 {
     Point pos;
@@ -14,12 +18,29 @@ typedef struct Camera
     Vector center;
 } Camera;
 
-
+/**
+ * Create new Camera
+ */
 Camera* Camera_new(Vector center);
+
+/**
+ * Delete Camera
+ */
 void Camera_delete(void* camera);
 
+/**
+ * Set position of a Camera
+ */
 void Camera_setPosition(Camera* camera, Point p);
+
+/**
+ * Set rotation angle of a Camera
+ */
 void Camera_setRotation(Camera* camera, float r);
+
+/**
+ * Set zoom-level of a Camera
+ */
 void Camera_setZoom(Camera* camera, float zoom);
 
 

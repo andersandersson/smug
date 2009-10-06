@@ -82,7 +82,7 @@ void Controller_disconnect(Controller* controller)
 	controller->_connected = FALSE;
 }
 
-
+// Callback used for setting the positive component of an axis
 static int setAxisPosCallback(void* axis, void* state)
 {
     Axis* a = (Axis*)axis;
@@ -97,6 +97,7 @@ static int setAxisPosCallback(void* axis, void* state)
     return 1;
 }
 
+// Callback used for setting the negative component of an axis
 static int setAxisNegCallback(void* axis, void* state)
 {
     Axis* a = (Axis*)axis;
@@ -111,6 +112,7 @@ static int setAxisNegCallback(void* axis, void* state)
     return 1;
 }
 
+// Callback used for setting the state of a button
 static int setButtonCallback(void* button, void* state)
 {
     Button* b = (Button*)button;

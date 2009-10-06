@@ -189,15 +189,33 @@ typedef float INPUTSTATE;
 #define DEVICE_BASE DEVICE_KEYBOARD
 #define DEVICE_COUNT DEVICE_LAST-DEVICE_BASE
 
+/**
+ * Initializes the platform layer and opens a window.
+ * @param width the width of the window in pixels
+ * @param height the height of the window in pixels
+ * @param fullscreen fullscreen or not
+ * @return int 0 on fail, 1 on succes
 int Platform_init(int width, int height, BOOL fullscreen);
 
 /** Returns true if the system is initialized
  */
 BOOL Platform_isInitialized();
 
+/**
+ * Terminate Platform system
+ */
 void Platform_terminate();
 
+
+/** 
+ * Check if the window is open
+ */
 BOOL Platform_isWindowOpen();
+
+
+/**
+ * Refresh graphhics in window
+ */
 void Platform_refreshWindow();
 
 /**
@@ -205,14 +223,39 @@ void Platform_refreshWindow();
  */
 Vector Platform_getWindowSize(); 
 
+/**
+ * Get the current system time
+ */
 TIME Platform_getTime();
+
+/**
+ * Sleep for a given amount of seconds
+ */
 void Platform_sleep(TIME seconds);
 
+/**
+ * Update platform layer
+ */
 void Platform_update();
+
+/**
+ * Register a handler for new input events
+ */
 void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPUTSTATE state));
+
+/**
+ * Unregister previously registered handler
+ */
 void Platform_unregisterInputHandler();
 
+/**
+ * Get the input state of a given trigger
+ */
 INPUTSTATE Platform_getInputState(int device, int trigger);
+
+/**
+ * Search for connected joysticks
+ */
 void Platform_detectJoysticks();
 
 #endif // PLATFORM_H

@@ -7,7 +7,7 @@
 
 #include "utils/vector.h"
 
-/** A simple rectangle type.
+/** A simple point type.
   *
   */
 typedef struct Point
@@ -51,11 +51,29 @@ Point Point_addVector(Point p, Vector v);
  */
 Vector Point_distanceToPoint(Point p1, Point p2);
 
-
+/** 
+ * Get the X component of a Point
+ * @param p pointer to a Point
+ */
 float Point_getX(Point* p);
+/** 
+ * Get the Y component of a Point
+ * @param p pointer to a Point
+ */
 float Point_getY(Point* p);
 
+/** 
+ * Set the X component of a Point
+ * @param p pointer to a Point
+ * @param x x-value
+ */
 void Point_setX(Point* p, float x);
+
+/** 
+ * Set the Y component of a Point
+ * @param p pointer to a Point
+ * @param y y-value
+ */
 void Point_setY(Point* p, float y);
 
 #endif // PHYSICS_POINT_H

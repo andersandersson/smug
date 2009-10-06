@@ -17,7 +17,7 @@ typedef struct Color
   */
 Color* Color_new(float r, float g, float b, float a);
 
-/** Detele a Color struct
+/** Delete a Color struct
   *
   * @relatesalso Color
   */

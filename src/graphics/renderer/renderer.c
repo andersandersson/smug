@@ -40,6 +40,7 @@ static void renderLayer(Renderer* renderer, Layer* layer)
 
     glPushMatrix();
 
+    // TODO: Fix zoom thingies
     glScalef(1.0f + (camera->scale.d[0] - 1.0f)  * p, 1.0f + (camera->scale.d[1] - 1.0f)  * p, 1.0f);
     glTranslatef(-Point_getX(&camera->pos) * p, -Point_getY(&camera->pos) * p, 0.0f);
 

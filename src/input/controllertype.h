@@ -1,7 +1,10 @@
 #ifndef SMUG_CONTROLLERTYPE_H
 #define SMUG_CONTROLLERTYPE_H
 
-
+/**
+ * ControllerType
+ * Defines a template for a controller.
+ */
 typedef struct ControllerType
 {
     unsigned int id;
@@ -10,6 +13,12 @@ typedef struct ControllerType
     float threshold;
 } ControllerType;
 
+/**
+ * Create a new ControllerType. All buttons and axes are 0-indexed
+ * in the instantiated controller.
+ * @param buttons how many buttons the controller will have
+ * @param axes how many axes the controller will have
+ */
 ControllerType* ControllerType_new(unsigned int buttons, unsigned int axes);
 
 
