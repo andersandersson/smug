@@ -310,6 +310,7 @@ BOOL Platform_isInitialized()
 void Platform_terminate()
 {
     NOTIFY("Terminating platform layer");
+    glfwCloseWindow();
     glfwTerminate();
     isInitialized = FALSE;
 }

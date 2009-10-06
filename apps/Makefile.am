@@ -8,9 +8,21 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_LDFLAGS = -L../src/graphics -lgraphics -L../src/common -lcommon -L../src/utils -lutils -L../src/platform -lplatform -L../src/physics -lphysics
+AM_LDFLAGS = \
+-L../src/graphics \-lgraphics \
+-L../src/physics \-lphysics \
+-L../src/input -linput \
+-L../src/common -lcommon \
+-L../src/platform -lplatform \
+-L../src/utils -lutils 
+
 AM_CFLAGS = -I../src/
 
-EXTRA_PROGRAMS = shapes
-shapes_SOURCES = shapes.c
+EXTRA_PROGRAMS = app-sprites app-input app-shapes
+app_sprites_SOURCES = app-sprites.c
+app_input_SOURCES = app-input.c
+app_shapes_SOURCES = app-shapes.c
+
+
+
 

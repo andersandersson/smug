@@ -6,18 +6,23 @@
 #include "common/log.h"
 #include "common/common.h"
 
+#include "input/input.h"
 
-int main(char argc, char* argv[])
+
+int main()
 {
     Log_init();
     
-    if (!Platform_init())
+    if (!Platform_init(640, 480, FALSE))
+        return 0;
+        
+    Log_print("Initializing\n");
+    
+    if (!Input_init())
         return 0;
     
-    Log_print("Initializing\n");
-    Physics_init();
-
-    Platform_openWindow(640, 480, FALSE);    
+    if (!Physics_init())
+        return 0;       
 
     if (!Graphics_init(640, 480))
         return 0;
@@ -42,15 +47,15 @@ int main(char argc, char* argv[])
         {   
             float x, y;
 
-            if (Platform_getKey(KEY_ESC))
+            if (Input_getKey(KEY_ESC))
                 break;
 
 
-            if (Platform_getKey(KEY_DOWN))
+            if (Input_getKey(KEY_DOWN))
                 {
                     y = 10.0;
                 } 
-            else if(Platform_getKey(KEY_UP))
+            else if(Input_getKey(KEY_UP))
                 {
                     y = -10.0;
                 }
@@ -60,11 +65,11 @@ int main(char argc, char* argv[])
                 }
 
 
-            if (Platform_getKey(KEY_RIGHT))
+            if (Input_getKey(KEY_RIGHT))
                 {
                     x = 10.0;
                 } 
-            else if(Platform_getKey(KEY_LEFT))
+            else if(Input_getKey(KEY_LEFT))
                 {
                     x = -10.0;
                 }
@@ -99,8 +104,6 @@ int main(char argc, char* argv[])
     Graphics_terminate();
 
     Physics_terminate();
-    
-    Platform_closeWindow();   
     
     Platform_terminate();
     

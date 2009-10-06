@@ -195,9 +195,11 @@ typedef float INPUTSTATE;
  * @param height the height of the window in pixels
  * @param fullscreen fullscreen or not
  * @return int 0 on fail, 1 on succes
+ */
 int Platform_init(int width, int height, BOOL fullscreen);
 
-/** Returns true if the system is initialized
+/**
+ * Returns true if the system is initialized
  */
 BOOL Platform_isInitialized();
 

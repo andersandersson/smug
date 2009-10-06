@@ -1,1 +1,0 @@
-rm -f demo-sprites.o && make demo-sprites.exe && ./demo-sprites

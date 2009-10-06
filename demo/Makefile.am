@@ -17,7 +17,5 @@ AM_LDFLAGS = \
 
 AM_CFLAGS = -I../src/
 
-EXTRA_PROGRAMS = demo-sprites demo-input
-demo_sprites_SOURCES = demo-sprites.c
-demo_input_SOURCES = demo-input.c
+EXTRA_PROGRAMS = 
 
