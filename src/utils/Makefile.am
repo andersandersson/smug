@@ -19,5 +19,6 @@ arraylist.c arraylist.h \
 hook.c hook.h \
 vector.c vector.h \
 rectangle.h rectangle.c \
-point.h point.c
+point.h point.c \
+map.c map.h
 

@@ -8,6 +8,14 @@
 
 #include "input/input.h"
 
+int collision_hook(void* lparam, void* rparam)
+{
+    CollisionData* data = (CollisionData*) rparam;
+
+    DEBUG("Result (%f): %f, %f", Rectangle_getW((Rectangle*)data->left->shape->data), Point_getX(data->result), Point_getY(data->result));
+    data->left->position = Point_addVector(data->left->position, *data->result);
+    data->left->new_position = data->left->position;
+}
 
 int main()
 {
@@ -28,13 +36,14 @@ int main()
         return 0;
 
 
-    Shape* shape = Shape_createFromRectangle(Rectangle_createFromXYWH(10.0, 10.0, 300.0, 80.0));
+    Shape* shape = Shape_createFromRectangle(Rectangle_createFromXYWH(10.0, 10.0, 60.0, 60.0));
     Body* body = Body_new();
+    Body_setPosition(body, 300.0, 300.0);
     Body_setShape(body, shape);
 
-    Shape* shape2 = Shape_createFromRectangle(Rectangle_createFromXYWH(10.0, 10.0, 300.0, 80.0));
+    Shape* shape2 = Shape_createFromRectangle(Rectangle_createFromXYWH(10.0, 10.0, 80.0, 80.0));
     Body* body2 = Body_new();
-    body2->position = Point_createFromXY(100.0, 100.0);
+    Body_setPosition(body2, 100.0, 100.0);
     Body_setShape(body2, shape2);
 
     TIME t, next_t;
@@ -43,6 +52,12 @@ int main()
 
     Physics_addBody(body);
     Physics_addBody(body2);
+
+    Hook* hook = Hook_newFromFunction(NULL, collision_hook);
+    
+    Physics_addCollisionHook(body->type, body2->type, hook);
+    Physics_addCollisionHook(body->type+1, body2->type, hook);
+
     while (1)
         {   
             float x, y;
@@ -98,6 +113,8 @@ int main()
     Shape_delete(shape);
     Body_delete(body2);
     Shape_delete(shape2);
+
+    Hook_delete(hook);
     
     Log_print("Stopped\n");
 

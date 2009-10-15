@@ -8,14 +8,15 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-TESTS = test-linkedlist test-arraylist test-hook test-vector
+TESTS = test-linkedlist test-arraylist test-hook test-vector test-map
 
 AM_LDFLAGS = -L../ -L../../common -lutils -lcommon
 AM_CFLAGS = -I../ -I../../
 
-check_PROGRAMS = test-linkedlist test-arraylist test-hook test-vector
+check_PROGRAMS = test-linkedlist test-arraylist test-hook test-vector test-map
 
 test_linkedlist_SOURCES = test-linkedlist.c 
 test_arraylist_SOURCES = test-arraylist.c
 test_hook_SOURCES = test-hook.c
 test_vector_SOURCES = test-vector.c
+test_map_SOURCES = test-map.c
