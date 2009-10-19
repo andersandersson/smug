@@ -102,9 +102,9 @@ int main()
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                     Physics_update(0);
                     next_t += 0.03;
+		    Platform_refreshWindow();
                 }
-
-            Platform_refreshWindow();
+	    Platform_sleep(next_t-t);
         }
     Physics_removeBody(body);
     Physics_removeBody(body2);
