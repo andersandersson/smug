@@ -5,7 +5,7 @@
 #include "utils/point.h"
 #include "graphics/color.h"
 
-void Physics_drawShape(Shape* shape, Point offset);
+void Physics_drawShape(Shape* shape, Point offset, Color color);
 void Physics_drawLine(Point source, Point dest, Color color);
 
 #endif // SMUG_PHYSICS_DEBUG_H

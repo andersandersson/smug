@@ -11,3 +11,10 @@ void Smug_assert(BOOL result, char* expression, char* file, int line)
     }
 }
 #endif
+
+void swap_float(float* left, float* right)
+{
+    float temp = *right;
+    *right = *left;
+    *left = temp;
+}

@@ -21,6 +21,8 @@ typedef unsigned char BOOL;
     #define assert(x) x
 #endif
 
+void swap_float(float* left, float* right);
+
 typedef double TIME;
 
 #endif // SMUG_COMMON_COMMON_H

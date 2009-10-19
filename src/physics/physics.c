@@ -17,6 +17,7 @@ typedef struct _CollisionType
 
 static Map* body_map;
 static Map* collision_hooks;
+static LinkedList* collision_list;
 
 static _CollisionType* _CollisionType_new()
 {
@@ -39,11 +40,22 @@ static BOOL _compareCollisionType(void* left, void* right)
     return FALSE;
 }
 
+CollisionData* CollisionData_new() 
+{
+    return malloc(sizeof(CollisionData));
+}
+
+void CollisionData_delete(CollisionData* data)
+{
+    free(data);
+}
+
 int Physics_init()
 {
     body_map = Map_new();
     collision_hooks = Map_new();
     collision_hooks->compareKeys = _compareCollisionType;
+    collision_list = LinkedList_new();
 
     DEBUG("Initializing physics");
 
@@ -59,35 +71,9 @@ void Physics_terminate()
             LinkedList_delete((LinkedList*) node->value);
         }
 
+    LinkedList_delete(collision_list);
     Map_delete(body_map);
     Map_delete(collision_hooks);
-}
-
-BOOL Physics_intervalOverlap(float left_l, float left_r, float right_l, float right_r, float* dest)
-{
-    float min_l = (left_l < left_r ? left_l : left_r);
-    float max_l = (left_l > left_r ? left_l : left_r);
-    float min_r = (right_l < right_r ? right_l : right_r);
-    float max_r = (right_l > right_r ? right_l : right_r);
-
-    if(min_l < min_r)
-        {
-            if(max_l > min_r)
-                {
-                    *dest = min_r - max_l;
-                    return TRUE;
-                }
-        }
-    else
-        {
-            if(max_r > min_l)
-                {
-                    *dest = max_r - min_l;
-                    return TRUE;
-                }
-        }
-
-    return FALSE;
 }
 
 void Physics_addCollisionHook(BODY_TYPE left, BODY_TYPE right, Hook* hook)
@@ -136,42 +122,113 @@ void Physics_removeBody(Body* body)
         }
 }
 
-BOOL Physics_collideRectangleRectangle(Body* left, Body* right, Vector* result)
+BOOL Physics_collidePoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t)
 {
-    float left_x = Rectangle_getX((Rectangle*)left->shape->data) + Point_getX(&(left->position));
-    float left_y = Rectangle_getY((Rectangle*)left->shape->data) + Point_getY(&(left->position));
-    float left_w = Rectangle_getW((Rectangle*)left->shape->data);
-    float left_h = Rectangle_getH((Rectangle*)left->shape->data);
+    float denumerator, numerator;
     
-    float right_x = Rectangle_getX((Rectangle*)right->shape->data) + Point_getX(&(right->position));
-    float right_y = Rectangle_getY((Rectangle*)right->shape->data) + Point_getY(&(right->position));
-    float right_w = Rectangle_getW((Rectangle*)right->shape->data);
-    float right_h = Rectangle_getH((Rectangle*)right->shape->data);
+    numerator = x1_start - x2_start;
+    denumerator = x2_end - x1_end + x1_start - x2_start;
     
-    float overlap_x, overlap_y;
-    
-    if(TRUE == Physics_intervalOverlap(left_x, left_x+left_w, right_x, right_x+right_w, &overlap_x) &&
-       TRUE == Physics_intervalOverlap(left_y, left_y+left_h, right_y, right_y+right_h, &overlap_y))
+    if(denumerator == 0) {
+        return FALSE;
+    }
+
+    *t = numerator / denumerator;
+
+    return TRUE;
+}
+
+BOOL Physics_collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end,
+                               float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end,
+                               float* t_in, float* t_out)
+{
+    float x1_in;
+    float x1_out;
+    float x2_in;
+    float x2_out;
+
+    BOOL res = TRUE;
+
+    res *= (1 - Physics_collidePoints1D(i1_x1_start, i1_x1_end, i2_x1_start, i2_x1_end, &x1_in));  
+    res *= (1 - Physics_collidePoints1D(i1_x1_start, i1_x1_end, i2_x2_start, i2_x2_end, &x1_out));  
+    res *= (1 - Physics_collidePoints1D(i1_x2_start, i1_x2_end, i2_x1_start, i2_x1_end, &x2_in));  
+    res *= (1 - Physics_collidePoints1D(i1_x2_start, i1_x2_end, i2_x2_start, i2_x2_end, &x2_out));  
+
+    if(TRUE == res)
         {
-            if(fabs(overlap_x) > fabs(overlap_y))
-                {
-                    Vector_setX(result, 0.0);
-                    Vector_setY(result, overlap_y);
-                }
-            else
-                {
-                    Vector_setX(result, overlap_x);
-                    Vector_setY(result, 0.0);
-                }
-            return TRUE;
+            return FALSE;
         }
+
+    if(x1_in > x1_out) swap_float(&x1_in, &x1_out);
+    if(x2_in > x2_out) swap_float(&x2_in, &x2_out);
+
+    *t_in = x1_in < x2_in ? x1_in : x2_in;
+    *t_out = x1_out > x2_out ? x1_out : x2_out;
+
+    return TRUE;
+}
+
+BOOL Physics_collideRectangleRectangle(Body* left, Body* right, CollisionData** collision_data)
+{
+    float t_x_in;
+    float t_x_out;
+    float t_y_in;
+    float t_y_out;
+
+    float left_x_start = Rectangle_getX(left->shape->data) + Point_getX(&left->position);
+    float left_x_end = Rectangle_getX(left->shape->data) + Point_getX(&left->new_position);
+    float left_width = Rectangle_getW(left->shape->data);
+
+    float right_x_start = Rectangle_getX(right->shape->data) + Point_getX(&right->position);
+    float right_x_end = Rectangle_getX(right->shape->data) + Point_getX(&right->new_position);
+    float right_width = Rectangle_getW(right->shape->data);
+
+    float left_y_start = Rectangle_getY(left->shape->data) + Point_getY(&left->position);
+    float left_y_end = Rectangle_getY(left->shape->data) + Point_getY(&left->new_position);
+    float left_height = Rectangle_getH(left->shape->data);
+
+    float right_y_start = Rectangle_getY(right->shape->data) + Point_getY(&right->position);
+    float right_y_end = Rectangle_getY(right->shape->data) + Point_getY(&right->new_position);
+    float right_height = Rectangle_getH(right->shape->data);
+
+    BOOL res = TRUE;
+
+    res *= (1 - Physics_collideInterval1D(left_x_start, left_x_end, left_x_start+left_width, left_x_end+left_width,
+                                          right_x_start, right_x_end, right_x_start+right_width, right_x_end+right_width,
+                                          &t_x_in, &t_x_out));
+
+    res *= (1 - Physics_collideInterval1D(left_y_start, left_y_end, left_y_start+left_height, left_y_end+left_height,
+                                          right_y_start, right_y_end, right_y_start+right_height, right_y_end+right_height,
+                                          &t_y_in, &t_y_out));
+
+    if(TRUE == res)
+        {
+            return FALSE;
+        }
+
+    // If either overlap exists before the other one enters
+    if(t_x_out < t_y_in || t_y_out < t_x_in)
+        {
+            return FALSE;
+        }
+    
+    
+    if(t_x_in < 1.0 && t_y_in < 1.0 && t_x_out > 0.0 && t_y_out > 0.0) {
+        (*collision_data) = CollisionData_new();
+        (*collision_data)->left = left;
+        (*collision_data)->right = right;
+        (*collision_data)->collisionTime = t_x_in > t_y_in ? t_x_in : t_y_in;
+        (*collision_data)->movement = Point_distanceToPoint(left->position, left->new_position);
+        
+        return TRUE;
+    }
 
     return FALSE;
 }
 
-void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisionHooks)
+void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions)
 {
-    CollisionData collision_data;
+    CollisionData* collision_data;
     Vector result;
     Node* left_node;
     Node* right_node;
@@ -193,7 +250,7 @@ void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* c
                     Body* left_body = (Body*) left_node->item;
                     Body* right_body = (Body*) right_node->item;
                     
-                    if(NULL != left_body->shape && NULL != right_body->shape)
+                    if(NULL == left_body->shape || NULL == right_body->shape)
                         {
                             continue;
                         }
@@ -201,21 +258,36 @@ void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* c
                     if(SHAPE_RECTANGLE == left_body->shape->type &&
                        SHAPE_RECTANGLE == right_body->shape->type)
                         {
-                            if(TRUE == Physics_collideRectangleRectangle(left_body, right_body, &result))
+                            if(TRUE == Physics_collideRectangleRectangle(left_body, right_body, &collision_data))
                                 {
-                                    collision_data.left = left_body;
-                                    collision_data.right = right_body;
-                                    collision_data.result = &result;
-                                    Hook_callAll(collisionHooks, (void*) &collision_data);
+                                    LinkedList_addLast(collisions, collision_data);
                                 }
                         }
                 }
         }
 }
 
+void Physics_handleCollisions(LinkedList* collisions, LinkedList* hooks)
+{
+    Node* node;
+
+    for(node = collisions->first; node != NULL; node = node->next)
+        {
+            CollisionData* data = (CollisionData*) node->item;
+
+            Hook_callAll(hooks, data);
+        }
+}
+
 void Physics_update(TIME time)
 {
     MapNode* node;
+    Node* list_node;
+
+    for(list_node = collision_list->last; list_node != NULL; list_node = list_node->prev)
+        {
+            LinkedList_remove(collision_list, list_node);
+        }
 
     for(node = body_map->first; node != NULL; node = node->next)
         {
@@ -230,7 +302,7 @@ void Physics_update(TIME time)
 
                     body->new_position = Point_addVector(body->new_position, body->movement);
                     
-                    body->position = body->new_position;
+                    //body->position = body->new_position;
                 }
         }
 
@@ -244,7 +316,7 @@ void Physics_update(TIME time)
 
             if(NULL != left && NULL != right)
                 {
-                    Physics_detectCollisions(left, right, (LinkedList*) node->value);
+                    Physics_detectCollisions(left, right, collision_list);
                 }
         }
 
@@ -259,7 +331,15 @@ void Physics_update(TIME time)
                 {
                     Body* body = list_node->item;
 
-                    Physics_drawShape(body->shape, body->position);
+                    Physics_drawShape(body->shape, body->position, Color_createFromRGBA(1.0, 0.0, 0.0, 1.0));
+                    Physics_drawLine(body->position, body->new_position, Color_createFromRGBA(0.0,1.0,0.0,1.0));
+                    Physics_drawShape(body->shape, body->new_position, Color_createFromRGBA(0.0, 1.0, 0.0, 1.0));
                 }
         }
+
+    for(node = collision_hooks->first; node != NULL; node = node->next)
+        {
+            Physics_handleCollisions(collision_list, (LinkedList*) node->value);
+        }
+
 }
