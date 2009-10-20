@@ -23,7 +23,7 @@ int collision_hook(void* lparam, void* rparam)
 
     if(0 != handle_collision) 
         {
-            data->left->new_position = data->left->position;
+            data->left->new_position = position;
         }
 }
 
@@ -48,7 +48,7 @@ int main()
 
     Shape* shape = Shape_createFromRectangle(Rectangle_createFromXYWH(-30.0, -30.0, 60.0, 60.0));
     Body* body = Body_new();
-    Body_setPosition(body, 300.0, 300.0);
+    Body_setPosition(body, 370.0, 300.0);
     Body_setShape(body, shape);
 
     Shape* shape2 = Shape_createFromRectangle(Rectangle_createFromXYWH(-40.0, -40.0, 80.0, 80.0));
@@ -72,8 +72,8 @@ int main()
     Body* current_body = body2;
     int tab_lock = 0;
     int space_lock = 0;
-    float x_dir = 10.0;
-    float y_dir = 10.0;
+    float x_dir = 5.0;
+    float y_dir = 2.0;
     while (1)
         {   
             float x, y;

@@ -142,10 +142,10 @@ BOOL Physics_collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_s
                                float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end,
                                float* t_in, float* t_out)
 {
-    float x1_in;
-    float x1_out;
-    float x2_in;
-    float x2_out;
+    float x1_in = 0;
+    float x1_out = 0;
+    float x2_in = 0;
+    float x2_out = 0;
 
     BOOL res = TRUE;
 
@@ -156,8 +156,8 @@ BOOL Physics_collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_s
 
     if(TRUE == res)
         {
-            if(max(i1_x1_start, i1_x2_start) < min(i2_x1_start, i2_x2_start) ||
-               max(i2_x1_start, i2_x2_start) < min(i1_x1_start, i1_x2_start))
+            if(max(i1_x1_start, i1_x2_start) <= min(i2_x1_start, i2_x2_start) ||
+               max(i2_x1_start, i2_x2_start) <= min(i1_x1_start, i1_x2_start))
                 {
                     return FALSE;
                 }
@@ -180,10 +180,10 @@ BOOL Physics_collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_s
 
 BOOL Physics_collideRectangleRectangle(Body* left, Body* right, CollisionData** collision_data)
 {
-    float t_x_in;
-    float t_x_out;
-    float t_y_in;
-    float t_y_out;
+    float t_x_in = 0;
+    float t_x_out = 0;
+    float t_y_in = 0;
+    float t_y_out = 0;
 
     float left_x_start = Rectangle_getX(left->shape->data) + Point_getX(&left->position);
     float left_x_end = Rectangle_getX(left->shape->data) + Point_getX(&left->new_position);
@@ -296,6 +296,7 @@ void Physics_update(TIME time)
 
     for(list_node = collision_list->last; list_node != NULL; list_node = list_node->prev)
         {
+            CollisionData_delete(list_node->item);
             LinkedList_remove(collision_list, list_node);
         }
 
