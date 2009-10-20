@@ -8,6 +8,8 @@
 
 #include "input/input.h"
 
+int handle_collision = 0;
+
 int collision_hook(void* lparam, void* rparam)
 {
     CollisionData* data = (CollisionData*) rparam;
@@ -18,7 +20,11 @@ int collision_hook(void* lparam, void* rparam)
     
 
     Physics_drawShape(data->left->shape, position, Color_createFromRGBA(0.0,0.0,1.0,1.0));
-    //data->left->new_position = data->left->position;
+
+    if(0 != handle_collision) 
+        {
+            data->left->new_position = data->left->position;
+        }
 }
 
 int main()
@@ -47,7 +53,7 @@ int main()
 
     Shape* shape2 = Shape_createFromRectangle(Rectangle_createFromXYWH(-40.0, -40.0, 80.0, 80.0));
     Body* body2 = Body_new();
-    Body_setPosition(body2, 100.0, 100.0);
+    Body_setPosition(body2, 300.0, 100.0);
     Body_setShape(body2, shape2);
 
     TIME t, next_t;
@@ -62,8 +68,12 @@ int main()
     Physics_addCollisionHook(body->type, body2->type, hook);
     Physics_addCollisionHook(body->type+1, body2->type, hook);
 
+    Body* other_body = body;
     Body* current_body = body2;
     int tab_lock = 0;
+    int space_lock = 0;
+    float x_dir = 10.0;
+    float y_dir = 10.0;
     while (1)
         {   
             float x, y;
@@ -119,6 +129,33 @@ int main()
                     tab_lock = 0;
                 }
 
+            if (Input_getKey(KEY_SPACE))
+                {
+                    if(space_lock == 0)
+                        {
+                            space_lock = 1;
+                            handle_collision = 1 - handle_collision;
+                        }
+                } 
+            else
+                {
+                    space_lock = 0;
+                }
+
+            if(Point_getX(&other_body->position) >= 640 ||
+               Point_getX(&other_body->position) <= 0)
+                {
+                    x_dir *= -1;
+                }
+
+            if(Point_getY(&other_body->position) >= 480 ||
+               Point_getY(&other_body->position) <= 0)
+                {
+                    y_dir *= -1;
+                }
+
+
+            Body_move(other_body, x_dir, y_dir);
             Body_move(current_body, x, y);
 
             t = Platform_getTime();

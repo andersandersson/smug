@@ -156,7 +156,17 @@ BOOL Physics_collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_s
 
     if(TRUE == res)
         {
-            return FALSE;
+            if(max(i1_x1_start, i1_x2_start) < min(i2_x1_start, i2_x2_start) ||
+               max(i2_x1_start, i2_x2_start) < min(i1_x1_start, i1_x2_start))
+                {
+                    return FALSE;
+                }
+            else
+                {
+                    *t_in = -100000.0;
+                    *t_out = 100000.0;
+                    return TRUE;
+                }
         }
 
     if(x1_in > x1_out) swap_float(&x1_in, &x1_out);
@@ -301,8 +311,6 @@ void Physics_update(TIME time)
                     Body* body = list_node->item;
 
                     body->new_position = Point_addVector(body->new_position, body->movement);
-                    
-                    //body->position = body->new_position;
                 }
         }
 
@@ -340,6 +348,21 @@ void Physics_update(TIME time)
     for(node = collision_hooks->first; node != NULL; node = node->next)
         {
             Physics_handleCollisions(collision_list, (LinkedList*) node->value);
+        }
+
+    for(node = body_map->first; node != NULL; node = node->next)
+        {
+            LinkedList* list;
+            Node* list_node;
+            
+            list = (LinkedList*) node->value;
+
+            for(list_node = list->first; list_node != NULL; list_node = list_node->next)
+                {
+                    Body* body = list_node->item;
+
+                    body->position = body->new_position;
+                }
         }
 
 }
