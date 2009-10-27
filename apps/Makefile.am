@@ -14,15 +14,13 @@ AM_LDFLAGS = \
 -L../src/input -linput \
 -L../src/common -lcommon \
 -L../src/platform -lplatform \
--L../src/utils -lutils 
+-L../src/utils -lutils \
+-L../src/engine -lsmug
 
 AM_CFLAGS = -I../src/
 
-EXTRA_PROGRAMS = app-sprites app-input app-shapes
+EXTRA_PROGRAMS = app-sprites app-input app-shapes app-linus
 app_sprites_SOURCES = app-sprites.c
 app_input_SOURCES = app-input.c
 app_shapes_SOURCES = app-shapes.c
-
-
-
-
+app_linus_SOURCES = app-linus.c

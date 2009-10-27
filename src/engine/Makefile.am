@@ -8,6 +8,14 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+AM_LDFLAGS = \
+-L../graphics \-lgraphics \
+-L../physics \-lphysics \
+-L../input -linput \
+-L../common -lcommon \
+-L../platform -lplatform \
+-L../utils -lutils
+
 AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
 
 noinst_LTLIBRARIES = libsmug.la

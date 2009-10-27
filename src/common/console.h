@@ -16,11 +16,13 @@
   */
 #define CONSOLE_PRINT_BUFFER_SIZE 1024
 
+
 /** Write text to the console
  *
  * @param fmt printf styled format string.
  */
 void Console_write(char* fmt, ...);
+
 
 /** Write a line of text to the console ending with newline
  *
@@ -28,6 +30,7 @@ void Console_write(char* fmt, ...);
  * @param fmt printf styled format string.
  */
 void Console_writeLine(char* fmt, ...);
+
 
 /** Read input to buffer.
  *
@@ -39,6 +42,7 @@ void Console_writeLine(char* fmt, ...);
  * @param maxlength Do not exceed this length when writing to the buffer
  */
 unsigned int Console_read(char* dest, unsigned int maxlength);
+
 
 /** Start a console loop.
  *
@@ -69,6 +73,7 @@ void Console_parseCommand(char* cmd);
  * @return TRUE if the command was handled, FALSE otherwise
  */
 BOOL Console_defaultParser(char* cmd);
+
 
 #endif // SMUG_COMMON_CONSOLE_H
 

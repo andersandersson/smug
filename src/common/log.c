@@ -39,7 +39,7 @@ BOOL Log_init()
 
 BOOL Log_isInitialized()
 {
-	return _isInitialized;
+	return _isInitialized();
 }
 
 void Log_terminate()
@@ -71,13 +71,15 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
     va_start(vl, fmt);
     
     // Only print log if correct log level is set
-    if(gCurrentLogLevel & level) 
+    if(gCurrentLogLevel & level)
     {
         // Print formatted string to the message buffer
         vsprintf(message, fmt, vl);
+        
+        _writePrefixStack();
          
         // Iterate over each char in the format string and output
-        for(c=0,c_max=strlen(format); c<c_max; c++) 
+        for(c=0,c_max=strlen(format); c<c_max; c++)
         {
             // Start reading a 'flag' when we hit an '%'
             if('%' == format[c] && FALSE == reading_flag)
@@ -128,8 +130,8 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
             {
                 Console_write("%c", format[c]);
             }
-        } 
-         
+        }
+        
     // Finally, add a newline
     Console_write("%c", '\n');
     }
@@ -164,6 +166,11 @@ void Log_setLevel(int level)
 {
     assert(_isInitialized());
     gCurrentLogLevel = level;
+}
+
+int Log_getLevel()
+{
+    return gCurrentLogLevel;
 }
 
 void Log_setFormatString(int level, char* format_string)

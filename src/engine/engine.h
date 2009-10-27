@@ -25,7 +25,7 @@
   * 
   * @return Returns zero on error, non-zero on success.
   */
-int Engine_init();
+int Engine_init(BOOL verbose);
 
 /** 
   * Checks if the engine is initialized.

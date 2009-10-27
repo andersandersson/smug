@@ -27,17 +27,21 @@
 #define Log_print(fmt, ...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, 0, ##__VA_ARGS__)
 #define Log_printLine(fmt, ...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, 1, ##__VA_ARGS__)
 
+
 /** Initialize the log system (allocate memory, etc)
  */
 BOOL Log_init();
+
 
 /** Returns true if the system is initialized
  */
 BOOL Log_isInitialized();
 
+
 /** Terminate the log system (free memory, etc)
  */
 void Log_terminate();
+
 
 /** Write a log entry.
   *
@@ -59,6 +63,14 @@ void _Log_print(int level, char* prefix, char* file, int line, char* fmt, int ne
   */
 void Log_setLevel(int level);
 
+
+/** Get the curent log level.
+  *
+  * @return A flagset consisting of the log level constants.
+  */
+int Log_getLevel();
+
+
 /** Set the format string to use for log output
   *
   * The following flags are recognized:
@@ -70,9 +82,11 @@ void Log_setLevel(int level);
   */
 void Log_setFormatString(int level, char* format_string);
 
+
 /** Get the log string set by Log_getFormatString
  */
 char* Log_getFormatString(int level);
+
 
 /** Push a prefix to be prepended to each %message%
  *
@@ -82,11 +96,13 @@ char* Log_getFormatString(int level);
  */
 void Log_pushPrefix(char* prefix);
 
+
 /** Pop a prefix from the stack
  *
  * Simply removes the last prefix pushed onto the stack
  */
 char* Log_popPrefix();
+
 
 /** Indent the log messages
  * 
@@ -94,17 +110,20 @@ char* Log_popPrefix();
  */
 void Log_indent();
 
+
 /** Dedent the log messages
  * 
  * Make all following log message be indented one level less
  */
 void Log_dedent();
 
+
 /** Set the tab length of the indentation
  * 
  * Set how many spaces one indentation level should have
  */
 void Log_setIndentation(unsigned int indent);
+
 
 #endif // SMUG_COMMON_LOG_H
 

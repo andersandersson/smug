@@ -12,10 +12,10 @@ GameObject* GameObject_new()
 {
     GameObject* go = (GameObject*)malloc(sizeof(GameObject));
     
-    go->x = 0.0f;
-    go->y = 0.0f;
+    // go->x = 0.0f;
+    // go->y = 0.0f;
     
-    go->shape = NULL;
+    // go->shape = NULL;
     go->drawable = NULL;
     go->visible = TRUE;
     go->tag = NULL;
@@ -42,8 +42,8 @@ void GameObject_delete(void* obj)
 void GameObject_setPosition(GameObject* obj, float x, float y)
 {
     GameObject_invariant(obj);
-    obj->x = x;
-    obj->y = y;
+    // obj->x = x;
+    // obj->y = y;
 }
 
 void GameObject_setDrawable(GameObject* obj, Drawable* d)

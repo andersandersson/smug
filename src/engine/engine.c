@@ -19,19 +19,37 @@ static BOOL gInitialized = FALSE;
 World* gWorld = NULL;
 
 // Checks that all subsystems have been initialized.
+void _assertSubsystemsInitialized()
+{
+	assert(Log_isInitialized());
+    assert(Platform_isInitialized());
+    assert(Signal_isInitialized());
+    assert(Input_isInitialized());
+    assert(Graphics_isInitialized());
+    assert(Physics_isInitialized());
+}
+
 BOOL _subsystemsInitialized()
 {
-	return Platform_isInitialized() &&
+	return Log_isInitialized() &&
+           Platform_isInitialized() &&
            Signal_isInitialized() &&
            Input_isInitialized() &&
            Graphics_isInitialized() &&
            Physics_isInitialized();
 }
 
-int Engine_init()
+int Engine_init(BOOL verbose)
 {
+    int logLevel;
+    
     assert(!gInitialized);
     Log_init();
+    if (verbose)
+    {
+        logLevel = Log_getLevel();
+        Log_setLevel(LOG_ALL);
+    }
 
     NOTIFY("Initializing engine:");
     Log_indent();
@@ -63,9 +81,11 @@ int Engine_init()
 
     Log_dedent();
     NOTIFY("Engine Initialized.");
+    Log_setLevel(logLevel);
     
-    assert(_subsystemsInitialized);
     gInitialized = TRUE;
+    _assertSubsystemsInitialized();
+//    assert(_subsystemsInitialized);
     return 1;
 }
 
@@ -84,7 +104,7 @@ void Engine_terminate()
     
     // Do not wait for console thread to end as getc() will
     // block until input is received. Instead, kill the thread.
-    Thread_forceKill(gConsoleThread);        
+    Thread_forceKill(gConsoleThread);
     
     Physics_terminate();
     

@@ -4,20 +4,14 @@
 
 int smugInit()
 {
-    Engine_init();
+    Engine_init(TRUE);
 }
 
-/** 
- * Close down Engine
- */
 void smugTerminate()
 {
     Engine_terminate();
 }
 
-/** 
- * Run the engine, 
- */
 void smugRun()
 {
     if (!Engine_isInitialized())

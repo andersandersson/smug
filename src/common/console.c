@@ -10,14 +10,14 @@ static unsigned int gIndent = 0;
 static unsigned int gTabWidth = 4;
 
 // Internal function for printing a character
-static char Console_getChar()
+static char _getChar()
 {
     return getc(stdin);
 }
 
 
 // Internal function for reading a character
-static void Console_putChar(char c)
+static void _putChar(char c)
 {
     putc(c, stderr);
 }
@@ -42,7 +42,7 @@ void Console_write(char* fmt, ...)
     // Iterate over the string and print each character until
     // the end of string is reach, or the buffer size limit.
     while(buffer[i] != '\0' && i < CONSOLE_PRINT_BUFFER_SIZE) {
-        Console_putChar(buffer[i]);
+        _putChar(buffer[i]);
         i++;
     }
 
@@ -70,12 +70,12 @@ void Console_writeLine(char* fmt, ...)
     // Iterate over the string and print each character until
     // the end of string is reach, or the buffer size limit.
     while(buffer[i] != '\0' && i < CONSOLE_PRINT_BUFFER_SIZE) {
-        Console_putChar(buffer[i]);
+        _putChar(buffer[i]);
         i++;
     }
     
     // End line
-    Console_putChar('\n');
+    _putChar('\n');
 
     // Finalize variable arguments
     va_end(vl);
@@ -90,7 +90,7 @@ unsigned int Console_read(char* dest, unsigned int maxlength)
     // Read characters until newline or maxlength is reached
     while(i < maxlength-1 && c != '\n')
     {
-        c = Console_getChar();
+        c = _getChar();
         dest[i] = c;
         i++;
     }
