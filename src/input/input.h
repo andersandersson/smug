@@ -10,16 +10,18 @@
 
 /**
  * Initialize Input subsystem
+ * @pre The platform layer must be initialized via Platform_init(...)
  */
 int Input_init();
 
 /**
  * Return true if the system is initialized
  */
-BOOL Input_isInitialized(); 
+BOOL Input_isInitialized();
 
 /** 
  * Terminate the input component of the engine.
+ * @pre the Input module must be initialized via Input_init(...)
  */
 void Input_terminate();
 

@@ -7,6 +7,7 @@
 #define SIG_TERM  0x0002 // Tell all systems to shut down
 
 int Signal_init();
+BOOL Signal_isInitialized();
 void Signal_terminate();
 void Signal_send(int signal);
 BOOL Signal_check(int signal);

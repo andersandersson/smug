@@ -3,23 +3,32 @@
 
 static int _signals = 0;
 static Mutex* _signalMutex = NULL;
+static BOOL isInitialized = FALSE;
 
 int Signal_init()
 {
+    assert(!isInitialized);
     _signalMutex = Mutex_new();
    
     if(NULL == _signalMutex || NULL == _signalMutex->_mutex)
-        {            
-            return FALSE;
-        }
+    {
+        isInitialized = FALSE;
+    }
     else
-        {
-            return TRUE;
-        }
+    {
+        isInitialized = TRUE;
+    }
+    return isInitialized;
+}
+
+BOOL Signal_isInitialized()
+{
+    return isInitialized;
 }
 
 void Signal_terminate()
 {
+    assert(isInitialized);
     Mutex_delete(_signalMutex);
 }
 

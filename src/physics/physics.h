@@ -13,6 +13,7 @@ typedef struct CollisionData
 } CollisionData;
 
 int Physics_init();
+BOOL Physics_isInitialized();
 void Physics_terminate();
 
 BOOL Physics_intervalOverlap(float left_l, float left_r, float right_l, float right_r, float* dest);

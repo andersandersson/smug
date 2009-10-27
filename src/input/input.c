@@ -111,6 +111,7 @@ static void inputHandler(int device, int trigger, INPUTSTATE state)
 
 int Input_init()
 {
+    assert(!isInitialized);
 	assert(Platform_isInitialized());
 	assert(Platform_isWindowOpen());
 
@@ -131,6 +132,7 @@ BOOL Input_isInitialized()
 
 void Input_terminate()
 {
+    assert(isInitialized);
     // This myst be done before freeing hook array
     Platform_unregisterInputHandler();
     

@@ -267,6 +267,7 @@ static void dummyInputHandler(int device, int trigger, INPUTSTATE state)
 
 int Platform_init(int width, int height, BOOL fullscreen)
 {
+    assert(!isInitialized);
     NOTIFY("Initializing platform layer");
     if (!glfwInit())
     {
@@ -309,6 +310,7 @@ BOOL Platform_isInitialized()
 
 void Platform_terminate()
 {
+    assert(isInitialized);
     NOTIFY("Terminating platform layer");
     glfwCloseWindow();
     glfwTerminate();

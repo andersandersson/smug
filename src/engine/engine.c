@@ -18,8 +18,19 @@ static BOOL gInitialized = FALSE;
 
 World* gWorld = NULL;
 
+// Checks that all subsystems have been initialized.
+BOOL _subsystemsInitialized()
+{
+	return Platform_isInitialized() &&
+           Signal_isInitialized() &&
+           Input_isInitialized() &&
+           Graphics_isInitialized() &&
+           Physics_isInitialized();
+}
+
 int Engine_init()
 {
+    assert(!gInitialized);
     Log_init();
 
     NOTIFY("Initializing engine:");
@@ -53,12 +64,19 @@ int Engine_init()
     Log_dedent();
     NOTIFY("Engine Initialized.");
     
+    assert(_subsystemsInitialized);
     gInitialized = TRUE;
     return 1;
 }
 
+BOOL Engine_isInitialized()
+{
+    return _subsystemsInitialized() && gInitialized;
+}
+
 void Engine_terminate()
 {
+    assert(gInitialized);
     NOTIFY("Terminating engine");
     Log_indent();
     
@@ -88,6 +106,7 @@ void Engine_terminate()
 
 void Engine_run()
 {
+    assert(gInitialized);
     if (!gInitialized)
         return;
 

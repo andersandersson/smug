@@ -8,6 +8,7 @@
 #include "utils/map.h"
 
 #include <math.h>
+#include <stdlib.h>
 
 typedef struct _CollisionType
 {
@@ -18,6 +19,7 @@ typedef struct _CollisionType
 static Map* body_map;
 static Map* collision_hooks;
 static LinkedList* collision_list;
+static BOOL isInitialized = FALSE;
 
 static _CollisionType* _CollisionType_new()
 {
@@ -52,18 +54,26 @@ void CollisionData_delete(CollisionData* data)
 
 int Physics_init()
 {
+    assert(!isInitialized);
+
     body_map = Map_new();
     collision_hooks = Map_new();
     collision_hooks->compareKeys = _compareCollisionType;
     collision_list = LinkedList_new();
 
     DEBUG("Initializing physics");
-
+    isInitialized = TRUE;
     return 1;
+}
+
+BOOL Physics_isInitialized()
+{
+    return isInitialized;
 }
 
 void Physics_terminate()
 {   
+    assert(isInitialized);
     MapNode* node;
 
     for(node = body_map->first; node != NULL; node = node->next)
@@ -74,6 +84,7 @@ void Physics_terminate()
     LinkedList_delete(collision_list);
     Map_delete(body_map);
     Map_delete(collision_hooks);
+    isInitialized = FALSE;
 }
 
 void Physics_addCollisionHook(BODY_TYPE left, BODY_TYPE right, Hook* hook)

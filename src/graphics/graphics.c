@@ -11,7 +11,7 @@ int gVBOSupported = 0;
 Vector screenSize;
 unsigned int gRenderMode = RENDER_NORMAL;
 
-BOOL isInitialized = FALSE;
+static BOOL isInitialized = FALSE;
 
 static void printGLError()
 {
@@ -88,6 +88,7 @@ static int setupGL()
 
 int Graphics_init(int width, int height)
 {
+    assert(!isInitialized);
 	assert(Platform_isInitialized());
 	assert(Platform_isWindowOpen());
 
@@ -117,6 +118,7 @@ Vector Graphics_getScreenSize()
 
 void Graphics_terminate()
 {
+    assert(isInitialized);
     Renderer_delete(sceneRenderer);
     isInitialized = FALSE;
 }

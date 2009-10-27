@@ -1,4 +1,6 @@
 #include "string.h"
+#include <stdlib.h>
+#include <string.h>
 
 // Creates a String object from the C string. The C string is NOT copied.
 String* _new(char* theString)
