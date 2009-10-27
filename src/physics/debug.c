@@ -6,7 +6,7 @@
 
 #include "utils/rectangle.h"
 
-static void Physics_drawRectangle(Rectangle* rectangle, Point offset)
+static void Physics_drawRectangle(Rectangle* rectangle, Point offset, Color color)
 {
     float x = Point_getX(&offset);
     float y = Point_getY(&offset);
@@ -16,20 +16,18 @@ static void Physics_drawRectangle(Rectangle* rectangle, Point offset)
     float r_w = Rectangle_getW(rectangle);
     float r_h = Rectangle_getH(rectangle);
 
-    Color c = Color_createFromRGBA(1.0, 0.0, 0.0, 1.0);
-
-    Physics_drawLine(Point_createFromXY(r_x+x, r_y+y), Point_createFromXY(r_x+r_w+x, r_y+y), c);
-    Physics_drawLine(Point_createFromXY(r_x+r_w+x, r_y+y), Point_createFromXY(r_x+r_w+x, r_y+r_h+y), c);
-    Physics_drawLine(Point_createFromXY(r_x+r_w+x, r_y+r_h+y), Point_createFromXY(r_x+x, r_y+r_h+y), c);
-    Physics_drawLine(Point_createFromXY(r_x+x, r_y+r_h+y), Point_createFromXY(r_x+x, r_y+y), c);
+    Physics_drawLine(Point_createFromXY(r_x+x, r_y+y), Point_createFromXY(r_x+r_w+x, r_y+y), color);
+    Physics_drawLine(Point_createFromXY(r_x+r_w+x, r_y+y), Point_createFromXY(r_x+r_w+x, r_y+r_h+y), color);
+    Physics_drawLine(Point_createFromXY(r_x+r_w+x, r_y+r_h+y), Point_createFromXY(r_x+x, r_y+r_h+y), color);
+    Physics_drawLine(Point_createFromXY(r_x+x, r_y+r_h+y), Point_createFromXY(r_x+x, r_y+y), color);
 }
 
-void Physics_drawShape(Shape* shape, Point offset)
+void Physics_drawShape(Shape* shape, Point offset, Color color)
 {
     switch(shape->type)
         {
         case SHAPE_RECTANGLE:
-            Physics_drawRectangle(shape->data, offset);
+            Physics_drawRectangle(shape->data, offset, color);
             break;
         default:
             break;
@@ -44,6 +42,7 @@ void Physics_drawLine(Point source, Point dest, Color color)
     float y2 = Point_getY(&dest);
 
     glBegin(GL_LINES);
+    glColor4f(color.r, color.g, color.b, color.a);
     glVertex3f(x1, y1, 0.0);
     glVertex3f(x2, y2, 0.0);
     glEnd();

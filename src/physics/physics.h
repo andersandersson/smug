@@ -8,7 +8,8 @@ typedef struct CollisionData
 {
     Body* left;
     Body* right;
-    Vector* result;
+    Vector movement;
+    float collisionTime;
 } CollisionData;
 
 int Physics_init();
@@ -21,7 +22,7 @@ void Physics_addBody(Body* body);
 void Physics_removeBody(Body* body);
 void Physics_update(TIME time);
 
-BOOL Physics_collideRectangleRectangle(Body* left, Body* right, Vector* result);
-void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisionHooks);
+BOOL Physics_collideRectangleRectangle(Body* left, Body* right, CollisionData** result);
+void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions);
 
 #endif

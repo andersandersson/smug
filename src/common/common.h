@@ -13,6 +13,9 @@ typedef unsigned char BOOL;
     #define NULL 0
 #endif
 
+#define max(x, y) ((x) > (y) ? (x) : (y))
+#define min(x, y) ((x) < (y) ? (x) : (y))
+
 #undef assert
 #ifndef DISABLE_ASSERTS
     void Smug_assert(BOOL result, char* expresison, char* file, int line);
@@ -20,6 +23,8 @@ typedef unsigned char BOOL;
 #else
     #define assert(x) x
 #endif
+
+void swap_float(float* left, float* right);
 
 typedef double TIME;
 
