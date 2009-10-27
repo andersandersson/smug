@@ -141,7 +141,7 @@ BOOL String_equalAlpha(String* first, String* second);
   * @param find The character to count.
   * @return The number of times the character find occurs in the string.
   */
-int String_occurences(String* this, char find)
+int String_occurences(String* this, char find);
 
 /** Finds the first occurence of a substring in a string.
   *
@@ -175,6 +175,6 @@ int String_findChar(String* this, char c);
   * @param start The position in which to start searching for the character.
   * @return The position in the string of the first occurence of the character c after position start. -1 if c is not found.
   */
-int String_findCharFrom(String* this, char c, int start)
+int String_findCharFrom(String* this, char c, int start);
 
 #endif // STRING_H

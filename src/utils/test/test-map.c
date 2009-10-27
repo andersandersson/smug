@@ -16,7 +16,7 @@ int main()
 
     Map_set(map, (void*)23, (void*)11);
 
-    map->compareKey = compare;
+//    map->compareKey = compare;
 
     
     fprintf(stderr, "Tal: %d\n",  (int)Map_get(map, (void*)23));

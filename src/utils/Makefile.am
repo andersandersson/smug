@@ -20,5 +20,5 @@ hook.c hook.h \
 vector.c vector.h \
 rectangle.h rectangle.c \
 point.h point.c \
-map.c map.h
-
+map.c map.h \
+string.c string.h

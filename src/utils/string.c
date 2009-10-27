@@ -187,7 +187,9 @@ int String_occurences(String* this, char find)
 	for (i = 0; i < this->mLength; i++)
 	{
 		if (String_charAt(this, i) == find)
+		{
 			n++;
+		}
 		i++;
 	}
 	return n;

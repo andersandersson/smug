@@ -2,7 +2,9 @@
 
 int main()
 {
-	String* str1, str2, str3;
+	String* str1;
+	String* str2;
+	String* str3;
 	
 	str1 = String_new("");
 	String_delete(str1);
@@ -23,7 +25,7 @@ int main()
 	str2 = String_new("BLA");
 	str3 = String_newReplaceChar(str1, 's', str2);
 	String_delete(str1);
-	str1 = String_new("TeBLAtar BLAtringBLA.")
+	str1 = String_new("TeBLAtar BLAtringBLA.");
 	if (!String_equalAscii(str3, str1)) return 3;
 	
 	//String_delete(str1);
