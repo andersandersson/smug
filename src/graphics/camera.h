@@ -1,3 +1,12 @@
+/** @file camera.h
+  * @brief Defines the Camera type.
+  * @ingroup smug_graphics
+  */
+
+/** @addtogroup smug_graphics
+  * @{
+  */
+
 #ifndef SMUG_GRAPHICS_CAMERA_H
 #define SMUG_GRAPHICS_CAMERA_H
 
@@ -7,7 +16,6 @@
 #include "utils/vector.h"
 
 /**
- * Camera
  * A versatile camera for viewing the world.
  */
 typedef struct Camera
@@ -45,3 +53,5 @@ void Camera_setZoom(Camera* camera, float zoom);
 
 
 #endif //SMUG_GRAPHICS_CAMERA_H
+
+/**@}*/

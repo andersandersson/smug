@@ -1,3 +1,12 @@
+/** @file sprite.h
+  * @brief Defines the Sprite type.
+  * @ingroup smug_graphics
+  */
+
+/** @addtogroup smug_graphics
+  * @{
+  */
+
 #ifndef SMUG_GRAPHICS_SPRITE_H
 #define SMUG_GRAPHICS_SPRITE_H
 
@@ -6,7 +15,6 @@
 #include "utils/vector.h"
 
 /** 
- * Sprite
  * Holds a texture and a rectangular area on it.
  * Also supports an offset to that area.
  */
@@ -39,6 +47,6 @@ Sprite* Sprite_newFromTextureCoords(Texture* texture, Rectangle rect, Vector off
  */
 void Sprite_delete(void* sprite);
 
-
-
 #endif // SMUG_GRAPHICS_SPRITE_H
+
+/**@}*/

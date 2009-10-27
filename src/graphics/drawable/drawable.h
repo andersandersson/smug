@@ -1,5 +1,10 @@
 /** @file drawable.h
   * @brief Defines the Drawable type.
+  * @ingroup smug_graphics
+  */
+
+/** @addtogroup smug_graphics
+  * @{
   */
 
 #ifndef SMUG_GRAPHICS_DRAWABLE_H
@@ -13,7 +18,6 @@
 #include "utils/vector.h"
 
 /** 
-  * Drawable
   * A graphical entity on screen. A Drawable is a common interface
   * for a collection of different graphic components.
   */
@@ -120,3 +124,5 @@ unsigned int Drawable_getTextureID(Drawable* d);
 unsigned int Drawable_getObjectSize(Drawable* d);
 
 #endif //SMUG_GRAPHICS_DRAWABLE_H
+
+/**@}*/

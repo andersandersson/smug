@@ -1,3 +1,12 @@
+/** @file common.h
+  * @brief Header file for common declarations
+  * @ingroup smug_common
+  */
+
+/** @defgroup smug_common Common
+  * @{
+  */
+  
 #ifndef SMUG_COMMON_COMMON_H
 #define SMUG_COMMON_COMMON_H
 
@@ -29,3 +38,5 @@ void swap_float(float* left, float* right);
 typedef double TIME;
 
 #endif // SMUG_COMMON_COMMON_H
+
+/**@}*/

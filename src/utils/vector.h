@@ -1,3 +1,12 @@
+/** @file vector.h
+  * @brief Defines the Vector type.
+  * @ingroup smug_utils
+  */
+
+/** @addtogroup smug_utils Utilities
+  * @{
+  */
+
 #ifndef VECTOR_H
 #define VECTOR_H
 
@@ -122,6 +131,6 @@ float Vector_squareLength(Vector v);
  */
 void Vector_print(Vector v);
 
-
-
 #endif
+
+/**@}*/

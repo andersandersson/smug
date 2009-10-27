@@ -1,5 +1,10 @@
 /** @file world.h
+  * @ingroup smug_engine
   * @brief Defines the World type.
+  */
+
+/** @addtogroup smug_engine
+  * @{
   */
 
 #ifndef SMUG_ENGINE_WORLD_H
@@ -10,6 +15,7 @@
 #include "gameobject.h"
 
 /** The World struct.
+  * @ingroup smug_engine
   */
 typedef struct World
 {
@@ -57,3 +63,5 @@ LinkedList* World_getObjectsByTag(World* world, char* tag);
 void World_render(World* world);
 
 #endif //SMUG_ENGINE_WORLD_H
+
+/**@}*/

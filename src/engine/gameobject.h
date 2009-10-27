@@ -1,7 +1,12 @@
 /** @file gameobject.h
+  * @ingroup smug_engine
   * @brief Defines the GameObject type.
   */
 
+/** @addtogroup smug_engine
+  * @{
+  */
+  
 #ifndef SMUG_ENGINE_GAMEOBJECT_H
 #define SMUG_ENGINE_GAMEOBJECT_H
 
@@ -58,3 +63,5 @@ void GameObject_setDrawable(GameObject* obj, Drawable* d);
 void GameObject_render(GameObject* obj);
 
 #endif //SMUG_ENGINE_GAMEOBJECT_H
+
+/**@}*/

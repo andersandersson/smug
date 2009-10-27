@@ -1,5 +1,11 @@
 /** @file graphics.h
   * @brief Contains functions to control graphics.
+  * @ingroup smug_graphics
+  */
+
+/** @defgroup smug_graphics Graphics
+  * The Graphics module handles all graphics in Smug.
+  * @{
   */
 
 #ifndef SMUG_GRAPHICS_GRAPHICS_H
@@ -86,3 +92,5 @@ void Graphics_setupLayer(unsigned int id, float parallax);
 void Graphics_setRenderMode(unsigned int flags);
 
 #endif // SMUG_GRAPHICS_GRAPHICS_H
+
+/**@}*/

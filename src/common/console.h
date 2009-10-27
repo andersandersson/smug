@@ -1,7 +1,12 @@
 /** @file console.h
   * @brief Defines a debug console
+  * @ingroup smug_common
   */
 
+/** @addtogroup smug_common
+  * @{
+  */
+  
 #ifndef SMUG_COMMON_CONSOLE_H
 #define SMUG_COMMON_CONSOLE_H
 
@@ -66,3 +71,5 @@ void Console_parseCommand(char* cmd);
 BOOL Console_defaultParser(char* cmd);
 
 #endif // SMUG_COMMON_CONSOLE_H
+
+/**@}*/

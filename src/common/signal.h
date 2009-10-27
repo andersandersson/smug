@@ -1,3 +1,12 @@
+/** @file signal.h
+  * @brief Header file for signaling system
+  * @ingroup smug_common
+  */
+
+/** @addtogroup smug_common
+  * @{
+  */
+  
 #ifndef SMUG_COMMON_SIGNAL_H
 #define SMUG_COMMON_SIGNAL_H
 
@@ -14,3 +23,5 @@ BOOL Signal_check(int signal);
 void Signal_clear(int signal);
 
 #endif // SMUG_COMMON_SIGNAL_H
+
+/**@}*/

@@ -1,3 +1,12 @@
+/** @file color.h
+  * @brief Defines the Color type.
+  * @ingroup smug_graphics
+  */
+
+/** @addtogroup smug_graphics
+  * @{
+  */
+
 #ifndef SMUG_GRAPHICS_COLOR_H
 #define SMUG_GRAPHICS_COLOR_H
 
@@ -28,3 +37,5 @@ Color Color_create();
 Color Color_createFromRGBA(float r, float g, float b, float a);
 
 #endif // SMUG_GRAPHICS_COLOR_H
+
+/**@}*/
