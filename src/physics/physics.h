@@ -1,3 +1,13 @@
+/** @file physics.h
+  * @brief Main file of the physics module. Collision detection etc.
+  * @ingroup smug_physics
+  */
+
+/** @defgroup smug_physics Physics
+  * 
+  * @{
+  */
+
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
@@ -27,3 +37,5 @@ BOOL Physics_collideRectangleRectangle(Body* left, Body* right, CollisionData** 
 void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions);
 
 #endif
+
+/**@}*/

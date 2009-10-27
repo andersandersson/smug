@@ -1,3 +1,13 @@
+/** @file platform.h
+  * @brief Main file of platform module.
+  * @ingroup smug_platform
+  */
+
+/** @defgroup smug_platform Platform
+  * 
+  * @{
+  */
+
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
@@ -261,3 +271,5 @@ INPUTSTATE Platform_getInputState(int device, int trigger);
 void Platform_detectJoysticks();
 
 #endif // PLATFORM_H
+
+/**@}*/

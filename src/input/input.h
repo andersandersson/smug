@@ -1,3 +1,13 @@
+/** @file input.h
+  * @brief Contains functions to handle user input.
+  * @ingroup smug_input
+  */
+
+/** @defgroup smug_input Input
+  * 
+  * @{
+  */
+
 #ifndef SMUG_INPUT_H
 #define SMUG_INPUT_H
 
@@ -105,5 +115,6 @@ void Input_disconnectController(unsigned int slot);
  */
 void Input_setTriggerControllerHook(unsigned int device, unsigned int trigger, void* object, int (*function)(void*, void*));
 
-
 #endif //SMUG_INPUT_H
+
+/**@}*/
