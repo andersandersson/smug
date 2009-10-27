@@ -130,7 +130,7 @@ void Renderer_render(Renderer* renderer)
             layer = ArrayList_get(renderer->layers, i);
             if (NULL != layer)
             {
-                renderLayer(renderer, layer); 
+                renderLayer(renderer, layer);
             }
         }
     }
@@ -155,7 +155,7 @@ void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
         ArrayList_set(renderer->layers, Drawable_getLayer(drawable), layer);
         renderer->layercount++;
     }
-    Layer_addDrawable(layer, drawable);  
+    Layer_addDrawable(layer, drawable);
 }
 
 
@@ -179,5 +179,3 @@ void Renderer_setupLayer(Renderer* renderer, unsigned int id, float parallax)
     }
     layer->parallax = parallax;
 }
-
-

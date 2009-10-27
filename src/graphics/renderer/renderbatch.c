@@ -106,7 +106,7 @@ void RenderBatch_write(RenderBatch* currentBatch)
     unsigned int capacity = BatchData_getCapacity(currentBatch->data);
     unsigned int datasize;
     Node* node;
-    node = currentBatch->drawables->first;  
+    node = currentBatch->drawables->first;
     while (NULL != node)
     {
         // find out how much data space the drawable needs

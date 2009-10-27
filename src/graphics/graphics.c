@@ -120,13 +120,14 @@ void Graphics_terminate()
 {
     assert(isInitialized);
     Renderer_delete(sceneRenderer);
+    sceneRenderer = NULL;
     isInitialized = FALSE;
 }
 
 void Graphics_render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glLoadIdentity();
+    //glLoadIdentity(); (called in Renderer_render)
 
     Renderer_render(sceneRenderer);
 }

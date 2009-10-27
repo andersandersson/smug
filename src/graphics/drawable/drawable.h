@@ -31,13 +31,14 @@ typedef struct Drawable
     unsigned int vertexcount;
     Vector* vertices;
     
-    void (*_writeBatchDataFunc)(struct Drawable* d, BatchData* batch, unsigned int start); // Function for writing data
-    int (*_getDataSizeFunc)(struct Drawable* d); // Function for getting data size
+    void (*_writeBatchDataFunc)(struct Drawable* d, BatchData* batch, unsigned int start); /**< Function for writing data */
+    int (*_getDataSizeFunc)(struct Drawable* d); /**< Function for getting data size */
     
 } Drawable;
 
 /**
  * Creates new drawable
+ * @relatesalso Drawable
  * @param vertexcount size of drawable in vertices
  * @return Drawable
  */
@@ -45,12 +46,14 @@ Drawable* Drawable_new(unsigned int vertexcount);
 
 /**
  * Deletes a Drawable
+ * @relatesalso Drawable
  * @param d Drawable to be deleted
  */
 void Drawable_delete(void* d);
 
 /**
  * Write all vertex data to batchdata
+ * @relatesalso Drawable
  * @param d Drawable containing data
  * @param batchdata batch for data to be written to
  * @param start where to start writing in batch
@@ -59,6 +62,7 @@ void Drawable_writeBatchData(Drawable* d, BatchData* batchdata, unsigned int sta
 
 /**
  * Get the size of the data that will be written
+ * @relatesalso Drawable
  * @param d Drawable
  * @return size of data in vertices
  */
@@ -66,6 +70,7 @@ int Drawable_getDataSize(Drawable* d);
 
 /**
  * Set position of a Drawable
+ * @relatesalso Drawable
  * @param d the Drawable
  * @param pos Position 
  */
@@ -73,6 +78,7 @@ void Drawable_setPos(Drawable* d, Point pos);
 
 /**
  * Set sprite of a Drawable
+ * @relatesalso Drawable
  * @param d the Drawable
  * @param sprite a pointer to a Sprite
  */
@@ -80,6 +86,7 @@ void Drawable_setSprite(Drawable* d, Sprite* sprite);
 
 /**
  * Set the graphical layer of a drawable
+ * @relatesalso Drawable
  * @param d Drawable
  * @param layer the layer
  */
@@ -87,6 +94,7 @@ void Drawable_setLayer(Drawable* d, unsigned int layer);
 
 /**
  * Set color of a Drawable
+ * @relatesalso Drawable
  * @param d Drawable
  * @param color Color
  */
@@ -94,6 +102,7 @@ void Drawable_setColor(Drawable* d, Color color);
 
 /**
  * Get the layer of a Drawable
+ * @relatesalso Drawable
  * @param d the Drawable
  * @return layer id
  */
@@ -101,6 +110,7 @@ unsigned int Drawable_getLayer(Drawable* d);
 
 /**
  * Get the texture of a drawable as pointer
+ * @relatesalso Drawable
  * @param d the Drawable
  * @return Texture
  */
@@ -108,6 +118,7 @@ Texture* Drawable_getTexture(Drawable* d);
 
 /**
  * Get texture of a drawable as an id
+ * @relatesalso Drawable
  * @param d the Drawable
  * @return texture id
  */
@@ -118,6 +129,7 @@ unsigned int Drawable_getTextureID(Drawable* d);
  * This size is the size of each component of a drawable, 
  * if a drawable consists of several rectangles (such as a font) 
  * then the objectsize is the number of vertices in one rectangle.
+ * @relatesalso Drawable
  * @param d the Drawable
  * @return 
  */

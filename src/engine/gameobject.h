@@ -18,10 +18,6 @@
   */
 typedef struct GameObject
 {
-    float x;
-    float y;
-    
-    void* shape;
     Drawable* drawable;
     BOOL visible;
     
