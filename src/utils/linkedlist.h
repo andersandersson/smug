@@ -14,9 +14,9 @@
   * @sa ::LinkedList
   */
 typedef struct Node {
-    void* item; /**< Pointer to the actual data in the node. */
-    struct Node* next; /**< Next node in list. Null if end of list. */
-    struct Node* prev; /**< Previous node in list. Null if start of list */
+    void* item; 		/**< Pointer to the actual data in the node. */
+    struct Node* next; 	/**< Next node in list. Null if end of list. */
+    struct Node* prev; 	/**< Previous node in list. Null if start of list */
 } Node;
 
 /** A struct for a linked list.
@@ -26,8 +26,8 @@ typedef struct Node {
   * @sa ::Node
   */
 typedef struct LinkedList {
-    Node* first; /**< First node in list. */
-    Node* last; /**< Last node in list */
+    Node* first; 		/**< First node in list. */
+    Node* last; 		/**< Last node in list */
     int length;
 } LinkedList;
 
@@ -77,6 +77,10 @@ void LinkedList_addLast(LinkedList* list, void* item);
   */
 void LinkedList_addFirst(LinkedList* list, void* item);
 
+void LinkedList_insertAfter(LinkedList* self, Node* node, void* item);
+
+void LinkedList_insertBefore(LinkedList* self, Node* node, void* item);
+
 BOOL LinkedList_isEmpty(LinkedList* list);
 
 int LinkedList_length(LinkedList* list);
@@ -90,6 +94,8 @@ int LinkedList_length(LinkedList* list);
 void LinkedList_remove(LinkedList* list, Node* node);
 
 /** Removes the passed item from the list. Does not delete the actual item!
+  *
+  * Compares pointers to determine equality.
   *
   * @relatesalso LinkedList
   * @param list The list.
@@ -157,17 +163,20 @@ BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*));
   * 
   * Calls the passed function on every data item in the list and then empties
   * the list. Assumes the passed function deletes the stored datatype correctly.
+  * The list still exists, empty, after the call.
   *
   * @relatesalso LinkedList
   * @param list The list.
   * @param deleter The destructor function for the type the list holds.
   */
 void LinkedList_deleteContents(LinkedList* list, void (*deleter)(void*));
-
-/*
-Create the deleter function like this:
+/* Create the deleter function like this:
 ContentItem_destroy(void* contentItem) {
     free((ContentItem*)contentItem);
-}
-*/
+}*/
+
+void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(void*));
+
+LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*));
+
 #endif // LINKEDLIST_H

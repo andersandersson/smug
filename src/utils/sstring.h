@@ -1,11 +1,12 @@
-/** @file string.h
+/** @file sstring.h
   * @brief Defines a string type and related functions.
   */
 
-#include "common/common.h"
+#ifndef SMUG_UTILS_SSTRING_H
+#define SMUG_UTILS_SSTRING_H
 
-#ifndef STRING_H
-#define STRING_H
+#include "common/common.h"
+#include "linkedlist.h"
 
 /** A struct for the string type.
   *
@@ -28,16 +29,19 @@ String* String_new(char* aString);
   *
   * @relatesalso String
   */
-void String_delete(String* this);
+void String_delete(String* self);
+void String_deleteVoid(void* self);
 
 /** Gets the number of characters in a string.
   *
   * @relatesalso String
   * @return The number of characters in the string.
   */
-int String_length(String* this);
+int String_length(String* self);
 
-BOOL String_isEmpty(String* this);
+BOOL String_isEmpty(String* self);
+
+void String_println(String* self);
 
 /** Gets a character from a string.
   *
@@ -48,7 +52,7 @@ BOOL String_isEmpty(String* this);
   * @param pos
   * @return The character in position pos.
   */
-char String_charAt(String* this, int pos);
+char String_charAt(String* self, int pos);
 
 /** Gets the internal C string of the string.
   *
@@ -58,14 +62,18 @@ char String_charAt(String* this, int pos);
   * @relatesalso String
   * @return The C string representation of the string.
   */
-char* String_asCstr(String* this);
+char* String_asCstr(String* self);
 
-/** Copies a string.
+/** Deep-copies a string.
   *
   * @relatesalso String
   * @return A pointer to the resulting string.
   */
-String* String_newCopy(String* this);
+String* String_newCopy(String* self);
+void* String_newCopyVoid(void* self);
+
+void String_toUppercase(String* self);
+void String_toLowercase(String* self);
 
 /** Finds a substring of a string.
   *
@@ -75,10 +83,10 @@ String* String_newCopy(String* this);
   *
   * @relatesalso String
   * @param start The position where the substring begins. Must not be negative.
-  * @param numChars The maximum number of characters to copy from the string.
+  * @param numChars The maximum number of characters to copy from the string. If self is negative, copies the rest of the string.
   * @return A pointer to the resulting string.
   */
-String* String_newSubString(String* this, int start, int numChars);
+String* String_newSubString(String* self, int start, int numChars);
 
 /** Concatenates two strings.
   *
@@ -100,7 +108,7 @@ String* String_newConcat(String* first, String* second);
   * @param replace The string to replace each occurence of find with.
   * @return A pointer to the resulting string.
   */
-String* String_newReplace(String* this, String* find, String* replace);
+String* String_newReplace(String* self, String* find, String* replace);
 
 /** Replace all occurences of a character within a string.
   *
@@ -111,18 +119,18 @@ String* String_newReplace(String* this, String* find, String* replace);
   * @param replace The string to replace each occurence of find with.
   * @return A pointer to the resulting string.
   */
-String* String_newReplaceChar(String* this, char find, String* replace);
+String* String_newReplaceChar(String* self, char find, String* replace);
 
 /** Crops a string.
   *
-  * Replaces the string with the substring starting in position start and continuing for maximum numChars characters.
+  * Replaces the string with its substring starting in position start and continuing for maximum numChars characters.
   * 
   * @relatesalso String
   * @param start The position of the first character to keep.
   * @param numChars The maximum number of characters to keep.
   * @return A pointer to the resulting string.
   */
-void String_crop(String* this, int start, int numChars);
+void String_crop(String* self, int start, int numChars);
 
 /** Compares ascii values of two strings.
   *
@@ -141,7 +149,8 @@ BOOL String_equalAlpha(String* first, String* second);
   * @param find The character to count.
   * @return The number of times the character find occurs in the string.
   */
-int String_occurences(String* this, char find);
+int String_occurences(String* self, char find);
+int String_occurencesStr(String* self, String* find);
 
 /** Finds the first occurence of a substring in a string.
   *
@@ -149,7 +158,7 @@ int String_occurences(String* this, char find);
   * @param str The substring to find.
   * @return The position in the string of the first occurence of the substring str. -1 if str is not found within the string.
   */
-int String_find(String* this, String* find);
+int String_find(String* self, String* find);
 
 /** Finds the next occurence of a substring in a string.
   *
@@ -158,7 +167,7 @@ int String_find(String* this, String* find);
   * @param start The position in which to start searching for the substring.
   * @return The position in the string of the first occurence of the substring str after position start. -1 if str is not found.
   */
-int String_findFrom(String* this, String* find, int start);
+int String_findFrom(String* self, String* find, int start);
 
 /** Finds the first occurence of a character in a string.
   *
@@ -166,7 +175,7 @@ int String_findFrom(String* this, String* find, int start);
   * @param c The character to find.
   * @return The position in the string of the first occurence of the character c. -1 if c is not found.
   */
-int String_findChar(String* this, char c);
+int String_findChar(String* self, char c);
 
 /** Finds the next occurence of a character in a string.
   *
@@ -175,6 +184,14 @@ int String_findChar(String* this, char c);
   * @param start The position in which to start searching for the character.
   * @return The position in the string of the first occurence of the character c after position start. -1 if c is not found.
   */
-int String_findCharFrom(String* this, char c, int start);
+int String_findCharFrom(String* self, char c, int start);
 
-#endif // STRING_H
+int String_findCharReverse(String* self, char c);
+
+LinkedList* String_split(String* self, char separator);
+LinkedList* String_splitMultiSep(String* self, String* separators);
+LinkedList* String_splitStr(String* self, String* separator);
+
+String* String_newJoin(LinkedList* strings, String* separator);
+
+#endif // SMUG_UTILS_SSTRING_H

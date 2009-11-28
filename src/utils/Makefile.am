@@ -21,4 +21,4 @@ vector.c vector.h \
 rectangle.h rectangle.c \
 point.h point.c \
 map.c map.h \
-string.c string.h
+sstring.c sstring.h

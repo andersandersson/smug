@@ -18,13 +18,12 @@ void Node_delete(Node* node)
     free(node);
 }
 
-// This is not declared in the h-file. Not needed publicly.
-void LinkedList_clear(LinkedList* list)
+static void _clear(LinkedList* list)
 {
     Node* node = list->first;
     Node* next_node;
 
-    while(NULL != node) 
+    while(NULL != node)
     {
         next_node = node->next;
         Node_delete(node);
@@ -51,14 +50,14 @@ LinkedList* LinkedList_new()
 
 void LinkedList_delete(LinkedList* list)
 {
-    LinkedList_clear(list);
-    free(list);    
+    _clear(list);
+    free(list);
 }
 
 void LinkedList_addLast(LinkedList* list, void* item)
 {
     Node* node = Node_new();
-  
+
     if (list->last)
     {
         node->prev = list->last;
@@ -68,7 +67,7 @@ void LinkedList_addLast(LinkedList* list, void* item)
     {
         list->first = node;
     }
-    
+
     list->last = node;
     node->item = item;
     list->length++;
@@ -77,7 +76,7 @@ void LinkedList_addLast(LinkedList* list, void* item)
 void LinkedList_addFirst(LinkedList* list, void* item)
 {
     Node* node = Node_new();
-  
+
     if (list->first)
     {
         node->next = list->first;
@@ -87,10 +86,28 @@ void LinkedList_addFirst(LinkedList* list, void* item)
     {
         list->last = node;
     }
-    
+
     list->first = node;
     node->item = item;
     list->length++;
+}
+
+void LinkedList_insertAfter(LinkedList* self, Node* node, void* item)
+{
+    Node* newNode = Node_new();
+    newNode->item = item;
+    newNode->next = node->next;
+    newNode->prev = node;
+    node->next = newNode;
+}
+
+void LinkedList_insertBefore(LinkedList* self, Node* node, void* item)
+{
+    Node* newNode = Node_new();
+    newNode->item = item;
+    newNode->next = node;
+    newNode->prev = node->prev;
+    node->prev = newNode;
 }
 
 BOOL LinkedList_isEmpty(LinkedList* list)
@@ -101,22 +118,6 @@ BOOL LinkedList_isEmpty(LinkedList* list)
 
 int LinkedList_length(LinkedList* list)
 {
-    // int i = 0;
-    // Node* n;
-    // if (NULL == list || NULL == list->first)
-    // {
-        // return 0;
-    // }
-    // else
-    // {
-        // n = list->first;
-        // while (NULL != n)
-        // {
-            // i++;
-            // n = n->next;
-        // }
-        // return 0;
-    // }
     return list->length;
 }
 
@@ -125,10 +126,10 @@ void LinkedList_remove(LinkedList* list, Node* node)
     // if (node == NULL) WARNING("LinkedList_remove: 'node' is NULL.")
     // if (list == NULL) WARNING("LinkedList_remove: 'list' is NULL.")
     // if (list->first == NULL || list->last == NULL) WARNING("LinkedList_remove: 'list' is empty.")
-    
+
     // Node* next_node;
     // next_node = node->next;
-    
+
     if (node == list->first)
     {
         list->first = node->next;
@@ -137,7 +138,7 @@ void LinkedList_remove(LinkedList* list, Node* node)
     {
         node->prev->next = node->next;
     }
-    
+
     if (node == list->last)
     {
         list->last = node->prev;
@@ -145,8 +146,8 @@ void LinkedList_remove(LinkedList* list, Node* node)
     else
     {
         node->next->prev = node->prev;
-    }    
-    
+    }
+
     Node_delete(node);
     list->length--;
 }
@@ -161,10 +162,10 @@ BOOL LinkedList_removeItem(LinkedList* list, void* item)
                 LinkedList_remove(list, node);
                 return TRUE;
             }
-        else 
+        else
             {
                 node = node->next;
-            }        
+            }
     }
     return FALSE;
 }
@@ -216,7 +217,7 @@ LinkedList* LinkedList_map(LinkedList* list, void* (*func)(void*))
         LinkedList_addLast(newList, func(node->item));
         node = node->next;
     }
-    return newList;    
+    return newList;
 }
 
 BOOL LinkedList_forAll(LinkedList* list, BOOL(*pred)(void*))
@@ -247,8 +248,39 @@ BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*))
     return FALSE;
 }
 
+void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(void*))
+{
+    Node* iter;
+    void* itemCopy;
+
+    iter = self->first;
+    iter = iter->next;
+
+    while (NULL != iter)
+    {
+        LinkedList_insertBefore(self, iter, itemCopier(item));
+        iter = iter->next;
+    }
+}
+
+LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*))
+{
+    LinkedList* newList;
+    Node* iter;
+
+    newList = LinkedList_new();
+    iter = self->first;
+
+    while (NULL != iter)
+    {
+        LinkedList_addLast(newList, itemCopier(iter->item));
+        iter = iter->next;
+    }
+    return newList;
+}
+
 void LinkedList_deleteContents(LinkedList* list, void (*deleter)(void*))
 {
     //LinkedList_traverse(list, deleter);
-    LinkedList_clear(list);
+    _clear(list);
 }

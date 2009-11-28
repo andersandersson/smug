@@ -1,4 +1,4 @@
-/** @file hooks.h
+/** @file hook.h
   * @brief Holds a simple struct for callable objects
   */
 

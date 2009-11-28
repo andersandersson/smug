@@ -11,7 +11,7 @@
 TESTS = test-linkedlist test-arraylist test-hook test-vector test-map test-string
 
 AM_LDFLAGS = -L../ -L../../common -lutils -lcommon
-AM_CFLAGS = -I../ -I../../
+AM_CFLAGS = -I../ -I../../ -I../../common 
 
 check_PROGRAMS = test-linkedlist test-arraylist test-hook test-vector test-map test-string
 

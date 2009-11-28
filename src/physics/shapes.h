@@ -15,7 +15,7 @@ typedef unsigned int SHAPE_TYPE;
 typedef struct Shape
 {
     SHAPE_TYPE type;
-    void* data;    
+    void* data;         
 } Shape;
 
 
