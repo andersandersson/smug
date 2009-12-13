@@ -2,22 +2,6 @@
 
 #include <stdlib.h>
 
-Node* Node_new()
-{
-    Node* node = malloc(sizeof(Node));
-
-    node->item = NULL;
-    node->next = NULL;
-    node->prev = NULL;
-
-    return node;
-}
-
-void Node_delete(Node* node)
-{
-    free(node);
-}
-
 static void _clear(LinkedList* list)
 {
     Node* node = list->first;
@@ -35,6 +19,36 @@ static void _clear(LinkedList* list)
     list->length = 0;
 }
 
+static BOOL _invariant(LinkedList* self)
+{
+    return (self != NULL &&
+            (   (self->first == NULL &&
+                self->last == NULL)
+                ||
+                (self->first != NULL &&
+                self->last != NULL &&
+                self->first->prev == NULL &&
+                self->last->next == NULL)
+            )
+        );
+}
+
+Node* Node_new()
+{
+    Node* node = malloc(sizeof(Node));
+
+    node->item = NULL;
+    node->next = NULL;
+    node->prev = NULL;
+
+    return node;
+}
+
+void Node_delete(Node* node)
+{
+    free(node);
+}
+
 LinkedList* LinkedList_new()
 {
     LinkedList* new_list;
@@ -45,55 +59,65 @@ LinkedList* LinkedList_new()
     new_list->last = NULL;
     new_list->length = 0;
 
+    assert(_invariant(new_list));
+
     return new_list;
 }
 
-void LinkedList_delete(LinkedList* list)
+void LinkedList_delete(LinkedList* self)
 {
-    _clear(list);
-    free(list);
+    assert(_invariant(self));
+
+    _clear(self);
+    free(self);
 }
 
-void LinkedList_addLast(LinkedList* list, void* item)
+void LinkedList_addLast(LinkedList* self, void* item)
 {
+    assert(_invariant(self));
+
     Node* node = Node_new();
 
-    if (list->last)
+    if (self->last)
     {
-        node->prev = list->last;
-        list->last->next = node;
+        node->prev = self->last;
+        self->last->next = node;
     }
     else
     {
-        list->first = node;
+        self->first = node;
     }
 
-    list->last = node;
+    self->last = node;
     node->item = item;
-    list->length++;
+    self->length++;
 }
 
-void LinkedList_addFirst(LinkedList* list, void* item)
+void LinkedList_addFirst(LinkedList* self, void* item)
 {
+    assert(_invariant(self));
+
     Node* node = Node_new();
 
-    if (list->first)
+    if (self->first)
     {
-        node->next = list->first;
-        list->first->prev = node;
+        node->next = self->first;
+        self->first->prev = node;
     }
     else
     {
-        list->last = node;
+        self->last = node;
     }
 
-    list->first = node;
+    self->first = node;
     node->item = item;
-    list->length++;
+    self->length++;
 }
 
 void LinkedList_insertAfter(LinkedList* self, Node* node, void* item)
 {
+    assert(_invariant(self));
+
     Node* newNode = Node_new();
     newNode->item = item;
     newNode->next = node->next;
@@ -103,6 +127,8 @@ void LinkedList_insertAfter(LinkedList* self, Node* node, void* item)
 
 void LinkedList_insertBefore(LinkedList* self, Node* node, void* item)
 {
+    assert(_invariant(self));
+
     Node* newNode = Node_new();
     newNode->item = item;
     newNode->next = node;
@@ -110,38 +136,36 @@ void LinkedList_insertBefore(LinkedList* self, Node* node, void* item)
     node->prev = newNode;
 }
 
-BOOL LinkedList_isEmpty(LinkedList* list)
+BOOL LinkedList_isEmpty(LinkedList* self)
 {
-    return ((NULL == list) || ((NULL == list->first) && (NULL == list->last)));
-    // OR: length == 0;
+    assert(_invariant(self));
+
+    return (NULL == self->first && NULL == self->last);
 }
 
-int LinkedList_length(LinkedList* list)
+int LinkedList_length(LinkedList* self)
 {
-    return list->length;
+    assert(_invariant(self));
+
+    return self->length;
 }
 
-void LinkedList_remove(LinkedList* list, Node* node)
+void LinkedList_remove(LinkedList* self, Node* node)
 {
-    // if (node == NULL) WARNING("LinkedList_remove: 'node' is NULL.")
-    // if (list == NULL) WARNING("LinkedList_remove: 'list' is NULL.")
-    // if (list->first == NULL || list->last == NULL) WARNING("LinkedList_remove: 'list' is empty.")
+    assert(_invariant(self));
 
-    // Node* next_node;
-    // next_node = node->next;
-
-    if (node == list->first)
+    if (node == self->first)
     {
-        list->first = node->next;
+        self->first = node->next;
     }
     else
     {
         node->prev->next = node->next;
     }
 
-    if (node == list->last)
+    if (node == self->last)
     {
-        list->last = node->prev;
+        self->last = node->prev;
     }
     else
     {
@@ -149,17 +173,19 @@ void LinkedList_remove(LinkedList* list, Node* node)
     }
 
     Node_delete(node);
-    list->length--;
+    self->length--;
 }
 
-BOOL LinkedList_removeItem(LinkedList* list, void* item)
+BOOL LinkedList_removeItem(LinkedList* self, void* item)
 {
-    Node* node = list->first;
+    assert(_invariant(self));
+
+    Node* node = self->first;
     while(NULL != node)
     {
         if (node->item == item)
             {
-                LinkedList_remove(list, node);
+                LinkedList_remove(self, node);
                 return TRUE;
             }
         else
@@ -170,9 +196,11 @@ BOOL LinkedList_removeItem(LinkedList* list, void* item)
     return FALSE;
 }
 
-void LinkedList_doList(LinkedList* list, void (*func)(void*))
+void LinkedList_doList(LinkedList* self, void (*func)(void*))
 {
-    Node* node = list->first;
+    assert(_invariant(self));
+
+    Node* node = self->first;
     while(NULL != node)
     {
         func(node->item);
@@ -180,9 +208,11 @@ void LinkedList_doList(LinkedList* list, void (*func)(void*))
     }
 }
 
-void LinkedList_doListIf(LinkedList* list, void (*func)(void*), BOOL(*pred)(void*))
+void LinkedList_doListIf(LinkedList* self, void (*func)(void*), BOOL(*pred)(void*))
 {
-    Node* node = list->first;
+    assert(_invariant(self));
+
+    Node* node = self->first;
     while(NULL != node)
     {
         if (pred(node->item))
@@ -193,10 +223,12 @@ void LinkedList_doListIf(LinkedList* list, void (*func)(void*), BOOL(*pred)(void
     }
 }
 
-LinkedList* LinkedList_getThose(LinkedList* list, BOOL(*pred)(void*))
+LinkedList* LinkedList_getThose(LinkedList* self, BOOL(*pred)(void*))
 {
+    assert(_invariant(self));
+
     LinkedList* newList = LinkedList_new();
-    Node* node = list->first;
+    Node* node = self->first;
     while (NULL != node)
     {
         if (pred(node->item))
@@ -208,10 +240,12 @@ LinkedList* LinkedList_getThose(LinkedList* list, BOOL(*pred)(void*))
     return newList;
 }
 
-LinkedList* LinkedList_map(LinkedList* list, void* (*func)(void*))
+LinkedList* LinkedList_map(LinkedList* self, void* (*func)(void*))
 {
+    assert(_invariant(self));
+
     LinkedList* newList = LinkedList_new();
-    Node* node = list->first;
+    Node* node = self->first;
     while (NULL != node)
     {
         LinkedList_addLast(newList, func(node->item));
@@ -220,9 +254,11 @@ LinkedList* LinkedList_map(LinkedList* list, void* (*func)(void*))
     return newList;
 }
 
-BOOL LinkedList_forAll(LinkedList* list, BOOL(*pred)(void*))
+BOOL LinkedList_forAll(LinkedList* self, BOOL(*pred)(void*))
 {
-    Node* node = list->first;
+    assert(_invariant(self));
+
+    Node* node = self->first;
     while(NULL != node)
     {
         if (!pred(node->item))
@@ -234,9 +270,11 @@ BOOL LinkedList_forAll(LinkedList* list, BOOL(*pred)(void*))
     return TRUE;
 }
 
-BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*))
+BOOL LinkedList_exists(LinkedList* self, BOOL(*pred)(void*))
 {
-    Node* node = list->first;
+    assert(_invariant(self));
+
+    Node* node = self->first;
     while(NULL != node)
     {
         if (pred(node->item))
@@ -248,10 +286,20 @@ BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*))
     return FALSE;
 }
 
+void LinkedList_concat(LinkedList* self, LinkedList* other)
+{
+    assert(_invariant(self));
+    assert(_invariant(other));
+    self->last->next = other->first;
+    other->first->prev = self->last;
+}
+
 void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(void*))
 {
     Node* iter;
     void* itemCopy;
+
+    assert(_invariant(self));
 
     iter = self->first;
     iter = iter->next;
@@ -268,6 +316,8 @@ LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*))
     LinkedList* newList;
     Node* iter;
 
+    assert(_invariant(self));
+
     newList = LinkedList_new();
     iter = self->first;
 
@@ -279,8 +329,9 @@ LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*))
     return newList;
 }
 
-void LinkedList_deleteContents(LinkedList* list, void (*deleter)(void*))
+void LinkedList_deleteContents(LinkedList* self, void (*deleter)(void*))
 {
-    //LinkedList_traverse(list, deleter);
-    _clear(list);
+    assert(_invariant(self));
+    //LinkedList_traverse(self, deleter);
+    _clear(self);
 }

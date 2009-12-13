@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "sstring.h"
 #include "linkedlist.h"
 
@@ -7,18 +6,6 @@ static const int NUM_TESTS = 100;
 /*
     TODO: Test String_splitStr()
 */
-
-main()
-{
-    int i;
-    int ret;
-    for (i = 0; i < NUM_TESTS; i++)
-    {
-        ret = runtest(i);
-        if (ret != 0) return ret;
-    }
-    return 0;
-}
 
 int runtest(int nr)
 {
@@ -159,5 +146,17 @@ int runtest(int nr)
         break;
     }
     String_delete(nullStr);
+    return 0;
+}
+
+int main()
+{
+    int i;
+    int ret;
+    for (i = 0; i < NUM_TESTS; i++)
+    {
+        ret = runtest(i);
+        if (ret != 0) return ret;
+    }
     return 0;
 }

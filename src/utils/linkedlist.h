@@ -53,127 +53,134 @@ void Node_delete(Node* node);
 LinkedList* LinkedList_new();
 
 /** Destroys a list.
-  * 
+  *
   * The data in the list is not deleted. Call LinkedList_deleteContents first to avoid memory leak.
   *
   * @relatesalso LinkedList
-  * @param list A pointer to the list to be deleted.
+  * @param self A pointer to the list to be deleted.
   */
-void LinkedList_delete(LinkedList* list);
+void LinkedList_delete(LinkedList* self);
 
 /** Adds the passed item to a new node at the end of the list.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param item A pointer to the item to be added.
   */
-void LinkedList_addLast(LinkedList* list, void* item);
+void LinkedList_addLast(LinkedList* self, void* item);
 
 /** Adds the passed item to a new node at the beginning of the list.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param item A pointer to the item to be added.
   */
-void LinkedList_addFirst(LinkedList* list, void* item);
+void LinkedList_addFirst(LinkedList* self, void* item);
 
 void LinkedList_insertAfter(LinkedList* self, Node* node, void* item);
 
 void LinkedList_insertBefore(LinkedList* self, Node* node, void* item);
 
-BOOL LinkedList_isEmpty(LinkedList* list);
+BOOL LinkedList_isEmpty(LinkedList* self);
 
-int LinkedList_length(LinkedList* list);
+int LinkedList_length(LinkedList* self);
 
 /** Removes the passed node from the list. Does not delete the contents of the node!
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param node The node to remove.
   */
-void LinkedList_remove(LinkedList* list, Node* node);
+void LinkedList_remove(LinkedList* self, Node* node);
 
 /** Removes the passed item from the list. Does not delete the actual item!
   *
   * Compares pointers to determine equality.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param item The item to remove.
   * @return TRUE if an item was removed.
   */
-BOOL LinkedList_removeItem(LinkedList* list, void* item);
+BOOL LinkedList_removeItem(LinkedList* self, void* item);
 
 /** Calls the passed function on every data item in the list.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param func The function to call.
   */
-void LinkedList_doList(LinkedList* list, void (*func)(void*));
+void LinkedList_doList(LinkedList* self, void (*func)(void*));
 
 /** A conditional doList.
   *
   * Same as doList, but only executes the function for those elements that satisfy the predicate function.
-  * 
+  *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param func The function to call.
   * @param pred The predicate function.
   */
-void LinkedList_doListIf(LinkedList* list, void (*func)(void*), BOOL (*pred)(void*));
+void LinkedList_doListIf(LinkedList* self, void (*func)(void*), BOOL (*pred)(void*));
 
 /** Returns a new list of those elements in list matching the predicate function.
-  * 
+  *
   * Returns a new list comprising those elements in list for which the predicate
   * function returns true. The actual elements are note copied, only the
   * pointers to them.
-  * 
+  *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param pred The predicate function.
   */
-LinkedList* LinkedList_getThose(LinkedList* list, BOOL (*pred)(void*));
+LinkedList* LinkedList_getThose(LinkedList* self, BOOL (*pred)(void*));
 
 /** Returns a mapping of the list according to a mapping function.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param func The mapping function.
   */
-LinkedList* LinkedList_map(LinkedList* list, void* (*func)(void*));
+LinkedList* LinkedList_map(LinkedList* self, void* (*func)(void*));
 
 /** Returns true if all the list elements satisfy the predicate.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param pred The predicate function.
   */
-BOOL LinkedList_forAll(LinkedList* list, BOOL(*pred)(void*));
+BOOL LinkedList_forAll(LinkedList* self, BOOL(*pred)(void*));
 
 /** Returns true if at least one of the list elements satisfies the predicate.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param pred The predicate function.
   */
-BOOL LinkedList_exists(LinkedList* list, BOOL(*pred)(void*));
+BOOL LinkedList_exists(LinkedList* self, BOOL(*pred)(void*));
 
 /** Deletes the contents of the list.
-  * 
+  *
   * Calls the passed function on every data item in the list and then empties
   * the list. Assumes the passed function deletes the stored datatype correctly.
   * The list still exists, empty, after the call.
   *
   * @relatesalso LinkedList
-  * @param list The list.
+  * @param self The list.
   * @param deleter The destructor function for the type the list holds.
   */
-void LinkedList_deleteContents(LinkedList* list, void (*deleter)(void*));
+void LinkedList_deleteContents(LinkedList* self, void (*deleter)(void*));
 /* Create the deleter function like this:
 ContentItem_destroy(void* contentItem) {
     free((ContentItem*)contentItem);
 }*/
+
+/** Concatenates two lists together.
+  *
+  * 'other' will be concatenated to the end of self. After this,
+  * 'other' should be set to NULL and not used anymore.
+  */
+void LinkedList_concat(LinkedList* self, LinkedList* other);
 
 void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(void*));
 

@@ -32,18 +32,14 @@ void intDeleter(void* ip)
 
 int main()
 {
-    printf("\n");
-
     LinkedList* l;
     LinkedList* l2;
 
     l = LinkedList_new();
-    
-//    printf("LinkedList created.\n");
-    
+
     int i;
     int* j;
-    
+
     // Add 100 integer pointers to list.
     for (i = 0; i < 100; i++)
     {
@@ -55,11 +51,8 @@ int main()
     {
         return 4;
     }
-//    printf("LinkedList filled.\n");
 
     l2 = LinkedList_getThose(l, isEven);
-    // printf("These should be the even numbers from 0 to 99:\n");
-    // printList(l2);
 
     if (LinkedList_exists(l2, isOdd))
     {
@@ -73,14 +66,14 @@ int main()
     {
         return 5;
     }
-    
+
     LinkedList_delete(l2);
     LinkedList_deleteContents(l, intDeleter);
     if (! LinkedList_isEmpty(l))
     {
         return 3;
     }
-    
+
     for (i = 0; i < 100; i++)
     {
         j = malloc(sizeof(int));
@@ -91,13 +84,11 @@ int main()
     {
         return 6;
     }
-    
+
     // TODO: Iterate over list and test remove
     // Test doList, doListIf and map.
-    
+
     LinkedList_delete(l);
-    
-    printf("\n");
-    
+
     return 0;
 }

@@ -15,6 +15,29 @@ String* _new(char* theString)
     return newStr;
 }
 
+static int _findAnyCharFrom(String* self, String* chars, int start)
+{
+    assert(NULL != self);
+    int i;
+
+    i = max(start, 0);
+
+    while (i < self->mLength)
+    {
+        if (String_findChar(chars, String_charAt(self, i)) != -1)
+        {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
+static int _findAnyChar(String* self, String* chars)
+{
+    _findAnyCharFrom(self, chars, 0);
+}
+
 String* String_new(char* aString)
 {
     String* new_string;
@@ -30,11 +53,11 @@ String* String_new(char* aString)
     return new_string;
 }
 
-void String_delete(String* this)
+void String_delete(String* self)
 {
-    assert(NULL != this);
-    free(this->mString);
-    free(this);
+    assert(NULL != self);
+    free(self->mString);
+    free(self);
 }
 
 void String_deleteVoid(void* self)
@@ -42,16 +65,16 @@ void String_deleteVoid(void* self)
     String_delete((String*)self);
 }
 
-int String_length(String* this)
+int String_length(String* self)
 {
-    assert(NULL != this);
-    return this->mLength;
+    assert(NULL != self);
+    return self->mLength;
 }
 
-BOOL String_isEmpty(String* this)
+BOOL String_isEmpty(String* self)
 {
-    assert(NULL != this);
-    return (this->mLength == 0);
+    assert(NULL != self);
+    return (self->mLength == 0);
 }
 
 void String_println(String* self)
@@ -59,23 +82,23 @@ void String_println(String* self)
     printf(self->mString);
 }
 
-char String_charAt(String* this, int pos)
+char String_charAt(String* self, int pos)
 {
-    assert(NULL != this);
-    assert(pos >= 0 && pos < this->mLength);
-    return *(this->mString + pos);
+    assert(NULL != self);
+    assert(pos >= 0 && pos < self->mLength);
+    return *(self->mString + pos);
 }
 
-char* String_asCstr(String* this)
+char* String_asCstr(String* self)
 {
-    assert(NULL != this);
-    return this->mString;
+    assert(NULL != self);
+    return self->mString;
 }
 
-String* String_newCopy(String* this)
+String* String_newCopy(String* self)
 {
-    assert(NULL != this);
-    return String_new(this->mString);
+    assert(NULL != self);
+    return String_new(self->mString);
 }
 
 void* String_newCopyVoid(void* self)
@@ -83,31 +106,55 @@ void* String_newCopyVoid(void* self)
     return (void*)String_newCopy((String*)self);
 }
 
+char _charToUpper(char c)
+{
+    if (c >= 97 && c <= 122)
+        return c - 32;
+    else
+        return c;
+}
+
+char _charToLower(char c)
+{
+    if (c >= 65 && c <= 90)
+        return c + 32;
+    else
+        return c;
+}
+
 void String_toUppercase(String* self)
 {
-    assert(!"Unimplemented function.");
+    int i;
+    for (i = 0; i < self->mLength; i++)
+    {
+        self->mString[i] = _charToUpper(self->mString[i]);
+    }
 }
 
 void String_toLowercase(String* self)
 {
-    assert(!"Unimplemented function.");
+    int i;
+    for (i = 0; i < self->mLength; i++)
+    {
+        self->mString[i] = _charToLower(self->mString[i]);
+    }
 }
 
-String* String_newSubString(String* this, int start, int numChars)
+String* String_newSubString(String* self, int start, int numChars)
 {
-    assert(NULL != this);
+    assert(NULL != self);
     assert(start >= 0);
     int num;
     int i;
     char* temp;
 
-    num = numChars < 0 ? this->mLength - start : min(numChars, this->mLength - start);
+    num = numChars < 0 ? self->mLength - start : min(numChars, self->mLength - start);
     temp = malloc(sizeof(char) * (num + 1));
     temp[num] = '\0';
 
     for (i = 0; i < num; i++)
     {
-        *(temp + i) = *(this->mString + start + i);
+        *(temp + i) = *(self->mString + start + i);
     }
     return _new(temp);
 }
@@ -124,15 +171,15 @@ String* String_newConcat(String* first, String* second)
     return _new(temp);
 }
 
-String* String_newReplace(String* this, String* find, String* replace)
+String* String_newReplace(String* self, String* find, String* replace)
 {
     assert(!"Unimplemented: String_newReplace.");
     return NULL;
 }
 
-String* String_newReplaceChar(String* this, char find, String* replace)
+String* String_newReplaceChar(String* self, char find, String* replace)
 {
-    assert(NULL != this);
+    assert(NULL != self);
     assert(NULL != replace);
     char* newString;
     int write;
@@ -143,35 +190,35 @@ String* String_newReplaceChar(String* this, char find, String* replace)
     write = 0;
     read = 0;
     lastRead = 0;
-    finalSize = this->mLength + String_occurences(this, find) * (replace->mLength - 1) + 1;
+    finalSize = self->mLength + String_occurences(self, find) * (replace->mLength - 1) + 1;
     newString = malloc(sizeof(char) * finalSize);
     newString[finalSize - 1] = '\0';
 
-    read = String_findChar(this, find);
+    read = String_findChar(self, find);
 
     while (read != -1)
     {
-        strncpy(newString + write, this->mString + lastRead, read - lastRead);
+        strncpy(newString + write, self->mString + lastRead, read - lastRead);
         write += read - lastRead;
         strncpy(newString + write, replace->mString, replace->mLength);
         write += replace->mLength;
         read++;
         lastRead = read;
-        read = String_findCharFrom(this, find, read);
+        read = String_findCharFrom(self, find, read);
     }
-    strncpy(newString + write, this->mString + lastRead, this->mLength - lastRead);
-    assert(write + (this->mLength - lastRead) == strlen(newString));
+    strncpy(newString + write, self->mString + lastRead, self->mLength - lastRead);
+    assert(write + (self->mLength - lastRead) == strlen(newString));
     return _new(newString);
 }
 
-void String_crop(String* this, int start, int numChars)
+void String_crop(String* self, int start, int numChars)
 {
-    assert(NULL != this);
+    assert(NULL != self);
     String* temp;
-    temp = String_newSubString(this, start, numChars);
-    free(this->mString);
-    this->mString = temp->mString;
-    this->mLength = temp->mLength;
+    temp = String_newSubString(self, start, numChars);
+    free(self->mString);
+    self->mString = temp->mString;
+    self->mLength = temp->mLength;
     free(temp);
 }
 
@@ -202,21 +249,28 @@ BOOL String_equalAscii(String* first, String* second)
 
 BOOL String_equalAlpha(String* first, String* second)
 {
-    assert(!"Unimplemented function.");
-    return FALSE;
+    String* firstUpper;
+    String* secondUpper;
+    BOOL ret;
+    firstUpper = String_newCopy(first);
+    secondUpper = String_newCopy(second);
+    ret = String_equalAscii(firstUpper, secondUpper);
+    String_delete(firstUpper);
+    String_delete(secondUpper);
+    return ret;
 }
 
-int String_occurences(String* this, char find)
+int String_occurences(String* self, char find)
 {
-    assert(NULL != this);
+    assert(NULL != self);
     int i;
     int n;
     i = 0;
     n = 0;
 
-    for (i = 0; i < this->mLength; i++)
+    for (i = 0; i < self->mLength; i++)
     {
-        if (String_charAt(this, i) == find)
+        if (String_charAt(self, i) == find)
         {
             n++;
         }
@@ -287,31 +341,42 @@ int String_findChar(String* self, char c)
 int String_findCharFrom(String* self, char c, int start)
 {
     assert(NULL != self);
-    BOOL found;
-    int pos;
     int i;
 
-    found = FALSE;
-    pos = -1;
-    i = start;
+    i = max(start, 0);
 
-    while (!found && i < self->mLength)
+    while (i < self->mLength)
     {
         if (String_charAt(self, i) == c)
         {
-            found = TRUE;
-            pos = i;
-            break;
+            return i;
         }
         i++;
     }
-    return pos;
+    return -1;
+}
+
+int String_findCharReverseFrom(String* self, char c, int start)
+{
+    assert(NULL != self);
+    int i;
+
+    i = min(start, self->mLength - 1);
+
+    while (i >= 0)
+    {
+        if (String_charAt(self, i) == c)
+        {
+            return i;
+        }
+        i--;
+    }
+    return -1;
 }
 
 int String_findCharReverse(String* self, char c)
 {
-    assert(!"Unimplemented function.");
-    return -1;
+    return String_findCharReverseFrom(self, c, self->mLength - 1);
 }
 
 LinkedList* String_split(String* self, char separator)
@@ -336,8 +401,22 @@ LinkedList* String_split(String* self, char separator)
 
 LinkedList* String_splitMultiSep(String* self, String* separators)
 {
-    assert(!"Unimplemented function.");
-    return NULL;
+    int pos;
+    int fromPos;
+    LinkedList* strings;
+
+    pos = _findAnyChar(self, separators);
+    fromPos = 0;
+    strings = LinkedList_new();
+
+    while (pos != -1)
+    {
+        LinkedList_addLast(strings, (void*)String_newSubString(self, fromPos, pos - fromPos));
+        fromPos = pos + 1;
+        pos = _findAnyCharFrom(self, separators, fromPos);
+    }
+    LinkedList_addLast(strings, (void*)String_newSubString(self, fromPos, self->mLength - fromPos));
+    return strings;
 }
 
 LinkedList* String_splitStr(String* self, String* separator)
