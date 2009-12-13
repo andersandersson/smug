@@ -4,7 +4,6 @@
 #include "common/common.h"
 #include "graphics/image/image.h"
 
-
 typedef struct Texture
 {
     Image* image;
@@ -22,14 +21,5 @@ Texture* Texture_newFromImage(Image* image);
 void Texture_release(Texture* texture);
 void Texture_reload(Texture* texture);
 void Texture_delete(void* texture);
-
-
-
-
-
-
-
-
-
 
 #endif //SMUG_GRAPHICS_TEXTURE_H

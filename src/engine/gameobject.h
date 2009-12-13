@@ -6,7 +6,7 @@
 /** @addtogroup smug_engine
   * @{
   */
-  
+
 #ifndef SMUG_ENGINE_GAMEOBJECT_H
 #define SMUG_ENGINE_GAMEOBJECT_H
 
@@ -20,7 +20,7 @@ typedef struct GameObject
 {
     Drawable* drawable;
     BOOL visible;
-    
+
     char* tag;
 
 } GameObject;
@@ -52,7 +52,7 @@ void GameObject_setDrawable(GameObject* obj, Drawable* d);
 /** Render the GameObject.
   *
   * If the GameObject is visible and has a Drawable, that drawable is rendered.
-  * 
+  *
   * @relatesalso GameObject
   * @param obj A pointer to the GameObject to render.
   */

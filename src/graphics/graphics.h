@@ -33,7 +33,7 @@
 #define RENDER_DEBUG_TEXT       0x0200  // textual information
 #define RENDER_DEBUG_IMPULSES   0x0400  // visualize impulses and forces
 #define RENDER_DEBUG_ALL        0x0FF0  // debug mode
-#define RENDER_FPS              0x1000  // show fps  
+#define RENDER_FPS              0x1000  // show fps
 #define RENDER_ALL              0xFF    // render everything
 
 
@@ -56,9 +56,9 @@ BOOL Graphics_isInitialized();
  * Returns the current size of the screen
  * @return Vector the current screen size
  */
-Vector Graphics_getScreenSize(); 
+Vector Graphics_getScreenSize();
 
-/** 
+/**
  * Render one frame.
  */
 void Graphics_render();
@@ -73,12 +73,12 @@ void Graphics_addDrawable(Drawable* d);
  */
 void Graphics_terminate();
 
-/** 
+/**
  * Gets the current camera
  */
 Camera* Graphics_getCamera();
 
-/** 
+/**
  * Sets the properties of a layer
  * @param id the layer id
  * @param parallax value

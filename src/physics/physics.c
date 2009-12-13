@@ -42,7 +42,7 @@ static BOOL _compareCollisionType(void* left, void* right)
     return FALSE;
 }
 
-CollisionData* CollisionData_new() 
+CollisionData* CollisionData_new()
 {
     return malloc(sizeof(CollisionData));
 }
@@ -72,7 +72,7 @@ BOOL Physics_isInitialized()
 }
 
 void Physics_terminate()
-{   
+{
     assert(isInitialized);
     MapNode* node;
 
@@ -102,7 +102,7 @@ void Physics_addCollisionHook(BODY_TYPE left, BODY_TYPE right, Hook* hook)
             _type->left = left;
             _type->right = right;
             list = LinkedList_new();
-            
+
             Map_set(collision_hooks, (void*) _type, list);
         }
 
@@ -136,10 +136,10 @@ void Physics_removeBody(Body* body)
 BOOL Physics_collidePoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t)
 {
     float denumerator, numerator;
-    
+
     numerator = x1_start - x2_start;
     denumerator = x2_end - x1_end + x1_start - x2_start;
-    
+
     if(denumerator == 0) {
         return FALSE;
     }
@@ -160,10 +160,10 @@ BOOL Physics_collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_s
 
     BOOL res = TRUE;
 
-    res *= (1 - Physics_collidePoints1D(i1_x1_start, i1_x1_end, i2_x1_start, i2_x1_end, &x1_in));  
-    res *= (1 - Physics_collidePoints1D(i1_x1_start, i1_x1_end, i2_x2_start, i2_x2_end, &x1_out));  
-    res *= (1 - Physics_collidePoints1D(i1_x2_start, i1_x2_end, i2_x1_start, i2_x1_end, &x2_in));  
-    res *= (1 - Physics_collidePoints1D(i1_x2_start, i1_x2_end, i2_x2_start, i2_x2_end, &x2_out));  
+    res *= (1 - Physics_collidePoints1D(i1_x1_start, i1_x1_end, i2_x1_start, i2_x1_end, &x1_in));
+    res *= (1 - Physics_collidePoints1D(i1_x1_start, i1_x1_end, i2_x2_start, i2_x2_end, &x1_out));
+    res *= (1 - Physics_collidePoints1D(i1_x2_start, i1_x2_end, i2_x1_start, i2_x1_end, &x2_in));
+    res *= (1 - Physics_collidePoints1D(i1_x2_start, i1_x2_end, i2_x2_start, i2_x2_end, &x2_out));
 
     if(TRUE == res)
         {
@@ -232,15 +232,15 @@ BOOL Physics_collideRectangleRectangle(Body* left, Body* right, CollisionData** 
         {
             return FALSE;
         }
-    
-    
+
+
     if(t_x_in < 1.0 && t_y_in < 1.0 && t_x_out > 0.0 && t_y_out > 0.0) {
         (*collision_data) = CollisionData_new();
         (*collision_data)->left = left;
         (*collision_data)->right = right;
         (*collision_data)->collisionTime = t_x_in > t_y_in ? t_x_in : t_y_in;
         (*collision_data)->movement = Point_distanceToPoint(left->position, left->new_position);
-        
+
         return TRUE;
     }
 
@@ -267,15 +267,15 @@ void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* c
                         {
                             continue;
                         }
-                    
+
                     Body* left_body = (Body*) left_node->item;
                     Body* right_body = (Body*) right_node->item;
-                    
+
                     if(NULL == left_body->shape || NULL == right_body->shape)
                         {
                             continue;
                         }
-                    
+
                     if(SHAPE_RECTANGLE == left_body->shape->type &&
                        SHAPE_RECTANGLE == right_body->shape->type)
                         {
@@ -315,7 +315,7 @@ void Physics_update(TIME time)
         {
             LinkedList* list;
             Node* list_node;
-            
+
             list = (LinkedList*) node->value;
 
             for(list_node = list->first; list_node != NULL; list_node = list_node->next)
@@ -344,7 +344,7 @@ void Physics_update(TIME time)
         {
             LinkedList* list;
             Node* list_node;
-            
+
             list = (LinkedList*) node->value;
 
             for(list_node = list->first; list_node != NULL; list_node = list_node->next)
@@ -366,7 +366,7 @@ void Physics_update(TIME time)
         {
             LinkedList* list;
             Node* list_node;
-            
+
             list = (LinkedList*) node->value;
 
             for(list_node = list->first; list_node != NULL; list_node = list_node->next)

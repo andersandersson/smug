@@ -28,4 +28,3 @@ void Sprite_delete(void* sprite)
         free(sprite);
     }
 }
-

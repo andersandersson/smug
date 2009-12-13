@@ -1,11 +1,9 @@
 #ifndef SMUG_PHYSICS_SHAPES_H
 #define SMUG_PHYSICS_SHAPES_H
 
-
 #include "utils/rectangle.h"
 #include "utils/point.h"
 #include "utils/vector.h"
-
 
 typedef unsigned int SHAPE_TYPE;
 
@@ -15,15 +13,13 @@ typedef unsigned int SHAPE_TYPE;
 typedef struct Shape
 {
     SHAPE_TYPE type;
-    void* data;         
+    void* data;
 } Shape;
 
-
-
 Shape* Shape_new();
+
 void Shape_delete(Shape* shape);
 
 Shape* Shape_createFromRectangle(Rectangle rect);
-
 
 #endif // SMUG_PHYSICS_SHAPES_H

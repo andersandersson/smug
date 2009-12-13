@@ -1,8 +1,6 @@
 #ifndef SMUG_GRAPHICS_BATCHDATA
 #define SMUG_GRAPHICS_BATCHDATA
 
-
-
 typedef struct BatchData
 {
     unsigned int capacity;
@@ -19,11 +17,8 @@ void BatchData_growCapacityTo(BatchData* batch, unsigned int size);
 unsigned int BatchData_getCapacity(BatchData* batch);
 void BatchData_expandTo(BatchData* batch, unsigned int size);
 
-
 //void BatchData_freeData(BatchData* data);
 //void BatchData_setSize(BatchData* data, unsigned int size);
 //void BatchData_copyData(BatchData* todata, Batchdata* fromdata, unsigned int size);
 
-
 #endif //SMUG_GRAPHICS_BATCHDATA
-

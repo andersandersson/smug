@@ -1,10 +1,8 @@
 #include "texture.h"
 
-#include "stdlib.h"
+#include <stdlib.h>
 #include "platform/opengl/opengl.h"
 #include "common/log.h"
-
-
 
 static Texture* loadTextureFromImage(Texture* tex, Image* image)
 {
@@ -18,21 +16,21 @@ static Texture* loadTextureFromImage(Texture* tex, Image* image)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width, image->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
+
     if (glIsTexture(texid) != GL_TRUE)
     {
         ERROR("Could not load texture from image.");
         return NULL;
     }
-    
+
     tex->texid = texid;
     tex->image = image;
     tex->width = image->width;
     tex->height = image->height;
     tex->px = 1.0/tex->width;
-    tex->py = 1.0/tex->height; 
-    tex->loaded = TRUE;  
-    
+    tex->py = 1.0/tex->height;
+    tex->loaded = TRUE;
+
     return tex;
 }
 
@@ -46,21 +44,21 @@ static BOOL loadEmptyTexture(Texture* tex, unsigned int width, unsigned height)
     glTexImage2D(GL_TEXTURE_2D, GL_RGBA, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
+
     if (glIsTexture(texid) != GL_TRUE)
     {
         ERROR("Could not load empty texture.");
         return FALSE;
     }
-    
+
     tex->texid = texid;
     tex->image = NULL;
     tex->width = width;
     tex->height = height;
     tex->px = 1.0/tex->width;
     tex->py = 1.0/tex->height;
-    tex->loaded = TRUE;    
-    
+    tex->loaded = TRUE;
+
     return TRUE;
 }
 
@@ -86,10 +84,9 @@ Texture* Texture_newFromImage(Image* image)
     return NULL;
 }
 
-
 void Texture_release(Texture* texture)
 {
-	glDeleteTextures(1,&texture->texid);
+	glDeleteTextures(1, &texture->texid);
 	texture->loaded = FALSE;
 }
 
@@ -99,7 +96,7 @@ void Texture_reload(Texture* texture)
     {
         Texture_release(texture);
     }
-    
+
     if (texture->image != NULL)
     {
        loadTextureFromImage(texture, texture->image);
@@ -119,12 +116,3 @@ void Texture_delete(void* texture)
         free(t);
     }
 }
-
-
-
-
-
-
-
-
-

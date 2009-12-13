@@ -17,7 +17,7 @@
 #include "utils/point.h"
 #include "utils/vector.h"
 
-/** 
+/**
   * A graphical entity on screen. A Drawable is a common interface
   * for a collection of different graphic components.
   */
@@ -30,10 +30,10 @@ typedef struct Drawable
     Color color;
     unsigned int vertexcount;
     Vector* vertices;
-    
+
     void (*_writeBatchDataFunc)(struct Drawable* d, BatchData* batch, unsigned int start); /**< Function for writing data */
     int (*_getDataSizeFunc)(struct Drawable* d); /**< Function for getting data size */
-    
+
 } Drawable;
 
 /**
@@ -72,7 +72,7 @@ int Drawable_getDataSize(Drawable* d);
  * Set position of a Drawable
  * @relatesalso Drawable
  * @param d the Drawable
- * @param pos Position 
+ * @param pos Position
  */
 void Drawable_setPos(Drawable* d, Point pos);
 
@@ -126,12 +126,12 @@ unsigned int Drawable_getTextureID(Drawable* d);
 
 /**
  * Get the size of an element of the drawable.
- * This size is the size of each component of a drawable, 
- * if a drawable consists of several rectangles (such as a font) 
+ * This size is the size of each component of a drawable,
+ * if a drawable consists of several rectangles (such as a font)
  * then the objectsize is the number of vertices in one rectangle.
  * @relatesalso Drawable
  * @param d the Drawable
- * @return 
+ * @return
  */
 unsigned int Drawable_getObjectSize(Drawable* d);
 

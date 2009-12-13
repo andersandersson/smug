@@ -30,7 +30,7 @@ int Drawable_getDataSize(Drawable* d)
     assert(NULL != d);
     if (NULL != ((Drawable*)d)->_getDataSizeFunc)
         return ((Drawable*)d)->_getDataSizeFunc(d);
-        
+
     return 0;
 }
 
@@ -38,7 +38,7 @@ void Drawable_delete(void* d)
 {
     assert(NULL != d);
     free(((Drawable*)d)->vertices);
-    free(d); 
+    free(d);
 }
 
 void Drawable_setPos(Drawable* d, Point pos)
@@ -65,12 +65,12 @@ void Drawable_setColor(Drawable* d, Color color)
 	d->color = color;
 }
 
-
 unsigned int Drawable_getLayer(Drawable* d)
 {
     assert(NULL != d);
     return d->layer;
 }
+
 Texture* Drawable_getTexture(Drawable* d)
 {
     assert(NULL != d);
@@ -96,4 +96,3 @@ unsigned int Drawable_getObjectSize(Drawable* d)
     assert(NULL != d);
     return d->vertexcount;
 }
-

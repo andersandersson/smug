@@ -51,7 +51,6 @@ void Camera_setRotation(Camera* camera, float r);
  */
 void Camera_setZoom(Camera* camera, float zoom);
 
-
 #endif //SMUG_GRAPHICS_CAMERA_H
 
 /**@}*/

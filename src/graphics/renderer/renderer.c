@@ -5,14 +5,13 @@
 #include "renderbatch.h"
 #include "layer.h"
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "graphics/graphics.h"
 #include "graphics/sprite.h"
 
 #include "platform/opengl/opengl.h"
-
 
 extern int gVBOSupported;
 extern unsigned int gRenderMode;
@@ -23,7 +22,7 @@ Renderer* Renderer_new()
     ret->layers = ArrayList_new();
     ret->layercount = 0;
     ret->camera = Camera_new(Vector_multiply(Graphics_getScreenSize(), 0.5));
-    
+
     return ret;
 }
 
@@ -44,9 +43,9 @@ static void renderLayer(Renderer* renderer, Layer* layer)
     glScalef(1.0f + (camera->scale.d[0] - 1.0f)  * p, 1.0f + (camera->scale.d[1] - 1.0f)  * p, 1.0f);
     glTranslatef(-Point_getX(&camera->pos) * p, -Point_getY(&camera->pos) * p, 0.0f);
 
-    Layer_render(layer); 
-    
-    glPopMatrix();    
+    Layer_render(layer);
+
+    glPopMatrix();
 }
 
 static void renderDebugGrid(Renderer* renderer)
@@ -77,7 +76,7 @@ static void renderDebugGrid(Renderer* renderer)
     // TODO: Compensate for screen ratio when rotated.
     glDisable(GL_TEXTURE_2D); // TODO: dont allways disable textures here, try to check if its already disabled
     glBegin(GL_LINES);
-    {      
+    {
         float i;
         // Draw vertical lines from the middle to the right
         for (i = cx; i <= cx + cw + gridsizex; i+=gridsizex)
@@ -109,8 +108,8 @@ static void renderDebugGrid(Renderer* renderer)
         }
     }
     glEnd();
-        
-    glPopMatrix();    
+
+    glPopMatrix();
 }
 
 void Renderer_render(Renderer* renderer)
@@ -120,7 +119,7 @@ void Renderer_render(Renderer* renderer)
     Camera* camera = renderer->camera;
     glTranslatef(camera->center.d[0], camera->center.d[1], 0.0f);
     glRotatef(renderer->camera->rot, 0.0f, 0.0f, 1.0f);
-    
+
     if (gRenderMode & RENDER_LAYERS)
     {
         Layer* layer;
@@ -134,12 +133,12 @@ void Renderer_render(Renderer* renderer)
             }
         }
     }
-    
+
     if (gRenderMode & RENDER_DEBUG_GRID)
     {
         renderDebugGrid(renderer);
     }
-    
+
 }
 
 void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
@@ -147,7 +146,7 @@ void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
     assert(NULL != renderer);
     assert(NULL != drawable);
 
-    
+
     Layer* layer = ArrayList_get(renderer->layers, Drawable_getLayer(drawable));
     if (NULL == layer )
     {
@@ -157,7 +156,6 @@ void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
     }
     Layer_addDrawable(layer, drawable);
 }
-
 
 Camera* Renderer_getCamera(Renderer* renderer)
 {
@@ -169,7 +167,7 @@ Camera* Renderer_getCamera(Renderer* renderer)
 void Renderer_setupLayer(Renderer* renderer, unsigned int id, float parallax)
 {
     assert(NULL != renderer);
-  
+
     Layer* layer = ArrayList_get(renderer->layers, id);
     if (NULL == layer )
     {

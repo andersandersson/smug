@@ -14,18 +14,18 @@
 #include "utils/rectangle.h"
 #include "utils/vector.h"
 
-/** 
+/**
  * Holds a texture and a rectangular area on it.
  * Also supports an offset to that area.
  */
 typedef struct Sprite
 {
-    Rectangle rect; 
+    Rectangle rect;
     Texture* texture;
     Vector offset;
 } Sprite;
 
-/*
+/**
  * Create new sprite from pixel coordinates.
  * @param texture a pointer to a valid texture
  * @param rect a rectangle on the texture
@@ -33,15 +33,15 @@ typedef struct Sprite
  */
 Sprite* Sprite_newFromPixelCoords(Texture* texture, Rectangle rect, Vector offset);
 
-/*
+/**
  * Create new sprite from texture coordinates
  * @param texture a pointer to a valid texture
  * @param rect a rectangle on the texture
- * @param offset offset of the rect 
+ * @param offset offset of the rect
  */
 Sprite* Sprite_newFromTextureCoords(Texture* texture, Rectangle rect, Vector offset);
 
-/*
+/**
  * Delete sprite
  * @param sprite a pointer to a sprite
  */

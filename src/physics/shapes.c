@@ -22,7 +22,7 @@ void Shape_delete(Shape* shape)
             Rectangle_delete((Rectangle*)shape->data);
             break;
         }
-    
+
     free(shape);
 }
 

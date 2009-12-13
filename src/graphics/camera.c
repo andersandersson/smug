@@ -1,6 +1,5 @@
 #include "camera.h"
-
-#include "stdlib.h"
+#include <stdlib.h>
 
 Camera* Camera_new(Vector center)
 {
@@ -12,8 +11,9 @@ Camera* Camera_new(Vector center)
 
     return ret;
 }
+
 void Camera_delete(void* camera)
-{   
+{
     assert(NULL != camera);
     Camera* thecamera = (Camera*)camera;
     free(thecamera);
@@ -22,16 +22,16 @@ void Camera_delete(void* camera)
 void Camera_setPosition(Camera* camera, Point p)
 {
     assert(NULL != camera);
-    
+
     camera->pos = p;
 }
+
 void Camera_setRotation(Camera* camera, float r)
 {
     assert(NULL != camera);
-    
+
     camera->rot = r;
 }
-
 
 void Camera_setZoom(Camera* camera, float zoom)
 {
@@ -41,8 +41,7 @@ void Camera_setZoom(Camera* camera, float zoom)
         zoom = 0.01;
     if (zoom >= 100)
        zoom = 99;
-        
-    camera->scale = Vector_create2d(zoom, zoom);
-    
-}
 
+    camera->scale = Vector_create2d(zoom, zoom);
+
+}

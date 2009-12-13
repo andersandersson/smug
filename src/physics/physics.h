@@ -4,7 +4,7 @@
   */
 
 /** @defgroup smug_physics Physics
-  * 
+  *
   * @{
   */
 

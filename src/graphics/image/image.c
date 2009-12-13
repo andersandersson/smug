@@ -11,12 +11,12 @@ Image* Image_new()
 {
     Image* ret = (Image*)malloc(sizeof(Image));
     ret->data = NULL;
-    ret->file = NULL; 
+    ret->file = NULL;
     ret->size = 0;
     ret->width = 0;
     ret->height = 0;
     ret->channels = 0;
-    
+
     return ret;
 }
 
@@ -24,17 +24,17 @@ Image* Image_newFromData(unsigned char* data, unsigned int size, unsigned int wi
 {
     Image* ret = (Image*)malloc(sizeof(Image));
     ret->size = size;
-    ret->channels = channels;      
+    ret->channels = channels;
     ret->width = width;
     ret->height = height;
     if (ret->channels * ret->width * ret->height != ret->size)
     {
-        WARNING("Size of data does not match dimensions of image."); 
-        DEBUG("Image width: %i, height: %i, channels: %i, size %i", ret->width, ret->height, ret->channels, ret->size);  
-    }   
+        WARNING("Size of data does not match dimensions of image.");
+        DEBUG("Image width: %i, height: %i, channels: %i, size %i", ret->width, ret->height, ret->channels, ret->size);
+    }
     ret->data = (unsigned char*)malloc(sizeof(unsigned char) * ret->size);
     memcpy(ret->data, data, ret->size);
-    ret->file = NULL; 
+    ret->file = NULL;
     return ret;
 }
 
@@ -49,8 +49,8 @@ void Image_delete(Image* image)
     {
         free(image->file);
         image->file = NULL;
-    } 
-   
+    }
+
     free(image);
 }
 
@@ -61,15 +61,15 @@ static unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
 	{
 		WARNING("Couldn't locate file '%s'.", filename);
 		return 0;
-	}   
+	}
     DEBUG("Successfully opened file '%s'.", filename);
-    
+
 	fseek(file, 0, SEEK_END);
 	int filelen = ftell(file);
 	fseek(file, 0, SEEK_SET);
-    
-    DEBUG("File length: '%i'.", filelen);   
-    
+
+    DEBUG("File length: '%i'.", filelen);
+
 	unsigned char* buffer = (unsigned char*)malloc(filelen);
 	if (fread(buffer, 1, filelen, file) != filelen)
 	{
@@ -77,8 +77,8 @@ static unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
 		fclose(file);
 		free(buffer);
         return 0;
-	}    
-    
+	}
+
     fclose(file);
     *buffersize = filelen;
     return buffer;
@@ -91,33 +91,32 @@ static BOOL _saveFile(const char* filename, unsigned char* buffer, unsigned int 
 	{
 		WARNING("Couldn't locate or create file '%s'.", filename);
 		return FALSE;
-	}   
+	}
     DEBUG("Successfully opened file '%s'.", filename);
-    
-    
-    DEBUG("Buffer length: '%i'.", buffersize);   
-    
+
+
+    DEBUG("Buffer length: '%i'.", buffersize);
+
 	if (fwrite(buffer, 1, buffersize, file) != buffersize)
 	{
 		ERROR("Did not write correct amount of bytes.");
 		fclose(file);
         return FALSE;
-	}    
-    
+	}
+
     fclose(file);
 
     return TRUE;
 }
 
-
 static BOOL _decodePNG(Image* image, unsigned char* buffer, unsigned int buffersize)
-{     
+{
     LodePNG_Decoder decoder;
     LodePNG_Decoder_init(&decoder);
     LodePNG_decode(&decoder, &image->data, &image->size, buffer, buffersize);
-      
-    if(decoder.error) 
-    {   
+
+    if(decoder.error)
+    {
         ERROR("PNG decoding failed, error: %d\n", decoder.error);
         return FALSE;
     }
@@ -132,17 +131,17 @@ static BOOL _decodePNG(Image* image, unsigned char* buffer, unsigned int buffers
 }
 
 static BOOL _encodePNG(unsigned char** buffer, unsigned int* buffersize, Image* image)
-{     
+{
     LodePNG_Encoder encoder;
     LodePNG_Encoder_init(&encoder);
     LodePNG_encode(&encoder, buffer, buffersize, image->data, image->width, image->height);
-      
-    if(encoder.error) 
-    {   
+
+    if(encoder.error)
+    {
         ERROR("PNG decoding failed, error: %d\n", encoder.error);
         return FALSE;
     }
-    
+
     LodePNG_Encoder_cleanup(&encoder);
 
     return TRUE;
@@ -150,10 +149,10 @@ static BOOL _encodePNG(unsigned char** buffer, unsigned int* buffersize, Image* 
 
 BOOL Image_loadFromFile(Image* image, const char* filename)
 {
-    unsigned char* buffer = NULL;  
-    
+    unsigned char* buffer = NULL;
+
     DEBUG("Loading image from file '%s'", filename);
-    
+
     unsigned int buffersize;
     buffer = _loadFile(filename, &buffersize);
     if (NULL == buffer)
@@ -161,7 +160,7 @@ BOOL Image_loadFromFile(Image* image, const char* filename)
         WARNING("Could not open image '%s'", filename);
         return FALSE;
     }
-    
+
     // Decode according to file ending
     int len = strlen(filename);
     BOOL retval = FALSE;
@@ -175,7 +174,7 @@ BOOL Image_loadFromFile(Image* image, const char* filename)
         DEBUG("No known file format, decoding image as PNG");
         retval = _decodePNG(image, buffer, buffersize);
     }
-    
+
     if (!retval)
     {
         ERROR("Could not load image");
@@ -188,10 +187,10 @@ BOOL Image_loadFromFile(Image* image, const char* filename)
 
 BOOL Image_saveToFile(Image* image, const char* filename)
 {
-    unsigned char* buffer = NULL;    
+    unsigned char* buffer = NULL;
     unsigned int buffersize;
     DEBUG("Saving image to file '%s'", filename);
-    
+
     // Encode according to file ending
     int len = strlen(filename);
     BOOL retval = FALSE;
@@ -206,7 +205,7 @@ BOOL Image_saveToFile(Image* image, const char* filename)
         DEBUG("No known file format, encoding image as PNG");
         retval = _encodePNG(&buffer, &buffersize, image);
     }
-        
+
     if (!retval || NULL == buffer)
     {
         ERROR("Could not save image");
@@ -214,6 +213,6 @@ BOOL Image_saveToFile(Image* image, const char* filename)
     }
 
     retval = _saveFile(filename, buffer, buffersize);
-    
+
     return retval;
 }

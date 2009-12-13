@@ -19,29 +19,28 @@ static void printGLError()
 
     switch (err)
     {
-        case GL_INVALID_ENUM: 
+        case GL_INVALID_ENUM:
             ERROR("GL error GL_INVALID_ENUM\n");
             break;
-        case GL_INVALID_VALUE: 
+        case GL_INVALID_VALUE:
             ERROR("GL error GL_INVALID_VALUE\n");
             break;
-        case GL_INVALID_OPERATION: 
+        case GL_INVALID_OPERATION:
             ERROR("GL error GL_INVALID_OPERATION\n");
             break;
-        case GL_STACK_OVERFLOW: 
+        case GL_STACK_OVERFLOW:
             ERROR("GL error GL_STACK_OVERFLOW\n");
             break;
-        case GL_STACK_UNDERFLOW: 
+        case GL_STACK_UNDERFLOW:
             ERROR("GL error GL_STACK_UNDERFLOW\n");
             break;
-        case GL_OUT_OF_MEMORY: 
+        case GL_OUT_OF_MEMORY:
             ERROR("GL error GL_OUT_OF_MEMORY\n");
-            break;   
+            break;
         default:
             break;
     }
 }
-
 
 static int setupGL()
 {
@@ -54,14 +53,14 @@ static int setupGL()
         return 0;
     }
 #endif //WIN32
-    
+
     DEBUG("Checking for VBO support");
 	if(GL_ARB_vertex_buffer_object)
-	{   
+	{
         gVBOSupported = 1;
     }
     else
-    {   
+    {
         WARNING("VBOs are not supported, rendering will use vertex arrays.\n");
     }
 
@@ -80,9 +79,9 @@ static int setupGL()
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
     printGLError();
-   
+
     glEnable( GL_TEXTURE_2D );
-    
+
     return 1;
 }
 
@@ -93,21 +92,20 @@ int Graphics_init(int width, int height)
 	assert(Platform_isWindowOpen());
 
     screenSize = Vector_create2d(width, height);
-    
+
     DEBUG("Graphics resolution set to %ix%i", width, height);
-    
+
     if (!setupGL())
         return 0;
-   
+
     sceneRenderer = Renderer_new();
 
     isInitialized = TRUE;
     return 1;
 }
 
-
 BOOL Graphics_isInitialized()
-{   
+{
     return isInitialized;
 }
 
@@ -131,7 +129,6 @@ void Graphics_render()
 
     Renderer_render(sceneRenderer);
 }
-
 
 void Graphics_addDrawable(Drawable* d)
 {
