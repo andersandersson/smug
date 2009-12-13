@@ -1,3 +1,12 @@
+/** @file shapes.h
+  * @brief
+  * @ingroup smug_physics
+  */
+
+/** @addtogroup smug_physics
+  * @{
+  */
+
 #ifndef SMUG_PHYSICS_BODY_H
 #define SMUG_PHYSICS_BODY_H
 
@@ -14,7 +23,6 @@ typedef struct Body
     Vector movement;
 } Body;
 
-
 Body* Body_new();
 void Body_delete(Body* body);
 void Body_setShape(Body* body, Shape* shape);
@@ -24,3 +32,5 @@ void Body_move(Body* body, float x, float y);
 void Body_moveTo(Body* body, float x, float y);
 
 #endif // SMUG_PHYSICS_BODY_H
+
+/**@}*/

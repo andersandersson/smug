@@ -1,5 +1,10 @@
 /** @file hook.h
   * @brief Holds a simple struct for callable objects
+  * @ingroup smug_utils
+  */
+
+/** @addtogroup smug_utils
+  * @{
   */
 
 #ifndef UTILS_HOOK_H
@@ -8,30 +13,30 @@
 #include "linkedlist.h"
 
 /** A struct for a callable object
-  * 
-  * Create a hook with Hook_new and delete them with 
+  *
+  * Create a hook with Hook_new and delete them with
   * Hook_delete. The 'data' member is usually set by
   * the creater of the Hook and the second parameter
   * to 'function' by the caller of the Hook.
-  */ 
+  */
 typedef struct Hook
 {
     /** Parameter 1 to be sent to 'function'. */
     void* data;
-   
+
     /** The function to be called.
       *
       * This function will be called by Hook_call.
       * 'data' will be sent as the first parameter, and
       * the second argument to Hook_call as the second.
-      * 
+      *
       * @return The value to be returned by Hook_call.
       */
     int (*function)(void*, void*);
 } Hook;
 
 
-/** Create a new hook instance 
+/** Create a new hook instance
   *
   * @return A pointer to the created Hook
   */
@@ -92,3 +97,5 @@ int Hook_callAllWhile(LinkedList* list, void* arg, int condition); // FIXFIX: Sa
 int Hook_callAllWhileNot(LinkedList* list, void* arg, int condition); // FIXFIX: Same as above
 
 #endif // UTILS_HOOK_H
+
+/**@}*/

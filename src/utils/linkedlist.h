@@ -1,5 +1,10 @@
 /** @file linkedlist.h
   * @brief Defines a regular linked list type (and a node type for it).
+  * @ingroup smug_utils
+  */
+
+/** @addtogroup smug_utils
+  * @{
   */
 
 #ifndef LINKEDLIST_H
@@ -187,3 +192,5 @@ void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(voi
 LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*));
 
 #endif // LINKEDLIST_H
+
+/**@}*/

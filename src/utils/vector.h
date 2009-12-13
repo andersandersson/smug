@@ -3,7 +3,7 @@
   * @ingroup smug_utils
   */
 
-/** @addtogroup smug_utils Utilities
+/** @addtogroup smug_utils
   * @{
   */
 
@@ -31,7 +31,7 @@ Vector Vector_create2d(float x, float y);
 
 
 /**
- * Calculate the normal (2 dimensional cross product) 
+ * Calculate the normal (2 dimensional cross product)
  * for the Vector.
  */
 Vector Vector_crossProduct2d(Vector v);
@@ -61,7 +61,7 @@ float Vector_getX(Vector* v);
 float Vector_getY(Vector* v);
 
 
-// Dimension independent functions 
+// Dimension independent functions
 // -------------------------------
 
 
@@ -81,12 +81,12 @@ Vector Vector_sub(Vector v, Vector w);
 
 /**
  * Multiply the elements in v by k and
- * return a new Vector with the result. 
+ * return a new Vector with the result.
  */
 Vector Vector_multiply(Vector v, float k);
 
 /**
- * Multiply Vectors v:s elements with vector w:s 
+ * Multiply Vectors v:s elements with vector w:s
  * and return a new Vector with the result.
  */
 Vector Vector_multiplyVector(Vector v, Vector w);

@@ -1,5 +1,10 @@
 /** @file sstring.h
   * @brief Defines a string type and related functions.
+  * @ingroup smug_utils
+  */
+
+/** @addtogroup smug_utils
+  * @{
   */
 
 #ifndef SMUG_UTILS_SSTRING_H
@@ -119,7 +124,7 @@ String* String_newSubString(String* self, int start, int numChars);
 /** Concatenates two strings.
   *
   * Creates a new string by concatenating two strings together.
-  * 
+  *
   * @relatesalso String
   * @param first The first string.
   * @param second The second string.
@@ -153,7 +158,7 @@ String* String_newReplaceChar(String* self, char find, String* replace);
 /** Crops a string.
   *
   * Replaces the string with its substring starting in position start and continuing for maximum numChars characters.
-  * 
+  *
   * @relatesalso String
   * @param self The string.
   * @param start The position of the first character to keep.
@@ -320,3 +325,5 @@ LinkedList* String_splitStr(String* self, String* separator);
 String* String_newJoin(LinkedList* strings, String* separator);
 
 #endif // SMUG_UTILS_SSTRING_H
+
+/**@}*/

@@ -1,3 +1,12 @@
+/** @file shapes.h
+  * @brief
+  * @ingroup smug_physics
+  */
+
+/** @addtogroup smug_physics
+  * @{
+  */
+
 #ifndef SMUG_PHYSICS_SHAPES_H
 #define SMUG_PHYSICS_SHAPES_H
 
@@ -23,3 +32,5 @@ void Shape_delete(Shape* shape);
 Shape* Shape_createFromRectangle(Rectangle rect);
 
 #endif // SMUG_PHYSICS_SHAPES_H
+
+/**@}*/
