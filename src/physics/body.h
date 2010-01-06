@@ -23,12 +23,34 @@ typedef struct Body
     Vector movement;
 } Body;
 
+/**
+ * @relatesalso Body
+ */
 Body* Body_new();
+
+/**
+ * @relatesalso Body
+ */
 void Body_delete(Body* body);
+
+/**
+ * @relatesalso Body
+ */
 void Body_setShape(Body* body, Shape* shape);
+
+/**
+ * @relatesalso Body
+ */
 void Body_setPosition(Body* body, float x, float y);
 
+/**
+ * @relatesalso Body
+ */
 void Body_move(Body* body, float x, float y);
+
+/**
+ * @relatesalso Body
+ */
 void Body_moveTo(Body* body, float x, float y);
 
 #endif // SMUG_PHYSICS_BODY_H
