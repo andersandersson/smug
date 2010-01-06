@@ -2,10 +2,12 @@
 #include <stdlib.h>
 
 #include "graphics/drawable/drawable.h"
+#include "graphics/graphics.h"
+#include "physics/body.h"
 
-static void GameObject_invariant(GameObject* go)
+static void _invariant(GameObject* self)
 {
-    assert(NULL != go);
+    assert(NULL != self);
 }
 
 GameObject* GameObject_new()
@@ -15,49 +17,134 @@ GameObject* GameObject_new()
     // go->x = 0.0f;
     // go->y = 0.0f;
 
-    // go->shape = NULL;
-    go->drawable = NULL;
+    go->drawables = LinkedList_new();
+    go->bodies = LinkedList_new();
     go->visible = TRUE;
     go->tag = NULL;
 
     return go;
 }
 
-void GameObject_delete(void* obj)
+void GameObject_delete(void* self)
 {
-    GameObject* go = (GameObject*)obj;
-    GameObject_invariant(go);
+    GameObject* go = (GameObject*)self;
+    _invariant(go);
 
-//    if (go->shape)
-        // Delete shape.
-
-    if (NULL != go->drawable)
-        Drawable_delete((void*)go->drawable);
-
-    //if (go->tag) // What do to with the char*?
+    LinkedList_deleteContents(go->drawables, Drawable_delete);
+    LinkedList_deleteContents(go->bodies, Body_delete);
+    LinkedList_delete(go->drawables);
+    LinkedList_delete(go->bodies);
 
     free(go);
 }
 
-void GameObject_setPosition(GameObject* obj, float x, float y)
+void GameObject_setPos(GameObject* self, float x, float y)
 {
-    GameObject_invariant(obj);
-    // obj->x = x;
-    // obj->y = y;
+    _invariant(self);
+    self->position = Vector_create2d(x, y);
+    // Set position of all bodies and drawables.
+    Node* node;
+
+    for (node = self->drawables->first; node != NULL; node = node->next)
+    {
+        if (node->item != NULL)
+            Drawable_updatePos((Drawable*)node->item);
+    }
+
+    for (node = self->bodies->first; node != NULL; node = node->next)
+    {
+        if (node->item != NULL)
+        {
+            // Body_updatePos((Body*)node->item);
+        }
+    }
 }
 
-void GameObject_setDrawable(GameObject* obj, Drawable* d)
+Vector GameObject_getPos(GameObject* self)
 {
-    GameObject_invariant(obj);
-//    assert(NULL != d);
+    _invariant(self);
+    return self->position;
+}
 
-    obj->drawable = d;
+int GameObject_addDrawable(GameObject* self, Drawable* d)
+{
+    _invariant(self);
+
+    Node* node;
+    int i;
+
+    node = self->drawables->first;
+
+    // See if there is a "hole" in the list to fill.
+    for (i = 0; i < LinkedList_length(self->drawables); i++)
+    {
+        if (node->item == NULL)
+        {
+            node->item = d;
+            break;
+        }
+        node = node->next;
+    }
+
+    if (i >= LinkedList_length(self->drawables))
+    {   // There was no hole.
+        LinkedList_addLast(self->drawables, (void*)d);
+    }
+
+    d->parent = self;
+    Graphics_addDrawable(d);
+
+    return i;
+}
+
+Drawable* GameObject_getDrawable(GameObject* self, int drawableIndex)
+{
+    Node* node;
+    int i;
+
+    node = self->drawables->first;
+    for (i = 0; i < drawableIndex; i++)
+    {
+        node = node->next;
+        assert(node != NULL);
+    }
+    assert(node->item != NULL);
+    return (Drawable*)node->item;
+}
+
+Drawable* GameObject_removeDrawable(GameObject* self, int drawableIndex)
+{
+    Node* node;
+    int i;
+    Drawable* d;
+
+    node = self->drawables->first;
+    for (i = 0; i < drawableIndex; i++)
+    {
+        node = node->next;
+        assert(node != NULL);
+    }
+    assert(node->item != NULL);
+    d = (Drawable*)node->item;
+    node->item = NULL;
+
+    // TODO: The opposite of this:
+    // Graphics_addDrawable(d);
+    return d;
+}
+
+int GameObject_addBody(GameObject* self, Body* b)
+{
+    _invariant(self);
+
+    LinkedList_addLast(self->bodies, (void*)b);
+    return LinkedList_length(self->bodies) - 1;
 }
 
 /*
 void GameObject_render(GameObject* obj)
 {
-    GameObject_invariant(obj);
+    _invariant(obj);
     if (NULL != obj->drawable && obj->visible)
     {
         Drawable_render(obj->drawable, obj->x, obj->y);

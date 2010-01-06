@@ -11,18 +11,23 @@
 #define SMUG_ENGINE_GAMEOBJECT_H
 
 #include "common/common.h"
-#include "graphics/drawable/drawable.h"
+// #include "graphics/drawable/drawable.h"
+struct Drawable;
+#include "utils/sstring.h"
+#include "utils/vector.h"
 
 
 /** The GameObject struct.
   */
 typedef struct GameObject
 {
-    Drawable* drawable;
+	LinkedList* drawables;
+	LinkedList* bodies;
+
     BOOL visible;
 
-    char* tag;
-
+    String* tag;
+	Vector position;
 } GameObject;
 
 /** Constructor for GameObject.
@@ -35,28 +40,36 @@ GameObject* GameObject_new();
 /** Destructor for GameObject.
   *
   * @relatesalso GameObject
-  * @param obj A pointer to the GameObject to be deleted.
+  * @param self A pointer to the GameObject to be deleted.
   */
-void GameObject_delete(void* obj);
+void GameObject_delete(void* self);
 
-void GameObject_setPosition(GameObject* obj, float x, float y);
+void GameObject_setPos(GameObject* self, float x, float y);
+
+Vector GameObject_getPos(GameObject* self);
 
 /** Assign a Drawable to the GameObject.
   *
   * @relatesalso GameObject
-  * @param obj A pointer to the GameObject.
+  * @param self A pointer to the GameObject.
   * @param d A pointer to the Drawable.
   */
-void GameObject_setDrawable(GameObject* obj, Drawable* d);
+int GameObject_addDrawable(GameObject* self, struct Drawable* d);
 
-/** Render the GameObject.
+struct Drawable* GameObject_getDrawable(GameObject* self, int drawableIndex);
+
+struct Drawable* GameObject_removeDrawable(GameObject* self, int drawableIndex);
+
+// int GameObject_addBody(GameObject* self, Body* b);
+
+/* Render the GameObject.
   *
   * If the GameObject is visible and has a Drawable, that drawable is rendered.
   *
   * @relatesalso GameObject
-  * @param obj A pointer to the GameObject to render.
+  * @param self A pointer to the GameObject to render.
   */
-void GameObject_render(GameObject* obj);
+// void GameObject_render(GameObject* self);
 
 #endif //SMUG_ENGINE_GAMEOBJECT_H
 

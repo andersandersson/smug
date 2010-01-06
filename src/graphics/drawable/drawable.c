@@ -10,11 +10,14 @@ Drawable* Drawable_new(unsigned int vertexcount)
     Drawable* ret = (Drawable*)malloc(sizeof(Drawable));
     ret->layer = 0;
     ret->pos = Point_createFromXY(0, 0);
+    ret->relativePos = ret->pos;
     ret->color = Color_create();
+    ret->followObject = TRUE;
     ret->vertexcount = vertexcount;
     ret->vertices = (Vector*)malloc(sizeof(Vector) * vertexcount);
     ret->sprite = NULL;
     ret->type = 0;
+    ret->parent = NULL;
     return ret;
 }
 
@@ -45,6 +48,29 @@ void Drawable_setPos(Drawable* d, Point pos)
 {
     assert(NULL != d);
     d->pos = pos;
+    d->followObject = FALSE;
+}
+
+void Drawable_updatePos(Drawable* self)
+{
+    if (self->parent)
+        self->pos = Point_addVector(self->relativePos, GameObject_getPos(self->parent));
+}
+
+void Drawable_setPosRelative(Drawable* d, Point pos)
+{
+    assert(NULL != d);
+    d->relativePos = pos;
+    if (d->parent)
+        d->pos = Point_addVector(pos, GameObject_getPos(d->parent));
+    else
+        d->pos = pos;
+    d->followObject = TRUE;
+}
+
+void Drawable_followObject(Drawable* self, BOOL follow)
+{
+    self->followObject = follow;
 }
 
 void Drawable_setSprite(Drawable* d, Sprite* sprite)

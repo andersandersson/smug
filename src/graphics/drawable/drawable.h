@@ -17,6 +17,8 @@
 #include "utils/point.h"
 #include "utils/vector.h"
 
+#include "engine/gameobject.h"
+
 /**
   * A graphical entity on screen. A Drawable is a common interface
   * for a collection of different graphic components.
@@ -25,7 +27,12 @@ typedef struct Drawable
 {
     int type;
     unsigned int layer;
+	GameObject* parent;
+
     Point pos;
+	Point relativePos;
+	BOOL followObject;
+
     Sprite* sprite; // Is NULL for shapes
     Color color;
     unsigned int vertexcount;
@@ -69,12 +76,26 @@ void Drawable_writeBatchData(Drawable* d, BatchData* batchdata, unsigned int sta
 int Drawable_getDataSize(Drawable* d);
 
 /**
- * Set position of a Drawable
+ * Set absolute position of a Drawable
  * @relatesalso Drawable
  * @param d the Drawable
  * @param pos Position
  */
 void Drawable_setPos(Drawable* d, Point pos);
+
+/**
+ * Set position of a Drawable relative to its GameObject
+ * @relatesalso Drawable
+ * @param d the Drawable
+ * @param pos Position
+ */
+void Drawable_setPosRelative(Drawable* d, Point pos);
+
+void Drawable_updatePos(Drawable* self);
+
+/** Currently not used.
+  */
+void Drawable_followObject(Drawable* self, BOOL follow);
 
 /**
  * Set sprite of a Drawable

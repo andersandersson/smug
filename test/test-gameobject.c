@@ -9,11 +9,12 @@
 
 int main()
 {
-    Rectangle* rect;
+/* Old stuff */
+/*     Rectangle* rect;
     GameObject* go;
     Drawable* drawable;
     Color* color;
-    
+
     go = GameObject_new();
     rect = Rectangle_new(0.0f, 0.0f, 100.0f, 100.0f);
 
@@ -25,7 +26,7 @@ int main()
     GameObject_setDrawable(go, drawable);
     GameObject_setPosition(go, 50.0f, 50.0f);
 
-    GameObject_delete(go);
-    
+    GameObject_delete(go); */
+
     return 0;
 }

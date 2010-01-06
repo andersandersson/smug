@@ -15,8 +15,20 @@
 Thread* gConsoleThread = NULL;
 
 static BOOL gInitialized = FALSE;
+static void (*gUserLogicFunction)() = NULL;
+static BOOL gLogicCallbackEnabled = TRUE;
 
 World* gWorld = NULL;
+
+void Engine_setLogicCallback(void (*logicCallback)())
+{
+    gUserLogicFunction = logicCallback;
+}
+
+void Engine_enableLogicCallback(BOOL enable)
+{
+    gLogicCallbackEnabled = enable;
+}
 
 // Checks that all subsystems have been initialized.
 void _assertSubsystemsInitialized()
@@ -150,7 +162,7 @@ void Engine_run()
 
         if (time >= nexttime)
         {
-            nexttime+=delay;
+            nexttime += delay;
 
             if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
             {
