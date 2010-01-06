@@ -1,10 +1,12 @@
+/*
+
+Try hitting keys 1, Q, 2, W, and so on...
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
-#include "platform/platform.h"
-
-//#include "platform/opengl/opengl.h"
 
 #include "common/log.h"
 #include "common/common.h"
@@ -110,9 +112,7 @@ void myLogicCallback()
     }
 
     period1 += 0.03;
-    // if (period1 > 1.0) period1 -= 1.0;
     period2 += 0.1;
-    // if (period2 > 1.0) period2 -= 1.0;
 }
 
 Guy* Guy_new()
@@ -208,6 +208,9 @@ int main()
     /*******************
         Cleanup (not...)
     *******************/
+
+    /* Bleeds memory like hell here. Who should be responsible
+    for cleaning up images, textures and the like? */
 
     NOTIFY("Stopped.");
 
