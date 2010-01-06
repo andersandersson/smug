@@ -68,6 +68,8 @@ void Graphics_render();
  */
 void Graphics_addDrawable(Drawable* d);
 
+void Graphics_removeDrawable(Drawable* d);
+
 /**
  * Terminate the graphics component of the engine.
  */

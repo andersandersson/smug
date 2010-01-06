@@ -4,6 +4,7 @@
 #include "graphics/drawable/drawable.h"
 #include "graphics/graphics.h"
 #include "physics/body.h"
+#include "common/log.h"
 
 static void _invariant(GameObject* self)
 {
@@ -66,71 +67,68 @@ Vector GameObject_getPos(GameObject* self)
     return self->position;
 }
 
-int GameObject_addDrawable(GameObject* self, Drawable* d)
+void GameObject_addDrawable(GameObject* self, Drawable* d)
 {
     _invariant(self);
 
-    Node* node;
-    int i;
+    // Node* node;
+    // int i;
 
-    node = self->drawables->first;
+    // node = self->drawables->first;
 
     // See if there is a "hole" in the list to fill.
-    for (i = 0; i < LinkedList_length(self->drawables); i++)
-    {
-        if (node->item == NULL)
-        {
-            node->item = d;
-            break;
-        }
-        node = node->next;
-    }
+    // for (i = 0; i < LinkedList_length(self->drawables); i++)
+    // {
+        // if (node->item == NULL)
+        // {
+            // node->item = d;
+            // break;
+        // }
+        // node = node->next;
+    // }
 
-    if (i >= LinkedList_length(self->drawables))
-    {   // There was no hole.
+    // if (i >= LinkedList_length(self->drawables))
+    // {   // There was no hole.
         LinkedList_addLast(self->drawables, (void*)d);
-    }
+    // }
 
     d->parent = self;
-    Graphics_addDrawable(d);
-
-    return i;
-}
-
-Drawable* GameObject_getDrawable(GameObject* self, int drawableIndex)
-{
-    Node* node;
-    int i;
-
-    node = self->drawables->first;
-    for (i = 0; i < drawableIndex; i++)
-    {
-        node = node->next;
-        assert(node != NULL);
-    }
-    assert(node->item != NULL);
-    return (Drawable*)node->item;
-}
-
-Drawable* GameObject_removeDrawable(GameObject* self, int drawableIndex)
-{
-    Node* node;
-    int i;
-    Drawable* d;
-
-    node = self->drawables->first;
-    for (i = 0; i < drawableIndex; i++)
-    {
-        node = node->next;
-        assert(node != NULL);
-    }
-    assert(node->item != NULL);
-    d = (Drawable*)node->item;
-    node->item = NULL;
-
-    // TODO: The opposite of this:
     // Graphics_addDrawable(d);
-    return d;
+
+    // return i;
+}
+
+// Drawable* GameObject_getDrawable(GameObject* self, int drawableIndex)
+// {
+    // Node* node;
+    // int i;
+
+    // node = self->drawables->first;
+    // for (i = 0; i < drawableIndex; i++)
+    // {
+        // node = node->next;
+        // assert(node != NULL);
+    // }
+    // assert(node->item != NULL);
+    // return (Drawable*)node->item;
+// }
+
+void GameObject_removeDrawable(GameObject* self, struct Drawable* drawable)
+{
+    _invariant(self);
+
+    // Node* node;
+
+    if (!LinkedList_removeItem(self->drawables, drawable))
+        WARNING("Tried to remove a Drawable that wasn't in the GameObject.");
+    // for (node = self->drawables->first; node != NULL; node = node->next)
+    // {
+        // if ((Drawable*)node->item == drawable)
+        // {
+            // LinkedList_remove(self->drawables, node);
+            // break;
+        // }
+    // }
 }
 
 int GameObject_addBody(GameObject* self, Body* b)

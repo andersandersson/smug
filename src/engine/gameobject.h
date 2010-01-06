@@ -54,11 +54,11 @@ Vector GameObject_getPos(GameObject* self);
   * @param self A pointer to the GameObject.
   * @param d A pointer to the Drawable.
   */
-int GameObject_addDrawable(GameObject* self, struct Drawable* d);
+void GameObject_addDrawable(GameObject* self, struct Drawable* d);
 
-struct Drawable* GameObject_getDrawable(GameObject* self, int drawableIndex);
+// struct Drawable* GameObject_getDrawable(GameObject* self, int drawableIndex);
 
-struct Drawable* GameObject_removeDrawable(GameObject* self, int drawableIndex);
+void GameObject_removeDrawable(GameObject* self, struct Drawable* drawable);
 
 // int GameObject_addBody(GameObject* self, Body* b);
 

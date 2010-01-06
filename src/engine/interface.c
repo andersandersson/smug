@@ -4,7 +4,7 @@
 
 int smugInit()
 {
-    Engine_init(TRUE);
+    Engine_init(TRUE, TRUE);
 }
 
 void smugTerminate()

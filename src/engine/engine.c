@@ -9,6 +9,7 @@
 #include "physics/physics.h"
 #include "input/input.h"
 #include "common/log.h"
+#include "common/common.h"
 #include "world.h"
 #include "gameobject.h"
 
@@ -17,8 +18,8 @@ Thread* gConsoleThread = NULL;
 static BOOL gInitialized = FALSE;
 static void (*gUserLogicFunction)() = NULL;
 static BOOL gLogicCallbackEnabled = TRUE;
-
-World* gWorld = NULL;
+// World* gWorld = NULL;
+static LinkedList* gGameObjects = NULL;
 
 // Checks that all subsystems have been initialized.
 void _assertSubsystemsInitialized()
@@ -41,7 +42,7 @@ BOOL _subsystemsInitialized()
            Physics_isInitialized();
 }
 
-int Engine_init(BOOL verbose)
+int Engine_init(BOOL verbose, BOOL console)
 {
     int logLevel;
 
@@ -72,14 +73,18 @@ int Engine_init(BOOL verbose)
     if (!Physics_init())
         return 0;
 
-    NOTIFY("Initializing console thread");
-    // Create a new thread for the console
-    gConsoleThread = Thread_new();
+    if (console)
+    {
+        NOTIFY("Initializing console thread");
+        // Create a new thread for the console
+        gConsoleThread = Thread_new();
 
-    // Run the console main loop in a new thread
-    Thread_call(gConsoleThread, Console_run, NULL);
+        // Run the console main loop in a new thread
+        Thread_call(gConsoleThread, Console_run, NULL);
+    }
 
-    gWorld = World_new();
+    // gWorld = World_new();
+    gGameObjects = LinkedList_new();
 
     Log_dedent();
     NOTIFY("Engine Initialized.");
@@ -109,14 +114,23 @@ void Engine_enableLogicCallback(BOOL enable)
 void Engine_terminate()
 {
     assert(gInitialized);
-    NOTIFY("Terminating engine");
+    NOTIFY("Terminating engine...");
     Log_indent();
 
-    World_delete(gWorld);
+    // World_delete(gWorld);
+    LinkedList_deleteContents(gGameObjects, GameObject_delete);
+    LinkedList_delete(gGameObjects);
 
     // Do not wait for console thread to end as getc() will
     // block until input is received. Instead, kill the thread.
-    Thread_forceKill(gConsoleThread);
+    if (gConsoleThread != NULL)
+    {
+        /* This doesn't seem to work, at least not always.
+        When console is enabled, the program's process is
+        still alive after the main program ends. */
+        Thread_forceKill(gConsoleThread);
+        gConsoleThread = NULL;
+    }
 
     Physics_terminate();
 
@@ -129,7 +143,7 @@ void Engine_terminate()
     Platform_terminate();
 
     Log_dedent();
-    NOTIFY("Engine terminated,\n");
+    NOTIFY("Engine terminated.\n");
 
     Log_terminate();
 
@@ -199,5 +213,23 @@ void Engine_run()
 
 void Engine_addObject(GameObject* newObj)
 {
-    World_addObject(gWorld, newObj);
+    assert(gInitialized);
+    LinkedList_addLast(gGameObjects, newObj);
+    // Add all drawables in the object to the graphics engine.
+    Node* node;
+    for (node = newObj->drawables->first; node != NULL; node = node->next)
+    {
+        Graphics_addDrawable((Drawable*)node->item);
+    }
+}
+
+void Engine_removeObject(GameObject* obj)
+{
+    assert(gInitialized);
+    LinkedList_removeItem(gGameObjects, obj);
+    Node* node;
+    for (node = obj->drawables->first; node != NULL; node = node->next)
+    {
+        Graphics_removeDrawable((Drawable*)node->item);
+    }
 }

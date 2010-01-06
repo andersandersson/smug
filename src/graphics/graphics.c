@@ -135,6 +135,11 @@ void Graphics_addDrawable(Drawable* d)
     Renderer_addDrawable(sceneRenderer, d);
 }
 
+void Graphics_removeDrawable(Drawable* d)
+{
+    WARNING("Unimplemented function Graphics_removeDrawable");
+}
+
 Camera* Graphics_getCamera()
 {
     assert(NULL != sceneRenderer);
