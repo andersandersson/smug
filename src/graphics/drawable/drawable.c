@@ -91,6 +91,11 @@ void Drawable_setColor(Drawable* d, Color color)
 	d->color = color;
 }
 
+void Drawable_setOpacity(Drawable* self, float opacity)
+{
+    self->color.a = opacity;
+}
+
 unsigned int Drawable_getLayer(Drawable* d)
 {
     assert(NULL != d);

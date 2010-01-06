@@ -121,6 +121,8 @@ void Drawable_setLayer(Drawable* d, unsigned int layer);
  */
 void Drawable_setColor(Drawable* d, Color color);
 
+void Drawable_setOpacity(Drawable* self, float opacity);
+
 /**
  * Get the layer of a Drawable
  * @relatesalso Drawable

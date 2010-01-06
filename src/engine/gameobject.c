@@ -131,6 +131,15 @@ void GameObject_removeDrawable(GameObject* self, struct Drawable* drawable)
     // }
 }
 
+void GameObject_setOpacity(GameObject* self, float opacity)
+{
+    Node* node;
+    for (node = self->drawables->first; node != NULL; node = node->next)
+    {
+        Drawable_setOpacity((Drawable*)node->item, opacity);
+    }
+}
+
 int GameObject_addBody(GameObject* self, Body* b)
 {
     _invariant(self);

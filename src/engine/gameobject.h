@@ -60,6 +60,8 @@ void GameObject_addDrawable(GameObject* self, struct Drawable* d);
 
 void GameObject_removeDrawable(GameObject* self, struct Drawable* drawable);
 
+void GameObject_setOpacity(GameObject* self, float opacity);
+
 // int GameObject_addBody(GameObject* self, Body* b);
 
 /* Render the GameObject.
