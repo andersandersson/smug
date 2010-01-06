@@ -20,16 +20,6 @@ static BOOL gLogicCallbackEnabled = TRUE;
 
 World* gWorld = NULL;
 
-void Engine_setLogicCallback(void (*logicCallback)())
-{
-    gUserLogicFunction = logicCallback;
-}
-
-void Engine_enableLogicCallback(BOOL enable)
-{
-    gLogicCallbackEnabled = enable;
-}
-
 // Checks that all subsystems have been initialized.
 void _assertSubsystemsInitialized()
 {
@@ -66,7 +56,7 @@ int Engine_init(BOOL verbose)
     NOTIFY("Initializing engine:");
     Log_indent();
 
-
+    // TODO: Make screen size value not hardcoded.
     if (!Platform_init(640, 480, FALSE))
         return 0;
 
@@ -104,6 +94,16 @@ int Engine_init(BOOL verbose)
 BOOL Engine_isInitialized()
 {
     return _subsystemsInitialized() && gInitialized;
+}
+
+void Engine_setLogicCallback(void (*logicCallback)())
+{
+    gUserLogicFunction = logicCallback;
+}
+
+void Engine_enableLogicCallback(BOOL enable)
+{
+    gLogicCallbackEnabled = enable;
 }
 
 void Engine_terminate()
@@ -164,18 +164,21 @@ void Engine_run()
         {
             nexttime += delay;
 
+            if (gLogicCallbackEnabled && gUserLogicFunction != NULL)
+            {
+                gUserLogicFunction();
+            }
+
             if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
             {
                 Signal_send(SIG_EXIT);
             }
-
-            // Render the world.
-            //World_render(gWorld);
-            Graphics_render();
-            Platform_refreshWindow();
-
-            fps++;
         }
+
+        Graphics_render();
+        Platform_refreshWindow();
+
+        fps++;
 
         if (Platform_getTime() - lastFpsCheck >= 1.0)
         {

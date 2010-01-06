@@ -23,6 +23,8 @@
   * started yet. This state, before the gameloop has started,
   * should be used to load resources and set up scenes.
   *
+  * Initializes logging, platform, signals, input, graphics and physics.
+  *
   * @return Returns zero on error, non-zero on success.
   */
 int Engine_init(BOOL verbose);
@@ -32,6 +34,10 @@ int Engine_init(BOOL verbose);
   *
   */
 BOOL Engine_isInitialized();
+
+void Engine_setLogicCallback(void (*logicCallback)());
+
+void Engine_enableLogicCallback(BOOL enable);
 
 /**
   * Close down Engine

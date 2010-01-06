@@ -19,9 +19,10 @@ AM_LDFLAGS = \
 
 AM_CFLAGS = -I../src/
 
-EXTRA_PROGRAMS = app-sprites app-input app-shapes app-linus app-sprites-go
+EXTRA_PROGRAMS = app-sprites app-input app-shapes app-linus app-sprites-go app-sprites-go-engine
 app_sprites_SOURCES = app-sprites.c
 app_input_SOURCES = app-input.c
 app_shapes_SOURCES = app-shapes.c
 app_sprites_go_SOURCES = app-sprites-go.c
+app_sprites_go_engine_SOURCES = app-sprites-go-engine.c
 app_linus_SOURCES = app-linus.c
