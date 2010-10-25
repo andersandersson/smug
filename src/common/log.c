@@ -20,7 +20,7 @@ static BOOL _isInitialized(void)
 static void _writePrefixStack(void)
 {
     // Local function: we can assume _isInitialized().
-    LinkedList_doList(gPrefixStack, Console_write);
+    LinkedList_doList(gPrefixStack, Console_puts);
 }
 
 BOOL Log_init(void)

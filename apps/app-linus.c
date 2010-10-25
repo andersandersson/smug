@@ -173,7 +173,6 @@ int main()
     /*******************
         Setup
     *******************/
-
     camera = Graphics_getCamera();
     cpos = Vector_create2d(0,0);
 

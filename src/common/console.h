@@ -16,6 +16,12 @@
   */
 #define CONSOLE_PRINT_BUFFER_SIZE 1024
 
+/** Write simple unformatted text to the console, ending with newline 
+ *
+ * Makes use of indentation levels.
+ * @param str The string to be printed
+ */
+void Console_puts(char* str);
 
 /** Write text to the console
  *

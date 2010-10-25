@@ -22,6 +22,10 @@ static void _putChar(char c)
     putc(c, stderr);
 }
 
+void Console_puts(char* str) {
+    Console_write("%s", str);
+}
+
 void Console_write(char* fmt, ...)
 {
     // Counter for writing characters

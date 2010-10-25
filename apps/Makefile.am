@@ -8,14 +8,14 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_LDFLAGS = \
--L../src/graphics \-lgraphics \
--L../src/physics \-lphysics \
--L../src/input -linput \
--L../src/common -lcommon \
--L../src/platform -lplatform \
--L../src/utils -lutils \
--L../src/engine -lsmug
+#AM_LDFLAGS = \
+#-L../src/graphics \-lgraphics \
+#-L../src/physics \-lphysics \
+#-L../src/input -linput \
+#-L../src/common -lcommon \
+#-L../src/platform -lplatform \
+#-L../src/utils -lutils \
+#-L../src/engine -lsmug
 
 AM_CFLAGS = -I../src/
 
@@ -26,3 +26,4 @@ app_shapes_SOURCES = app-shapes.c
 app_sprites_go_SOURCES = app-sprites-go.c
 app_sprites_go_engine_SOURCES = app-sprites-go-engine.c
 app_linus_SOURCES = app-linus.c
+app_linus_LDADD = ../src/libsmug.la

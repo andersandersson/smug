@@ -8,16 +8,15 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_LDFLAGS = \
--L../graphics \-lgraphics \
--L../physics \-lphysics \
--L../input -linput \
--L../common -lcommon \
--L../platform -lplatform \
--L../utils -lutils
-
 AM_CFLAGS = $(LIBGLFWCFLAGS) -I.. -I../common
 
 noinst_LTLIBRARIES = libsmug.la
 
 libsmug_la_SOURCES =  interface.c interface.h engine.c engine.h gameobject.c gameobject.h world.c world.h
+libsmug_la_LIBADD = ../common/libcommon.la
+libsmug_la_LIBADD += ../utils/libutils.la
+libsmug_la_LIBADD += ../graphics/libgraphics.la
+libsmug_la_LIBADD += ../physics/libphysics.la
+libsmug_la_LIBADD += ../platform/libplatform.la
+libsmug_la_LIBADD += ../input/libinput.la
+libsmug_la_LIBADD += ../logic/liblogic.la
