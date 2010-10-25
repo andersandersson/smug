@@ -22,18 +22,18 @@
  * Initialize Input subsystem
  * @pre The platform layer must be initialized via Platform_init(...)
  */
-int Input_init();
+int Input_init(void);
 
 /**
  * Return true if the system is initialized
  */
-BOOL Input_isInitialized();
+BOOL Input_isInitialized(void);
 
 /** 
  * Terminate the input component of the engine.
  * @pre the Input module must be initialized via Input_init(...)
  */
-void Input_terminate();
+void Input_terminate(void);
 
 /**
  * Get the state of a keyboard key, returns 
@@ -56,14 +56,14 @@ INPUTSTATE Input_getMouseButton(unsigned int button);
  * The position is centered with origo in the center of the screen. 
  * @return Vector with relative values.
  */
-Vector Input_getMouseScreenMovement();
+Vector Input_getMouseScreenMovement(void);
 
 /**
  * Get the screen position of the mouse. The position
  * is centered with origo in the center of the screen. 
  * @return Point with absoulte values.
  */
-Point Input_getMouseScreenPosition();
+Point Input_getMouseScreenPosition(void);
 
 /**
  * Get the relative movement of the mouse as an INPUTSTATE. 
@@ -71,7 +71,7 @@ Point Input_getMouseScreenPosition();
  * The position is centered with origo in the center of the screen. 
  * @return Vector of INPUTSTATE with relative values.
  */
-Vector Input_getMouseMovement();
+Vector Input_getMouseMovement(void);
 
 /**
  * Get the position of the mouse as an INPUTSTATE. 
@@ -79,7 +79,7 @@ Vector Input_getMouseMovement();
  * is centered with origo in the center of the screen. 
  * @return Point of INPUTSTATE with absoulte values.
  */
-Point Input_getMousePosition();
+Point Input_getMousePosition(void);
 
 /**
  * Get the inputstate of a given device  and trigger id.

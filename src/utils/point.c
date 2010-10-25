@@ -5,7 +5,7 @@
 
 static Point sp;
 
-Point* Point_new()
+Point* Point_new(void)
 {
     Point* p = malloc(sizeof(Point));
     p->v = Vector_create2d(0,0);

@@ -12,18 +12,18 @@ static char* gFormatString = NULL;
 static char  gIndentString[1024] = "\0";
 static LinkedList* gPrefixStack = NULL;
 
-static BOOL _isInitialized()
+static BOOL _isInitialized(void)
 {
     return NULL != gPrefixStack;
 }
 
-static void _writePrefixStack()
+static void _writePrefixStack(void)
 {
     // Local function: we can assume _isInitialized().
     LinkedList_doList(gPrefixStack, Console_write);
 }
 
-BOOL Log_init()
+BOOL Log_init(void)
 {
     // Allocate memory for prefix stack
     gPrefixStack = LinkedList_new();
@@ -37,12 +37,12 @@ BOOL Log_init()
     return NULL != gPrefixStack;
 }
 
-BOOL Log_isInitialized()
+BOOL Log_isInitialized(void)
 {
 	return _isInitialized();
 }
 
-void Log_terminate()
+void Log_terminate(void)
 {
     assert(_isInitialized());
     LinkedList_delete(gPrefixStack);
@@ -168,7 +168,7 @@ void Log_setLevel(int level)
     gCurrentLogLevel = level;
 }
 
-int Log_getLevel()
+int Log_getLevel(void)
 {
     return gCurrentLogLevel;
 }
@@ -196,7 +196,7 @@ void Log_pushPrefix(char* prefix)
     LinkedList_addLast(gPrefixStack, prefix);
 }
 
-char* Log_popPrefix()
+char* Log_popPrefix(void)
 {
     char* item = NULL;
     assert(_isInitialized());
@@ -218,12 +218,12 @@ char* Log_popPrefix()
     return item;
 }
 
-void Log_indent()
+void Log_indent(void)
 {
     Log_pushPrefix(gIndentString);
 }
 
-void Log_dedent()
+void Log_dedent(void)
 {
     Log_popPrefix();
 }

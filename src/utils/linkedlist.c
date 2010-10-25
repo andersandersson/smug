@@ -297,7 +297,7 @@ void LinkedList_concat(LinkedList* self, LinkedList* other)
 void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(void*))
 {
     Node* iter;
-    void* itemCopy;
+    //void* itemCopy; is not used
 
     assert(_invariant(self));
 

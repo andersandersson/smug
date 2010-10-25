@@ -17,7 +17,7 @@ typedef struct ArrayList
 /**
  * Creates an ArrayList
  */
-ArrayList* ArrayList_new();
+ArrayList* ArrayList_new(void);
 
 /**
  * Creates an ArrayList with a given capacity

@@ -13,7 +13,7 @@ typedef struct Image
     int channels;
 } Image;
 
-Image* Image_new();
+Image* Image_new(void);
 Image* Image_newFromData(unsigned char* data, unsigned int size, unsigned int width, unsigned int height, int channels);
 void Image_delete(Image* image);
 

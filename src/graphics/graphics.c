@@ -13,7 +13,7 @@ unsigned int gRenderMode = RENDER_NORMAL;
 
 static BOOL isInitialized = FALSE;
 
-static void printGLError()
+static void printGLError(void)
 {
     int err = glGetError();
 
@@ -42,7 +42,7 @@ static void printGLError()
     }
 }
 
-static int setupGL()
+static int setupGL(void)
 {
 #ifdef WIN32
     DEBUG("Initializing GLEW");
@@ -104,17 +104,17 @@ int Graphics_init(int width, int height)
     return 1;
 }
 
-BOOL Graphics_isInitialized()
+BOOL Graphics_isInitialized(void)
 {
     return isInitialized;
 }
 
-Vector Graphics_getScreenSize()
+Vector Graphics_getScreenSize(void)
 {
     return screenSize;
 }
 
-void Graphics_terminate()
+void Graphics_terminate(void)
 {
     assert(isInitialized);
     Renderer_delete(sceneRenderer);
@@ -122,7 +122,7 @@ void Graphics_terminate()
     isInitialized = FALSE;
 }
 
-void Graphics_render()
+void Graphics_render(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     //glLoadIdentity(); (called in Renderer_render)

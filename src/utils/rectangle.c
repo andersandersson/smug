@@ -3,7 +3,7 @@
 #include "common/common.h"
 #include <stdlib.h>
 
-Rectangle* Rectangle_new()
+Rectangle* Rectangle_new(void)
 {
     Rectangle* r = malloc(sizeof(Rectangle));
     r->pos = Point_createFromXY(0,0);

@@ -20,7 +20,7 @@ typedef struct Layer
     float parallax;
 } Layer;
 
-Layer* Layer_new();
+Layer* Layer_new(void);
 void Layer_delete(void* layer);
 
 void Layer_addDrawable(Layer* layer, Drawable* drawable);

@@ -11,7 +11,7 @@ static void _invariant(GameObject* self)
     assert(NULL != self);
 }
 
-GameObject* GameObject_new()
+GameObject* GameObject_new(void)
 {
     GameObject* go = (GameObject*)malloc(sizeof(GameObject));
 

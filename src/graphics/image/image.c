@@ -7,7 +7,7 @@
 #include "common/log.h"
 #include "common/common.h"
 
-Image* Image_new()
+Image* Image_new(void)
 {
     Image* ret = (Image*)malloc(sizeof(Image));
     ret->data = NULL;

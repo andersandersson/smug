@@ -7,7 +7,7 @@
 
 static void Map_addLast(Map* map, MapNode* node);
 
-MapNode* MapNode_new()
+MapNode* MapNode_new(void)
 {
     MapNode* node = malloc(sizeof(MapNode));
 
@@ -23,7 +23,7 @@ void MapNode_delete(MapNode* node)
     free(node);
 }
 
-Map* Map_new()
+Map* Map_new(void)
 {
     Map* map = malloc(sizeof(Map));
 

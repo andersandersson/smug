@@ -15,7 +15,7 @@
  * @relatesalso Drawable
  * @return Drawable
  */
-Drawable* Drawable_newBox();
+Drawable* Drawable_newBox(void);
 
 /**
  * Creates new box drawable from a rectangle

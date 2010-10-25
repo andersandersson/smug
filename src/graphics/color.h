@@ -32,7 +32,7 @@ Color* Color_new(float r, float g, float b, float a);
   */
 void Color_delete(Color* c);
 
-Color Color_create();
+Color Color_create(void);
 
 Color Color_createFromRGBA(float r, float g, float b, float a);
 

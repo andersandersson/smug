@@ -16,13 +16,13 @@
 Thread* gConsoleThread = NULL;
 
 static BOOL gInitialized = FALSE;
-static void (*gUserLogicFunction)() = NULL;
+static void (*gUserLogicFunction)(void) = NULL;
 static BOOL gLogicCallbackEnabled = TRUE;
 // World* gWorld = NULL;
 static LinkedList* gGameObjects = NULL;
 
 // Checks that all subsystems have been initialized.
-void _assertSubsystemsInitialized()
+void _assertSubsystemsInitialized(void)
 {
 	assert(Log_isInitialized());
     assert(Platform_isInitialized());
@@ -32,7 +32,7 @@ void _assertSubsystemsInitialized()
     assert(Physics_isInitialized());
 }
 
-BOOL _subsystemsInitialized()
+BOOL _subsystemsInitialized(void)
 {
 	return Log_isInitialized() &&
            Platform_isInitialized() &&
@@ -77,7 +77,7 @@ int Engine_init(BOOL verbose, BOOL console)
     {
         NOTIFY("Initializing console thread");
         // Create a new thread for the console
-        gConsoleThread = Thread_new();
+        gConsoleThread = Thread_new("console");
 
         // Run the console main loop in a new thread
         Thread_call(gConsoleThread, Console_run, NULL);
@@ -96,12 +96,12 @@ int Engine_init(BOOL verbose, BOOL console)
     return 1;
 }
 
-BOOL Engine_isInitialized()
+BOOL Engine_isInitialized(void)
 {
     return _subsystemsInitialized() && gInitialized;
 }
 
-void Engine_setLogicCallback(void (*logicCallback)())
+void Engine_setLogicCallback(void (*logicCallback)(void))
 {
     gUserLogicFunction = logicCallback;
 }
@@ -111,7 +111,7 @@ void Engine_enableLogicCallback(BOOL enable)
     gLogicCallbackEnabled = enable;
 }
 
-void Engine_terminate()
+void Engine_terminate(void)
 {
     assert(gInitialized);
     NOTIFY("Terminating engine...");
@@ -150,7 +150,7 @@ void Engine_terminate()
     gInitialized = FALSE;
 }
 
-void Engine_run()
+void Engine_run(void)
 {
     assert(gInitialized);
     if (!gInitialized)

@@ -30,17 +30,17 @@
 
 /** Initialize the log system (allocate memory, etc)
  */
-BOOL Log_init();
+BOOL Log_init(void);
 
 
 /** Returns true if the system is initialized
  */
-BOOL Log_isInitialized();
+BOOL Log_isInitialized(void);
 
 
 /** Terminate the log system (free memory, etc)
  */
-void Log_terminate();
+void Log_terminate(void);
 
 
 /** Write a log entry.
@@ -68,7 +68,7 @@ void Log_setLevel(int level);
   *
   * @return A flagset consisting of the log level constants.
   */
-int Log_getLevel();
+int Log_getLevel(void);
 
 
 /** Set the format string to use for log output
@@ -101,21 +101,21 @@ void Log_pushPrefix(char* prefix);
  *
  * Simply removes the last prefix pushed onto the stack
  */
-char* Log_popPrefix();
+char* Log_popPrefix(void);
 
 
 /** Indent the log messages
  * 
  * Make all following log message be indented an extra level
  */
-void Log_indent();
+void Log_indent(void);
 
 
 /** Dedent the log messages
  * 
  * Make all following log message be indented one level less
  */
-void Log_dedent();
+void Log_dedent(void);
 
 
 /** Set the tab length of the indentation

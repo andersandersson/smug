@@ -35,7 +35,7 @@ static int _findAnyCharFrom(String* self, String* chars, int start)
 
 static int _findAnyChar(String* self, String* chars)
 {
-    _findAnyCharFrom(self, chars, 0);
+    return _findAnyCharFrom(self, chars, 0);
 }
 
 String* String_new(char* aString)

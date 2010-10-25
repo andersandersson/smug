@@ -2,17 +2,17 @@
 #include "common/log.h"
 #include "engine.h"
 
-int smugInit()
+int smugInit(void)
 {
     Engine_init(TRUE, TRUE);
 }
 
-void smugTerminate()
+void smugTerminate(void)
 {
     Engine_terminate();
 }
 
-void smugRun()
+void smugRun(void)
 {
     if (!Engine_isInitialized())
     {

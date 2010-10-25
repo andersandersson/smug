@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-Hook* Hook_new()
+Hook* Hook_new(void)
 {
     Hook* hook = malloc(sizeof(Hook));
     return hook;

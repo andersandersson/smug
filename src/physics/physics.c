@@ -21,7 +21,7 @@ static Map* collision_hooks;
 static LinkedList* collision_list;
 static BOOL isInitialized = FALSE;
 
-static _CollisionType* _CollisionType_new()
+static _CollisionType* _CollisionType_new(void)
 {
     return malloc(sizeof(_CollisionType));
 }
@@ -42,7 +42,7 @@ static BOOL _compareCollisionType(void* left, void* right)
     return FALSE;
 }
 
-CollisionData* CollisionData_new()
+CollisionData* CollisionData_new(void)
 {
     return malloc(sizeof(CollisionData));
 }
@@ -52,7 +52,7 @@ void CollisionData_delete(CollisionData* data)
     free(data);
 }
 
-int Physics_init()
+int Physics_init(void)
 {
     assert(!isInitialized);
 
@@ -66,12 +66,12 @@ int Physics_init()
     return 1;
 }
 
-BOOL Physics_isInitialized()
+BOOL Physics_isInitialized(void)
 {
     return isInitialized;
 }
 
-void Physics_terminate()
+void Physics_terminate(void)
 {
     assert(isInitialized);
     MapNode* node;

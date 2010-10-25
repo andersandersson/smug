@@ -51,7 +51,7 @@ unsigned int Console_read(char* dest, unsigned int maxlength);
  *
  * This function will end on SIG_EXIT.
  */
-void Console_run();
+void Console_run(void);
 
 
 /** Receive a command and parse it. 

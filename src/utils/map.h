@@ -18,10 +18,10 @@ typedef struct Map
 } Map;
 
 
-MapNode* MapNode_new();
-void MapNode_delete();
+MapNode* MapNode_new(void);
+void MapNode_delete(MapNode* node);
 
-Map* Map_new();
+Map* Map_new(void);
 void Map_delete(Map* map);
 void Map_set(Map* map, void* key, void* value);
 void* Map_get(Map* map, void* key);

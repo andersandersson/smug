@@ -14,7 +14,7 @@ static BOOL _invariant(PathName* p)
             );
 }
 
-static String* _getDot()
+static String* _getDot(void)
 {
     if (NULL == _dot)
     {
@@ -23,7 +23,7 @@ static String* _getDot()
     return _dot;
 }
 
-static String* _getSeparator()
+static String* _getSeparator(void)
 {
     if (NULL == _separator)
     {

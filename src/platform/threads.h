@@ -47,7 +47,7 @@ typedef struct ConditionVariable
   * 
   * @relatesalso Thread
   */
-Thread* Thread_new();
+Thread* Thread_new(char* name);
 
 /** Join and destroy the thread.
   * 
@@ -77,7 +77,7 @@ void Thread_join(Thread* thread);
   * 
   * @relatesalso Mutex
   */
-Mutex* Mutex_new();
+Mutex* Mutex_new(void);
 
 /** Destroy a mutex.
   * 
@@ -101,7 +101,7 @@ void Mutex_unlock(Mutex* mutex);
   * 
   * @relatesalso ConditionVariable
   */
-ConditionVariable* ConditionVariable_new();
+ConditionVariable* ConditionVariable_new(void);
 
 /** Destroy a condition variable.
   * 

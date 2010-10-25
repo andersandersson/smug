@@ -19,7 +19,7 @@ void Color_delete(Color* c)
     free(c);
 }
 
-Color Color_create()
+Color Color_create(void)
 {
     Color c;
     c.r = 0.0f;

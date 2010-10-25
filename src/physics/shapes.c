@@ -4,7 +4,7 @@
 
 #include <stdlib.h>
 
-Shape* Shape_new()
+Shape* Shape_new(void)
 {
     Shape* shape = malloc(sizeof(Shape));
 

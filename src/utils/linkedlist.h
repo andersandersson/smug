@@ -41,7 +41,7 @@ typedef struct LinkedList {
   * @relatesalso Node
   * @return A pointer to the node just created.
   */
-Node* Node_new();
+Node* Node_new(void);
 
 /** Destroys a node struct
   *
@@ -55,7 +55,7 @@ void Node_delete(Node* node);
   * @relatesalso LinkedList
   * @return A pointer to the list just created.
   */
-LinkedList* LinkedList_new();
+LinkedList* LinkedList_new(void);
 
 /** Destroys a list.
   *

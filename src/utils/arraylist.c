@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-ArrayList* ArrayList_new()
+ArrayList* ArrayList_new(void)
 {
     ArrayList* ret = (ArrayList*)malloc(sizeof(ArrayList));
     ret->capacity = 0;

@@ -9,16 +9,16 @@
   * 
   * @return Returns zero on error, non-zero on success.
   */
-int smugInit();
+int smugInit(void);
 
 /** 
   * Close down Engine
   */
-void smugTerminate();
+void smugTerminate(void);
 
 /** 
   * Run the engine, 
   */
-void smugRun();
+void smugRun(void);
 
 #endif //SMUG_ENGINE_INTERFACE_H

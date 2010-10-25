@@ -150,7 +150,7 @@ void GLFWCALL Thread_loop(void* arg)
 
 
 
-Mutex* Mutex_new()
+Mutex* Mutex_new(void)
 {
    Mutex* mutex = malloc(sizeof(Mutex));
 
@@ -182,7 +182,7 @@ void Mutex_unlock(Mutex* mutex)
 
 
 
-ConditionVariable* ConditionVariable_new()
+ConditionVariable* ConditionVariable_new(void)
 {
    ConditionVariable* cond = malloc(sizeof(ConditionVariable));
 

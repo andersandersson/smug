@@ -21,7 +21,7 @@ typedef struct Rectangle
   *
   * @relatesalso Rectangle
   */
-Rectangle* Rectangle_new();
+Rectangle* Rectangle_new(void);
 
 /** Create a Rectangle from position and size
   *

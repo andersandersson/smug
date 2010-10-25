@@ -40,7 +40,7 @@ typedef struct Hook
   *
   * @return A pointer to the created Hook
   */
-Hook* Hook_new();
+Hook* Hook_new(void);
 
 
 /** Create a new hook from a function

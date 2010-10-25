@@ -8,7 +8,7 @@ static void World_invariant(World* w)
     assert(NULL != w->gameObjects);
 }
 
-World* World_new()
+World* World_new(void)
 {
     World* world = malloc(sizeof(World));
     world->gameObjects = LinkedList_new();

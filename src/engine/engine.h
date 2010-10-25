@@ -33,9 +33,9 @@ int Engine_init(BOOL verbose, BOOL console);
   * Checks if the engine is initialized.
   *
   */
-BOOL Engine_isInitialized();
+BOOL Engine_isInitialized(void);
 
-void Engine_setLogicCallback(void (*logicCallback)());
+void Engine_setLogicCallback(void (*logicCallback)(void));
 
 void Engine_enableLogicCallback(BOOL enable);
 
@@ -43,14 +43,14 @@ void Engine_enableLogicCallback(BOOL enable);
   * Close down Engine
   *
   */
-void Engine_terminate();
+void Engine_terminate(void);
 
 /**
   * Run the engine.
   *
   * @pre The engine must be initialized.
   */
-void Engine_run();
+void Engine_run(void);
 
 /**
   *

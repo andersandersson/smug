@@ -52,7 +52,7 @@ static void clearJoystickState(unsigned int joystick)
 }
 
 // Reset the state of all input
-static void clearInputState()
+static void clearInputState(void)
 {
     static int i;
     for (i = 0; i < KEY_LAST - KEY_BASE; i++)
@@ -182,7 +182,7 @@ static void GLFWCALL mouseWheelCallback(int pos)
 }
 
 // Update the state of all connected joysticks
-static void updateJoysticks()
+static void updateJoysticks(void)
 {
     static unsigned char buttons[JOYSTICK_BUTTON_LAST - JOYSTICK_BUTTON_BASE];
     static float axes[JOYSTICK_BUTTON_LAST - JOYSTICK_BUTTON_BASE];
@@ -241,7 +241,7 @@ static void updateJoysticks()
     }
 }
 
-void Platform_detectJoysticks()
+void Platform_detectJoysticks(void)
 {
     int j;
     for (j = 0; j < DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE; j++)
@@ -303,12 +303,12 @@ int Platform_init(int width, int height, BOOL fullscreen)
     return 1;
 }
 
-BOOL Platform_isInitialized()
+BOOL Platform_isInitialized(void)
 {
     return isInitialized;
 }
 
-void Platform_terminate()
+void Platform_terminate(void)
 {
     assert(isInitialized);
     NOTIFY("Terminating platform layer");
@@ -317,22 +317,22 @@ void Platform_terminate()
     isInitialized = FALSE;
 }
 
-BOOL Platform_isWindowOpen()
+BOOL Platform_isWindowOpen(void)
 {
     return glfwGetWindowParam(GLFW_OPENED);
 }
 
-void Platform_refreshWindow()
+void Platform_refreshWindow(void)
 {
     glfwSwapBuffers();
 }
 
-Vector Platform_getWindowSize()
+Vector Platform_getWindowSize(void)
 {
     return windowSize;
 }
 
-TIME Platform_getTime()
+TIME Platform_getTime(void)
 {
     return glfwGetTime();
 }
@@ -342,7 +342,7 @@ void Platform_sleep(TIME seconds)
     glfwSleep(seconds);
 }
 
-void Platform_update()
+void Platform_update(void)
 {
     glfwPollEvents();
 
@@ -356,7 +356,7 @@ void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPU
     inputHandler = handler;
 }
 
-void Platform_unregisterInputHandler()
+void Platform_unregisterInputHandler(void)
 {   
     Platform_registerInputHandler(&dummyInputHandler);
 }

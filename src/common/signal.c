@@ -5,7 +5,7 @@ static int _signals = 0;
 static Mutex* _signalMutex = NULL;
 static BOOL isInitialized = FALSE;
 
-int Signal_init()
+int Signal_init(void)
 {
     assert(!isInitialized);
     _signalMutex = Mutex_new();
@@ -21,12 +21,12 @@ int Signal_init()
     return isInitialized;
 }
 
-BOOL Signal_isInitialized()
+BOOL Signal_isInitialized(void)
 {
     return isInitialized;
 }
 
-void Signal_terminate()
+void Signal_terminate(void)
 {
     assert(isInitialized);
     Mutex_delete(_signalMutex);

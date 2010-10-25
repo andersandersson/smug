@@ -19,7 +19,7 @@ typedef struct Point
   *
   * @relatesalso Point
   */
-Point* Point_new();
+Point* Point_new(void);
 
 /** Create a Point from coordinates
   *

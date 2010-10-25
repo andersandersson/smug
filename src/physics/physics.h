@@ -22,9 +22,9 @@ typedef struct CollisionData
     float collisionTime;
 } CollisionData;
 
-int Physics_init();
-BOOL Physics_isInitialized();
-void Physics_terminate();
+int Physics_init(void);
+BOOL Physics_isInitialized(void);
+void Physics_terminate(void);
 
 BOOL Physics_intervalOverlap(float left_l, float left_r, float right_l, float right_r, float* dest);
 

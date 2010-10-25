@@ -20,7 +20,7 @@ static ArrayList* controllers = NULL;
 static ArrayList* hooks_devices = NULL; 
 
 // Initialize the array that holds all trigger hooks 
-static void initHookArray()
+static void initHookArray(void)
 {
     // Dimension 1 of devices
     hooks_devices = ArrayList_newFromCapacity(DEVICE_COUNT);
@@ -74,7 +74,7 @@ static void freeTriggersPart(void* triggerarray)
 }
 
 // Free the hook table
-static void freeHookArray()
+static void freeHookArray(void)
 {
     assert(NULL != hooks_devices);
     ArrayList_deleteContents(hooks_devices, &freeTriggersPart);
@@ -109,7 +109,7 @@ static void inputHandler(int device, int trigger, INPUTSTATE state)
     }    
 }
 
-int Input_init()
+int Input_init(void)
 {
     assert(!isInitialized);
 	assert(Platform_isInitialized());
@@ -125,12 +125,12 @@ int Input_init()
 	return 1;
 }
 
-BOOL Input_isInitialized()
+BOOL Input_isInitialized(void)
 {
 	return isInitialized;
 }
 
-void Input_terminate()
+void Input_terminate(void)
 {
     assert(isInitialized);
     // This myst be done before freeing hook array
@@ -169,7 +169,7 @@ INPUTSTATE Input_getKey(unsigned int key)
 	return Platform_getInputState(DEVICE_KEYBOARD, key);
 }
 
-Point Input_getMousePos()
+Point Input_getMousePos(void)
 {
     Vector windowSize = Vector_multiply(Platform_getWindowSize(), 0.5);
     return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
@@ -184,7 +184,7 @@ INPUTSTATE Input_getMouseButton(unsigned int button)
 	return Platform_getInputState(DEVICE_MOUSE, button) == INPUTSTATE_PRESSED;
 }
 
-Vector Input_getMouseScreenMovement()
+Vector Input_getMouseScreenMovement(void)
 {
     static Point last_pos;
     Point pos = Input_getMouseScreenPosition();
@@ -193,7 +193,7 @@ Vector Input_getMouseScreenMovement()
     return retval;
 }
 
-Point Input_getMouseScreenPosition()
+Point Input_getMouseScreenPosition(void)
 {
     Vector screenSize = Graphics_getScreenSize();
     return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
@@ -202,7 +202,7 @@ Point Input_getMouseScreenPosition()
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YNEG)) * Vector_getY(&screenSize) * 0.5f);
 }
 
-Vector Input_getMouseMovement()
+Vector Input_getMouseMovement(void)
 {
     static Point last_pos;
     Point pos = Input_getMousePosition();
@@ -211,7 +211,7 @@ Vector Input_getMouseMovement()
     return retval;
 }
 
-Point Input_getMousePosition()
+Point Input_getMousePosition(void)
 {
     return Point_createFromXY(Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XNEG),

@@ -35,7 +35,7 @@ typedef struct GameObject
   * @relatesalso GameObject
   * @return A pointer to the GameObject just created.
   */
-GameObject* GameObject_new();
+GameObject* GameObject_new(void);
 
 /** Destructor for GameObject.
   *

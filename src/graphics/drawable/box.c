@@ -77,7 +77,7 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     batchdata->textureData[texturestart + 3 * 2 + 1] = ty1;
 }
 
-Drawable* Drawable_newBox()
+Drawable* Drawable_newBox(void)
 {
     Drawable* ret = Drawable_new(4);
     ret->_writeBatchDataFunc = writeBatchData;

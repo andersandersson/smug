@@ -28,7 +28,7 @@ typedef struct World
   * @relatesalso World
   * @return A pointer to the World struct just created.
   */
-World* World_new();
+World* World_new(void);
 
 /** Destructor for World.
   * 

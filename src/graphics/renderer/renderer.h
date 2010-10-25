@@ -16,7 +16,7 @@ typedef struct Renderer
     Camera* camera;
 } Renderer;
 
-Renderer* Renderer_new();
+Renderer* Renderer_new(void);
 void Renderer_delete(void* renderer);
 
 void Renderer_render(Renderer* renderer);

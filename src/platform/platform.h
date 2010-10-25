@@ -211,34 +211,34 @@ int Platform_init(int width, int height, BOOL fullscreen);
 /**
  * Returns true if the system is initialized
  */
-BOOL Platform_isInitialized();
+BOOL Platform_isInitialized(void);
 
 /**
  * Terminate Platform system
  */
-void Platform_terminate();
+void Platform_terminate(void);
 
 
 /** 
  * Check if the window is open
  */
-BOOL Platform_isWindowOpen();
+BOOL Platform_isWindowOpen(void);
 
 
 /**
  * Refresh graphhics in window
  */
-void Platform_refreshWindow();
+void Platform_refreshWindow(void);
 
 /**
  * Returns the current size of the window
  */
-Vector Platform_getWindowSize(); 
+Vector Platform_getWindowSize(void); 
 
 /**
  * Get the current system time
  */
-TIME Platform_getTime();
+TIME Platform_getTime(void);
 
 /**
  * Sleep for a given amount of seconds
@@ -248,7 +248,7 @@ void Platform_sleep(TIME seconds);
 /**
  * Update platform layer
  */
-void Platform_update();
+void Platform_update(void);
 
 /**
  * Register a handler for new input events
@@ -258,7 +258,7 @@ void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPU
 /**
  * Unregister previously registered handler
  */
-void Platform_unregisterInputHandler();
+void Platform_unregisterInputHandler(void);
 
 /**
  * Get the input state of a given trigger
@@ -268,7 +268,7 @@ INPUTSTATE Platform_getInputState(int device, int trigger);
 /**
  * Search for connected joysticks
  */
-void Platform_detectJoysticks();
+void Platform_detectJoysticks(void);
 
 #endif // PLATFORM_H
 

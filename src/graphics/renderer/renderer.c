@@ -16,7 +16,7 @@
 extern int gVBOSupported;
 extern unsigned int gRenderMode;
 
-Renderer* Renderer_new()
+Renderer* Renderer_new(void)
 {
     Renderer* ret = (Renderer*)malloc(sizeof(Renderer));
     ret->layers = ArrayList_new();

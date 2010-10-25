@@ -44,7 +44,7 @@ typedef struct Shape
  * @relatesalso Shape
  * @return Shape
  */ 
-Shape* Shape_new();
+Shape* Shape_new(void);
 
 
 /** Free memory used by a Shape

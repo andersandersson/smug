@@ -4,7 +4,7 @@
 
 #include <stdlib.h>
 
-Body* Body_new()
+Body* Body_new(void)
 {
     Body* body = malloc(sizeof(Body));
 

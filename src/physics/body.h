@@ -26,7 +26,7 @@ typedef struct Body
 /**
  * @relatesalso Body
  */
-Body* Body_new();
+Body* Body_new(void);
 
 /**
  * @relatesalso Body

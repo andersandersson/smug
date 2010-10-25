@@ -50,18 +50,18 @@ int Graphics_init(int width, int height);
 /**
  * Returns true if system is initialized
  */
-BOOL Graphics_isInitialized();
+BOOL Graphics_isInitialized(void);
 
 /**
  * Returns the current size of the screen
  * @return Vector the current screen size
  */
-Vector Graphics_getScreenSize();
+Vector Graphics_getScreenSize(void);
 
 /**
  * Render one frame.
  */
-void Graphics_render();
+void Graphics_render(void);
 
 /**
  * Registers a drawable for rendering.
@@ -73,12 +73,12 @@ void Graphics_removeDrawable(Drawable* d);
 /**
  * Terminate the graphics component of the engine.
  */
-void Graphics_terminate();
+void Graphics_terminate(void);
 
 /**
  * Gets the current camera
  */
-Camera* Graphics_getCamera();
+Camera* Graphics_getCamera(void);
 
 /**
  * Sets the properties of a layer
