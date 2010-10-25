@@ -47,7 +47,11 @@ int Engine_init(BOOL verbose, BOOL console)
     int logLevel;
 
     assert(!gInitialized);
-    Log_init();
+    if (!Log_init())
+    {
+      return 0;
+    }
+    
     if (verbose)
     {
         logLevel = Log_getLevel();
