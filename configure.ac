@@ -22,15 +22,12 @@ AC_DEFUN([AC_INIT_WIN32],
          [CFLAGS="$CFLAGS -mno-cygwin"])
 	
 # Default init parameters
-AC_INIT([smug],
-        [0.0.1],
-        [Anders Andersson finrist@gmail.com],
-        [smug])
+AC_INIT([smug],[0.0.1],[Anders Andersson finrist@gmail.com],[smug])
 
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([dist-bzip2])
 
@@ -42,7 +39,7 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 
 # Check for library function
-AC_PROG_LIBTOOL
+LT_INIT
 
 # Check the OS and run corresponding init script
 case $host_os in
