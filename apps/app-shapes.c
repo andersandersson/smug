@@ -16,14 +16,20 @@ int collision_hook(void* lparam, void* rparam)
 
     Point position = data->left->position;
     Vector movement = Vector_multiply(data->movement, data->collisionTime);    
+    Vector m = Vector_sub(data->movement, movement);
+    Vector p = Vector_projection(m, data->normal);
+
+    float f = Vector_dotProduct(data->normal, data->movement);
     position = Point_addVector(position, movement);
+    position = Point_addVector(position, p);
     
-
-    Physics_drawShape(data->left->shape, position, Color_createFromRGBA(0.0,0.0,1.0,1.0));
-
+    //Physics_drawShape(data->left->shape, position, Color_createFromRGBA(1.0,0.0,1.0,1.0));
+    
     if(0 != handle_collision) 
-        {
-            data->left->new_position = position;
+        {	  
+	  if(f <= 0.0f) {
+	    data->left->new_position = position;
+	  }
         }
 }
 
@@ -84,11 +90,11 @@ int main()
 
             if (Input_getKey(KEY_DOWN))
                 {
-                    y = 10.0;
+                    y = 100.0;
                 } 
             else if(Input_getKey(KEY_UP))
                 {
-                    y = -10.0;
+                    y = -100.0;
                 }
             else
                 {
@@ -98,16 +104,21 @@ int main()
 
             if (Input_getKey(KEY_RIGHT))
                 {
-                    x = 10.0;
+                    x = 100.0;
                 } 
             else if(Input_getKey(KEY_LEFT))
                 {
-                    x = -10.0;
+                    x = -100.0;
                 }
             else
                 {
                     x = 0.0;
                 }
+
+            if (Input_getKey(KEY_ENTER))
+	    {
+	      current_body->position = current_body->new_position;
+	    }
 
             if (Input_getKey(KEY_TAB))
                 {

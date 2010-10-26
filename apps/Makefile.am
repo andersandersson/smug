@@ -20,13 +20,15 @@
 SUBDIRS = ../src/ .
 
 AM_CFLAGS = -I../src/
-AM_LDFLAGS= -L../src/ -lsmug
+#AM_LDFLAGS= -L../src/ -lsmug
 
-bin_PROGRAMS = app-linus app-input app-shapes app-sprites app-sprites-go app-sprites-go-engine
-#EXTRA_PROGRAMS = app-linus app-input app-shapes app-sprites app-sprites-go app-sprites-go-engine
+#bin_PROGRAMS = app-linus app-input app-shapes app-sprites app-sprites-go app-sprites-go-engine
+EXTRA_PROGRAMS = app-linus app-input app-shapes app-sprites app-sprites-go app-sprites-go-engine
+app_sprites_SOURCES = app-sprites.c
 app_sprites_SOURCES = app-sprites.c
 app_input_SOURCES = app-input.c
 app_shapes_SOURCES = app-shapes.c
+app_shapes_LDADD = ../src/libsmug.la
 app_sprites_go_SOURCES = app-sprites-go.c
 app_sprites_go_engine_SOURCES = app-sprites-go-engine.c
 app_linus_SOURCES = app-linus.c

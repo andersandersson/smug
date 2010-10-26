@@ -14,27 +14,39 @@
 #include "body.h"
 #include "utils/hook.h"
 
+/** Data container for a collision
+ *
+ * This data is sent as a parameter to the collision handler
+ * when two objects collide with eachother
+ */
 typedef struct CollisionData
 {
     Body* left;
     Body* right;
     Vector movement;
+    Vector normal;
     float collisionTime;
 } CollisionData;
 
-int Physics_init(void);
-BOOL Physics_isInitialized(void);
-void Physics_terminate(void);
+CollisionData* CollisionData_new(void);
+void CollisionData_delete(CollisionData* data);
 
-BOOL Physics_intervalOverlap(float left_l, float left_r, float right_l, float right_r, float* dest);
+/** Initialize the physics
+ */
+int Physics_init(void);
+
+/** Check if the Physics is initialized
+ */
+BOOL Physics_isInitialized(void);
+
+/** Clean up the physics
+ */
+void Physics_terminate(void);
 
 void Physics_addCollisionHook(BODY_TYPE left, BODY_TYPE right, Hook* hook);
 void Physics_addBody(Body* body);
 void Physics_removeBody(Body* body);
 void Physics_update(TIME time);
-
-BOOL Physics_collideRectangleRectangle(Body* left, Body* right, CollisionData** result);
-void Physics_detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions);
 
 #endif
 
