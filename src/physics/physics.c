@@ -38,8 +38,8 @@ static void _CollisionType_delete(_CollisionType* type);
 static BOOL _compareCollisionType(void* self, void* other);
 static BOOL _collideMovingPoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t);
 static BOOL _collideMovingInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end, 
-			       float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end, 
-			       float* t_in, float* t_out);
+				     float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end, 
+				     float* t_in, float* t_out);
 
 static BOOL _collideRectangleRectangle(Body* self, Body* other, CollisionData** collision_data);
 static void _detectCollisions(LinkedList* self, LinkedList* other, LinkedList* collisions);
