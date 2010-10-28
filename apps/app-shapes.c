@@ -15,11 +15,11 @@ int collision_hook(void* lparam, void* rparam)
     CollisionData* data = (CollisionData*) rparam;
 
     Point position = data->self->position;
-    Vector movement = Vector_multiply(data->movement, data->collisionTime);    
-    Vector m = Vector_sub(data->movement, movement);
-    Vector p = Vector_projection(m, data->normal);
+    Vector movement = Vector_multiply(data->selfMovement, data->collisionTime);    
+    Vector m = Vector_sub(data->selfMovement, movement);
+    Vector p = Vector_projection(m, data->contactNormal);
 
-    float f = Vector_dotProduct(data->normal, data->movement);
+    float f = Vector_dotProduct(data->contactNormal, data->selfMovement);
     position = Point_addVector(position, movement);
     position = Point_addVector(position, p);
     
