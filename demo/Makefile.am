@@ -8,14 +8,11 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AM_LDFLAGS = \
--L../src/graphics \-lgraphics \
--L../src/input -linput \
--L../src/common -lcommon \
--L../src/platform -lplatform \
--L../src/utils -lutils 
-
+#AM_LDFLAGS = 
 AM_CFLAGS = -I../src/
 
-EXTRA_PROGRAMS = 
+EXTRA_PROGRAMS = pong
+
+pong_SOURCES = pong.c
+pong_LDADD = ../src/libsmug.la
 

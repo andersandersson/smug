@@ -532,3 +532,55 @@ void Physics_update(TIME time)
         }
 
 }
+
+
+static int _handle_collision_solid(void* lparam, void* rparam, BOOL gliding) 
+{
+  CollisionData* data = (CollisionData*) rparam;
+
+  // Check if "self" is moving away from "other". In that case we will do nothing about
+  // the collision.
+  float relative_movement = Vector_dotProduct(data->contactNormal, data->selfMovement);
+
+  if(relative_movement > 0.0f) {
+    return 0;
+  }
+
+  // Init new_position
+  Point new_position = data->self->position;
+
+  // Calculate the movement until collision
+  Vector movement = Vector_multiply(data->selfMovement, data->collisionTime);
+  Vector glide_movement;
+
+  if(TRUE == gliding) {
+     // Calculate the movement for the glide after the collision
+     glide_movement = Vector_projection(Vector_sub(data->selfMovement, movement), data->contactNormal);
+  }
+
+  // Add the movement until collision to the new_position
+  new_position = Point_addVector(new_position, movement);
+
+  if(TRUE == gliding) {
+    // Add the glide movement to the new_position
+    new_position = Point_addVector(new_position, glide_movement);
+  }
+
+  data->self->new_position = new_position;
+
+  return 0;
+}
+
+int Physics_collisionHandler_SolidGliding(void* lparam, void* rparam)
+{
+  return _handle_collision_solid(lparam, rparam, TRUE);
+}
+
+void Physics_setCollisionHandler_SolidGliding(BODY_TYPE left, BODY_TYPE right)
+{
+  Hook* hook = Hook_newFromFunction(NULL, Physics_collisionHandler_SolidGliding);
+
+  Physics_addCollisionHook(left, right, hook);
+}
+
+

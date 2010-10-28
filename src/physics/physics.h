@@ -95,6 +95,15 @@ void Physics_removeBody(Body* body);
  */
 void Physics_update(TIME time);
 
+
+/** Default collision handler for solid, gliding objects.
+ */
+int Physics_collisionHandler_SolidGliding(void* lparam, void* rparam);
+
+/** Add default handler Hook for solid, gliding objects
+ */
+void Physics_setCollisionHandler_SolidGliding(BODY_TYPE left, BODY_TYPE right);
+
 #endif
 
 /**@}*/

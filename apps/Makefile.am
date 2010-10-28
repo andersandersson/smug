@@ -25,7 +25,6 @@ AM_CFLAGS = -I../src/
 #bin_PROGRAMS = app-linus app-input app-shapes app-sprites app-sprites-go app-sprites-go-engine
 EXTRA_PROGRAMS = app-linus app-input app-shapes app-sprites app-sprites-go app-sprites-go-engine
 app_sprites_SOURCES = app-sprites.c
-app_sprites_SOURCES = app-sprites.c
 app_input_SOURCES = app-input.c
 app_shapes_SOURCES = app-shapes.c
 app_shapes_LDADD = ../src/libsmug.la
