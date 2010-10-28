@@ -14,7 +14,7 @@ int collision_hook(void* lparam, void* rparam)
 {
     CollisionData* data = (CollisionData*) rparam;
 
-    Point position = data->left->position;
+    Point position = data->self->position;
     Vector movement = Vector_multiply(data->movement, data->collisionTime);    
     Vector m = Vector_sub(data->movement, movement);
     Vector p = Vector_projection(m, data->normal);
@@ -28,7 +28,7 @@ int collision_hook(void* lparam, void* rparam)
     if(0 != handle_collision) 
         {	  
 	  if(f <= 0.0f) {
-	    data->left->new_position = position;
+	    data->self->new_position = position;
 	  }
         }
 }
@@ -90,11 +90,11 @@ int main()
 
             if (Input_getKey(KEY_DOWN))
                 {
-                    y = 100.0;
+                    y = 10.0;
                 } 
             else if(Input_getKey(KEY_UP))
                 {
-                    y = -100.0;
+                    y = -10.0;
                 }
             else
                 {
@@ -104,11 +104,11 @@ int main()
 
             if (Input_getKey(KEY_RIGHT))
                 {
-                    x = 100.0;
+                    x = 10.0;
                 } 
             else if(Input_getKey(KEY_LEFT))
                 {
-                    x = -100.0;
+                    x = -10.0;
                 }
             else
                 {

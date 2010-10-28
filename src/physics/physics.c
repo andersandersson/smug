@@ -12,8 +12,8 @@
 
 typedef struct _CollisionType
 {
-    BODY_TYPE left;
-    BODY_TYPE right;
+    BODY_TYPE self;
+    BODY_TYPE other;
 } _CollisionType;
 
 static Map* body_map;
@@ -24,13 +24,13 @@ static BOOL debugMode = FALSE;
 
 static _CollisionType* _CollisionType_new(void);
 static void _CollisionType_delete(_CollisionType* type);
-static BOOL _compareCollisionType(void* left, void* right);
+static BOOL _compareCollisionType(void* self, void* other);
 static BOOL _collidePoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t);
 static BOOL _collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end, 
 			       float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end, 
 			       float* t_in, float* t_out);
-static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** collision_data);
-static void _detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions);
+static BOOL _collideRectangleRectangle(Body* self, Body* other, CollisionData** collision_data);
+static void _detectCollisions(LinkedList* self, LinkedList* other, LinkedList* collisions);
 static void _handleCollisions(LinkedList* collisions, LinkedList* hooks);
   
 static _CollisionType* _CollisionType_new(void)
@@ -43,10 +43,10 @@ static void _CollisionType_delete(_CollisionType* type)
     free(type);
 }
 
-static BOOL _compareCollisionType(void* left, void* right)
+static BOOL _compareCollisionType(void* self, void* other)
 {
-    if(((_CollisionType*) left)->left == ((_CollisionType*) right)->left &&
-       ((_CollisionType*) left)->right == ((_CollisionType*) right)->right)
+    if(((_CollisionType*) self)->self == ((_CollisionType*) other)->self &&
+       ((_CollisionType*) self)->other == ((_CollisionType*) other)->other)
         {
             return TRUE;
         }
@@ -110,37 +110,37 @@ static BOOL _collideMovingInterval1D(float i1_x1_start, float i1_x1_end, float i
     return TRUE;
 }
 
-static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** collision_data)
+static BOOL _collideRectangleRectangle(Body* self, Body* other, CollisionData** collision_data)
 {
     float t_x_in = 0;
     float t_x_out = 0;
     float t_y_in = 0;
     float t_y_out = 0;
 
-    float left_x_start = Rectangle_getX(left->shape->data) + Point_getX(&left->position);
-    float left_x_end = Rectangle_getX(left->shape->data) + Point_getX(&left->new_position);
-    float left_width = Rectangle_getW(left->shape->data);
+    float self_x_start = Rectangle_getX(self->shape->data) + Point_getX(&self->position);
+    float self_x_end = Rectangle_getX(self->shape->data) + Point_getX(&self->new_position);
+    float self_width = Rectangle_getW(self->shape->data);
 
-    float right_x_start = Rectangle_getX(right->shape->data) + Point_getX(&right->position);
-    float right_x_end = Rectangle_getX(right->shape->data) + Point_getX(&right->new_position);
-    float right_width = Rectangle_getW(right->shape->data);
+    float other_x_start = Rectangle_getX(other->shape->data) + Point_getX(&other->position);
+    float other_x_end = Rectangle_getX(other->shape->data) + Point_getX(&other->new_position);
+    float other_width = Rectangle_getW(other->shape->data);
 
-    float left_y_start = Rectangle_getY(left->shape->data) + Point_getY(&left->position);
-    float left_y_end = Rectangle_getY(left->shape->data) + Point_getY(&left->new_position);
-    float left_height = Rectangle_getH(left->shape->data);
+    float self_y_start = Rectangle_getY(self->shape->data) + Point_getY(&self->position);
+    float self_y_end = Rectangle_getY(self->shape->data) + Point_getY(&self->new_position);
+    float self_height = Rectangle_getH(self->shape->data);
 
-    float right_y_start = Rectangle_getY(right->shape->data) + Point_getY(&right->position);
-    float right_y_end = Rectangle_getY(right->shape->data) + Point_getY(&right->new_position);
-    float right_height = Rectangle_getH(right->shape->data);
+    float other_y_start = Rectangle_getY(other->shape->data) + Point_getY(&other->position);
+    float other_y_end = Rectangle_getY(other->shape->data) + Point_getY(&other->new_position);
+    float other_height = Rectangle_getH(other->shape->data);
 
     BOOL res = TRUE;
 
-    res *= (1 - _collideMovingInterval1D(left_x_start, left_x_end, left_x_start+left_width, left_x_end+left_width,
-					 right_x_start, right_x_end, right_x_start+right_width, right_x_end+right_width,
+    res *= (1 - _collideMovingInterval1D(self_x_start, self_x_end, self_x_start+self_width, self_x_end+self_width,
+					 other_x_start, other_x_end, other_x_start+other_width, other_x_end+other_width,
 					 &t_x_in, &t_x_out));
 
-    res *= (1 - _collideMovingInterval1D(left_y_start, left_y_end, left_y_start+left_height, left_y_end+left_height,
-					 right_y_start, right_y_end, right_y_start+right_height, right_y_end+right_height,
+    res *= (1 - _collideMovingInterval1D(self_y_start, self_y_end, self_y_start+self_height, self_y_end+self_height,
+					 other_y_start, other_y_end, other_y_start+other_height, other_y_end+other_height,
 					 &t_y_in, &t_y_out));
 
     if(TRUE == res)
@@ -148,27 +148,25 @@ static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** 
             return FALSE;
         }
 
-    // If either overlap exists before the other one enters
     if(t_x_out < t_y_in || t_y_out < t_x_in)
         {
             return FALSE;
         }
 
-
     if(t_x_in < 1.0 && t_y_in < 1.0 && t_x_out > 0.0 && t_y_out > 0.0) {
         (*collision_data) = CollisionData_new();
-        (*collision_data)->left = left;
-        (*collision_data)->right = right;
+        (*collision_data)->self = self;
+        (*collision_data)->other = other;
 	
 	if(t_x_in > t_y_in) {
 	  (*collision_data)->collisionTime =  t_x_in;
-	  (*collision_data)->normal = Vector_create2d( (left_x_start - right_x_start) / abs(left_x_start - right_x_start), 0.0f);
+	  (*collision_data)->contactNormal = Vector_create2d( (self_x_start - other_x_start) / abs(self_x_start - other_x_start), 0.0f);
 	} else {
 	  (*collision_data)->collisionTime =  t_y_in;
-	  (*collision_data)->normal = Vector_create2d(0.0f, (left_y_start - right_y_start) / abs(left_y_start - right_y_start));
+	  (*collision_data)->contactNormal = Vector_create2d(0.0f, (self_y_start - other_y_start) / abs(self_y_start - other_y_start));
 	}
         
-	(*collision_data)->movement = Point_distanceToPoint(left->position, left->new_position);
+	(*collision_data)->selfMovement = Point_distanceToPoint(self->position, self->new_position);
 
         return TRUE;
     }
@@ -176,39 +174,39 @@ static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** 
     return FALSE;
 }
 
-static void _detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions)
+static void _detectCollisions(LinkedList* self, LinkedList* other, LinkedList* collisions)
 {
     CollisionData* collision_data;
     Vector result;
-    Node* left_node;
-    Node* right_node;
+    Node* self_node;
+    Node* other_node;
 
-    if(NULL == left->first || NULL == right->first)
+    if(NULL == self->first || NULL == other->first)
         {
             return;
         }
 
-    for(left_node = left->first; left_node != NULL; left_node = left_node->next)
+    for(self_node = self->first; self_node != NULL; self_node = self_node->next)
         {
-            for(right_node = right->first; right_node != NULL; right_node = right_node->next)
+            for(other_node = other->first; other_node != NULL; other_node = other_node->next)
                 {
-                    if(right_node->item == left_node->item)
+                    if(other_node->item == self_node->item)
                         {
                             continue;
                         }
 
-                    Body* left_body = (Body*) left_node->item;
-                    Body* right_body = (Body*) right_node->item;
+                    Body* self_body = (Body*) self_node->item;
+                    Body* other_body = (Body*) other_node->item;
 
-                    if(NULL == left_body->shape || NULL == right_body->shape)
+                    if(NULL == self_body->shape || NULL == other_body->shape)
                         {
                             continue;
                         }
 
-                    if(SHAPE_RECTANGLE == left_body->shape->type &&
-                       SHAPE_RECTANGLE == right_body->shape->type)
+                    if(SHAPE_RECTANGLE == self_body->shape->type &&
+                       SHAPE_RECTANGLE == other_body->shape->type)
                         {
-                            if(TRUE == _collideRectangleRectangle(left_body, right_body, &collision_data))
+                            if(TRUE == _collideRectangleRectangle(self_body, other_body, &collision_data))
                                 {
                                     LinkedList_addLast(collisions, collision_data);
                                 }
@@ -274,20 +272,20 @@ void Physics_terminate(void)
     isInitialized = FALSE;
 }
 
-void Physics_addCollisionHook(BODY_TYPE left, BODY_TYPE right, Hook* hook)
+void Physics_addCollisionHook(BODY_TYPE self, BODY_TYPE other, Hook* hook)
 {
     _CollisionType type;
 
-    type.left = left;
-    type.right = right;
+    type.self = self;
+    type.other = other;
 
     LinkedList* list = Map_get(collision_hooks, (void*) &type);
 
     if(NULL == list)
         {
             _CollisionType* _type = _CollisionType_new();
-            _type->left = left;
-            _type->right = right;
+            _type->self = self;
+            _type->other = other;
             list = LinkedList_new();
 
             Map_set(collision_hooks, (void*) _type, list);
@@ -348,15 +346,15 @@ void Physics_update(TIME time)
 
     for(node = collision_hooks->first; node != NULL; node = node->next)
         {
-            LinkedList* left;
-            LinkedList* right;
+            LinkedList* self;
+            LinkedList* other;
 
-            left = Map_get(body_map, ((_CollisionType *) node->key)->left);
-            right = Map_get(body_map, ((_CollisionType *) node->key)->right);
+            self = Map_get(body_map, ((_CollisionType *) node->key)->self);
+            other = Map_get(body_map, ((_CollisionType *) node->key)->other);
 
-            if(NULL != left && NULL != right)
+            if(NULL != self && NULL != other)
                 {
-                    _detectCollisions(left, right, collision_list);
+                    _detectCollisions(self, other, collision_list);
                 }
         }
 
