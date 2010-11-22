@@ -6,7 +6,7 @@
 /** @addtogroup smug_common
   * @{
   */
-  
+
 #ifndef SMUG_COMMON_SIGNAL_H
 #define SMUG_COMMON_SIGNAL_H
 

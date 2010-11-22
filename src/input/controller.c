@@ -48,14 +48,14 @@ Controller* Controller_new(ControllerType* type)
 {
     assert(NULL != type);
 	Controller* c = (Controller*)malloc(sizeof(Controller));
-	
+
 	c->_slot = 0;
 	c->_connected = FALSE;
 	c->type = type;
-    
+
     c->buttons = ArrayList_newFromCapacity(type->num_of_buttons);
     c->axes = ArrayList_newFromCapacity(type->num_of_axes);
-    
+
 	return c;
 }
 
@@ -63,7 +63,7 @@ void Controller_delete(void* controller)
 {
 	assert(NULL != controller);
 	Controller* c = (Controller*)controller;
-    
+
     ArrayList_deleteContents(c->buttons, &Button_delete);
     ArrayList_deleteContents(c->axes, &Axis_delete);
     ArrayList_delete(c->buttons);
@@ -128,7 +128,7 @@ static int setButtonCallback(void* button, void* state)
 
 void Controller_bindButton(Controller* controller, unsigned int button, unsigned int device, unsigned int trigger)
 {
-    if (button >= controller->type->num_of_buttons) 
+    if (button >= controller->type->num_of_buttons)
     {
         WARNING("Invalid button id");
         return;
@@ -138,10 +138,10 @@ void Controller_bindButton(Controller* controller, unsigned int button, unsigned
     Input_setTriggerControllerHook(device, trigger, b, &setButtonCallback);
 }
 
-void Controller_bindAxis(Controller* controller, unsigned int axis, unsigned int device_neg, unsigned int trigger_neg, 
+void Controller_bindAxis(Controller* controller, unsigned int axis, unsigned int device_neg, unsigned int trigger_neg,
 																	unsigned int device_pos, unsigned int trigger_pos)
 {
-    if (axis >= controller->type->num_of_axes) 
+    if (axis >= controller->type->num_of_axes)
     {
         WARNING("Invalid axis id");
         return;
@@ -177,7 +177,7 @@ BOOL Controller_wasAxisTriggered(Controller* controller, unsigned int axis)
     BOOL retval = FALSE;
     Button* theaxis = ArrayList_get(controller->axes, axis);
     if (NULL != theaxis)
-    {  
+    {
         retval = theaxis->triggered;
         theaxis->triggered = FALSE;
     }
@@ -185,11 +185,11 @@ BOOL Controller_wasAxisTriggered(Controller* controller, unsigned int axis)
 }
 
 BOOL Controller_wasButtonTriggered(Controller* controller, unsigned int button)
-{   
+{
     BOOL retval = FALSE;
     Button* thebutton = ArrayList_get(controller->buttons, button);
     if (NULL != thebutton)
-    {  
+    {
         retval = thebutton->triggered;
         thebutton->triggered = FALSE;
     }
@@ -201,11 +201,11 @@ INPUTSTATE Controller_getAxisChange(Controller* controller, unsigned int axis)
     INPUTSTATE change = 0.0f;
     Axis* theaxis = ArrayList_get(controller->axes, axis);
     if (NULL != theaxis)
-    {  
+    {
         change = theaxis->state - theaxis->oldstate;
         theaxis->oldstate = theaxis->state;
     }
-    return change;    
+    return change;
 }
 
 INPUTSTATE Controller_getButtonChange(Controller* controller, unsigned int button)
@@ -213,7 +213,7 @@ INPUTSTATE Controller_getButtonChange(Controller* controller, unsigned int butto
     INPUTSTATE change = 0.0f;
     Button* thebutton = ArrayList_get(controller->buttons, button);
     if (NULL != thebutton)
-    {  
+    {
         change = thebutton->state - thebutton->oldstate;
         thebutton->oldstate = thebutton->state;
     }

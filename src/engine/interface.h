@@ -6,18 +6,18 @@
 #define SMUG_ENGINE_INTERFACE_H
 
 /** Initialize Engine
-  * 
+  *
   * @return Returns zero on error, non-zero on success.
   */
 int smugInit(void);
 
-/** 
+/**
   * Close down Engine
   */
 void smugTerminate(void);
 
-/** 
-  * Run the engine, 
+/**
+  * Run the engine,
   */
 void smugRun(void);
 

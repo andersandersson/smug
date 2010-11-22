@@ -17,19 +17,19 @@ static BOOL isInitialized = FALSE;
 static ArrayList* controllers = NULL;
 
 // A 2d table with linked lists, holds [device][trigger][list of hooks]
-static ArrayList* hooks_devices = NULL; 
+static ArrayList* hooks_devices = NULL;
 
-// Initialize the array that holds all trigger hooks 
+// Initialize the array that holds all trigger hooks
 static void initHookArray(void)
 {
     // Dimension 1 of devices
     hooks_devices = ArrayList_newFromCapacity(DEVICE_COUNT);
     int i;
     ArrayList* triggerList;
-    
+
     // Setup trigger lists for keyboard
     triggerList = ArrayList_newFromCapacity(KEY_COUNT);
-    ArrayList_set(hooks_devices, DEVICE_KEYBOARD - DEVICE_BASE, triggerList);    
+    ArrayList_set(hooks_devices, DEVICE_KEYBOARD - DEVICE_BASE, triggerList);
     for (i = 0; i < KEY_COUNT; i++)
     {
         ArrayList_set(triggerList, i, LinkedList_new());
@@ -37,7 +37,7 @@ static void initHookArray(void)
 
     // Setup trigger lists for mouse
     triggerList = ArrayList_newFromCapacity(MOUSE_COUNT);
-    ArrayList_set(hooks_devices, DEVICE_MOUSE - DEVICE_BASE, triggerList);    
+    ArrayList_set(hooks_devices, DEVICE_MOUSE - DEVICE_BASE, triggerList);
     for (i = 0; i < MOUSE_COUNT; i++)
     {
         ArrayList_set(triggerList, i, LinkedList_new());
@@ -48,7 +48,7 @@ static void initHookArray(void)
     for (j = 0; j < JOYSTICK_COUNT; j++)
     {
         triggerList = ArrayList_newFromCapacity(JOYSTICK_COUNT);
-        ArrayList_set(hooks_devices, DEVICE_JOYSTICK_BASE - DEVICE_BASE + j, triggerList);    
+        ArrayList_set(hooks_devices, DEVICE_JOYSTICK_BASE - DEVICE_BASE + j, triggerList);
         for (i = 0; i < JOYSTICK_COUNT; i++)
         {
             ArrayList_set(triggerList, i, LinkedList_new());
@@ -69,7 +69,7 @@ static void freeHooksPart(void* hooklist)
 static void freeTriggersPart(void* triggerarray)
 {
     assert(NULL != triggerarray);
-    ArrayList_deleteContents(triggerarray, &freeHooksPart); 
+    ArrayList_deleteContents(triggerarray, &freeHooksPart);
     ArrayList_delete(triggerarray);
 }
 
@@ -95,7 +95,7 @@ static void inputHandler(int device, int trigger, INPUTSTATE state)
 {
     assert(NULL != hooks_devices);
 	//fprintf(stderr, "Input: Got trigger: %i\n", trigger);
-    
+
     // Call all hooks connected to the trigger
     ArrayList* triggerarray = ArrayList_get(hooks_devices, device);
     LinkedList* hooklist = ArrayList_get(triggerarray, trigger);
@@ -106,7 +106,7 @@ static void inputHandler(int device, int trigger, INPUTSTATE state)
         hook = node->item;
         Hook_call(hook, &state);
         node = node->next;
-    }    
+    }
 }
 
 int Input_init(void)
@@ -117,10 +117,10 @@ int Input_init(void)
 
     // Register this system as a handler for incoming events
 	Platform_registerInputHandler(&inputHandler);
-	
+
 	controllers = ArrayList_new();
     initHookArray();
-	
+
 	isInitialized = TRUE;
 	return 1;
 }
@@ -135,7 +135,7 @@ void Input_terminate(void)
     assert(isInitialized);
     // This myst be done before freeing hook array
     Platform_unregisterInputHandler();
-    
+
     freeHookArray();
 	isInitialized = FALSE;
 }
@@ -145,7 +145,7 @@ void Input_setTriggerControllerHook(unsigned int device, unsigned int trigger, v
     assert(NULL != object);
     assert(NULL != function);
     setHook(device, trigger, object, function);
-} 
+}
 
 void Input_connectController(Controller* controller, unsigned int slot)
 {
@@ -160,7 +160,7 @@ void Input_disconnectController(unsigned int slot)
 	{
 		Controller_disconnect(c);
 	}
-	ArrayList_set(controllers, slot, NULL);	
+	ArrayList_set(controllers, slot, NULL);
 }
 
 INPUTSTATE Input_getKey(unsigned int key)
@@ -172,9 +172,9 @@ INPUTSTATE Input_getKey(unsigned int key)
 Point Input_getMousePos(void)
 {
     Vector windowSize = Vector_multiply(Platform_getWindowSize(), 0.5);
-    return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
+    return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) -
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XNEG)) * windowSize.d[0],
-                                    (Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) - 
+                                    (Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) -
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YNEG)) * windowSize.d[1]);
 }
 
@@ -196,9 +196,9 @@ Vector Input_getMouseScreenMovement(void)
 Point Input_getMouseScreenPosition(void)
 {
     Vector screenSize = Graphics_getScreenSize();
-    return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
+    return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) -
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XNEG)) * Vector_getX(&screenSize) * 0.5f,
-                                    (Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) - 
+                                    (Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) -
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YNEG)) * Vector_getY(&screenSize) * 0.5f);
 }
 
@@ -213,9 +213,9 @@ Vector Input_getMouseMovement(void)
 
 Point Input_getMousePosition(void)
 {
-    return Point_createFromXY(Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) - 
+    return Point_createFromXY(Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) -
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XNEG),
-                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) - 
+                                    Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) -
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YNEG));
 }
 
@@ -224,6 +224,6 @@ Point Input_getMousePosition(void)
 
 INPUTSTATE Input_getInputState(int device, int id)
 {
-	return Platform_getInputState(device, id);	
+	return Platform_getInputState(device, id);
 }
 

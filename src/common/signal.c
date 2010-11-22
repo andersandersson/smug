@@ -9,7 +9,7 @@ int Signal_init(void)
 {
     assert(!isInitialized);
     _signalMutex = Mutex_new();
-   
+
     if(NULL == _signalMutex || NULL == _signalMutex->_mutex)
     {
         isInitialized = FALSE;
@@ -48,14 +48,14 @@ BOOL Signal_check(int signal)
             Mutex_unlock(_signalMutex);
             return TRUE;
         }
-   
+
     Mutex_unlock(_signalMutex);
 
     return FALSE;
 }
 
 void Signal_clear(int signal)
-{ 
+{
     Mutex_lock(_signalMutex);
     _signals = (_signals & ~signal);
     Mutex_unlock(_signalMutex);

@@ -51,7 +51,7 @@ int Engine_init(BOOL verbose, BOOL console)
     {
       return 0;
     }
-    
+
     if (verbose)
     {
         logLevel = Log_getLevel();

@@ -6,7 +6,7 @@
 /** @defgroup smug_common Common
   * @{
   */
-  
+
 #ifndef SMUG_COMMON_COMMON_H
 #define SMUG_COMMON_COMMON_H
 

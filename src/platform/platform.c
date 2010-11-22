@@ -99,7 +99,7 @@ static void GLFWCALL mousePosCallback(int x, int y)
     static float abs_posy;
     static float abs_negx;
     static float abs_negy;
-    
+
     // Calc centered position on window
     absx = ((float)x - windowSize.d[0]/2) / windowSize.d[0]*2;
     absy = ((float)y - windowSize.d[1]/2) / windowSize.d[1]*2;
@@ -138,19 +138,19 @@ static void GLFWCALL mousePosCallback(int x, int y)
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_XPOS, abs_posx);
         mouseState[MOUSE_AXIS_XPOS] = abs_posx;
     }
-    
+
     if (abs_posy - mouseState[MOUSE_AXIS_YPOS])
     {
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_YPOS, abs_posy);
         mouseState[MOUSE_AXIS_YPOS] = abs_posy;
     }
-    
+
     if (abs_negx - mouseState[MOUSE_AXIS_XNEG])
     {
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_XNEG, abs_negx);
         mouseState[MOUSE_AXIS_XNEG] = abs_negx;
     }
-    
+
     if (abs_negy - mouseState[MOUSE_AXIS_YNEG])
     {
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_YNEG, abs_negy);
@@ -163,7 +163,7 @@ static void GLFWCALL mouseWheelCallback(int pos)
 {
     assert(NULL != inputHandler);
     static int old_pos = 0;
-    
+
     // Handle mousewheel as two digital triggers.
     // Since we won't get an event for "trigger released" we have
     // to send both pressed and released to simulate a tapped trigger.
@@ -177,8 +177,8 @@ static void GLFWCALL mouseWheelCallback(int pos)
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELNEG, INPUTSTATE_PRESSED);
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELNEG, INPUTSTATE_RELEASED);
     }
-    
-    old_pos = pos;    
+
+    old_pos = pos;
 }
 
 // Update the state of all connected joysticks
@@ -357,7 +357,7 @@ void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPU
 }
 
 void Platform_unregisterInputHandler(void)
-{   
+{
     Platform_registerInputHandler(&dummyInputHandler);
 }
 

@@ -24,7 +24,7 @@ static void Thread_release(Thread* thread);
 Thread* Thread_new(char* name)
 {
    Thread* thread = malloc(sizeof(Thread));
-   
+
    thread->_alive = 0;
    thread->_awake = 0;
    thread->_callbackParam = NULL;
@@ -34,7 +34,7 @@ Thread* Thread_new(char* name)
 
    // Create a new thread and have it run the Thread_Loop
    thread->id = glfwCreateThread(Thread_loop, (void*) thread);
-   
+
    // Acquire the loop lock
    glfwLockMutex(thread->_loopMutex);
 
@@ -72,12 +72,12 @@ void Thread_release(Thread* thread)
 void Thread_join(Thread* thread)
 {
    Thread_lock(thread);
-  
+
    while(1 == thread->_awake) {
       Thread_signal(thread);
       glfwWaitCond(thread->_loopCond, thread->_loopMutex, GLFW_INFINITY);
    }
-  
+
    Thread_release(thread);
 }
 
@@ -131,7 +131,7 @@ void GLFWCALL Thread_loop(void* arg)
 
    glfwSignalCond(thread->_loopCond);
 
-   while(1 == thread->_alive) {    
+   while(1 == thread->_alive) {
       while(0 == thread->_awake) {
          Thread_signal(thread);
          glfwWaitCond(thread->_loopCond, thread->_loopMutex, GLFW_INFINITY);
@@ -141,7 +141,7 @@ void GLFWCALL Thread_loop(void* arg)
          thread->_callback(thread->_callbackParam);
       }
 
-      thread->_awake = 0;    
+      thread->_awake = 0;
    }
 
    Thread_signal(thread);

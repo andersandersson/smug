@@ -6,7 +6,7 @@
 /** @addtogroup smug_common
   * @{
   */
-  
+
 #ifndef SMUG_COMMON_CONSOLE_H
 #define SMUG_COMMON_CONSOLE_H
 
@@ -16,7 +16,7 @@
   */
 #define CONSOLE_PRINT_BUFFER_SIZE 1024
 
-/** Write simple unformatted text to the console, ending with newline 
+/** Write simple unformatted text to the console, ending with newline
  *
  * Makes use of indentation levels.
  * @param str The string to be printed
@@ -60,9 +60,9 @@ unsigned int Console_read(char* dest, unsigned int maxlength);
 void Console_run(void);
 
 
-/** Receive a command and parse it. 
+/** Receive a command and parse it.
  *
- * This function will call each registred parser with 
+ * This function will call each registred parser with
  * the commanduntil one of them returns TRUE.
  *
  * @param cmd The command to parse

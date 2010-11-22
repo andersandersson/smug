@@ -26,13 +26,13 @@ static _CollisionType* _CollisionType_new(void);
 static void _CollisionType_delete(_CollisionType* type);
 static BOOL _compareCollisionType(void* left, void* right);
 static BOOL _collidePoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t);
-static BOOL _collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end, 
-			       float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end, 
+static BOOL _collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end,
+			       float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end,
 			       float* t_in, float* t_out);
 static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** collision_data);
 static void _detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions);
 static void _handleCollisions(LinkedList* collisions, LinkedList* hooks);
-  
+
 static _CollisionType* _CollisionType_new(void)
 {
     return malloc(sizeof(_CollisionType));
@@ -159,7 +159,7 @@ static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** 
         (*collision_data) = CollisionData_new();
         (*collision_data)->left = left;
         (*collision_data)->right = right;
-	
+
 	if(t_x_in > t_y_in) {
 	  (*collision_data)->collisionTime =  t_x_in;
 	  (*collision_data)->normal = Vector_create2d( (left_x_start - right_x_start) / abs(left_x_start - right_x_start), 0.0f);
@@ -167,7 +167,7 @@ static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** 
 	  (*collision_data)->collisionTime =  t_y_in;
 	  (*collision_data)->normal = Vector_create2d(0.0f, (left_y_start - right_y_start) / abs(left_y_start - right_y_start));
 	}
-        
+
 	(*collision_data)->movement = Point_distanceToPoint(left->position, left->new_position);
 
         return TRUE;

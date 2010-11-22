@@ -4,7 +4,7 @@
   */
 
 /** @defgroup smug_platform Platform
-  * 
+  *
   * @{
   */
 
@@ -150,7 +150,7 @@ typedef float INPUTSTATE;
 #define JOYSTICK_BUTTON_COUNT      JOYSTICK_BUTTON_LAST-JOYSTICK_BUTTON_BASE
 
 // Joystick axis identifiers
-#define JOYSTICK_AXIS_BASE JOYSTICK_BUTTON_LAST+1 
+#define JOYSTICK_AXIS_BASE JOYSTICK_BUTTON_LAST+1
 #define JOYSTICK_AXIS_1_XPOS JOYSTICK_AXIS_BASE+0
 #define JOYSTICK_AXIS_1_XNEG JOYSTICK_AXIS_BASE+1
 #define JOYSTICK_AXIS_1_YPOS JOYSTICK_AXIS_BASE+2
@@ -174,7 +174,7 @@ typedef float INPUTSTATE;
 #define JOYSTICK_LAST JOYSTICK_AXIS_BASE
 #define JOYSTICK_COUNT JOYSTICK_LAST-JOYSTICK_BASE
 
-//Device identifiers 
+//Device identifiers
 #define DEVICE_KEYBOARD 0
 #define DEVICE_MOUSE 1
 #define DEVICE_JOYSTICK_BASE 2
@@ -219,7 +219,7 @@ BOOL Platform_isInitialized(void);
 void Platform_terminate(void);
 
 
-/** 
+/**
  * Check if the window is open
  */
 BOOL Platform_isWindowOpen(void);
@@ -233,7 +233,7 @@ void Platform_refreshWindow(void);
 /**
  * Returns the current size of the window
  */
-Vector Platform_getWindowSize(void); 
+Vector Platform_getWindowSize(void);
 
 /**
  * Get the current system time

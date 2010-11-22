@@ -20,7 +20,7 @@ void World_delete(void* world)
 {
     World* w = (World*)world;
     World_invariant(w);
-    
+
     LinkedList_deleteContents(w->gameObjects, GameObject_delete);
     LinkedList_delete(w->gameObjects);
     free(w);

@@ -6,7 +6,7 @@
 /** @addtogroup smug_common
   * @{
   */
-  
+
 #ifndef SMUG_COMMON_LOG_H
 #define SMUG_COMMON_LOG_H
 
@@ -51,7 +51,7 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
 
 
 /** Print log text to console
-  * 
+  *
   * Use the macro Log_print(char*, ...) instead
   */
 void _Log_print(int level, char* prefix, char* file, int line, char* fmt, int newline, ...);
@@ -91,7 +91,7 @@ char* Log_getFormatString(int level);
 /** Push a prefix to be prepended to each %message%
  *
  * If you push a prefix to the prefix stack, each following
- * log will be prepended with this until it is poped from the 
+ * log will be prepended with this until it is poped from the
  * stack. All prefixes on the stack will be printed.
  */
 void Log_pushPrefix(char* prefix);
@@ -105,21 +105,21 @@ char* Log_popPrefix(void);
 
 
 /** Indent the log messages
- * 
+ *
  * Make all following log message be indented an extra level
  */
 void Log_indent(void);
 
 
 /** Dedent the log messages
- * 
+ *
  * Make all following log message be indented one level less
  */
 void Log_dedent(void);
 
 
 /** Set the tab length of the indentation
- * 
+ *
  * Set how many spaces one indentation level should have
  */
 void Log_setIndentation(unsigned int indent);

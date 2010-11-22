@@ -33,7 +33,7 @@ void Console_write(char* fmt, ...)
 
     // Temporary buffer to print formatted string to
     char buffer[CONSOLE_PRINT_BUFFER_SIZE];
-   
+
     // Variable argument list
     va_list vl;
 
@@ -77,7 +77,7 @@ void Console_writeLine(char* fmt, ...)
         _putChar(buffer[i]);
         i++;
     }
-    
+
     // End line
     _putChar('\n');
 
@@ -86,11 +86,11 @@ void Console_writeLine(char* fmt, ...)
 }
 
 
-unsigned int Console_read(char* dest, unsigned int maxlength)   
+unsigned int Console_read(char* dest, unsigned int maxlength)
 {
     int i = 0;
     char c = 0;
-   
+
     // Read characters until newline or maxlength is reached
     while(i < maxlength-1 && c != '\n')
     {
@@ -98,7 +98,7 @@ unsigned int Console_read(char* dest, unsigned int maxlength)
         dest[i] = c;
         i++;
     }
-   
+
     // Replace the newline with a string terminator
     dest[i-1] = '\0';
 
@@ -132,7 +132,7 @@ void Console_parseCommand(char* cmd)
 BOOL Console_defaultParser(char* cmd)
 {
     // exit - Send exit signal
-    if(0 == strcmp("exit", cmd)) 
+    if(0 == strcmp("exit", cmd))
     {
         Signal_send(SIG_EXIT);
     }

@@ -27,10 +27,10 @@ BOOL Log_init(void)
 {
     // Allocate memory for prefix stack
     gPrefixStack = LinkedList_new();
-    
+
     // Set default format string
     Log_setFormatString(LOG_NOTIFICATION, "[%file%:%line%] - %level% - %message%");
-    
+
     // Set default indentation level
     Log_setIndentation(4);
 
@@ -51,7 +51,7 @@ void Log_terminate(void)
 void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
 {
     assert(_isInitialized());
-    char* format;   
+    char* format;
     char message[CONSOLE_PRINT_BUFFER_SIZE];
     char flag[64];
     int  c = 0;
@@ -59,25 +59,25 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
     int  flag_c = 0;
     BOOL reading_flag = FALSE;
     va_list vl;
-    
+
     // Get the format string for the used log level
     format = Log_getFormatString(level);
-    
+
     // If no format string is set, don't print anything.
     if(NULL == format) {
         return;
-    }   
-    
+    }
+
     va_start(vl, fmt);
-    
+
     // Only print log if correct log level is set
     if(gCurrentLogLevel & level)
     {
         // Print formatted string to the message buffer
         vsprintf(message, fmt, vl);
-        
+
         _writePrefixStack();
-         
+
         // Iterate over each char in the format string and output
         for(c=0,c_max=strlen(format); c<c_max; c++)
         {
@@ -91,7 +91,7 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
             else if('%' == format[c] && TRUE == reading_flag)
             {
                 reading_flag = FALSE;
-                
+
                 // %file%
                 if(0 == strcmp("file", flag))
                 {
@@ -117,7 +117,7 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
                     Console_write(prefix);
                 }
             }
-            // If we are currently reading a flag, store 
+            // If we are currently reading a flag, store
             // it in the flag buffer
             else if(TRUE == reading_flag)
             {
@@ -131,7 +131,7 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
                 Console_write("%c", format[c]);
             }
         }
-        
+
     // Finally, add a newline
     Console_write("%c", '\n');
     }
@@ -192,7 +192,7 @@ void Log_pushPrefix(char* prefix)
     //{
     //    gPrefixStack = LinkedList_new();
     //}
-    
+
     LinkedList_addLast(gPrefixStack, prefix);
 }
 
@@ -200,21 +200,21 @@ char* Log_popPrefix(void)
 {
     char* item = NULL;
     assert(_isInitialized());
-    
+
     //if(NULL == gPrefixStack)
     //{
     //    return NULL;
     //}
- 
+
     if(NULL == gPrefixStack->first)
     {
         return NULL;
     }
-    
+
     item = gPrefixStack->first->item;
-    
+
     LinkedList_remove(gPrefixStack, gPrefixStack->first);
-    
+
     return item;
 }
 
@@ -231,7 +231,7 @@ void Log_dedent(void)
 void Log_setIndentation(unsigned int indent)
 {
     unsigned int c = 0;
-    
+
     for(c=0; c<indent && c<1023; c++)
     {
         gIndentString[c] = ' ';
