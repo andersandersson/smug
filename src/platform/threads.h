@@ -5,43 +5,26 @@
 #ifndef THREAD_H
 #define THREAD_H
 
-#include <GL/glfw.h>
-
 /** Data holder for a thread.
   *
   * @sa ::Mutex, ::ConditionVariable
   */
-typedef struct Thread
-{
-    GLFWthread id;
-
-    // "Private" data
-    void (*_callback)(void*);
-    void* _callbackParam;
-    GLFWcond _loopCond;
-    GLFWmutex _loopMutex;
-    int _alive;
-    int _awake;
-} Thread;
+struct _Thread;
+typedef struct _Thread Thread;
 
 /** Hide the GLFW mutex in our own.
   *
   * @sa ::Thread, ::ConditionVariable
   */
-typedef struct Mutex
-{
-    GLFWmutex _mutex;
-} Mutex;
+struct _Mutex;
+typedef struct _Mutex Mutex;
 
 /** Hide the GLFW condition variable in our own.
   *
   * @sa ::Thread, ::Mutex
   */
-typedef struct ConditionVariable
-{
-    GLFWcond _cond;
-} ConditionVariable;
-
+struct _ConditionVariable;
+typedef struct _ConditionVariable ConditionVariable;
 
 /** Create a new thread and set it in a waiting state.
   *

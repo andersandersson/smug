@@ -4,6 +4,29 @@
 
 #include "threads.h"
 
+struct _Thread
+{
+    GLFWthread id;
+
+    // "Private" data
+    void (*_callback)(void*);
+    void* _callbackParam;
+    GLFWcond _loopCond;
+    GLFWmutex _loopMutex;
+    int _alive;
+    int _awake;
+};
+
+struct _Mutex
+{
+    GLFWmutex _mutex;
+};
+
+struct _ConditionVariable
+{
+    GLFWcond _cond;
+};
+
 // Internal functions that should not be used
 // outside threads.c
 
