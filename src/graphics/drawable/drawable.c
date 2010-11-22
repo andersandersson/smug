@@ -1,6 +1,6 @@
 #include "drawable.h"
 
-#include "graphics.h"
+#include "graphics/graphics.h"
 
 #include "common/common.h"
 #include <stdlib.h>

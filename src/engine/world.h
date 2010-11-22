@@ -10,7 +10,7 @@
 #ifndef SMUG_ENGINE_WORLD_H
 #define SMUG_ENGINE_WORLD_H
 
-#include "common.h"
+#include "common/common.h"
 #include "utils/linkedlist.h"
 #include "gameobject.h"
 
