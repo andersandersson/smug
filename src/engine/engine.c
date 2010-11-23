@@ -4,9 +4,7 @@
 
 #include "common/signal.h"
 #include "common/console.h"
-#include "platform/platform.h"
 #include "graphics/graphics.h"
-#include "physics/physics.h"
 #include "input/input.h"
 #include "common/log.h"
 #include "common/common.h"
@@ -154,65 +152,17 @@ void Engine_terminate(void)
     gInitialized = FALSE;
 }
 
-void Engine_run(void)
+void Engine_heartbeat(void)
 {
-    assert(gInitialized);
-    if (!gInitialized)
-        return;
-
-    Signal_clear(SIG_EXIT);
-
-    NOTIFY("Running engine...");
-    Log_indent();
-
-    TIME lastFpsCheck = Platform_getTime();
-    int fps = 0;
-
-    // Setup timing variables
-    TIME delay = 1.0f/30.0f;
-    TIME nexttime;
-    TIME time;
-    nexttime = Platform_getTime();
-
-    while(TRUE != Signal_check(SIG_EXIT))
+    if (gLogicCallbackEnabled && gUserLogicFunction != NULL)
     {
-        time = Platform_getTime();
-
-        if (time >= nexttime)
-        {
-            nexttime += delay;
-
-            if (gLogicCallbackEnabled && gUserLogicFunction != NULL)
-            {
-                gUserLogicFunction();
-            }
-
-            if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
-            {
-                Signal_send(SIG_EXIT);
-            }
-        }
-
-        Graphics_render();
-        Platform_refreshWindow();
-
-        fps++;
-
-        if (Platform_getTime() - lastFpsCheck >= 1.0)
-        {
-            //Console_writeLine("Fps: %i", fps);
-            //Log_write(LOG_NOTIFICATION, "FPSCK", "engine.c", 116, "%i", fps);
-            NOTIFY("Fps: %i", fps);
-            fps = 0;
-            lastFpsCheck = Platform_getTime();
-        }
-
-        // TODO: add if-case: if nexttime-time > smallest_sleep_time
-        Platform_sleep(nexttime - time);
+        gUserLogicFunction();
     }
 
-    Log_dedent();
-    NOTIFY("Engine stopped.");
+    if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
+    {
+        Signal_send(SIG_EXIT);
+    }
 }
 
 void Engine_addObject(GameObject* newObj)
