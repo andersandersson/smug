@@ -5,6 +5,8 @@
 #ifndef THREAD_H
 #define THREAD_H
 
+#include <common/common.h>
+
 /** Data holder for a thread.
   *
   * @sa ::Mutex, ::ConditionVariable
@@ -67,6 +69,8 @@ Mutex* Mutex_new(void);
   * @relatesalso Mutex
   */
 void Mutex_delete(Mutex* mutex);
+
+BOOL Mutex_isInitialized(Mutex* self);
 
 /** Lock a mutex.
   *

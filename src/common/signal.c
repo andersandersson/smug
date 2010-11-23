@@ -10,7 +10,7 @@ int Signal_init(void)
     assert(!isInitialized);
     _signalMutex = Mutex_new();
 
-    if(NULL == _signalMutex || NULL == _signalMutex->_mutex)
+    if(!Mutex_isInitialized(_signalMutex))
     {
         isInitialized = FALSE;
     }

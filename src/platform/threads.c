@@ -191,6 +191,12 @@ void Mutex_delete(Mutex* mutex)
 }
 
 
+BOOL Mutex_isInitialized(Mutex* self)
+{
+    return self != NULL && self->_mutex != NULL;
+}
+
+
 void Mutex_lock(Mutex* mutex)
 {
    glfwLockMutex(mutex->_mutex);
