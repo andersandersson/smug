@@ -1,6 +1,6 @@
 #include "debug.h"
 
-#include <GL/glfw.h>
+#include <platform/opengl/opengl.h>
 
 #include "common/log.h"
 
