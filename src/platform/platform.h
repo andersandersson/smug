@@ -208,6 +208,8 @@ typedef float INPUTSTATE;
  */
 int Platform_init(int width, int height, BOOL fullscreen);
 
+void Platform_initInput(void);
+
 /**
  * Returns true if the system is initialized
  */

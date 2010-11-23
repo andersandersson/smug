@@ -285,6 +285,13 @@ int Platform_init(int width, int height, BOOL fullscreen)
         return 0;
     }
 
+    Platform_initInput();
+    isInitialized = TRUE;
+    return 1;
+}
+
+void Platform_initInput(void)
+{
     // Initialize device state arrays
     clearInputState();
 
@@ -298,9 +305,6 @@ int Platform_init(int width, int height, BOOL fullscreen)
     glfwSetKeyCallback(&keyCallback);
 
     //Platform_detectJoysticks();
-
-    isInitialized = TRUE;
-    return 1;
 }
 
 BOOL Platform_isInitialized(void)

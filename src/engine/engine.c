@@ -4,6 +4,7 @@
 
 #include "common/signal.h"
 #include "common/console.h"
+#include "physics/physics.h"
 #include "graphics/graphics.h"
 #include "input/input.h"
 #include "common/log.h"

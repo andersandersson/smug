@@ -11,7 +11,7 @@
 #define SMUG_COMMON_COMMON_H
 
 #ifdef HAS_CONFIG_H
-    #include "config.h"
+    #include <config.h>
 #endif
 
 typedef unsigned char BOOL;

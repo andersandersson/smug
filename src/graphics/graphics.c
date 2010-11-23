@@ -1,9 +1,9 @@
-#include "graphics.h"
-#include "platform/opengl/opengl.h"
-#include "renderer/renderer.h"
-#include "platform/platform.h"
+#include <common/log.h>
+#include <platform/opengl/opengl.h>
+#include <graphics/renderer/renderer.h>
+#include <platform/platform.h>
 
-#include "common/log.h"
+#include "graphics.h"
 
 Renderer* sceneRenderer = NULL;
 
