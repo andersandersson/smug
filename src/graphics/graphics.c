@@ -1,3 +1,4 @@
+#include <common/common.h>
 #include <common/log.h>
 #include <platform/opengl/opengl.h>
 #include <graphics/renderer/renderer.h>
@@ -70,7 +71,11 @@ static int setupGL(void)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+#ifdef SMUG_GLES
+	glOrthox(FIXED(0.0), FIXED(screenSize.d[0]), FIXED(screenSize.d[1]), FIXED(0.0), FIXED(-1.0), FIXED(1.0));
+#else
 	glOrtho(0, screenSize.d[0], screenSize.d[1], 0, -1, 1);
+#endif /* SMUG_GLES */
 	glMatrixMode(GL_MODELVIEW);
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);

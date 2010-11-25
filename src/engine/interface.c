@@ -12,7 +12,8 @@ void smugTerminate(void)
     Engine_terminate();
 }
 
-void smugRun(void)
+/* Commenting this out for now. Want to have possibility of compiling with or without a gameloop internal to smug. */
+/* void smugRun(void)
 {
     if (!Engine_isInitialized())
     {
@@ -20,4 +21,4 @@ void smugRun(void)
     }
 
     Engine_run();
-}
+} */

@@ -37,6 +37,12 @@ void swap_float(float* left, float* right);
 
 typedef double TIME;
 
+#ifdef SMUG_GLES
+    // Needed in OpenGL ES
+    long floatToFixed(float value);
+    #define FIXED(value) floatToFixed(value)
+#endif /* SMUG_GLES */
+
 #endif // SMUG_COMMON_COMMON_H
 
 /**@}*/

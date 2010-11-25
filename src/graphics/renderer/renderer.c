@@ -50,6 +50,8 @@ static void renderLayer(Renderer* renderer, Layer* layer)
 
 static void renderDebugGrid(Renderer* renderer)
 {
+// TODO: Implement this function without using openGL's immediate mode.
+#ifndef SMUG_GLES
     Camera* camera = renderer->camera;
 
     glPushMatrix();
@@ -110,6 +112,7 @@ static void renderDebugGrid(Renderer* renderer)
     glEnd();
 
     glPopMatrix();
+#endif /* SMUG_GLES */
 }
 
 void Renderer_render(Renderer* renderer)

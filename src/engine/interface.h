@@ -19,6 +19,7 @@ void smugTerminate(void);
 /**
   * Run the engine,
   */
-void smugRun(void);
+/* See note in interface.c */
+/* void smugRun(void); */
 
 #endif //SMUG_ENGINE_INTERFACE_H
