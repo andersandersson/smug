@@ -1,13 +1,13 @@
-#include "interface.h"
-#include "common/log.h"
+#include <smug.h>
+#include <common/log.h>
 #include "engine.h"
 
-int smugInit(void)
+SMUGEXPORT int smugInit(void)
 {
     Engine_init(TRUE, TRUE);
 }
 
-void smugTerminate(void)
+SMUGEXPORT void smugTerminate(void)
 {
     Engine_terminate();
 }

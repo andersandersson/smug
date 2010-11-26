@@ -1,4 +1,4 @@
-package se.lolektivet.jolivi;
+package se.lolektivet.apitest;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -14,7 +14,7 @@ import android.view.OrientationEventListener;
 import android.view.KeyEvent;
 import android.os.Bundle;
 
-public class JoLiViActivity extends Activity
+public class ApitestActivity extends Activity
 {
     private GLSurfaceView mGLView;
 
@@ -41,7 +41,8 @@ public class JoLiViActivity extends Activity
     }
 
     static {
-        System.loadLibrary("jolivi");
+        System.loadLibrary("smug");
+        System.loadLibrary("apitest");
     }
 }
 

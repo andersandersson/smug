@@ -46,13 +46,6 @@ void Engine_enableLogicCallback(BOOL enable);
 void Engine_terminate(void);
 
 /**
-  * Run the engine.
-  *
-  * @pre The engine must be initialized.
-  */
-void Engine_run(void);
-
-/**
   *
   */
 void Engine_addObject(GameObject* newObj);

@@ -5,6 +5,10 @@
     extern "C" {
 #endif
 
+#ifndef SMUGEXPORT
+    #define SMUGEXPORT
+#endif /* SMUGEXPORT */
+
 #include "graphics/interface.h"
 #include "physics/interface.h"
 #include "utils/interface.h"

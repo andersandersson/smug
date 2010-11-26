@@ -128,7 +128,7 @@
 
   <property name="android.tools.dir" location="${sdk.dir}/tools" />
   <!-- Name of the application package extracted from manifest file -->
-  <property name="manifest.package" value="se.lolektivet.jolivi" />
+  <!-- <property name="manifest.package" value="se.lolektivet.jolivi" /> -->
   <!-- xpath input="AndroidManifest.xml" expression="/manifest/@package"
               output="manifest.package" / -->
 
@@ -610,7 +610,7 @@
     <echo>                      device.</echo>
   </target>
 
-  <property name="native.classes" value="se.lolektivet.jolivi.NativeFunctions"/>
+  <!-- <property name="native.classes" value="se.lolektivet.jolivi.NativeFunctions"/> -->
 
   <target name="native-headers" depends="-compile,-dirs">
     <run.javah/>
@@ -647,9 +647,10 @@
     <echo file="${out.jni.abs.dir}/Application.mk">APP_PROJECT_PATH := $(shell cygpath "${out.abs.dir}")
 APP_PLATFORM = ${target}
 APP_BUILD_SCRIPT := ${APP_PROJECT_PATH}/Android.mk
+APP_MODULES := smug ${build.app}
 </echo>
     <copy file="${build.dir}/AndroidManifest.xml" todir="${out.abs.dir}"/>
-    <copy file="${droidsmug.basedir}/jni/Android.mk" todir="${out.abs.dir}"/>
+    <copy file="${build.dir}/jni/Android.mk" todir="${out.abs.dir}"/>
   </target>
 
   <macrodef name="run.javah">

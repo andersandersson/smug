@@ -1,13 +1,8 @@
-V ?= 1
-DEBUG ?= true
+SMUG_DEBUG ?= true
 
-SMUG_ROOT ?= $(shell cygpath "$(call my-dir)/..")
+#$(info SMUG_ROOT is: '$(SMUG_ROOT)')
 
-#LOCAL_PATH := $(call my-dir)/src/jni
-LOCAL_PATH := $(SMUG_ROOT)/src
-#LOCAL_PATH := /cygdrive/d/Pyssel/Koda/jolivi/src/jni
-
-$(info Local path is: '$(LOCAL_PATH)')
+LOCAL_PATH := $(shell cygpath "$(call my-dir)/../../../src")
 
 include $(CLEAR_VARS)
 
@@ -15,7 +10,7 @@ LOCAL_MODULE := smug
 
 LOCAL_CFLAGS := -DANDROID_NDK -DHAS_CONFIG_H -Wall -pedantic -std=c99 -Wno-variadic-macros
 
-ifeq ($(DEBUG),true)
+ifeq ($(SMUG_DEBUG),true)
 # debug defines
 endif
 
@@ -24,13 +19,6 @@ LOCAL_ALLOW_UNDEFINED_SYMBOLS := false
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/platform/android \
     $(LOCAL_PATH) .
-    # $(LOCAL_PATH)/common \
-    # $(LOCAL_PATH)/engine \
-    # $(LOCAL_PATH)/graphics \
-    # $(LOCAL_PATH)/input \
-    # $(LOCAL_PATH)/physics \
-    # $(LOCAL_PATH)/platform \
-    # $(LOCAL_PATH)/utils
 
 LOCAL_SRC_FILES := \
     common/interface.c \

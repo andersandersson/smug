@@ -9,12 +9,12 @@
   *
   * @return Returns zero on error, non-zero on success.
   */
-int smugInit(void);
+SMUGEXPORT int smugInit(void);
 
 /**
   * Close down Engine
   */
-void smugTerminate(void);
+SMUGEXPORT void smugTerminate(void);
 
 /**
   * Run the engine,
