@@ -60,6 +60,7 @@ LOCAL_SRC_FILES := \
     platform/android/threads.c \
     platform/android/platform.c \
     platform/android/input.c \
+    platform/android/smugstd.c \
     graphics/graphics.c \
     graphics/texture/texture.c \
     graphics/renderer/renderer.c \

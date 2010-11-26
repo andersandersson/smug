@@ -1,5 +1,4 @@
 #include <jni.h>
-#include <android/log.h>
 #include <smug.h>
 
 /*
@@ -10,6 +9,8 @@
 JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeInit
   (JNIEnv* env, jclass clazz, jfloat fps)
 {
+    smugInit();
+    smugPrintf("Hello smug world!");
 }
 
 /*
