@@ -1,7 +1,7 @@
 V ?= 1
 DEBUG ?= true
 
-SMUG_ROOT := $(shell cygpath "$(call my-dir)/../../..")
+SMUG_ROOT ?= $(shell cygpath "$(call my-dir)/..")
 
 #LOCAL_PATH := $(call my-dir)/src/jni
 LOCAL_PATH := $(SMUG_ROOT)/src
@@ -77,7 +77,7 @@ LOCAL_SRC_FILES := \
     graphics/renderer/renderer.c \
     graphics/renderer/renderbatch.c \
     graphics/renderer/batchdata.c \
-    physics/debug.c
+    platform/android/physics_debug.c
     # platform/platform.c               #depends on GLFW
     # platform/android/platform.c \
 

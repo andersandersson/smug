@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="droidsmugtest" default="help">
+
+  <property name="build.app" value="apitest"/>
+  <import file="../../../build/android/build.xml"/>
+  <setup import="false"/>
+
+  <property name="manifest.package" value="se.lolektivet.jolivi" />
+  <property name="native.classes" value="se.lolektivet.jolivi.NativeFunctions"/>
+
+  <target name="setup">
+  </target>
+
+</project>

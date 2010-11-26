@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="JoLiVi" default="help">
+<project name="DroidSmug" default="help" basedir="." xmlns:android="antlib:com.googlecode.autoandroid.ant">
+  <dirname property="droidsmug.basedir" file="${ant.file.DroidSmug}"/>
+  <property name="smug.dir" value="${droidsmug.basedir}/../.."/>
+  <property name="smug.abs.dir" location="${smug.dir}"/>
 
   <!-- The local.properties file is created and updated by the 'android' tool.
        It contains the path to the SDK. It should *NOT* be checked in in Version
        Control Systems. -->
-  <property file="local.properties" />
+  <property file="${droidsmug.basedir}/local.properties" />
 
   <!-- The build.properties file can be created by you and is never touched
        by the 'android' tool. This is the place to change some of the default property values
@@ -26,13 +29,20 @@
        should be checked in in Version Control Systems.
 
        -->
-  <property file="build.properties" />
+  <property file="${droidsmug.basedir}/build.properties" />
 
   <!-- The default.properties file is created and updated by the 'android' tool, as well
        as ADT.
        This file is an integral part of the build system for your application and
        should be checked in in Version Control Systems. -->
-  <property file="default.properties" />
+  <property file="${droidsmug.basedir}/default.properties" />
+
+  <property name="build.dir" value="${smug.dir}/apps/android/${build.app}"/>
+  <property name="build.abs.dir" location="${build.dir}"/>
+
+  <taskdef uri="antlib:com.googlecode.autoandroid.ant" classpath="${droidsmug.basedir}/tools/android-ant.jar"/>
+  <android:home/>
+  <echo>${android-home}</echo>
 
   <!-- Custom Android task to deal with the project target, and import the proper rules.
        This requires ant 1.6.0 or above. -->
@@ -44,7 +54,7 @@
     <pathelement path="${sdk.dir}/tools/lib/jarutils.jar" />
   </path>
 
-  <property name="antcontrib.loc" location="tools/ant-contrib/ant-contrib-1.0b3.jar"/>
+  <property name="antcontrib.loc" location="${droidsmug.basedir}/tools/ant-contrib/ant-contrib-1.0b3.jar"/>
 
   <echo>${antcontrib.loc}</echo>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -71,7 +81,7 @@
        This will ensure that the properties are setup correctly but that your customized
        build steps are used.
   -->
-  <setup import="false"/>
+  <!-- <setup import="false"/> -->
 
   <!--
       This rules file is meant to be imported by the custom Ant task:
@@ -123,48 +133,48 @@
               output="manifest.package" / -->
 
   <!-- Input directories -->
-  <property name="source.dir" value="src/java" />
-  <property name="source.absolute.dir" location="${source.dir}" />
-  <property name="resource.dir" value="res" />
-  <property name="resource.absolute.dir" location="${resource.dir}" />
-  <property name="asset.dir" value="assets" />
-  <property name="asset.absolute.dir" location="${asset.dir}" />
+  <property name="source.dir" value="${build.dir}/src/java" />
+  <property name="source.abs.dir" location="${source.dir}" />
+  <property name="resource.dir" value="${build.dir}/res" />
+  <property name="resource.abs.dir" location="${resource.dir}" />
+  <property name="asset.dir" value="${build.dir}/assets" />
+  <property name="asset.abs.dir" location="${asset.dir}" />
 
   <!-- Output directories -->
-  <property name="out.dir" value="output" />
-  <property name="out.absolute.dir" location="${out.dir}" />
+  <property name="out.dir" value="${smug.dir}/output" />
+  <property name="out.abs.dir" location="${out.dir}" />
   <property name="out.classes.dir" value="${out.dir}/classes" />
-  <property name="out.classes.absolute.dir" location="${out.classes.dir}" />
+  <property name="out.classes.abs.dir" location="${out.classes.dir}" />
   <property name="gen.dir" value="${out.dir}/generated" />
-  <property name="gen.absolute.dir" location="${gen.dir}" />
+  <property name="gen.abs.dir" location="${gen.dir}" />
   <property name="headers.dir" value="${gen.dir}/headers" />
-  <property name="headers.absolute.dir" location="${headers.dir}" />
+  <property name="headers.abs.dir" location="${headers.dir}" />
   <property name="out.jni.dir" value="${out.dir}/jni" />
-  <property name="out.jni.absolute.dir" location="${out.jni.dir}" />
+  <property name="out.jni.abs.dir" location="${out.jni.dir}" />
 
   <!-- Directory for the third party java libraries -->
   <property name="external.libs.dir" value="${out.dir}/ext-libs" />
-  <property name="external.libs.absolute.dir" location="${external.libs.dir}" />
+  <property name="external.libs.abs.dir" location="${external.libs.dir}" />
 
   <!-- Directory for the native libraries -->
   <property name="native.libs.dir" value="${out.dir}/libs" />
-  <property name="native.libs.absolute.dir" location="${native.libs.dir}" />
+  <property name="native.libs.abs.dir" location="${native.libs.dir}" />
 
   <!-- Intermediate files -->
   <property name="dex.file.name" value="classes.dex" />
-  <property name="intermediate.dex.file" location="${out.absolute.dir}/${dex.file.name}" />
+  <property name="intermediate.dex.file" location="${out.abs.dir}/${dex.file.name}" />
 
   <!-- The final package file to generate -->
   <property name="out.debug.unaligned.package"
-            location="${out.absolute.dir}/${ant.project.name}-debug-unaligned.apk" />
+            location="${out.abs.dir}/${ant.project.name}-debug-unaligned.apk" />
   <property name="out.debug.package"
-            location="${out.absolute.dir}/${ant.project.name}-debug.apk" />
+            location="${out.abs.dir}/${ant.project.name}-debug.apk" />
   <property name="out.unsigned.package"
-            location="${out.absolute.dir}/${ant.project.name}-unsigned.apk" />
+            location="${out.abs.dir}/${ant.project.name}-unsigned.apk" />
   <property name="out.unaligned.package"
-            location="${out.absolute.dir}/${ant.project.name}-unaligned.apk" />
+            location="${out.abs.dir}/${ant.project.name}-unaligned.apk" />
   <property name="out.release.package"
-            location="${out.absolute.dir}/${ant.project.name}-release.apk" />
+            location="${out.abs.dir}/${ant.project.name}-release.apk" />
 
   <!-- Verbosity -->
   <property name="verbose" value="false" />
@@ -213,8 +223,8 @@
         <arg value="--output=${intermediate.dex.file}" />
         <extra-parameters />
         <arg line="${verbose.option}" />
-        <arg path="${out.classes.absolute.dir}" />
-        <fileset dir="${external.libs.absolute.dir}" includes="*.jar" />
+        <arg path="${out.classes.abs.dir}" />
+        <fileset dir="${external.libs.abs.dir}" includes="*.jar" />
         <external-libs />
       </apply>
     </sequential>
@@ -234,14 +244,14 @@
     <element name="extra-jars" optional="yes" />
     <sequential>
       <apkbuilder
-            outfolder="${out.absolute.dir}"
+            outfolder="${out.abs.dir}"
             basename="${ant.project.name}"
             signed="@{sign.package}"
             verbose="${verbose}">
         <file path="${intermediate.dex.file}" />
-        <sourcefolder path="${source.absolute.dir}" />
-        <nativefolder path="${native.libs.absolute.dir}" />
-        <jarfolder path="${external.libs.absolute.dir}" />
+        <sourcefolder path="${source.abs.dir}" />
+        <nativefolder path="${native.libs.abs.dir}" />
+        <jarfolder path="${external.libs.abs.dir}" />
         <extra-jars/>
       </apkbuilder>
     </sequential>
@@ -303,14 +313,14 @@
   <!-- Creates the output directories if they don't exist yet. -->
   <target name="-dirs">
     <my.echo>Creating output directories if needed...</my.echo>
-    <mkdir dir="${resource.absolute.dir}" />
-    <mkdir dir="${external.libs.absolute.dir}" />
-    <mkdir dir="${native.libs.absolute.dir}" />
-    <mkdir dir="${gen.absolute.dir}" />
-    <mkdir dir="${out.absolute.dir}" />
-    <mkdir dir="${out.classes.absolute.dir}" />
-    <mkdir dir="${out.jni.absolute.dir}" />
-    <mkdir dir="${headers.absolute.dir}" />
+    <mkdir dir="${resource.abs.dir}" />
+    <mkdir dir="${external.libs.abs.dir}" />
+    <mkdir dir="${native.libs.abs.dir}" />
+    <mkdir dir="${gen.abs.dir}" />
+    <mkdir dir="${out.abs.dir}" />
+    <mkdir dir="${out.classes.abs.dir}" />
+    <mkdir dir="${out.jni.abs.dir}" />
+    <mkdir dir="${headers.abs.dir}" />
   </target>
 
   <!-- Generates the R.java file for this project's resources. -->
@@ -321,11 +331,11 @@
       <arg line="${v.option}" />
       <arg value="-m" />
       <arg value="-J" />
-      <arg path="${gen.absolute.dir}" />
+      <arg path="${gen.abs.dir}" />
       <arg value="-M" />
-      <arg path="AndroidManifest.xml" />
+      <arg path="${build.dir}/AndroidManifest.xml" />
       <arg value="-S" />
-      <arg path="${resource.absolute.dir}" />
+      <arg path="${resource.abs.dir}" />
       <arg value="-I" />
       <arg path="${android.jar}" />
     </exec>
@@ -336,9 +346,9 @@
     <my.echo>Compiling aidl files into Java classes...</my.echo>
     <apply executable="${aidl}" failonerror="true">
       <arg value="-p${android.aidl}" />
-      <arg value="-I${source.absolute.dir}" />
-      <arg value="-o${gen.absolute.dir}" />
-      <fileset dir="${source.absolute.dir}">
+      <arg value="-I${source.abs.dir}" />
+      <arg value="-o${gen.abs.dir}" />
+      <fileset dir="${source.abs.dir}">
         <include name="**/*.aidl" />
       </fileset>
     </apply>
@@ -350,22 +360,22 @@
     <!-- If android rules are used for a test project, its classpath should include
          tested project's location -->
     <condition property="extensible.classpath"
-               value="${tested.project.absolute.dir}/${out.classes.dir}" else=".">
-      <isset property="tested.project.absolute.dir" />
+               value="${tested.project.abs.dir}/${out.classes.dir}" else=".">
+      <isset property="tested.project.abs.dir" />
     </condition>
     <condition property="extensible.libs.classpath"
-               value="${tested.project.absolute.dir}/${external.libs.dir}" else="./${external.libs.dir}">
-      <isset property="tested.project.absolute.dir" />
+               value="${tested.project.abs.dir}/${external.libs.dir}" else="${external.libs.dir}">
+      <isset property="tested.project.abs.dir" />
     </condition>
     <javac encoding="ascii" target="1.5" debug="true" extdirs=""
-            destdir="${out.classes.absolute.dir}"
+            destdir="${out.classes.abs.dir}"
             bootclasspathref="android.target.classpath"
             verbose="${verbose}" classpath="${extensible.classpath}"
             includeAntRuntime="false">
-      <src path="${source.absolute.dir}" />
-      <src path="${gen.absolute.dir}" />
+      <src path="${source.abs.dir}" />
+      <src path="${gen.abs.dir}" />
       <classpath>
-        <fileset dir="${external.libs.absolute.dir}" includes="*.jar" />
+        <fileset dir="${external.libs.abs.dir}" includes="*.jar" />
         <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
       </classpath>
     </javac>
@@ -383,14 +393,34 @@
        -->
   <target name="-package-resources">
     <my.echo>Packaging resources</my.echo>
+    <my.echo>executable = ${aapt}</my.echo>
+    <my.echo>resources = ${resource.abs.dir}</my.echo>
+    <my.echo>assets = ${asset.abs.dir}</my.echo>
+    <my.echo>androidjar = ${android.jar}</my.echo>
+    <my.echo>outfolder = ${out.abs.dir}</my.echo>
+    <my.echo>basename = ${ant.project.name}</my.echo>
+    <my.echo>manifest = ${build.abs.dir}/AndroidManifest.xml</my.echo>
     <aaptexec executable="${aapt}"
               command="package"
               manifest="AndroidManifest.xml"
-              resources="${resource.absolute.dir}"
-              assets="${asset.absolute.dir}"
+              resources="${resource.abs.dir}"
+              assets="${asset.abs.dir}"
               androidjar="${android.jar}"
-              outfolder="${out.absolute.dir}"
+              outfolder="${out.abs.dir}"
               basename="${ant.project.name}" />
+<!--     <android:aapt>
+      <arg value="package"/>
+      <arg value="-m"/>
+      <arg value="-J"/>
+      <arg file="${out.abs.dir}"/>
+      <arg value="-M"/>
+      <arg file="AndroidManifest.xml"/>
+      <arg value="-S"/>
+      <arg file="${resource.abs.dir}"/>
+      <arg value="-I"/>
+      <arg file="${android.jar}"/>
+    </android:aapt> -->
+
   </target>
 
   <!-- Packages the application and sign it with a debug key. -->
@@ -405,7 +435,7 @@
 
   <target name="-compile-tested-if-test" if="tested.project.dir" unless="do.not.compile.again">
    <subant target="-compile">
-      <fileset dir="${tested.project.absolute.dir}" includes="build.xml" />
+      <fileset dir="${tested.project.abs.dir}" includes="build.xml" />
    </subant>
   </target>
 
@@ -415,7 +445,6 @@
     <zipalign-helper in.package="${out.debug.unaligned.package}"
                                out.package="${out.debug.package}" />
     <delete file="${out.debug.unaligned.package}"/>
-    <delete file="${out.absolute.dir}/JoLiVi.ap_"/>
     <my.echo>Debug Package: ${out.debug.package}</my.echo>
   </target>
 
@@ -509,21 +538,21 @@
   </target>
 
   <target name="clean" description="Removes output files created by other targets.">
-    <delete dir="${out.absolute.dir}" verbose="${verbose}" />
+    <delete dir="${out.abs.dir}" verbose="${verbose}" />
   </target>
 
   <!-- Targets for code-coverage measurement purposes, invoked from external file -->
 
   <!-- Emma-instruments tested project classes (compiles the tested project if necessary)
-           and writes instrumented classes to ${instrumentation.absolute.dir}/classes -->
+           and writes instrumented classes to ${instrumentation.abs.dir}/classes -->
   <target name="-emma-instrument" depends="-compile">
-    <my.echo>Instrumenting classes from ${out.absolute.dir}/classes...</my.echo>
+    <my.echo>Instrumenting classes from ${out.abs.dir}/classes...</my.echo>
     <!-- It only instruments class files, not any external libs -->
     <emma enabled="true">
       <instr verbosity="${verbosity}"
              mode="overwrite"
-             instrpath="${out.absolute.dir}/classes"
-             outdir="${out.absolute.dir}/classes">
+             instrpath="${out.abs.dir}/classes"
+             outdir="${out.abs.dir}/classes">
       </instr>
       <!-- TODO: exclusion filters on R*.class and allowing custom exclusion from
            user defined file -->
@@ -594,7 +623,7 @@
     <condition property="ndk.debug.arg" value="DEBUG=true" else="DEBUG=false">
       <istrue value="${debug}"/>
     </condition>
-    <exec executable="sh" dir="${out.absolute.dir}" failonerror="true">
+    <exec executable="sh" dir="${out.abs.dir}" failonerror="true">
       <arg line="${ndk.dir}/ndk-build ${ndk.verbosity.arg} ${ndk.debug.arg}"/>
     </exec>
   </target>
@@ -603,28 +632,39 @@
   </target>
 
   <target name="-compile-libsmug">
-    <exec executable="sh" dir="${out.absolute.dir}" failonerror="true">
-      <arg line="${ndk.dir}/ndk-build"/>
+    <condition property="ndk.verbosity.arg" value="V=1 NDK_LOG=1" else="V=0">
+      <istrue value="${verbose}"/>
+    </condition>
+    <condition property="ndk.debug.arg" value="DEBUG=true" else="DEBUG=false">
+      <istrue value="${debug}"/>
+    </condition>
+    <exec executable="sh" dir="${out.abs.dir}" failonerror="true">
+      <arg line="${ndk.dir}/ndk-build SMUG_ROOT=${smug.dir} ${ndk.verbosity.arg} ${ndk.debug.arg}"/>
     </exec>
   </target>
 
   <target name="-application-mk" depends="-dirs">
-    <echo file="${out.jni.absolute.dir}/Application.mk">APP_PROJECT_PATH := $(shell cygpath "${out.absolute.dir}")
+    <echo file="${out.jni.abs.dir}/Application.mk">APP_PROJECT_PATH := $(shell cygpath "${out.abs.dir}")
 APP_PLATFORM = ${target}
 APP_BUILD_SCRIPT := ${APP_PROJECT_PATH}/Android.mk
 </echo>
-    <copy file="AndroidManifest.xml" todir="${out.absolute.dir}"/>
-    <copy file="Android.mk" todir="${out.absolute.dir}"/>
+    <copy file="${build.dir}/AndroidManifest.xml" todir="${out.abs.dir}"/>
+    <copy file="${droidsmug.basedir}/jni/Android.mk" todir="${out.abs.dir}"/>
   </target>
 
   <macrodef name="run.javah">
     <sequential>
       <javah class="${native.classes}"
-          destdir="${headers.absolute.dir}"
+          destdir="${headers.abs.dir}"
           verbose="${verbose}"
           classpath="${out.classes.dir}">
         <bootclasspath refid="android.target.classpath"/>
       </javah>
     </sequential>
   </macrodef>
+
+  <target name="setup">
+    <ant dir="${build.dir}" target="setup"/>
+  </target>
+
 </project>
