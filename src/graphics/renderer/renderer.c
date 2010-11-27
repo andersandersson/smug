@@ -11,7 +11,8 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite.h"
 
-#include "platform/opengl/opengl.h"
+#include <platform/platform.h>
+#include <platform/opengl/opengl.h>
 
 extern int gVBOSupported;
 extern unsigned int gRenderMode;
@@ -21,7 +22,7 @@ Renderer* Renderer_new(void)
     Renderer* ret = (Renderer*)malloc(sizeof(Renderer));
     ret->layers = ArrayList_new();
     ret->layercount = 0;
-    ret->camera = Camera_new(Vector_multiply(Graphics_getScreenSize(), 0.5));
+    ret->camera = Camera_new(Vector_multiply(Platform_getWindowSize(), 0.5));
 
     return ret;
 }
@@ -60,7 +61,7 @@ static void renderDebugGrid(Renderer* renderer)
     float scaley = camera->scale.d[1];
     glScalef(scalex, scaley, 1.0f);
     glTranslatef(-Point_getX(&camera->pos), -Point_getY(&camera->pos), 0.0f);
-    Vector screenSize = Vector_multiply(Graphics_getScreenSize(), 0.5);
+    Vector screenSize = Vector_multiply(Platform_getWindowSize(), 0.5);
     float gridsizex = 16.0f;
     float gridsizey = 16.0f;
     float cposx = Point_getX(&camera->pos);

@@ -40,23 +40,19 @@
 /**
  * Initialize Graphics subsystem
  *
- * This creates a view, mapping a screen of the given width
- * and height to the current window.
- * @param width The width of the screen in pixels.
- * @param height The height of the screen in pixels.
+ * This creates a view, mapping a screen to the current window.
+ * The width and height are read from the platform module.
  */
-int Graphics_init(int width, int height);
+int Graphics_init();
 
 /**
  * Returns true if system is initialized
  */
 BOOL Graphics_isInitialized(void);
 
-/**
- * Returns the current size of the screen
- * @return Vector the current screen size
+/** For setting the window size internally. This function should not be visible to user code.
  */
-Vector Graphics_getScreenSize(void);
+void Graphics_setWindowSize(double w, double h);
 
 /**
  * Render one frame.

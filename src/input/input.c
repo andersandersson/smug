@@ -195,7 +195,7 @@ Vector Input_getMouseScreenMovement(void)
 
 Point Input_getMouseScreenPosition(void)
 {
-    Vector screenSize = Graphics_getScreenSize();
+    Vector screenSize = Platform_getWindowSize();
     return Point_createFromXY((Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XPOS) -
                                     Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_XNEG)) * Vector_getX(&screenSize) * 0.5f,
                                     (Platform_getInputState(DEVICE_MOUSE, MOUSE_AXIS_YPOS) -

@@ -237,6 +237,8 @@ void Platform_refreshWindow(void);
  */
 Vector Platform_getWindowSize(void);
 
+void Platform_setWindowResizeCallback(void(*callback)(int, int));
+
 /**
  * Get the current system time
  */

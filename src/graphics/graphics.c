@@ -9,7 +9,6 @@
 Renderer* sceneRenderer = NULL;
 
 int gVBOSupported = 0;
-Vector screenSize;
 unsigned int gRenderMode = RENDER_NORMAL;
 
 static BOOL isInitialized = FALSE;
@@ -69,13 +68,9 @@ static int setupGL(void)
     glDisable(GL_CULL_FACE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      // 4-byte pixel alignment
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-#ifdef SMUG_GLES
-	glOrthox(FIXED(0.0), FIXED(screenSize.d[0]), FIXED(screenSize.d[1]), FIXED(0.0), FIXED(-1.0), FIXED(1.0));
-#else
-	glOrtho(0, screenSize.d[0], screenSize.d[1], 0, -1, 1);
-#endif /* SMUG_GLES */
+    Vector screenSize = Platform_getWindowSize();
+    Graphics_setWindowSize(screenSize.d[0], screenSize.d[1]);
+
 	glMatrixMode(GL_MODELVIEW);
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
@@ -90,15 +85,23 @@ static int setupGL(void)
     return 1;
 }
 
-int Graphics_init(int width, int height)
+void Graphics_setWindowSize(double w, double h)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+#ifdef SMUG_GLES
+	glOrthox(FIXED(0.0), FIXED(w), FIXED(h), FIXED(0.0), FIXED(-1.0), FIXED(1.0));
+#else
+	glOrtho(0, w, h, 0, -1, 1);
+#endif /* SMUG_GLES */
+}
+
+int Graphics_init()
 {
     assert(!isInitialized);
 	assert(Platform_isInitialized());
 	assert(Platform_isWindowOpen());
-
-    screenSize = Vector_create2d(width, height);
-
-    DEBUG("Graphics resolution set to %ix%i", width, height);
 
     if (!setupGL())
         return 0;
@@ -112,11 +115,6 @@ int Graphics_init(int width, int height)
 BOOL Graphics_isInitialized(void)
 {
     return isInitialized;
-}
-
-Vector Graphics_getScreenSize(void)
-{
-    return screenSize;
 }
 
 void Graphics_terminate(void)

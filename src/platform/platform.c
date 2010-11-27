@@ -20,6 +20,14 @@ static BOOL isInitialized = FALSE;
 // Size of window in pixels
 static Vector windowSize;
 
+static void(*userWindowResizeCallback)(int, int);
+static void GLFWCALL windowResizeCallback(int w, int h)
+{
+    setWindowSize(w, h);
+    Graphics_setWindowSize(w, h);
+    userWindowResizeCallback(w, h);
+}
+
 // State array for keyboard
 static INPUTSTATE keyState[KEY_LAST - KEY_BASE];
 
@@ -265,6 +273,11 @@ static void dummyInputHandler(int device, int trigger, INPUTSTATE state)
     fprintf(stderr, "Got input event. Device: %i, trigger: %i, state: %f\n", device, trigger, state);
 }
 
+static void setWindowSize(int w, int h)
+{
+    windowSize = Vector_create2d(w, h);
+}
+
 int Platform_init(int width, int height, BOOL fullscreen)
 {
     assert(!isInitialized);
@@ -278,12 +291,13 @@ int Platform_init(int width, int height, BOOL fullscreen)
     glfwEnable(GLFW_STICKY_KEYS);
     glfwEnable(GLFW_STICKY_MOUSE_BUTTONS);
 
-    windowSize = Vector_create2d(width, height);
+    setWindowSize(width, height);
     if (!glfwOpenWindow(width, height, 8, 8, 8, 8, 24, 0, fullscreen? GLFW_FULLSCREEN : GLFW_WINDOW))
     {
         ERROR("Could not open window.");
         return 0;
     }
+    glfwSetWindowSizeCallback(windowResizeCallback);
 
     Platform_initInput();
     isInitialized = TRUE;
@@ -334,6 +348,11 @@ void Platform_refreshWindow(void)
 Vector Platform_getWindowSize(void)
 {
     return windowSize;
+}
+
+void Platform_setWindowResizeCallback(void(*callback)(int, int))
+{
+    userWindowResizeCallback = callback;
 }
 
 TIME Platform_getTime(void)

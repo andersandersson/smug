@@ -392,14 +392,6 @@
        declared in default.properties.
        -->
   <target name="-package-resources">
-    <my.echo>Packaging resources</my.echo>
-    <my.echo>executable = ${aapt}</my.echo>
-    <my.echo>resources = ${resource.abs.dir}</my.echo>
-    <my.echo>assets = ${asset.abs.dir}</my.echo>
-    <my.echo>androidjar = ${android.jar}</my.echo>
-    <my.echo>outfolder = ${out.abs.dir}</my.echo>
-    <my.echo>basename = ${ant.project.name}</my.echo>
-    <my.echo>manifest = ${build.abs.dir}/AndroidManifest.xml</my.echo>
     <aaptexec executable="${aapt}"
               command="package"
               manifest="AndroidManifest.xml"
@@ -408,19 +400,6 @@
               androidjar="${android.jar}"
               outfolder="${out.abs.dir}"
               basename="${ant.project.name}" />
-<!--     <android:aapt>
-      <arg value="package"/>
-      <arg value="-m"/>
-      <arg value="-J"/>
-      <arg file="${out.abs.dir}"/>
-      <arg value="-M"/>
-      <arg file="AndroidManifest.xml"/>
-      <arg value="-S"/>
-      <arg file="${resource.abs.dir}"/>
-      <arg value="-I"/>
-      <arg file="${android.jar}"/>
-    </android:aapt> -->
-
   </target>
 
   <!-- Packages the application and sign it with a debug key. -->

@@ -6,7 +6,7 @@
  * Method:    nativeInit
  * Signature: (F)V
  */
-JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeInit
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeInit
   (JNIEnv* env, jclass clazz, jfloat fps)
 {
     smugInit();
@@ -15,20 +15,10 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeInit
 
 /*
  * Class:     se_lolektivet_apitest_NativeFunctions
- * Method:    nativeResize
- * Signature: (II)V
- */
-JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeResize
-  (JNIEnv* env, jclass clazz, jint width, jint height)
-{
-}
-
-/*
- * Class:     se_lolektivet_apitest_NativeFunctions
  * Method:    nativeRender
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeRender
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeRender
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -38,7 +28,7 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeRender
  * Method:    nativeDone
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeDone
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeDone
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -48,7 +38,7 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeDone
  * Method:    nativeTouchDown
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouchDown
+SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouchDown
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -58,7 +48,7 @@ JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouc
  * Method:    nativeTouchUp
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouchUp
+SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouchUp
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -68,7 +58,7 @@ JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouc
  * Method:    nativeKeyDown
  * Signature: (I)Z
  */
-JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyDown
+SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyDown
   (JNIEnv* env, jclass clazz, jint keyCode)
 {
 }
@@ -78,7 +68,7 @@ JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyD
  * Method:    nativeKeyUp
  * Signature: (I)Z
  */
-JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyUp
+SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyUp
   (JNIEnv* env, jclass clazz, jint keyCode)
 {
 }
@@ -88,7 +78,7 @@ JNIEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyU
  * Method:    nativeOrientationChange
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeOrientationChange
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeOrientationChange
   (JNIEnv* env, jclass clazz, jint orientation)
 {
 }
@@ -98,7 +88,7 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeOrientat
  * Method:    nativeHeartbeat
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeHeartbeat
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeHeartbeat
   (JNIEnv* env, jclass clazz)
 {
 }

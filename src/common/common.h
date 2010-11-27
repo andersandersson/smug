@@ -14,6 +14,10 @@
     #include <config.h>
 #endif
 
+#ifndef SMUGEXPORT
+    #define SMUGEXPORT
+#endif /* SMUGEXPORT */
+
 typedef unsigned char BOOL;
 #define TRUE  1
 #define FALSE 0

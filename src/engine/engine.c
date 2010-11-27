@@ -70,7 +70,7 @@ int Engine_init(BOOL verbose, BOOL console)
 	if (!Input_init())
 		return 0;
 
-    if (!Graphics_init(640, 480))
+    if (!Graphics_init())
         return 0;
 
     if (!Physics_init())

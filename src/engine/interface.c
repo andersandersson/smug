@@ -1,6 +1,7 @@
-#include <smug.h>
+#include <common/common.h>
 #include <common/log.h>
 #include "engine.h"
+#include "interface.h"
 
 SMUGEXPORT int smugInit(void)
 {

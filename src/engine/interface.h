@@ -5,6 +5,8 @@
 #ifndef SMUG_ENGINE_INTERFACE_H
 #define SMUG_ENGINE_INTERFACE_H
 
+#include <common/common.h>
+
 /** Initialize Engine
   *
   * @return Returns zero on error, non-zero on success.
