@@ -18,7 +18,8 @@ LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/platform/android \
-    $(LOCAL_PATH)
+    $(LOCAL_PATH) \
+    $(SMUG_ROOT)/src
 
 LOCAL_SRC_FILES := se_lolektivet_apitest_DroidSmugGame.c
 

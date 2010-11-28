@@ -5,7 +5,9 @@
 #ifndef SMUG_ENGINE_INTERFACE_H
 #define SMUG_ENGINE_INTERFACE_H
 
+#ifdef INTERNAL_INCLUDE
 #include <common/common.h>
+#endif /* INTERNAL_INCLUDE */
 
 /** Initialize Engine
   *
