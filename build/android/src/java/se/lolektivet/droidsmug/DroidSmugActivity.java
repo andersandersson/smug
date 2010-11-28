@@ -16,10 +16,10 @@ import android.os.Bundle;
 
 public class DroidSmugActivity extends Activity
 {
-    private GLSurfaceView mGLView;
-    private static boolean _callNativeInitOnGlInit = false;
-    private static boolean _callWindowRestoredOnGlInit = false;
-    private static boolean _callWindowActivatedOnGlInit = false;
+    private DroidSmugGLSurfaceView mGLView;
+    private boolean _callNativeInitOnGlInit = false;
+    private boolean _callWindowRestoredOnGlInit = false;
+    private boolean _callWindowActivatedOnGlInit = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -29,10 +29,9 @@ public class DroidSmugActivity extends Activity
         mGLView = new DroidSmugGLSurfaceView(this);
         setContentView(mGLView);
 
-        if (DroidSmugRenderer.haveGlContext())
+        if (mGLView.hasGlContext())
         {
-            NativeFunctions.nativeInit(Heartbeat.Fps);
-            NativeFunctions.nativeWindowOpened();
+            nativeInit();
         }
         else
         {
@@ -41,17 +40,42 @@ public class DroidSmugActivity extends Activity
         System.out.println("JAVASMUG: Activity.onCreate returning.");
     }
 
-    public static boolean callNativeInitOnGlInit()
+    private void nativeInit()
+    {
+        NativeFunctions.nativeInit(Heartbeat.Fps);
+        initGame();
+        NativeFunctions.nativeWindowOpened();
+    }
+
+    public void surfaceCreatedCallback()
+    {
+        if (callNativeInitOnGlInit())
+        {
+            nativeInit();
+        }
+        DroidSmugGLSurfaceView.startHeartbeat();
+        if (callWindowRestoredOnGlInit())
+        {
+            NativeFunctions.nativeWindowRestored();
+        }
+        if (callWindowActivatedOnGlInit())
+        {
+            NativeFunctions.nativeWindowActivated();
+        }
+        resetGlInitCalls();
+    }
+
+    private boolean callNativeInitOnGlInit()
     {
         return _callNativeInitOnGlInit;
     }
 
-    public static boolean callWindowRestoredOnGlInit()
+    private boolean callWindowRestoredOnGlInit()
     {
         return _callWindowRestoredOnGlInit;
     }
 
-    public static boolean callWindowActivatedOnGlInit()
+    private boolean callWindowActivatedOnGlInit()
     {
         return _callWindowActivatedOnGlInit;
     }
@@ -59,7 +83,7 @@ public class DroidSmugActivity extends Activity
     /** Being a bit lazy with this one, since these three are always set together atm. Need
      *  investigation.
      */
-    public static void resetGlInitCalls()
+    private void resetGlInitCalls()
     {
         _callNativeInitOnGlInit = false;
         _callWindowRestoredOnGlInit = false;
@@ -78,7 +102,7 @@ public class DroidSmugActivity extends Activity
     {
         super.onStart();
         System.out.println("JAVASMUG: Activity.onStart.");
-        if (DroidSmugRenderer.haveGlContext())
+        if (mGLView.hasGlContext())
         {
             NativeFunctions.nativeWindowRestored();
         }
@@ -111,7 +135,7 @@ public class DroidSmugActivity extends Activity
         super.onResume();
         System.out.println("JAVASMUG: Activity.onResume.");
         mGLView.onResume();
-        if (DroidSmugRenderer.haveGlContext())
+        if (mGLView.hasGlContext())
         {
             NativeFunctions.nativeWindowActivated();
         }
@@ -120,6 +144,8 @@ public class DroidSmugActivity extends Activity
             _callWindowActivatedOnGlInit = true;
         }
     }
+
+    protected void initGame() {};
 
     static
     {
@@ -156,7 +182,8 @@ class Heartbeat extends TimerTask
         NativeFunctions.nativeHeartbeat();
     }
 
-    public void start() {
+    public void start()
+    {
         mUpdateTimer = new Timer();
         mUpdateTimer.schedule(this, 0, (int)(1000.0f / Fps));
     }
@@ -168,16 +195,21 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
     private DroidSmugRenderer mRenderer;
     private static Heartbeat mHeartbeat;
 
-    public DroidSmugGLSurfaceView(Context context)
+    public DroidSmugGLSurfaceView(DroidSmugActivity activity /* Context context */)
     {
-        super(context);
-        mRenderer = new DroidSmugRenderer();
+        super((Context)activity);
+        mRenderer = new DroidSmugRenderer(activity);
         setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
         setRenderer(mRenderer);
-        mOrientationHandler = new OrientationHandler(context);
+        mOrientationHandler = new OrientationHandler((Context)activity);
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
+    }
+
+    public boolean hasGlContext()
+    {
+        return mRenderer.hasGlContext();
     }
 
     public static void startHeartbeat()
@@ -186,7 +218,7 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
         mHeartbeat.start();
     }
 
-    @Override
+/*     @Override
     public void onPause()
     {
         super.onPause();
@@ -196,15 +228,17 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
     public void onResume()
     {
         super.onResume();
-    }
+    } */
 
     public boolean onTouchEvent(final MotionEvent event)
     {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        {
             System.out.println("Java received touch down event.");
             return NativeFunctions.nativeTouchDown();
         }
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (event.getAction() == MotionEvent.ACTION_UP)
+        {
             System.out.println("Java received touch up event.");
             return NativeFunctions.nativeTouchUp();
         }
@@ -238,11 +272,13 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
 
     public boolean onKey(View v, int keyCode, KeyEvent event)
     {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN)
+        {
             System.out.println("onKeyDown, keyCode: "+keyCode);
             return NativeFunctions.nativeKeyDown(keyCode);
         }
-        if (event.getAction() == KeyEvent.ACTION_UP) {
+        if (event.getAction() == KeyEvent.ACTION_UP)
+        {
             System.out.println("onKeyUp, keyCode: "+keyCode);
             return NativeFunctions.nativeKeyUp(keyCode);
         }
@@ -273,16 +309,25 @@ class NativeFunctions
 
 class DroidSmugRenderer implements GLSurfaceView.Renderer
 {
-    static boolean _haveGlContext = false;
+    boolean _hasGlContext = false;
+    DroidSmugActivity activity;
 
-    public static boolean haveGlContext()
+    DroidSmugRenderer(DroidSmugActivity activity)
     {
-        return _haveGlContext;
+        super();
+        this.activity = activity;
     }
 
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+    public boolean hasGlContext()
+    {
+        return _hasGlContext;
+    }
+
+    public void onSurfaceCreated(GL10 gl, EGLConfig config)
+    {
         System.out.println("JAVASMUG: DroidSmugRenderer.onSurfaceCreated");
-        if (DroidSmugActivity.callNativeInitOnGlInit())
+        activity.surfaceCreatedCallback();
+/*         if (DroidSmugActivity.callNativeInitOnGlInit())
         {
             NativeFunctions.nativeInit(Heartbeat.Fps);
             NativeFunctions.nativeWindowOpened();
@@ -296,15 +341,17 @@ class DroidSmugRenderer implements GLSurfaceView.Renderer
         {
             NativeFunctions.nativeWindowActivated();
         }
-        DroidSmugActivity.resetGlInitCalls();
-        _haveGlContext = true;
+        DroidSmugActivity.resetGlInitCalls(); */
+        _hasGlContext = true;
     }
 
-    public void onSurfaceChanged(GL10 gl, int w, int h) {
+    public void onSurfaceChanged(GL10 gl, int w, int h)
+    {
         NativeFunctions.nativeResize(w, h);
     }
 
-    public void onDrawFrame(GL10 gl) {
+    public void onDrawFrame(GL10 gl)
+    {
         NativeFunctions.nativeRender();
     }
 }
