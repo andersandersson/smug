@@ -2,7 +2,7 @@ SMUG_DEBUG ?= true
 
 #$(info SMUG_ROOT is: '$(SMUG_ROOT)')
 
-LOCAL_PATH := $(shell cygpath "$(call my-dir)/../../../src")
+LOCAL_PATH := $(shell cygpath "$(call my-dir)/../src")
 
 include $(CLEAR_VARS)
 
