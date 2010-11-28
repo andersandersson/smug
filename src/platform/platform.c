@@ -17,17 +17,24 @@ typedef struct JoystickInfo
 
 static BOOL isInitialized = FALSE;
 
+static void(*gUserWindowResizeCallback)(int, int) = NULL;
+static void(*gUserWindowStateChangeCallback)(void) = NULL;
+static void (*gUserLogicCallback)(void) = NULL;
+
+static BOOL gLogicCallbackEnabled = TRUE;
+
 // Size of window in pixels
 static Vector windowSize;
 
-static void(*userWindowResizeCallback)(int, int);
 static void GLFWCALL windowResizeCallback(int w, int h)
 {
     setWindowSize(w, h);
     Graphics_setWindowSize(w, h);
-    userWindowResizeCallback(w, h);
+    if (gUserWindowResizeCallback != NULL)
+    {
+        gUserWindowResizeCallback(w, h);
+    }
 }
-
 // State array for keyboard
 static INPUTSTATE keyState[KEY_LAST - KEY_BASE];
 
@@ -352,7 +359,78 @@ Vector Platform_getWindowSize(void)
 
 void Platform_setWindowResizeCallback(void(*callback)(int, int))
 {
-    userWindowResizeCallback = callback;
+    gUserWindowResizeCallback = callback;
+}
+
+void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHANGE))
+{
+    gUserWindowStateChangeCallback = callback;
+}
+
+void Platform_setLogicCallback(void (*callback)(void))
+{
+    gUserLogicCallback = callback;
+}
+
+void Platform_enableLogicCallback(BOOL enable)
+{
+    gLogicCallbackEnabled = enable;
+}
+
+void Platform_internalHeartbeat(void)
+{
+    if (gLogicCallbackEnabled && gUserLogicCallback != NULL)
+    {
+        gUserLogicCallback();
+    }
+
+    BOOL gWindowOpen = FALSE;       // Open == FALSE means dead
+    BOOL gWindowVisible = FALSE;    // Open == TRUE && Visible == FALSE means minimized
+    BOOL gWindowActive = FALSE;     // Open == TRUE && Visible == TRUE && Active == FALSE means background
+                                    // Active == TRUE means foreground
+
+    BOOL windowOpenNow = glfwGetWindowParam(GLFW_OPENED) == GL_TRUE;
+    BOOL windowVisibleNow = glfwGetWindowParam(GLFW_ICONIFIED) == GL_FALSE;
+    BOOL windowActiveNow = glfwGetWindowParam(GLFW_ACTIVE) == GL_TRUE;
+
+    if (gUserWindowStateChangeCallback != NULL)
+    {
+        if (!gWindowOpen && windowOpenNow)
+        {
+            gWindowOpen = TRUE;
+            gUserWindowStateChangeCallback(SMUG_OPENED);
+        }
+        if (!gWindowVisible && windowVisibleNow)
+        {
+            gWindowVisible = TRUE;
+            gUserWindowStateChangeCallback(SMUG_RESTORED);
+        }
+        if (!gWindowActive && windowActiveNow)
+        {
+            gWindowActive = TRUE;
+            gUserWindowStateChangeCallback(SMUG_ACTIVATED);
+        }
+        if (gWindowActive && !windowActiveNow)
+        {
+            gWindowActive = FALSE;
+            gUserWindowStateChangeCallback(SMUG_DEACTIVATED);
+        }
+        if (gWindowVisible && !windowVisibleNow)
+        {
+            gWindowVisible = FALSE;
+            gUserWindowStateChangeCallback(SMUG_MINIMIZED);
+        }
+        if (gWindowOpen && !windowOpenNow)
+        {
+            gWindowOpen = FALSE;
+            gUserWindowStateChangeCallback(SMUG_CLOSED);
+        }
+    }
+
+    if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
+    {
+        Signal_send(SIG_EXIT);
+    }
 }
 
 TIME Platform_getTime(void)

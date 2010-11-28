@@ -33,7 +33,7 @@ void Engine_run(void)
         if (time >= nexttime)
         {
             nexttime += delay;
-            Engine_heartbeat();
+            Platform_internalHeartbeat();
         }
 
         Graphics_render();

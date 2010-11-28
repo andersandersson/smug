@@ -199,6 +199,16 @@ typedef float INPUTSTATE;
 #define DEVICE_BASE DEVICE_KEYBOARD
 #define DEVICE_COUNT DEVICE_LAST-DEVICE_BASE
 
+typedef enum
+{
+    SMUG_OPENED,
+    SMUG_RESTORED,
+    SMUG_ACTIVATED,
+    SMUG_DEACTIVATED,
+    SMUG_MINIMIZED,
+    SMUG_CLOSED
+} SMUG_WINDOW_STATE_CHANGE;
+
 /**
  * Initializes the platform layer and opens a window.
  * @param width the width of the window in pixels
@@ -220,6 +230,10 @@ BOOL Platform_isInitialized(void);
  */
 void Platform_terminate(void);
 
+/** Will be called by the platform OR the blocking version of the smug engine at the set fps
+ *  interval.
+ */
+void Platform_internalHeartbeat(void);
 
 /**
  * Check if the window is open
@@ -238,6 +252,12 @@ void Platform_refreshWindow(void);
 Vector Platform_getWindowSize(void);
 
 void Platform_setWindowResizeCallback(void(*callback)(int, int));
+
+void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHANGE));
+
+void Platform_setLogicCallback(void (*callback)(void));
+
+void Platform_enableLogicCallback(BOOL enable);
 
 /**
  * Get the current system time

@@ -35,10 +35,6 @@ int Engine_init(BOOL verbose, BOOL console);
   */
 BOOL Engine_isInitialized(void);
 
-void Engine_setLogicCallback(void (*logicCallback)(void));
-
-void Engine_enableLogicCallback(BOOL enable);
-
 /**
   * Close down Engine
   *

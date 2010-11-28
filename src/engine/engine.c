@@ -15,8 +15,6 @@
 Thread* gConsoleThread = NULL;
 
 static BOOL gInitialized = FALSE;
-static void (*gUserLogicFunction)(void) = NULL;
-static BOOL gLogicCallbackEnabled = TRUE;
 // World* gWorld = NULL;
 static LinkedList* gGameObjects = NULL;
 
@@ -104,16 +102,6 @@ BOOL Engine_isInitialized(void)
     return _subsystemsInitialized() && gInitialized;
 }
 
-void Engine_setLogicCallback(void (*logicCallback)(void))
-{
-    gUserLogicFunction = logicCallback;
-}
-
-void Engine_enableLogicCallback(BOOL enable)
-{
-    gLogicCallbackEnabled = enable;
-}
-
 void Engine_terminate(void)
 {
     assert(gInitialized);
@@ -151,19 +139,6 @@ void Engine_terminate(void)
     Log_terminate();
 
     gInitialized = FALSE;
-}
-
-void Engine_heartbeat(void)
-{
-    if (gLogicCallbackEnabled && gUserLogicFunction != NULL)
-    {
-        gUserLogicFunction();
-    }
-
-    if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
-    {
-        Signal_send(SIG_EXIT);
-    }
 }
 
 void Engine_addObject(GameObject* newObj)

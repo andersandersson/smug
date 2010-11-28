@@ -82,13 +82,3 @@ SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeOrienta
   (JNIEnv* env, jclass clazz, jint orientation)
 {
 }
-
-/*
- * Class:     se_lolektivet_apitest_NativeFunctions
- * Method:    nativeHeartbeat
- * Signature: ()V
- */
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeHeartbeat
-  (JNIEnv* env, jclass clazz)
-{
-}

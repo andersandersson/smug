@@ -26,18 +26,42 @@ public class ApitestActivity extends Activity
         mGLView = new DemoGLSurfaceView(this);
 
         setContentView(mGLView);
+        NativeFunctions.nativeWindowOpened();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        NativeFunctions.nativeWindowClosed();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        NativeFunctions.nativeWindowRestored();
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        NativeFunctions.nativeWindowMinimized();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
+        NativeFunctions.nativeWindowDeactivated();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mGLView.onResume();
+        NativeFunctions.nativeWindowActivated();
     }
 
     static {
@@ -178,6 +202,13 @@ class NativeFunctions
     public static native boolean nativeKeyUp(int keyCode);
     public static native void nativeOrientationChange(int orientation);
     public static native void nativeHeartbeat();
+
+    public static native void nativeWindowOpened();
+    public static native void nativeWindowRestored();
+    public static native void nativeWindowActivated();
+    public static native void nativeWindowDeactivated();
+    public static native void nativeWindowMinimized();
+    public static native void nativeWindowClosed();
 }
 
 class DemoRenderer implements GLSurfaceView.Renderer

@@ -1,18 +1,33 @@
 #include <common/log.h>
+#include <common/common.h>
 #include <platform/platform.h>
 #include <smugstd.h>
 #include <graphics/graphics.h>
+#include <input/input.h>
+#include <common/signal.h>
 
 static BOOL isInitialized = FALSE;
+
+static void(*gUserWindowResizeCallback)(int, int) = NULL;
+static void(*gUserWindowStateChangeCallback)(SMUG_WINDOW_STATE_CHANGE);
+static void (*gUserLogicCallback)(void) = NULL;
+static BOOL gLogicCallbackEnabled = TRUE;
 
 // Size of window in pixels
 static Vector windowSize;
 
-static void(*userWindowResizeCallback)(int, int) = NULL;
-
 static void setWindowSize(int w, int h)
 {
     windowSize = Vector_create2d(w, h);
+}
+
+static void windowStateChangeCallback(SMUG_WINDOW_STATE_CHANGE state)
+{
+    if (gUserWindowStateChangeCallback != NULL)
+    {
+        gUserWindowStateChangeCallback(state);
+    }
+    smug_printf("Window state changed: %i", state);
 }
 
 int Platform_init(int width, int height, BOOL fullscreen)
@@ -69,9 +84,72 @@ Vector Platform_getWindowSize(void)
     return windowSize;
 }
 
+void Platform_internalHeartbeat(void)
+{
+    if (gLogicCallbackEnabled && gUserLogicCallback != NULL)
+    {
+        gUserLogicCallback();
+    }
+    if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
+    {
+        Signal_send(SIG_EXIT);
+    }
+}
+
+void Platform_setLogicCallback(void (*callback)(void))
+{
+    gUserLogicCallback = callback;
+}
+
+void Platform_enableLogicCallback(BOOL enable)
+{
+    gLogicCallbackEnabled = enable;
+}
+
 void Platform_setWindowResizeCallback(void(*callback)(int, int))
 {
-    userWindowResizeCallback = callback;
+    gUserWindowResizeCallback = callback;
+}
+
+void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHANGE))
+{
+    gUserWindowStateChangeCallback = callback;
+}
+
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowOpened
+  (JNIEnv* env, jclass clazz)
+{
+    windowStateChangeCallback(SMUG_OPENED);
+}
+
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowRestored
+  (JNIEnv* env, jclass clazz)
+{
+    windowStateChangeCallback(SMUG_RESTORED);
+}
+
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowActivated
+  (JNIEnv* env, jclass clazz)
+{
+    windowStateChangeCallback(SMUG_ACTIVATED);
+}
+
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowDeactivated
+  (JNIEnv* env, jclass clazz)
+{
+    windowStateChangeCallback(SMUG_DEACTIVATED);
+}
+
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowMinimized
+  (JNIEnv* env, jclass clazz)
+{
+    windowStateChangeCallback(SMUG_MINIMIZED);
+}
+
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowClosed
+  (JNIEnv* env, jclass clazz)
+{
+    windowStateChangeCallback(SMUG_CLOSED);
 }
 
 /** The window resize callback. Called from Android OS (through DroidSmug class).
@@ -82,10 +160,19 @@ SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeResize
     smug_printf("Window resized: %i x %i", (int)w, (int)h);
     setWindowSize(w, h);
     Graphics_setWindowSize(w, h);
-    if (userWindowResizeCallback != NULL)
+    if (gUserWindowResizeCallback != NULL)
     {
-        userWindowResizeCallback(w, h);
+        gUserWindowResizeCallback(w, h);
     }
+}
+
+/** If we ever run our own game loop (i.e. "blocking engine") on Android, we must make sure this
+ *  doesn't get called, since internalHeartbeat will then get called from our gameloop instead.
+ */
+SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeHeartbeat
+  (JNIEnv* env, jclass clazz)
+{
+    Platform_internalHeartbeat();
 }
 
 TIME Platform_getTime(void)

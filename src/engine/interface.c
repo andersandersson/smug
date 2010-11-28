@@ -5,7 +5,7 @@
 
 SMUGEXPORT int smugInit(void)
 {
-    Engine_init(TRUE, TRUE);
+    return Engine_init(TRUE, TRUE);
 }
 
 SMUGEXPORT void smugTerminate(void)
