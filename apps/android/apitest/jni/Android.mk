@@ -20,6 +20,6 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/platform/android \
     $(LOCAL_PATH)
 
-LOCAL_SRC_FILES := $(SMUG_APP_SRC)/se_lolektivet_apitest_NativeFunctions.c
+LOCAL_SRC_FILES := $(SMUG_APP_SRC)/se_lolektivet_droidsmug_NativeFunctions.c
 
 include $(BUILD_SHARED_LIBRARY)

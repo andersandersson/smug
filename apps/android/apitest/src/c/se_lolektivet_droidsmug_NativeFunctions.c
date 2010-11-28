@@ -6,7 +6,7 @@
  * Method:    nativeInit
  * Signature: (F)V
  */
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeInit
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeInit)
   (JNIEnv* env, jclass clazz, jfloat fps)
 {
     smugInit();
@@ -18,7 +18,7 @@ SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeInit
  * Method:    nativeRender
  * Signature: ()V
  */
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeRender
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeRender)
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -28,7 +28,7 @@ SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeRender
  * Method:    nativeDone
  * Signature: ()V
  */
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeDone
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeDone)
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -38,7 +38,7 @@ SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeDone
  * Method:    nativeTouchDown
  * Signature: ()Z
  */
-SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouchDown
+SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeTouchDown)
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -48,7 +48,7 @@ SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTou
  * Method:    nativeTouchUp
  * Signature: ()Z
  */
-SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTouchUp
+SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeTouchUp)
   (JNIEnv* env, jclass clazz)
 {
 }
@@ -58,7 +58,7 @@ SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeTou
  * Method:    nativeKeyDown
  * Signature: (I)Z
  */
-SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyDown
+SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeKeyDown)
   (JNIEnv* env, jclass clazz, jint keyCode)
 {
 }
@@ -68,7 +68,7 @@ SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKey
  * Method:    nativeKeyUp
  * Signature: (I)Z
  */
-SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKeyUp
+SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeKeyUp)
   (JNIEnv* env, jclass clazz, jint keyCode)
 {
 }
@@ -78,7 +78,7 @@ SMUGEXPORT jboolean JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeKey
  * Method:    nativeOrientationChange
  * Signature: (I)V
  */
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeOrientationChange
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeOrientationChange)
   (JNIEnv* env, jclass clazz, jint orientation)
 {
 }

@@ -116,37 +116,37 @@ void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHA
     gUserWindowStateChangeCallback = callback;
 }
 
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowOpened
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowOpened)
   (JNIEnv* env, jclass clazz)
 {
     windowStateChangeCallback(SMUG_OPENED);
 }
 
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowRestored
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowRestored)
   (JNIEnv* env, jclass clazz)
 {
     windowStateChangeCallback(SMUG_RESTORED);
 }
 
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowActivated
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowActivated)
   (JNIEnv* env, jclass clazz)
 {
     windowStateChangeCallback(SMUG_ACTIVATED);
 }
 
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowDeactivated
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowDeactivated)
   (JNIEnv* env, jclass clazz)
 {
     windowStateChangeCallback(SMUG_DEACTIVATED);
 }
 
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowMinimized
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowMinimized)
   (JNIEnv* env, jclass clazz)
 {
     windowStateChangeCallback(SMUG_MINIMIZED);
 }
 
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowClosed
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowClosed)
   (JNIEnv* env, jclass clazz)
 {
     windowStateChangeCallback(SMUG_CLOSED);
@@ -154,7 +154,7 @@ SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeWindowC
 
 /** The window resize callback. Called from Android OS (through DroidSmug class).
  */
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeResize
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeResize)
   (JNIEnv* env, jclass clazz, jint w, jint h)
 {
     smug_printf("Window resized: %i x %i", (int)w, (int)h);
@@ -169,7 +169,7 @@ SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeResize
 /** If we ever run our own game loop (i.e. "blocking engine") on Android, we must make sure this
  *  doesn't get called, since internalHeartbeat will then get called from our gameloop instead.
  */
-SMUGEXPORT void JNICALL Java_se_lolektivet_apitest_NativeFunctions_nativeHeartbeat
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeHeartbeat)
   (JNIEnv* env, jclass clazz)
 {
     Platform_internalHeartbeat();
