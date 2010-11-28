@@ -5,8 +5,8 @@
   <import file="../../../build/android/common.xml"/>
   <setup import="false"/>
 
-  <property name="manifest.package" value="se.lolektivet.droidsmug" />
-  <property name="native.classes" value="se.lolektivet.droidsmug.NativeFunctions"/>
+  <property name="manifest.package" value="se.lolektivet.apitest" />
+  <property name="native.classes" value="se.lolektivet.apitest.DroidSmugGame"/>
 
   <target name="setup">
   </target>

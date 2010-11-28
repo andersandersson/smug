@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="DroidSmug" default="help" basedir="." xmlns:android="antlib:com.googlecode.autoandroid.ant">
   <dirname property="droidsmug.basedir" file="${ant.file.DroidSmug}"/>
-  <property name="smug.dir" value="${droidsmug.basedir}/../.."/>
-  <property name="smug.abs.dir" location="${smug.dir}"/>
 
   <!-- The local.properties file is created and updated by the 'android' tool.
        It contains the path to the SDK. It should *NOT* be checked in in Version
@@ -41,6 +39,13 @@
   <condition property="barebone" value="true" else="false">
     <equals arg1="${build.app}" arg2="droidsmug"/>
   </condition>
+
+  <condition property="smug.dir" value="../.." else="../../..">
+    <istrue value="${barebone}"/>
+  </condition>
+  <!-- <property name="smug.dir" value="${droidsmug.basedir}/../.."/> -->
+  <property name="smug.abs.dir" location="${smug.dir}"/>
+
   <condition property="build.dir" value="${droidsmug.basedir}" else="${smug.dir}/apps/android/${build.app}">
     <istrue value="${barebone}"/>
   </condition>

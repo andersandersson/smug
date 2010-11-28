@@ -1,10 +1,10 @@
-SMUG_ROOT ?= $(shell cygpath "$(call my-dir)/..")
+SMUG_ROOT := $(shell cygpath "$(call my-dir)/..")
 
-include $(SMUG_ROOT)/build/android/jni/Android.mk
+include $(SMUG_ROOT)/build/android/DroidSmug.mk
+
+LOCAL_PATH := $(SMUG_ROOT)/apps/android/apitest/src/c
 
 include $(CLEAR_VARS)
-
-SMUG_APP_SRC := ../apps/android/apitest/src/c
 
 LOCAL_MODULE := apitest
 
@@ -20,6 +20,6 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/platform/android \
     $(LOCAL_PATH)
 
-LOCAL_SRC_FILES := $(SMUG_APP_SRC)/se_lolektivet_droidsmug_NativeFunctions.c
+LOCAL_SRC_FILES := se_lolektivet_apitest_DroidSmugGame.c
 
 include $(BUILD_SHARED_LIBRARY)
