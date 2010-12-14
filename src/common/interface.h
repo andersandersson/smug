@@ -13,4 +13,6 @@ void smugLogSetLevel(int level);
 
 void smugLogPrint(char* msg);
 
+/* void smugLog(int level, char* fmt, ...); */
+
 #endif // SMUG_COMMON_INTERFACE_H
