@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include <common/common.h>
 #include <common/log.h>
 #include <platform/opengl/opengl.h>
@@ -101,9 +102,9 @@ void Graphics_setWindowSize(double w, double h)
 
 int Graphics_init()
 {
-    assert(!isInitialized);
-	assert(Platform_isInitialized());
-	assert(Platform_isWindowOpen());
+    smug_assert(!isInitialized);
+	smug_assert(Platform_isInitialized());
+	smug_assert(Platform_isWindowOpen());
 
     if (!setupGL())
         return 0;
@@ -121,7 +122,7 @@ BOOL Graphics_isInitialized(void)
 
 void Graphics_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     Renderer_delete(sceneRenderer);
     sceneRenderer = NULL;
     isInitialized = FALSE;
@@ -149,7 +150,7 @@ void Graphics_removeDrawable(Drawable* d)
 
 Camera* Graphics_getCamera()
 {
-    assert(NULL != sceneRenderer);
+    smug_assert(NULL != sceneRenderer);
     return Renderer_getCamera(sceneRenderer);
 
 }

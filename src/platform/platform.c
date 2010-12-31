@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "platform.h"
 
 #include "GL/glfw.h"
@@ -87,7 +88,7 @@ static void clearInputState(void)
 // Callback for platform key events
 static void GLFWCALL keyCallback(int key, int action)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static int trigger;
     trigger = convertKeyToTrigger(key);
     keyState[trigger] = (INPUTSTATE)action;
@@ -97,7 +98,7 @@ static void GLFWCALL keyCallback(int key, int action)
 // Callback for platform mousebutton events
 static void GLFWCALL mouseButtonCallback(int button, int action)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static int trigger;
     trigger = convertMouseButtonToTrigger(button);
     mouseState[trigger] = (INPUTSTATE)action;
@@ -107,7 +108,7 @@ static void GLFWCALL mouseButtonCallback(int button, int action)
 // Callback for platform mouse move events
 static void GLFWCALL mousePosCallback(int x, int y)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static float absx;
     static float absy;
     static float abs_posx;
@@ -176,7 +177,7 @@ static void GLFWCALL mousePosCallback(int x, int y)
 // Callback for platform mouse wheel events
 static void GLFWCALL mouseWheelCallback(int pos)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static int old_pos = 0;
 
     // Handle mousewheel as two digital triggers.
@@ -287,7 +288,7 @@ static void setWindowSize(int w, int h)
 
 int Platform_init(int width, int height, BOOL fullscreen)
 {
-    assert(!isInitialized);
+    smug_assert(!isInitialized);
     NOTIFY("Initializing platform layer");
     if (!glfwInit())
     {
@@ -335,7 +336,7 @@ BOOL Platform_isInitialized(void)
 
 void Platform_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     NOTIFY("Terminating platform layer");
     glfwCloseWindow();
     glfwTerminate();
@@ -452,7 +453,7 @@ void Platform_update(void)
 
 void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPUTSTATE state))
 {
-    assert(NULL != handler);
+    smug_assert(NULL != handler);
 
     inputHandler = handler;
 }
@@ -464,24 +465,24 @@ void Platform_unregisterInputHandler(void)
 
 INPUTSTATE Platform_getInputState(int device, int trigger)
 {
-    assert(device >= DEVICE_BASE && device <= DEVICE_LAST);
+    smug_assert(device >= DEVICE_BASE && device <= DEVICE_LAST);
     switch (device)
     {
         case DEVICE_KEYBOARD:
         {
-            assert(trigger >= KEY_BASE && trigger <= KEY_LAST);
+            smug_assert(trigger >= KEY_BASE && trigger <= KEY_LAST);
             return keyState[trigger];
             break;
         }
         case DEVICE_MOUSE:
         {
-            assert(trigger >= MOUSE_BASE && trigger <= MOUSE_LAST);
+            smug_assert(trigger >= MOUSE_BASE && trigger <= MOUSE_LAST);
             return mouseState[trigger];
             break;
         }
         default:
         {
-            assert(trigger >= JOYSTICK_BASE && trigger <= JOYSTICK_LAST);
+            smug_assert(trigger >= JOYSTICK_BASE && trigger <= JOYSTICK_LAST);
             return joyState[device - DEVICE_JOYSTICK_BASE].state[trigger];
             break;
         }

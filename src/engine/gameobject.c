@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "gameobject.h"
 #include <stdlib.h>
 
@@ -8,7 +9,7 @@
 
 static void _invariant(GameObject* self)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
 }
 
 GameObject* GameObject_new(void)
@@ -108,9 +109,9 @@ void GameObject_addDrawable(GameObject* self, Drawable* d)
     // for (i = 0; i < drawableIndex; i++)
     // {
         // node = node->next;
-        // assert(node != NULL);
+        // smug_assert(node != NULL);
     // }
-    // assert(node->item != NULL);
+    // smug_assert(node->item != NULL);
     // return (Drawable*)node->item;
 // }
 

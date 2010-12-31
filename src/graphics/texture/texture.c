@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "texture.h"
 
 #include <stdlib.h>
@@ -6,7 +7,7 @@
 
 static Texture* loadTextureFromImage(Texture* tex, Image* image)
 {
-    assert(image != NULL);
+    smug_assert(image != NULL);
 
     unsigned int texid;
 

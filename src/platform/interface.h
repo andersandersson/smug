@@ -12,4 +12,6 @@
 
 void smugSetLogicCallback(void (*callback)(void));
 
+double smugGetTime(void);
+
 #endif // SMUG_PLATFORM_INTERFACE_H

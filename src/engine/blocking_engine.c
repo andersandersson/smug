@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "common/common.h"
 #include "common/signal.h"
 #include "platform/platform.h"
@@ -8,7 +9,7 @@
 
 void Engine_run(void)
 {
-    assert(Engine_isInitialized());
+    smug_assert(Engine_isInitialized());
     if (!Engine_isInitialized())
         return;
 

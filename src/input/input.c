@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "input.h"
 
 #include <stdlib.h>
@@ -59,7 +60,7 @@ static void initHookArray(void)
 // A helper function for freeing trigger hook table
 static void freeHooksPart(void* hooklist)
 {
-    assert(NULL != hooklist);
+    smug_assert(NULL != hooklist);
     LinkedList* list = (LinkedList*)hooklist;
     LinkedList_deleteContents(list, &Hook_delete);
     LinkedList_delete(list);
@@ -68,7 +69,7 @@ static void freeHooksPart(void* hooklist)
 // A helper function for freeing trigger hook table
 static void freeTriggersPart(void* triggerarray)
 {
-    assert(NULL != triggerarray);
+    smug_assert(NULL != triggerarray);
     ArrayList_deleteContents(triggerarray, &freeHooksPart);
     ArrayList_delete(triggerarray);
 }
@@ -76,7 +77,7 @@ static void freeTriggersPart(void* triggerarray)
 // Free the hook table
 static void freeHookArray(void)
 {
-    assert(NULL != hooks_devices);
+    smug_assert(NULL != hooks_devices);
     ArrayList_deleteContents(hooks_devices, &freeTriggersPart);
     ArrayList_delete(hooks_devices);
     hooks_devices = NULL;
@@ -93,7 +94,7 @@ static void setHook(unsigned int device, unsigned int trigger, void* data, int (
 // Handle incoming input events
 static void inputHandler(int device, int trigger, INPUTSTATE state)
 {
-    assert(NULL != hooks_devices);
+    smug_assert(NULL != hooks_devices);
 	//fprintf(stderr, "Input: Got trigger: %i\n", trigger);
 
     // Call all hooks connected to the trigger
@@ -111,9 +112,9 @@ static void inputHandler(int device, int trigger, INPUTSTATE state)
 
 int Input_init(void)
 {
-    assert(!isInitialized);
-	assert(Platform_isInitialized());
-	assert(Platform_isWindowOpen());
+    smug_assert(!isInitialized);
+	smug_assert(Platform_isInitialized());
+	smug_assert(Platform_isWindowOpen());
 
     // Register this system as a handler for incoming events
 	Platform_registerInputHandler(&inputHandler);
@@ -132,7 +133,7 @@ BOOL Input_isInitialized(void)
 
 void Input_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     // This myst be done before freeing hook array
     Platform_unregisterInputHandler();
 
@@ -142,8 +143,8 @@ void Input_terminate(void)
 
 void Input_setTriggerControllerHook(unsigned int device, unsigned int trigger, void* object, int (*function)(void*, void*))
 {
-    assert(NULL != object);
-    assert(NULL != function);
+    smug_assert(NULL != object);
+    smug_assert(NULL != function);
     setHook(device, trigger, object, function);
 }
 
@@ -165,7 +166,7 @@ void Input_disconnectController(unsigned int slot)
 
 INPUTSTATE Input_getKey(unsigned int key)
 {
-	assert(key >= KEY_BASE && key <= KEY_LAST);
+	smug_assert(key >= KEY_BASE && key <= KEY_LAST);
 	return Platform_getInputState(DEVICE_KEYBOARD, key);
 }
 

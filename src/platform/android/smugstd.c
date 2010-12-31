@@ -9,3 +9,13 @@ int smug_printf(const char* format, ...)
     va_end(arguments);
     return return_value;
 }
+
+#ifndef DISABLE_ASSERTS
+void Smug_assert(int result, char* expression, char* file, int line)
+{
+    if(!result)
+    {
+        smug_printf("Assertion '%s' failed at line %d in file %s\n", expression, line, file);
+    }
+}
+#endif

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <smugstd.h>
 #include "sstring.h"
 
 // Creates a String object from the C string. The C string is NOT copied.
@@ -17,7 +18,7 @@ String* _new(char* theString)
 
 static int _findAnyCharFrom(String* self, String* chars, int start)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     int i;
 
     i = max(start, 0);
@@ -55,7 +56,7 @@ String* String_new(char* aString)
 
 void String_delete(String* self)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     free(self->mString);
     free(self);
 }
@@ -67,13 +68,13 @@ void String_deleteVoid(void* self)
 
 int String_length(String* self)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     return self->mLength;
 }
 
 BOOL String_isEmpty(String* self)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     return (self->mLength == 0);
 }
 
@@ -84,20 +85,20 @@ void String_println(String* self)
 
 char String_charAt(String* self, int pos)
 {
-    assert(NULL != self);
-    assert(pos >= 0 && pos < self->mLength);
+    smug_assert(NULL != self);
+    smug_assert(pos >= 0 && pos < self->mLength);
     return *(self->mString + pos);
 }
 
 char* String_asCstr(String* self)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     return self->mString;
 }
 
 String* String_newCopy(String* self)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     return String_new(self->mString);
 }
 
@@ -142,8 +143,8 @@ void String_toLowercase(String* self)
 
 String* String_newSubString(String* self, int start, int numChars)
 {
-    assert(NULL != self);
-    assert(start >= 0);
+    smug_assert(NULL != self);
+    smug_assert(start >= 0);
     int num;
     int i;
     char* temp;
@@ -161,8 +162,8 @@ String* String_newSubString(String* self, int start, int numChars)
 
 String* String_newConcat(String* first, String* second)
 {
-    assert(NULL != first);
-    assert(NULL != second);
+    smug_assert(NULL != first);
+    smug_assert(NULL != second);
     char* temp;
 
     temp = malloc(sizeof(char) * (first->mLength + second->mLength + 1));
@@ -173,14 +174,14 @@ String* String_newConcat(String* first, String* second)
 
 String* String_newReplace(String* self, String* find, String* replace)
 {
-    assert(!"Unimplemented: String_newReplace.");
+    smug_assert(!"Unimplemented: String_newReplace.");
     return NULL;
 }
 
 String* String_newReplaceChar(String* self, char find, String* replace)
 {
-    assert(NULL != self);
-    assert(NULL != replace);
+    smug_assert(NULL != self);
+    smug_assert(NULL != replace);
     char* newString;
     int write;
     int read;
@@ -207,13 +208,13 @@ String* String_newReplaceChar(String* self, char find, String* replace)
         read = String_findCharFrom(self, find, read);
     }
     strncpy(newString + write, self->mString + lastRead, self->mLength - lastRead);
-    assert(write + (self->mLength - lastRead) == strlen(newString));
+    smug_assert(write + (self->mLength - lastRead) == strlen(newString));
     return _new(newString);
 }
 
 void String_crop(String* self, int start, int numChars)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     String* temp;
     temp = String_newSubString(self, start, numChars);
     free(self->mString);
@@ -224,8 +225,8 @@ void String_crop(String* self, int start, int numChars)
 
 BOOL String_equalAscii(String* first, String* second)
 {
-    assert(NULL != first);
-    assert(NULL != second);
+    smug_assert(NULL != first);
+    smug_assert(NULL != second);
     int i;
     BOOL fail;
 
@@ -262,7 +263,7 @@ BOOL String_equalAlpha(String* first, String* second)
 
 int String_occurences(String* self, char find)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     int i;
     int n;
     i = 0;
@@ -308,7 +309,7 @@ int String_find(String* self, String* find)
 
 BOOL _compSkewed(String* self, int pos, String* find)
 {
-    assert(pos < self->mLength);
+    smug_assert(pos < self->mLength);
     if (find->mLength > self->mLength - pos) return FALSE;
     return 0 == strncmp(self->mString + pos, find->mString, self->mLength);
 }
@@ -340,7 +341,7 @@ int String_findChar(String* self, char c)
 
 int String_findCharFrom(String* self, char c, int start)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     int i;
 
     i = max(start, 0);
@@ -358,7 +359,7 @@ int String_findCharFrom(String* self, char c, int start)
 
 int String_findCharReverseFrom(String* self, char c, int start)
 {
-    assert(NULL != self);
+    smug_assert(NULL != self);
     int i;
 
     i = min(start, self->mLength - 1);

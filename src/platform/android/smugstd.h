@@ -7,4 +7,11 @@
 
 int smug_printf(const char* format, ...);
 
+#ifndef DISABLE_ASSERTS
+    void Smug_assert(int result, char* expression, char* file, int line);
+    #define smug_assert(x) Smug_assert(x, #x, __FILE__, __LINE__)
+#else
+    #define smug_assert(x) x
+#endif
+
 #endif /* SMUGSTD_H_INCLUDED */

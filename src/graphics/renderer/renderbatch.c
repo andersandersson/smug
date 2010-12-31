@@ -52,7 +52,7 @@ RenderBatch* RenderBatch_new(unsigned int objectSize, Texture* texture, unsigned
 
 void RenderBatch_delete(void* batch)
 {
-    assert(NULL != batch);
+    smug_assert(NULL != batch);
 
     RenderBatch* thebatch = (RenderBatch*)batch;
     BatchData_delete(thebatch->data);
@@ -70,16 +70,16 @@ void RenderBatch_delete(void* batch)
 
 unsigned int RenderBatch_getSize(RenderBatch* batch)
 {
-    assert(NULL != batch);
+    smug_assert(NULL != batch);
     return batch->dataSize;
 }
 
 void RenderBatch_addDrawable(RenderBatch* batch, Drawable* drawable)
 {
-    assert(NULL != batch);
-    assert(NULL != drawable);
-    assert(Drawable_getTexture(drawable) == batch->texture);
-    assert(Drawable_getObjectSize(drawable) == batch->objectSize);
+    smug_assert(NULL != batch);
+    smug_assert(NULL != drawable);
+    smug_assert(Drawable_getTexture(drawable) == batch->texture);
+    smug_assert(Drawable_getObjectSize(drawable) == batch->objectSize);
 
     // Add drawable to list
     LinkedList_addLast(batch->drawables, drawable);

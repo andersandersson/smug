@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "log.h"
 #include "common/console.h"
 #include "utils/linkedlist.h"
@@ -44,13 +45,13 @@ BOOL Log_isInitialized(void)
 
 void Log_terminate(void)
 {
-    assert(_isInitialized());
+    smug_assert(_isInitialized());
     LinkedList_delete(gPrefixStack);
 }
 
 void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
 {
-    assert(_isInitialized());
+    smug_assert(_isInitialized());
     char* format;
     char message[CONSOLE_PRINT_BUFFER_SIZE];
     char flag[64];
@@ -164,7 +165,7 @@ void _Log_print(int level, char* prefix, char* file, int line, char* fmt, int ne
 
 void Log_setLevel(int level)
 {
-    assert(_isInitialized());
+    smug_assert(_isInitialized());
     gCurrentLogLevel = level;
 }
 
@@ -175,19 +176,19 @@ int Log_getLevel(void)
 
 void Log_setFormatString(int level, char* format_string)
 {
-    assert(_isInitialized());
+    smug_assert(_isInitialized());
     gFormatString = format_string;
 }
 
 char* Log_getFormatString(int level)
 {
-    assert(_isInitialized());
+    smug_assert(_isInitialized());
     return gFormatString;
 }
 
 void Log_pushPrefix(char* prefix)
 {
-    assert(_isInitialized());
+    smug_assert(_isInitialized());
     //if(NULL == gPrefixStack)
     //{
     //    gPrefixStack = LinkedList_new();
@@ -199,7 +200,7 @@ void Log_pushPrefix(char* prefix)
 char* Log_popPrefix(void)
 {
     char* item = NULL;
-    assert(_isInitialized());
+    smug_assert(_isInitialized());
 
     //if(NULL == gPrefixStack)
     //{

@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "engine.h"
 
 #include "stdio.h"
@@ -21,12 +22,12 @@ static LinkedList* gGameObjects = NULL;
 // Checks that all subsystems have been initialized.
 void _assertSubsystemsInitialized(void)
 {
-	assert(Log_isInitialized());
-    assert(Platform_isInitialized());
-    assert(Signal_isInitialized());
-    assert(Input_isInitialized());
-    assert(Graphics_isInitialized());
-    assert(Physics_isInitialized());
+	smug_assert(Log_isInitialized());
+    smug_assert(Platform_isInitialized());
+    smug_assert(Signal_isInitialized());
+    smug_assert(Input_isInitialized());
+    smug_assert(Graphics_isInitialized());
+    smug_assert(Physics_isInitialized());
 }
 
 BOOL _subsystemsInitialized(void)
@@ -43,7 +44,7 @@ int Engine_init(BOOL verbose, BOOL console)
 {
     int logLevel;
 
-    assert(!gInitialized);
+    smug_assert(!gInitialized);
     if (!Log_init())
     {
       return 0;
@@ -93,7 +94,7 @@ int Engine_init(BOOL verbose, BOOL console)
 
     gInitialized = TRUE;
     _assertSubsystemsInitialized();
-//    assert(_subsystemsInitialized);
+//    smug_assert(_subsystemsInitialized);
     return 1;
 }
 
@@ -104,7 +105,7 @@ BOOL Engine_isInitialized(void)
 
 void Engine_terminate(void)
 {
-    assert(gInitialized);
+    smug_assert(gInitialized);
     NOTIFY("Terminating engine...");
     Log_indent();
 
@@ -143,7 +144,7 @@ void Engine_terminate(void)
 
 void Engine_addObject(GameObject* newObj)
 {
-    assert(gInitialized);
+    smug_assert(gInitialized);
     LinkedList_addLast(gGameObjects, newObj);
     // Add all drawables in the object to the graphics engine.
     Node* node;
@@ -155,7 +156,7 @@ void Engine_addObject(GameObject* newObj)
 
 void Engine_removeObject(GameObject* obj)
 {
-    assert(gInitialized);
+    smug_assert(gInitialized);
     LinkedList_removeItem(gGameObjects, obj);
     Node* node;
     for (node = obj->drawables->first; node != NULL; node = node->next)

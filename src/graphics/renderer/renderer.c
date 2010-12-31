@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "renderer.h"
 
 #include <math.h>
@@ -148,8 +149,8 @@ void Renderer_render(Renderer* renderer)
 
 void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
 {
-    assert(NULL != renderer);
-    assert(NULL != drawable);
+    smug_assert(NULL != renderer);
+    smug_assert(NULL != drawable);
 
 
     Layer* layer = ArrayList_get(renderer->layers, Drawable_getLayer(drawable));
@@ -164,14 +165,14 @@ void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
 
 Camera* Renderer_getCamera(Renderer* renderer)
 {
-    assert(NULL != renderer);
+    smug_assert(NULL != renderer);
 
     return renderer->camera;
 }
 
 void Renderer_setupLayer(Renderer* renderer, unsigned int id, float parallax)
 {
-    assert(NULL != renderer);
+    smug_assert(NULL != renderer);
 
     Layer* layer = ArrayList_get(renderer->layers, id);
     if (NULL == layer )

@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "signal.h"
 #include "platform/threads.h"
 
@@ -7,7 +8,7 @@ static BOOL isInitialized = FALSE;
 
 int Signal_init(void)
 {
-    assert(!isInitialized);
+    smug_assert(!isInitialized);
     _signalMutex = Mutex_new();
 
     if(!Mutex_isInitialized(_signalMutex))
@@ -28,7 +29,7 @@ BOOL Signal_isInitialized(void)
 
 void Signal_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     Mutex_delete(_signalMutex);
 }
 

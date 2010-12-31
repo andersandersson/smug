@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "layer.h"
 
 #include "stdlib.h"
@@ -40,8 +41,8 @@ void Layer_delete(void* layer)
 
 void Layer_addDrawable(Layer* layer, Drawable* drawable)
 {
-    assert(NULL != layer);
-    assert(NULL != drawable);
+    smug_assert(NULL != layer);
+    smug_assert(NULL != drawable);
 
     // find the proper batch to put the drawable in
 
@@ -96,7 +97,7 @@ static void doForEachBatch(Layer* layer, void (*batchFunc)(RenderBatch*))
 
 void Layer_render(Layer* layer)
 {
-    assert(NULL != layer);
+    smug_assert(NULL != layer);
 
     // write all batches
     doForEachBatch(layer, RenderBatch_write);
@@ -108,11 +109,11 @@ void Layer_render(Layer* layer)
 
 float Layer_getParallax(Layer* layer)
 {
-    assert(NULL != layer);
+    smug_assert(NULL != layer);
     return layer->parallax;
 }
 void Layer_setParallax(Layer* layer, float value)
 {
-    assert(NULL != layer);
+    smug_assert(NULL != layer);
     layer->parallax = value;
 }

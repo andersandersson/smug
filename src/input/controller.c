@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "controller.h"
 
 #include "common/log.h"
@@ -46,7 +47,7 @@ void Axis_delete(void* axis)
 
 Controller* Controller_new(ControllerType* type)
 {
-    assert(NULL != type);
+    smug_assert(NULL != type);
 	Controller* c = (Controller*)malloc(sizeof(Controller));
 
 	c->_slot = 0;
@@ -61,7 +62,7 @@ Controller* Controller_new(ControllerType* type)
 
 void Controller_delete(void* controller)
 {
-	assert(NULL != controller);
+	smug_assert(NULL != controller);
 	Controller* c = (Controller*)controller;
 
     ArrayList_deleteContents(c->buttons, &Button_delete);

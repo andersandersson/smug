@@ -35,7 +35,7 @@ static void windowStateChangeCallback(SMUG_WINDOW_STATE_CHANGE state)
 
 int Platform_init(int width, int height, BOOL fullscreen)
 {
-    assert(!isInitialized);
+    smug_assert(!isInitialized);
     NOTIFY("Initializing platform layer");
     // if (!glfwInit())
     // {
@@ -65,7 +65,7 @@ BOOL Platform_isInitialized(void)
 
 void Platform_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     NOTIFY("Terminating platform layer");
     // glfwCloseWindow();
     // glfwTerminate();

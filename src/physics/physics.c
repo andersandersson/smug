@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "physics.h"
 #include "debug.h"
 
@@ -241,7 +242,7 @@ void CollisionData_delete(CollisionData* data)
 
 int Physics_init(void)
 {
-    assert(!isInitialized);
+    smug_assert(!isInitialized);
 
     body_map = Map_new();
     collision_hooks = Map_new();
@@ -260,7 +261,7 @@ BOOL Physics_isInitialized(void)
 
 void Physics_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     MapNode* node;
 
     for(node = body_map->first; node != NULL; node = node->next)

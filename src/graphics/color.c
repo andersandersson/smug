@@ -1,3 +1,4 @@
+#include <smugstd.h>
 #include "color.h"
 
 #include "common/common.h"
@@ -15,7 +16,7 @@ Color* Color_new(float r, float g, float b, float a)
 
 void Color_delete(Color* c)
 {
-    assert(NULL != c);
+    smug_assert(NULL != c);
     free(c);
 }
 
