@@ -1,7 +1,6 @@
 #include "renderbatch.h"
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <smugstd.h>
 
 #include "common/log.h"
 
@@ -122,7 +121,6 @@ void RenderBatch_write(RenderBatch* currentBatch)
 
         node = node->next;
     }
-
     currentBatch->dataSize = writepos;
 
 }
@@ -187,15 +185,18 @@ void RenderBatch_render(RenderBatch* currentBatch)
             break;
         }
         case 3:
+        case 6:
         {
             glDrawArrays(GL_TRIANGLES, 0, batchSize);
             break;
         }
+#ifndef SMUG_GLES
         case 4:
         {
             glDrawArrays(GL_QUADS, 0, batchSize);
             break;
         }
+#endif /* SMUG_GLES */
         default:
         {
             glDrawArrays(GL_TRIANGLE_FAN, 0, batchSize);
