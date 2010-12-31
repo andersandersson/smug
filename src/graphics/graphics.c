@@ -87,14 +87,16 @@ static int setupGL(void)
 
 void Graphics_setWindowSize(double w, double h)
 {
+    // glViewport(0, 0, (int)w, (int)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
 #ifdef SMUG_GLES
-	glOrthox(FIXED(0.0), FIXED(w), FIXED(h), FIXED(0.0), FIXED(-1.0), FIXED(1.0));
+	glOrthof(0.0f, (float)w, (float)h, 0.0f, -1.0f, 1.0f);
 #else
 	glOrtho(0, w, h, 0, -1, 1);
 #endif /* SMUG_GLES */
+
+    glMatrixMode(GL_MODELVIEW);
 }
 
 int Graphics_init()
@@ -131,6 +133,8 @@ void Graphics_render(void)
     //glLoadIdentity(); (called in Renderer_render)
 
     Renderer_render(sceneRenderer);
+    // glFlush();
+    // glFinish();
 }
 
 void Graphics_addDrawable(Drawable* d)
