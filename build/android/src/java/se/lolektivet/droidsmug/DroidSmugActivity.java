@@ -247,7 +247,6 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
 
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-        System.out.println("onKeyDown, keyCode: "+keyCode);
         if (NativeFunctions.nativeKeyDown(keyCode))
         {
             return true;
@@ -259,7 +258,6 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
     }
     public boolean onKeyUp(int keyCode, KeyEvent event)
     {
-        System.out.println("onKeyUp, keyCode: "+keyCode);
         if (NativeFunctions.nativeKeyUp(keyCode))
         {
             return true;
@@ -274,13 +272,25 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
     {
         if (event.getAction() == KeyEvent.ACTION_DOWN)
         {
-            System.out.println("onKeyDown, keyCode: "+keyCode);
-            return NativeFunctions.nativeKeyDown(keyCode);
+            if (NativeFunctions.nativeKeyUp(keyCode))
+            {
+                return true;
+            }
+            else
+            {
+                return super.onKeyUp(keyCode, event);
+            }
         }
         if (event.getAction() == KeyEvent.ACTION_UP)
         {
-            System.out.println("onKeyUp, keyCode: "+keyCode);
-            return NativeFunctions.nativeKeyUp(keyCode);
+            if (NativeFunctions.nativeKeyUp(keyCode))
+            {
+                return true;
+            }
+            else
+            {
+                return super.onKeyUp(keyCode, event);
+            }
         }
         return false;
     }
