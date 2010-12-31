@@ -6,7 +6,6 @@
   <setup import="false"/>
 
   <property name="manifest.package" value="se.lolektivet.droidsmug" />
-  <property name="native.classes" value="se.lolektivet.droidsmug.NativeFunctions"/>
 
   <target name="setup">
   </target>

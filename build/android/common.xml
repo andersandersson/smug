@@ -133,12 +133,16 @@
   <property name="adb.device.arg" value="" />
 
   <property name="android.tools.dir" location="${sdk.dir}/tools" />
+  <property name="android.platform.tools.dir" location="${sdk.dir}/platform-tools" />
   <!-- Name of the application package extracted from manifest file -->
   <!-- <property name="manifest.package" value="se.lolektivet.jolivi" /> -->
   <!-- xpath input="AndroidManifest.xml" expression="/manifest/@package"
               output="manifest.package" / -->
 
   <!-- Input directories -->
+  <property name="droidsmug.source.dir" value="${droidsmug.basedir}/src/java" />
+  <property name="droidsmug.source.abs.dir" value="${droidsmug.basedir}/src/java" />
+
   <property name="source.dir" value="${build.dir}/src/java" />
   <property name="source.abs.dir" location="${source.dir}" />
   <property name="resource.dir" value="${build.dir}/res" />
@@ -182,6 +186,9 @@
   <property name="out.release.package"
             location="${out.abs.dir}/${ant.project.name}-release.apk" />
 
+  <property name="resource.package.file.name"
+                value="${ant.project.name}.ap_" />
+
   <!-- Verbosity -->
   <property name="verbose" value="false" />
   <!-- This is needed by emma as it uses multilevel verbosity instead of simple 'true' or 'false'
@@ -202,7 +209,7 @@
 
   <!-- Tools -->
   <condition property="exe" value=".exe" else=""><os family="windows" /></condition>
-  <property name="adb" location="${android.tools.dir}/adb${exe}" />
+  <property name="adb" location="${android.platform.tools.dir}/adb${exe}" />
   <property name="zipalign" location="${android.tools.dir}/zipalign${exe}" />
 
   <!-- Emma configuration -->
@@ -251,10 +258,13 @@
     <sequential>
       <apkbuilder
             outfolder="${out.abs.dir}"
-            basename="${ant.project.name}"
-            signed="@{sign.package}"
+            apkfilepath="${out.debug.unaligned.package}"
+            resourcefile="${resource.package.file.name}"
+            debugsigning="true"
+            debugpackaging="true"
+            hascode="true"
             verbose="${verbose}">
-        <file path="${intermediate.dex.file}" />
+        <dex path="${intermediate.dex.file}" />
         <sourcefolder path="${source.abs.dir}" />
         <nativefolder path="${native.libs.abs.dir}" />
         <jarfolder path="${external.libs.abs.dir}" />
@@ -283,7 +293,7 @@
   <macrodef name="install" description="Install Opera Mini onto running emulator or connected device.">
     <attribute name="adbarg" default=""/>
     <sequential>
-      <exec executable="${sdk.dir}/tools/adb" failonerror="true" outputproperty="adb.output">
+      <exec executable="${adb}" failonerror="true" outputproperty="adb.output">
         <arg line="@{adbarg} install"/>
         <arg value="-r"/>
         <arg value="${out.debug.package}"/>
@@ -293,11 +303,11 @@
           <contains string="${adb.output}" substring="Success"/>
         </not>
         <then>
-          <exec executable="${sdk.dir}/tools/adb" failonerror="true">
+          <exec executable="${adb}" failonerror="true">
             <arg line="@{adbarg} uninstall"/>
             <arg value="${manifest.package}"/>
           </exec>
-          <exec executable="${sdk.dir}/tools/adb" failonerror="true">
+          <exec executable="${adb}" failonerror="true">
             <arg line="@{adbarg} install"/>
             <arg value="${out.debug.package}"/>
           </exec>
@@ -365,6 +375,12 @@
           description="Compiles project's .java files into .class files">
     <!-- If android rules are used for a test project, its classpath should include
          tested project's location -->
+    <if>
+      <isfalse value="${barebone}"/>
+      <then>
+        <compile-droidsmug/>
+      </then>
+    </if>
     <condition property="extensible.classpath"
                value="${tested.project.abs.dir}/${out.classes.dir}" else=".">
       <isset property="tested.project.abs.dir" />
@@ -387,6 +403,18 @@
     </javac>
   </target>
 
+  <macrodef name="compile-droidsmug">
+    <sequential>
+      <javac encoding="ascii" target="1.5" debug="true" extdirs=""
+              destdir="${out.classes.abs.dir}"
+              bootclasspathref="android.target.classpath"
+              verbose="${verbose}" classpath="${extensible.classpath}"
+              includeAntRuntime="false">
+        <src path="${droidsmug.source.abs.dir}" />
+      </javac>
+    </sequential>
+  </macrodef>
+
   <!-- Converts this project's .class files into .dex files -->
   <target name="-dex" depends="-compile">
     <dex-helper />
@@ -400,12 +428,14 @@
   <target name="-package-resources">
     <aaptexec executable="${aapt}"
               command="package"
+              debug="${true}"
               manifest="AndroidManifest.xml"
-              resources="${resource.abs.dir}"
               assets="${asset.abs.dir}"
               androidjar="${android.jar}"
-              outfolder="${out.abs.dir}"
-              basename="${ant.project.name}" />
+              resourcefilename="${resource.package.file.name}"
+              apkfolder="${out.abs.dir}">
+      <res path="${resource.abs.dir}" />
+    </aaptexec>
   </target>
 
   <!-- Packages the application and sign it with a debug key. -->
@@ -524,8 +554,6 @@
 
   <target name="clean" description="Removes output files created by other targets.">
     <delete dir="${out.abs.dir}" verbose="${verbose}" />
-    <delete dir="${droidsmug.basedir}/libs" verbose="${verbose}" />
-    <delete dir="${droidsmug.basedir}/obj" verbose="${verbose}" />
   </target>
 
   <!-- Targets for code-coverage measurement purposes, invoked from external file -->
@@ -644,9 +672,14 @@ APP_MODULES := smug ${local.module}
     <copy file="${build.dir}/jni/Android.mk" todir="${out.abs.dir}"/>
   </target>
 
+  <property name="droidsmug.classes" value="se.lolektivet.droidsmug.NativeFunctions"/>
+
   <macrodef name="run.javah">
     <sequential>
-      <javah class="${native.classes}"
+      <condition property="in.classes" value="${droidsmug.classes}" else="${droidsmug.classes},${native.classes}">
+        <istrue value="${barebone}"/>
+      </condition>
+      <javah class="${in.classes}"
           destdir="${headers.abs.dir}"
           verbose="${verbose}"
           classpath="${out.classes.dir}">
