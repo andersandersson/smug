@@ -10,4 +10,6 @@
     BOOL canSetWindowSize;
 } SmugCapabilities; */
 
+void smugSetLogicCallback(void (*callback)(void));
+
 #endif // SMUG_PLATFORM_INTERFACE_H

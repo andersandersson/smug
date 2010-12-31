@@ -61,6 +61,7 @@ LOCAL_SRC_FILES := \
     utils/vector.c \
     platform/android/platform/opengl/importgl.c \
     common/signal.c \
+    platform/interface.c \
     platform/android/threads.c \
     platform/android/platform.c \
     platform/android/input.c \
