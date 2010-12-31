@@ -22,6 +22,7 @@ GameObject* GameObject_new(void)
     go->bodies = LinkedList_new();
     go->visible = TRUE;
     go->tag = NULL;
+    go->position = Vector_create2d(0, 0);
 
     return go;
 }
