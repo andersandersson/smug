@@ -134,12 +134,14 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowRestored)
 SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowActivated)
   (JNIEnv* env, jclass clazz)
 {
+    Platform_enableLogicCallback(TRUE);
     windowStateChangeCallback(SMUG_ACTIVATED);
 }
 
 SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeWindowDeactivated)
   (JNIEnv* env, jclass clazz)
 {
+    Platform_enableLogicCallback(FALSE);
     windowStateChangeCallback(SMUG_DEACTIVATED);
 }
 
@@ -180,7 +182,7 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeHeartbeat)
 
 TIME Platform_getTime(void)
 {
-    return (TIME)0;
+    return ((double)clock()) / ((double)CLOCKS_PER_SEC);
 }
 
 void Platform_sleep(TIME seconds)
@@ -210,6 +212,7 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeInit)
 SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeRender)
   (JNIEnv* env, jclass clazz)
 {
+    Graphics_render();
 }
 
 /*
@@ -250,6 +253,11 @@ SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeTouchUp)
 SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeKeyDown)
   (JNIEnv* env, jclass clazz, jint keyCode)
 {
+    if (keyCode == 4)
+    {
+        return JNI_FALSE;
+    }
+    return JNI_TRUE;
 }
 
 /*
@@ -260,6 +268,11 @@ SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeKeyDown)
 SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeKeyUp)
   (JNIEnv* env, jclass clazz, jint keyCode)
 {
+    if (keyCode == 4)
+    {
+        return JNI_FALSE;
+    }
+    return JNI_TRUE;
 }
 
 /*
