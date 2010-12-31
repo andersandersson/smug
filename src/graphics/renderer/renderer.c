@@ -22,7 +22,8 @@ Renderer* Renderer_new(void)
     Renderer* ret = (Renderer*)malloc(sizeof(Renderer));
     ret->layers = ArrayList_new();
     ret->layercount = 0;
-    ret->camera = Camera_new(Vector_multiply(Platform_getWindowSize(), 0.5));
+    // ret->camera = Camera_new(Vector_multiply(Platform_getWindowSize(), 0.5));
+    ret->camera = Camera_new(Vector_create2d(0.0, 0.0));
 
     return ret;
 }
