@@ -3,6 +3,8 @@
 #include "common/common.h"
 #include <stdlib.h>
 
+static Rectangle newRect;
+
 Rectangle* Rectangle_new(void)
 {
     Rectangle* r = malloc(sizeof(Rectangle));
@@ -12,10 +14,9 @@ Rectangle* Rectangle_new(void)
 
 Rectangle Rectangle_createFromXYWH(float x, float y, float w, float h)
 {
-    static Rectangle r;
-    r.pos = Point_createFromXY(x,y);
-    r.size = Vector_create2d(w,h);
-    return r;
+    newRect.pos = Point_createFromXY(x,y);
+    newRect.size = Vector_create2d(w,h);
+    return newRect;
 }
 
 float Rectangle_getX(Rectangle* r)
