@@ -9,6 +9,11 @@
 #include <common/common.h>
 #endif /* INTERNAL_INCLUDE */
 
+#include <graphics/interface.h>
+
+struct GameObject;
+typedef struct GameObject* SmugObject;
+
 /** Initialize Engine
   *
   * @return Returns zero on error, non-zero on success.
@@ -26,7 +31,12 @@ SMUGEXPORT void smugTerminate(void);
 /* See note in interface.c */
 /* void smugRun(void); */
 
-/* int smugAddObject(SmugObject* gameObject); */
+SMUGEXPORT SmugObject smugObject_new(void);
+SMUGEXPORT void smugObject_delete(SmugObject);
+SMUGEXPORT void smugObject_setPos(SmugObject obj, float x, float y);
+SMUGEXPORT void smugObject_addDrawable(SmugObject obj, SmugDrawable d);
+SMUGEXPORT int smugAddObject(SmugObject obj);
+
 /* SmugObject* smugRemoveObject(int index); */
 /* void smugAddDrawableToObject(SmugObject* object, SmugDrawable* drawable); */
 /* void smugAddBodyToObject(SmugObject* object, SmugBody* drawable); */
