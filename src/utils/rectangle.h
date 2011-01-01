@@ -2,20 +2,10 @@
   * @brief Defines a rectangle type.
   */
 
-#ifndef PHYSICS_RECTANGLE_H
-#define PHYSICS_RECTANGLE_H
+#ifndef UTILS_RECTANGLE_H
+#define UTILS_RECTANGLE_H
 
-#include "utils/vector.h"
-#include "utils/point.h"
-
-/** A simple rectangle type.
-  *
-  */
-typedef struct Rectangle
-{
-    Point pos;
-    Vector size;
-} Rectangle;
+#include <utils/rectangle_type.h>
 
 /** Create a new Rectangle
   *
@@ -43,4 +33,4 @@ float Rectangle_getH(Rectangle* r);
 Rectangle Rectangle_multiplyVector(Rectangle r, Vector s);
 
 
-#endif // PHYSICS_RECTANGLE_H
+#endif // UTILS_RECTANGLE_H
