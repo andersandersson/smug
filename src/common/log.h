@@ -20,13 +20,12 @@
 #define LOG_ALL             0xFF
 
 // Define macros for the Log_Write function
-#define DEBUG(fmt, ...) Log_addEntry(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define WARNING(fmt, ...) Log_addEntry(LOG_WARNING, "WARNING", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define ERROR(fmt, ...) Log_addEntry(LOG_ERROR, "ERROR", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define NOTIFY(fmt, ...) Log_addEntry(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-#define Log_print(fmt, ...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, 0, ##__VA_ARGS__)
-#define Log_printLine(fmt, ...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, fmt, 1, ##__VA_ARGS__)
-
+#define DEBUG(...) Log_addEntry(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, ##__VA_ARGS__)
+#define WARNING(...) Log_addEntry(LOG_WARNING, "WARNING", __FILE__, __LINE__, ##__VA_ARGS__)
+#define ERROR(...) Log_addEntry(LOG_ERROR, "ERROR", __FILE__, __LINE__, ##__VA_ARGS__)
+#define NOTIFY(...) Log_addEntry(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, ##__VA_ARGS__)
+#define Log_print(...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, 0, ##__VA_ARGS__)
+#define Log_printLine(...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, 1, ##__VA_ARGS__)
 
 /** Initialize the log system (allocate memory, etc)
  */
@@ -54,7 +53,7 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
   *
   * Use the macro Log_print(char*, ...) instead
   */
-void _Log_print(int level, char* prefix, char* file, int line, char* fmt, int newline, ...);
+void _Log_print(int level, char* prefix, char* file, int line, int newline, char* fmt, ...);
 
 
 /** Set the log level to be written by Log_Write.
