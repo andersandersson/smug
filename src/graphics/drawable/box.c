@@ -49,10 +49,10 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
 #endif /* SMUG_GLES */
 
     // write colordata
-    r = drawable->color.r;
-    g = drawable->color.g;
-    b = drawable->color.b;
-    a = drawable->color.a;
+    r = Color_Rf(drawable->color);
+    g = Color_Gf(drawable->color);
+    b = Color_Bf(drawable->color);
+    a = Color_Af(drawable->color);
 
     batchdata->colorData[colorstart + 0 * 4 + 0] = r;
     batchdata->colorData[colorstart + 0 * 4 + 1] = g;

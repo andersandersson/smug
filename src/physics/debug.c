@@ -42,7 +42,7 @@ void Physics_drawLine(Point source, Point dest, Color color)
     float y2 = Point_getY(&dest);
 
     glBegin(GL_LINES);
-    glColor4f(color.r, color.g, color.b, color.a);
+    glColor4f(Color_Rf(color), Color_Gf(color), Color_Bf(color), Color_Af(color));
     glVertex3f(x1, y1, 0.0);
     glVertex3f(x2, y2, 0.0);
     glEnd();

@@ -372,9 +372,9 @@ void Physics_update(TIME time)
                 {
                     Body* body = list_node->item;
 
-                    Physics_drawShape(body->shape, body->position, Color_createFromRGBA(1.0, 0.0, 0.0, 1.0));
-                    Physics_drawLine(body->position, body->new_position, Color_createFromRGBA(0.0,1.0,0.0,1.0));
-                    Physics_drawShape(body->shape, body->new_position, Color_createFromRGBA(0.0, 1.0, 0.0, 1.0));
+                    Physics_drawShape(body->shape, body->position, Color_createFromRGBAf(1.0, 0.0, 0.0, 1.0));
+                    Physics_drawLine(body->position, body->new_position, Color_createFromRGBAf(0.0,1.0,0.0,1.0));
+                    Physics_drawShape(body->shape, body->new_position, Color_createFromRGBAf(0.0, 1.0, 0.0, 1.0));
                 }
         }
 

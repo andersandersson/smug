@@ -94,7 +94,7 @@ void Drawable_setColor(Drawable* d, Color color)
 
 void Drawable_setOpacity(Drawable* self, float opacity)
 {
-    self->color.a = opacity;
+    self->color = Color_setCompAf(self->color, opacity);
 }
 
 unsigned int Drawable_getLayer(Drawable* d)
