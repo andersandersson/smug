@@ -638,8 +638,11 @@
     <condition property="ndk.debug.arg" value="DEBUG=true" else="DEBUG=false">
       <istrue value="${debug}"/>
     </condition>
+    <condition property="ndk.parallel.arg" value="-j${ndk.parallel}" else="">
+      <isset property="ndk.parallel"/>
+    </condition>
     <exec executable="sh" dir="${out.abs.dir}" failonerror="true">
-      <arg line="${ndk.dir}/ndk-build ${ndk.verbosity.arg} ${ndk.debug.arg}"/>
+      <arg line="${ndk.dir}/ndk-build ${ndk.verbosity.arg} ${ndk.debug.arg} ${ndk.parallel.arg}"/>
     </exec>
   </target>
 

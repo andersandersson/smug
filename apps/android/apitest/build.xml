@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="droidsmugtest" default="help">
 
+  <property file="build.properties" />
   <property name="build.app" value="apitest"/>
   <import file="../../../build/android/common.xml"/>
   <setup import="false"/>
