@@ -129,7 +129,7 @@ void RenderBatch_render(RenderBatch* currentBatch)
 {
     static BOOL texture_enabled = FALSE;
 
-    int tex = 0;
+    // int tex = 0;
     if (NULL != currentBatch->texture)
     {
         if (texture_enabled != TRUE)

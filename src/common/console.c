@@ -6,8 +6,8 @@
 #include <stdarg.h>
 #include <string.h>
 
-static unsigned int gIndent = 0;
-static unsigned int gTabWidth = 4;
+// static unsigned int gIndent = 0;
+// static unsigned int gTabWidth = 4;
 
 // Internal function for printing a character
 static char _getChar()
@@ -105,7 +105,7 @@ unsigned int Console_read(char* dest, unsigned int maxlength)
     return i;
 }
 
-void Console_run()
+void Console_run(void)
 {
     char buffer[1024];
 

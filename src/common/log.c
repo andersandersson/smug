@@ -18,10 +18,15 @@ static BOOL _isInitialized(void)
     return NULL != gPrefixStack;
 }
 
+static void _Console_putsVoid(void* str)
+{
+    Console_puts((char*)str);
+}
+
 static void _writePrefixStack(void)
 {
     // Local function: we can assume _isInitialized().
-    LinkedList_doList(gPrefixStack, Console_puts);
+    LinkedList_doList(gPrefixStack, _Console_putsVoid);
 }
 
 BOOL Log_init(void)

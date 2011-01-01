@@ -12,6 +12,11 @@ static void _invariant(GameObject* self)
     smug_assert(NULL != self);
 }
 
+void _Body_deleteVoid(void* body)
+{
+    Body_delete((Body*)body);
+}
+
 GameObject* GameObject_new(void)
 {
     GameObject* go = (GameObject*)malloc(sizeof(GameObject));
@@ -34,7 +39,7 @@ void GameObject_delete(void* self)
     _invariant(go);
 
     LinkedList_deleteContents(go->drawables, Drawable_delete);
-    LinkedList_deleteContents(go->bodies, Body_delete);
+    LinkedList_deleteContents(go->bodies, _Body_deleteVoid);
     LinkedList_delete(go->drawables);
     LinkedList_delete(go->bodies);
 

@@ -233,6 +233,7 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeDone)
 SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeTouchDown)
   (JNIEnv* env, jclass clazz)
 {
+    return JNI_FALSE;
 }
 
 /*
@@ -243,6 +244,7 @@ SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeTouchDown)
 SMUGEXPORT jboolean JNICALL JAVA_IMPLEMENTATION(nativeTouchUp)
   (JNIEnv* env, jclass clazz)
 {
+    return JNI_FALSE;
 }
 
 /*

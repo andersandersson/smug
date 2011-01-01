@@ -282,7 +282,7 @@ int String_occurences(String* self, char find)
 static int _occurencesStr(String* self, String* find, int skipNr)
 {
     int i;
-    int counter;
+    int counter = 0;
     i = String_find(self, find);
     while (-1 != i)
     {

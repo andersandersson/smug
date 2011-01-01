@@ -11,7 +11,7 @@ Hook* Hook_new(void)
 Hook* Hook_newFromFunction(void* data, int (*function)(void*, void*))
 {
     Hook* hook = Hook_new();
-    
+
     hook->data = data;
     hook->function = function;
 
@@ -30,8 +30,8 @@ int Hook_call(Hook* hook, void* arg)
 
 int Hook_callAll(LinkedList* list, void* arg)
 {
-    Node* node = NULL;    
-    int result;
+    Node* node = NULL;
+    int result = 0;
 
     for(node = list->first; node != NULL; node = node->next)
     {
@@ -44,12 +44,12 @@ int Hook_callAll(LinkedList* list, void* arg)
 int Hook_callAllWhile(LinkedList* list, void* arg, int condition)
 {
     Node* node = NULL;
-    int result;
+    int result = 0;
 
     for(node = list->first; node != NULL; node = node->next)
     {
         result = ((Hook*) node->item)->function(((Hook*) node->item)->data, arg);
-        
+
         if(result != condition)
         {
             return result;
@@ -63,12 +63,12 @@ int Hook_callAllWhile(LinkedList* list, void* arg, int condition)
 int Hook_callAllWhileNot(LinkedList* list, void* arg, int condition)
 {
     Node* node = NULL;
-    int result;
+    int result = 0;
 
     for(node = list->first; node != NULL; node = node->next)
     {
         result = ((Hook*) node->item)->function(((Hook*) node->item)->data, arg);
-        
+
         if(result == condition)
         {
             return result;

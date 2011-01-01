@@ -216,7 +216,7 @@ void PathName_delete(PathName* self)
             String_delete(self->extension);
         }
     }
-    LinkedList_deleteContents(self->path, String_delete);
+    LinkedList_deleteContents(self->path, String_deleteVoid);
     LinkedList_delete(self->path);
     free(self);
 }
@@ -240,7 +240,7 @@ PathName* PathName_newCopy(PathName* self)
             newPn->extension = String_newCopy(self->extension);
         }
     }
-    newPn->path = LinkedList_deepCopy(self->path, String_newCopy);
+    newPn->path = LinkedList_deepCopy(self->path, String_newCopyVoid);
 
     smug_assert(_invariant(newPn));
     return newPn;
@@ -344,7 +344,7 @@ void PathName_addBase(PathName* self, PathName* base)
         self->root = String_newCopy(base->root);
     }
 
-    basePath = LinkedList_deepCopy(base->path, String_newCopy);
+    basePath = LinkedList_deepCopy(base->path, String_newCopyVoid);
     LinkedList_concat(basePath, self->path);
     self->path = basePath;
 }

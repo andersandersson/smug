@@ -25,10 +25,10 @@ static JoystickInfo joyState[DEVICE_JOYSTICK_LAST - DEVICE_JOYSTICK_BASE];
 static void (*inputHandler)(int device, int trigger, INPUTSTATE state) = NULL;
 
 // Converts a platform key id to a trigger id
-static int convertKeyToTrigger(int key) { return KEY_BASE + key; }
+// static int convertKeyToTrigger(int key) { return KEY_BASE + key; }
 
 // Converts a platform moouse button id to a trigger id
-static int convertMouseButtonToTrigger(int button) { return MOUSE_BUTTON_BASE + button; }
+// static int convertMouseButtonToTrigger(int button) { return MOUSE_BUTTON_BASE + button; }
 
 // Reset the state of a joystick
 static void clearJoystickState(unsigned int joystick)

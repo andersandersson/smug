@@ -21,15 +21,15 @@ static Map* body_map;
 static Map* collision_hooks;
 static LinkedList* collision_list;
 static BOOL isInitialized = FALSE;
-static BOOL debugMode = FALSE;
+// static BOOL debugMode = FALSE;
 
 static _CollisionType* _CollisionType_new(void);
-static void _CollisionType_delete(_CollisionType* type);
+// static void _CollisionType_delete(_CollisionType* type);
 static BOOL _compareCollisionType(void* left, void* right);
-static BOOL _collidePoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t);
-static BOOL _collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end,
-			       float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end,
-			       float* t_in, float* t_out);
+// static BOOL _collidePoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t);
+// static BOOL _collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end,
+			       // float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end,
+			       // float* t_in, float* t_out);
 static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** collision_data);
 static void _detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions);
 static void _handleCollisions(LinkedList* collisions, LinkedList* hooks);
@@ -39,10 +39,10 @@ static _CollisionType* _CollisionType_new(void)
     return malloc(sizeof(_CollisionType));
 }
 
-static void _CollisionType_delete(_CollisionType* type)
-{
-    free(type);
-}
+// static void _CollisionType_delete(_CollisionType* type)
+// {
+    // free(type);
+// }
 
 static BOOL _compareCollisionType(void* left, void* right)
 {
@@ -180,7 +180,7 @@ static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** 
 static void _detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions)
 {
     CollisionData* collision_data;
-    Vector result;
+    // Vector result;
     Node* left_node;
     Node* right_node;
 
@@ -352,8 +352,8 @@ void Physics_update(TIME time)
             LinkedList* left;
             LinkedList* right;
 
-            left = Map_get(body_map, ((_CollisionType *) node->key)->left);
-            right = Map_get(body_map, ((_CollisionType *) node->key)->right);
+            left = Map_get(body_map, &((_CollisionType *) node->key)->left);
+            right = Map_get(body_map, &((_CollisionType *) node->key)->right);
 
             if(NULL != left && NULL != right)
                 {

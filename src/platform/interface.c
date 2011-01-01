@@ -8,5 +8,5 @@ void smugSetLogicCallback(void (*callback)(void))
 
 double smugGetTime(void)
 {
-    Platform_getTime();
+    return Platform_getTime();
 }

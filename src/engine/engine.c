@@ -40,6 +40,11 @@ BOOL _subsystemsInitialized(void)
            Physics_isInitialized();
 }
 
+void _Console_runVoid(void* dummy)
+{
+    Console_run();
+}
+
 int Engine_init(BOOL verbose, BOOL console)
 {
     int logLevel;
@@ -50,9 +55,9 @@ int Engine_init(BOOL verbose, BOOL console)
       return 0;
     }
 
+    logLevel = Log_getLevel();
     if (verbose)
     {
-        logLevel = Log_getLevel();
         Log_setLevel(LOG_ALL);
     }
 
@@ -82,7 +87,7 @@ int Engine_init(BOOL verbose, BOOL console)
         gConsoleThread = Thread_new("console");
 
         // Run the console main loop in a new thread
-        Thread_call(gConsoleThread, Console_run, NULL);
+        Thread_call(gConsoleThread, _Console_runVoid, NULL);
     }
 
     // gWorld = World_new();
