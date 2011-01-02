@@ -11,7 +11,7 @@ int smugPrintf(const char* format, ...)
     return return_value;
 }
 
-SmugRect smugRect_Create(float x, float y, float w, float h)
+SmugRect smugRect_create(float x, float y, float w, float h)
 {
     return Rectangle_createFromXYWH(x, y, w, h);
 }

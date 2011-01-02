@@ -7,6 +7,6 @@ typedef Rectangle SmugRect;
 
 int smugPrintf(const char* format, ...);
 
-SmugRect smugRect_Create(float x, float y, float w, float h);
+SmugRect smugRect_create(float x, float y, float w, float h);
 
 #endif // SMUG_UTILS_INTERFACE_H
