@@ -10,8 +10,10 @@
     BOOL canSetWindowSize;
 } SmugCapabilities; */
 
-void smugSetLogicCallback(void (*callback)(void));
+SMUGEXPORT void smugSetLogicCallback(void (*callback)(void));
 
-double smugGetTime(void);
+SMUGEXPORT double smugGetTime(void);
+
+SMUGEXPORT void smugSetLogicFps(float fps);
 
 #endif // SMUG_PLATFORM_INTERFACE_H

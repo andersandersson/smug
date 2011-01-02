@@ -7,6 +7,8 @@
 #include "blocking_engine.h"
 #include "engine.h"
 
+static TIME delay;
+
 void Engine_run(void)
 {
     smug_assert(Engine_isInitialized());
@@ -22,7 +24,7 @@ void Engine_run(void)
     int fps = 0;
 
     // Setup timing variables
-    TIME delay = 1.0f/30.0f;
+    delay = 1.0f/30.0f;
     TIME nexttime;
     TIME time;
     nexttime = Platform_getTime();
@@ -57,4 +59,9 @@ void Engine_run(void)
 
     Log_dedent();
     NOTIFY("Engine stopped.");
+}
+
+void Engine_setLogicFps(float fps)
+{
+    delay = 1.0 / fps;
 }

@@ -12,12 +12,34 @@
 static BOOL isInitialized = FALSE;
 
 static void(*gUserWindowResizeCallback)(int, int) = NULL;
-static void(*gUserWindowStateChangeCallback)(SMUG_WINDOW_STATE_CHANGE);
+static void(*gUserWindowStateChangeCallback)(SMUG_WINDOW_STATE_CHANGE) = NULL;
+static void(*gUserTouchEventCallback)(int, int, int) = NULL;
 static void (*gUserLogicCallback)(void) = NULL;
 static BOOL gLogicCallbackEnabled = TRUE;
 
+static jclass gHeartbeatClass = NULL;
+static jmethodID gHeartbeat_changeFps = NULL;
+static JavaVM* gJavaVm = NULL;
+
 // Size of window in pixels
 static Vector windowSize;
+
+jint JNI_OnLoad(JavaVM* vm, void* reserved)
+{
+    gJavaVm = vm;
+    return (jint)JNI_VERSION_1_2;
+}
+
+static JNIEnv* getJniEnvironment()
+{
+    smug_assert(gJavaVm != NULL);
+    JNIEnv* env;
+    if(0 != (*gJavaVm)->AttachCurrentThread(gJavaVm, &env, NULL))
+    {
+        // Error
+    }
+    return env;
+}
 
 static void setWindowSize(int w, int h)
 {
@@ -37,21 +59,12 @@ int Platform_init(int width, int height, BOOL fullscreen)
 {
     smug_assert(!isInitialized);
     NOTIFY("Initializing platform layer");
-    // if (!glfwInit())
-    // {
-        // return 0;
-    // }
-
-    // glfwDisable(GLFW_AUTO_POLL_EVENTS);
-    // glfwEnable(GLFW_STICKY_KEYS);
-    // glfwEnable(GLFW_STICKY_MOUSE_BUTTONS);
 
     setWindowSize(width, height);
-    // if (!glfwOpenWindow(width, height, 8, 8, 8, 8, 24, 0, fullscreen? GLFW_FULLSCREEN : GLFW_WINDOW))
-    // {
-        // ERROR("Could not open window.");
-        // return 0;
-    // }
+
+    JNIEnv* env = getJniEnvironment();
+    gHeartbeatClass = JCALL1(env, FindClass, "se/lolektivet/droidsmug/Heartbeat");
+    gHeartbeat_changeFps = JCALL3(env, GetStaticMethodID, gHeartbeatClass, "changeFps", "(F)V");
 
     Platform_initInput();
     isInitialized = TRUE;
@@ -107,6 +120,17 @@ void Platform_setLogicCallback(void (*callback)(void))
 void Platform_enableLogicCallback(BOOL enable)
 {
     gLogicCallbackEnabled = enable;
+}
+
+void Platform_setLogicFps(float fps)
+{
+    JNIEnv* env = getJniEnvironment();
+    JCALL3(env, CallStaticVoidMethod, gHeartbeatClass, gHeartbeat_changeFps, (jfloat)fps);
+}
+
+void Platform_setTouchEventCallback(void(*callback)(int, int, int))
+{
+    gUserTouchEventCallback = callback;
 }
 
 void Platform_setWindowResizeCallback(void(*callback)(int, int))

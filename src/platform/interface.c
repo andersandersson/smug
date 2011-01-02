@@ -1,12 +1,17 @@
 #include <platform/platform.h>
 #include "interface.h"
 
-void smugSetLogicCallback(void (*callback)(void))
+SMUGEXPORT void smugSetLogicCallback(void (*callback)(void))
 {
     Platform_setLogicCallback(callback);
 }
 
-double smugGetTime(void)
+SMUGEXPORT double smugGetTime(void)
 {
     return Platform_getTime();
+}
+
+SMUGEXPORT void smugSetLogicFps(float fps)
+{
+    Platform_setLogicFps(fps);
 }

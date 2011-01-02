@@ -13,4 +13,6 @@
   */
 void Engine_run(void);
 
+void Engine_setLogicFps(float fps);
+
 #endif // SMUG_ENGINE_BLOCKING_ENGINE_H

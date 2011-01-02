@@ -368,6 +368,11 @@ void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHA
     gUserWindowStateChangeCallback = callback;
 }
 
+void Platform_setTouchEventCallback(void(*callback)(int, int, int))
+{
+    ERROR("Touch events are not supported on this platform");
+}
+
 void Platform_setLogicCallback(void (*callback)(void))
 {
     gUserLogicCallback = callback;
@@ -376,6 +381,11 @@ void Platform_setLogicCallback(void (*callback)(void))
 void Platform_enableLogicCallback(BOOL enable)
 {
     gLogicCallbackEnabled = enable;
+}
+
+void Platform_setLogicFps(float fps)
+{
+    Engine_setLogicFps(fps);
 }
 
 void Platform_internalHeartbeat(void)

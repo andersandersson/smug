@@ -42,7 +42,7 @@ public class DroidSmugActivity extends Activity
 
     private void nativeInit()
     {
-        NativeFunctions.nativeInit(Heartbeat.Fps);
+        NativeFunctions.nativeInit(Heartbeat.getInstance().getFps());
         initGame();
         NativeFunctions.nativeWindowOpened();
     }
@@ -53,7 +53,7 @@ public class DroidSmugActivity extends Activity
         {
             nativeInit();
         }
-        DroidSmugGLSurfaceView.startHeartbeat();
+        Heartbeat.getInstance().start();
         if (callWindowRestoredOnGlInit())
         {
             NativeFunctions.nativeWindowRestored();
@@ -174,7 +174,8 @@ class OrientationHandler extends OrientationEventListener
 class Heartbeat extends TimerTask
 {
     private Timer mUpdateTimer;
-    public static final float Fps = 20.0f;
+    private float mFps = 20.0f;
+    private static Heartbeat mInstance = null;
 
     @Override
     public void run()
@@ -182,10 +183,39 @@ class Heartbeat extends TimerTask
         NativeFunctions.nativeHeartbeat();
     }
 
+    public static Heartbeat getInstance()
+    {
+        if (mInstance == null)
+        {
+            mInstance = new Heartbeat();
+        }
+        return mInstance;
+    }
+
     public void start()
     {
         mUpdateTimer = new Timer();
-        mUpdateTimer.schedule(this, 0, (int)(1000.0f / Fps));
+        mUpdateTimer.schedule(this, 0, (int)(1000.0f / mFps));
+    }
+
+    public float getFps()
+    {
+        return mFps;
+    }
+
+    private static void changeFps(float fps)
+    {
+        Heartbeat instance = getInstance();
+        if (instance.mUpdateTimer != null)
+        {
+            instance.mUpdateTimer.cancel();
+            instance.mUpdateTimer.purge();
+        }
+        instance.mFps = fps;
+        if (instance.mUpdateTimer != null)
+        {
+            instance.start();
+        }
     }
 }
 
@@ -193,7 +223,6 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
 {
     private OrientationHandler mOrientationHandler;
     private DroidSmugRenderer mRenderer;
-    private static Heartbeat mHeartbeat;
 
     public DroidSmugGLSurfaceView(DroidSmugActivity activity /* Context context */)
     {
@@ -210,12 +239,6 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
     public boolean hasGlContext()
     {
         return mRenderer.hasGlContext();
-    }
-
-    public static void startHeartbeat()
-    {
-        mHeartbeat = new Heartbeat();
-        mHeartbeat.start();
     }
 
 /*     @Override
