@@ -34,6 +34,8 @@ SMUGEXPORT void smugTerminate(void);
 SMUGEXPORT SmugObject smugObject_new(void);
 SMUGEXPORT void smugObject_delete(SmugObject);
 SMUGEXPORT void smugObject_setPos(SmugObject obj, float x, float y);
+SMUGEXPORT float smugObject_getX(SmugObject obj);
+SMUGEXPORT float smugObject_getY(SmugObject obj);
 SMUGEXPORT void smugObject_addDrawable(SmugObject obj, SmugDrawable d);
 SMUGEXPORT int smugAddObject(SmugObject obj);
 

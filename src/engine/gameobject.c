@@ -74,6 +74,18 @@ Vector GameObject_getPos(GameObject* self)
     return self->position;
 }
 
+float GameObject_getX(GameObject* self)
+{
+    _invariant(self);
+    return self->position.d[0];
+}
+
+float GameObject_getY(GameObject* self)
+{
+    _invariant(self);
+    return self->position.d[1];
+}
+
 void GameObject_addDrawable(GameObject* self, Drawable* d)
 {
     _invariant(self);

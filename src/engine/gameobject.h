@@ -48,6 +48,10 @@ void GameObject_setPos(GameObject* self, float x, float y);
 
 Vector GameObject_getPos(GameObject* self);
 
+float GameObject_getX(GameObject* self);
+
+float GameObject_getY(GameObject* self);
+
 /** Assign a Drawable to the GameObject.
   *
   * @relatesalso GameObject

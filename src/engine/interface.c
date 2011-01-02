@@ -41,6 +41,16 @@ SMUGEXPORT void smugObject_setPos(SmugObject obj, float x, float y)
     GameObject_setPos(obj, x, y);
 }
 
+SMUGEXPORT float smugObject_getX(SmugObject obj)
+{
+    return GameObject_getX(obj);
+}
+
+SMUGEXPORT float smugObject_getY(SmugObject obj)
+{
+    return GameObject_getY(obj);
+}
+
 SMUGEXPORT void smugObject_addDrawable(SmugObject obj, SmugDrawable d)
 {
     GameObject_addDrawable(obj, d);
