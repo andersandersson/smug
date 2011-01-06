@@ -9,7 +9,8 @@
 #define MAX(a, b) (a > b ? a : b)
 #define MIN(a, b) (a < b ? a : b)
 
-static SmugObject obj;
+static SmugObject obj1;
+static SmugObject obj2;
 static SmugObject avatar;
 static BOOL fingerAvatarConnection = FALSE;
 static BOOL moveAvatarTowardsFinger = FALSE;
@@ -25,9 +26,10 @@ static const float fps = 20.0f;
 void logicCallback(void)
 {
     double t = smugGetTime();
-    double f = sin(t) * 50;
+    double f = sin(t*2) * 200;
     // smug_printf("Gameobject position: %f, %f. Time: %f, f: %f", Vector_getX(&v), Vector_getY(&v), t, f);
-    smugObject_moveTo(obj, f, 0);
+    smugObject_moveTo(obj1, f, 0);
+    smugObject_setPos(obj2, f, 0);
     // GameObject_setOpacity(obj, ((f + 1.0) / 4.0) + 0.5);
 
     if (moveAvatarTowardsFinger)
@@ -59,11 +61,17 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_DroidSmugGame_nativeGameInit
     smugSetLogicCallback(logicCallback);
     smugSetLogicFps(fps);
 
-    obj = smugObject_new();
+    obj1 = smugObject_new();
     SmugDrawable d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
     smugDrawable_setColor(d, smugColor_create(255, 0, 0, 255));
-    smugObject_addDrawableAt(obj, d, 240.0f, 100.0f);
-    smugAddObject(obj);
+    smugObject_addDrawableAt(obj1, d, 240.0f, 100.0f);
+    smugAddObject(obj1);
+
+    obj2 = smugObject_new();
+    d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
+    smugDrawable_setColor(d, smugColor_create(0, 255, 0, 255));
+    smugObject_addDrawableAt(obj2, d, 240.0f, 60.0f);
+    smugAddObject(obj2);
 
     avatar = smugObject_new();
     d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
