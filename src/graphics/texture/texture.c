@@ -1,9 +1,10 @@
-#include <smugstd.h>
-#include "texture.h"
-
 #include <stdlib.h>
-#include "platform/opengl/opengl.h"
-#include "common/log.h"
+#include <smugstd.h>
+
+#include <common/common.h>
+#include <common/log.h>
+#include <platform/opengl/opengl.h>
+#include <graphics/texture/texture.h>
 
 static Texture* loadTextureFromImage(Texture* tex, Image* image)
 {

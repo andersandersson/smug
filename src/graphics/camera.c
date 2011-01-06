@@ -1,6 +1,11 @@
-#include <smugstd.h>
-#include "camera.h"
 #include <stdlib.h>
+#include <smugstd.h>
+
+#include <common/common.h>
+#include <utils/point.h>
+#include <utils/vector.h>
+
+#include <graphics/camera.h>
 
 Camera* Camera_new(Vector center)
 {

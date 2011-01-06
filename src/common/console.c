@@ -1,10 +1,9 @@
-#include "console.h"
-
-#include "signal.h"
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+
+#include <common/signal.h>
+#include <common/console.h>
 
 // static unsigned int gIndent = 0;
 // static unsigned int gTabWidth = 4;

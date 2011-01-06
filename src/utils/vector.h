@@ -7,10 +7,11 @@
   * @{
   */
 
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef SMUG_UTILS_VECTOR_H
+#define SMUG_UTILS_VECTOR_H
 
 #include <common/common.h>
+
 #include <utils/vector_type.h>
 
 
@@ -126,6 +127,6 @@ BOOL Vector_equal(Vector self, Vector other);
  */
 void Vector_print(Vector v);
 
-#endif
+#endif /* SMUG_UTILS_VECTOR_H */
 
 /**@}*/

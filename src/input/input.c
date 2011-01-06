@@ -1,15 +1,14 @@
 #include <smugstd.h>
-#include "input.h"
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <utils/arraylist.h>
+#include <utils/linkedlist.h>
+#include <utils/point.h>
+#include <utils/hook.h>
+#include <utils/vector.h>
+#include <graphics/graphics.h>
+#include <platform/platform.h>
 
-#include "utils/arraylist.h"
-#include "utils/linkedlist.h"
-#include "utils/hook.h"
-
-#include "graphics/graphics.h"
-#include "platform/platform.h"
+#include <input/input.h>
 
 // System init value
 static BOOL isInitialized = FALSE;

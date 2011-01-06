@@ -10,8 +10,8 @@
 #ifndef SMUG_UTILS_SSTRING_H
 #define SMUG_UTILS_SSTRING_H
 
-#include "common/common.h"
-#include "linkedlist.h"
+#include <common/common.h>
+#include <utils/linkedlist.h>
 
 /** A struct for the string type.
   *

@@ -1,12 +1,10 @@
 #ifndef SMUG_INPUT_CONTROLLER_H
 #define SMUG_INPUT_CONTROLLER_H
 
-#include "common/common.h"
-
-#include "utils/arraylist.h"
-#include "controllertype.h"
-
-#include "platform/platform.h"
+#include <common/common.h>
+#include <utils/arraylist.h>
+#include <platform/platform.h>
+#include <input/controllertype.h>
 
 /*
  * Controller

@@ -1,15 +1,14 @@
 /** This platform version is based on GLFW and the blocking version of the smug engine.
  */
 
+#include <GL/glfw.h>
 #include <smugstd.h>
-#include "platform.h"
 
-#include "GL/glfw.h"
-#include "common/log.h"
-#include "stdlib.h"
-
-#include "stdio.h"
+#include <common/common.h>
+#include <common/log.h>
 #include <engine/blocking_engine.h>
+
+#include <platform/platform.h>
 
 // Holds information of physical joystick
 typedef struct JoystickInfo

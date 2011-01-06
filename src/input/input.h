@@ -8,15 +8,14 @@
   * @{
   */
 
-#ifndef SMUG_INPUT_H
-#define SMUG_INPUT_H
+#ifndef SMUG_INPUT_INPUT_H
+#define SMUG_INPUT_INPUT_H
 
-#include "common/common.h"
-#include "utils/hook.h"
-#include "utils/point.h"
-#include "platform/platform.h"
-
-#include "controller.h"
+#include <common/common.h>
+#include <utils/hook.h>
+#include <utils/point_type.h>
+#include <platform/platform.h>
+#include <input/controller.h>
 
 /**
  * Initialize Input subsystem

@@ -1,5 +1,5 @@
 #include <platform/platform.h>
-#include "interface.h"
+#include <platform/interface.h>
 
 SMUGEXPORT void smugSetLogicCallback(void (*callback)(void))
 {

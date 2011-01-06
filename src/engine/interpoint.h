@@ -1,8 +1,8 @@
 #ifndef SMUG_ENGINE_INTERPOINT_H
 #define SMUG_ENGINE_INTERPOINT_H
 
-#include <utils/point_type.h>
 #include <common/common.h>
+#include <utils/point_type.h>
 
 typedef struct
 {

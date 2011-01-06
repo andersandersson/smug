@@ -1,6 +1,6 @@
 #include <smugstd.h>
-#include "signal.h"
-#include "platform/threads.h"
+#include <platform/threads.h>
+#include <common/signal.h>
 
 static int _signals = 0;
 static Mutex* _signalMutex = NULL;

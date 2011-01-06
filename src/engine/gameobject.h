@@ -10,13 +10,13 @@
 #ifndef SMUG_ENGINE_GAMEOBJECT_H
 #define SMUG_ENGINE_GAMEOBJECT_H
 
-#include "common/common.h"
-// #include "graphics/drawable/drawable.h"
-struct Drawable;
-#include "utils/sstring.h"
-#include "utils/vector_type.h"
+#include <common/common.h>
+#include <utils/sstring.h>
+#include <utils/vector_type.h>
 #include <utils/point_type.h>
 #include <engine/interpoint.h>
+
+struct Drawable;
 
 /** The GameObject struct.
   */
@@ -77,15 +77,6 @@ void GameObject_removeDrawable(GameObject* self, struct Drawable* drawable);
 void GameObject_setOpacity(GameObject* self, float opacity);
 
 // int GameObject_addBody(GameObject* self, Body* b);
-
-/* Render the GameObject.
-  *
-  * If the GameObject is visible and has a Drawable, that drawable is rendered.
-  *
-  * @relatesalso GameObject
-  * @param self A pointer to the GameObject to render.
-  */
-// void GameObject_render(GameObject* self);
 
 #endif //SMUG_ENGINE_GAMEOBJECT_H
 

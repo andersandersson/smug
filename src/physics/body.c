@@ -1,8 +1,11 @@
-#include "body.h"
+#include <smugstd.h>
 
-#include "common/log.h"
+#include <common/common.h>
+#include <common/log.h>
+#include <utils/point.h>
+#include <utils/vector.h>
 
-#include <stdlib.h>
+#include <physics/body.h>
 
 Body* Body_new(void)
 {

@@ -1,11 +1,11 @@
 #ifndef SMUG_UTILS_ARRAYLIST_H
 #define SMUG_UTILS_ARRAYLIST_H
 
-#include "common/common.h"
+#include <common/common.h>
 
-/** 
+/**
  * ArrayList
- * A static array-based list type. It will expand 
+ * A static array-based list type. It will expand
  * on demand and can be initiated with a capacity.
  */
 typedef struct ArrayList
@@ -55,7 +55,7 @@ void* ArrayList_get(ArrayList* list, unsigned int index);
 void* ArrayList_remove(ArrayList* list, unsigned int index);
 
 /**
- * Get the current capacity of the list, this is not 
+ * Get the current capacity of the list, this is not
  * necessarily equal to the size.
  * @param list pointer to list
  */

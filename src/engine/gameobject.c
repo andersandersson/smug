@@ -1,13 +1,14 @@
 #include <smugstd.h>
-#include "gameobject.h"
 #include <stdlib.h>
 
-#include "graphics/drawable/drawable.h"
-#include "graphics/graphics.h"
-#include "physics/body.h"
-#include "common/log.h"
+#include <graphics/drawable/drawable.h>
+#include <graphics/graphics.h>
+#include <physics/body.h>
+#include <common/log.h>
 #include <platform/platform.h>
 #include <utils/point.h>
+
+#include <engine/gameobject.h>
 
 static void _invariant(GameObject* self)
 {

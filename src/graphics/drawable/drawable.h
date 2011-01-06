@@ -7,17 +7,15 @@
   * @{
   */
 
-#ifndef SMUG_GRAPHICS_DRAWABLE_H
-#define SMUG_GRAPHICS_DRAWABLE_H
+#ifndef SMUG_GRAPHICS_DRAWABLE_DRAWABLE_H
+#define SMUG_GRAPHICS_DRAWABLE_DRAWABLE_H
 
-#include "graphics/color.h"
-#include "graphics/sprite.h"
-#include "graphics/renderer/batchdata.h"
-
-#include "utils/point.h"
-#include "utils/vector.h"
-
-#include "engine/gameobject.h"
+#include <graphics/color_type.h>
+#include <graphics/sprite.h>
+#include <graphics/renderer/batchdata.h>
+#include <utils/point_type.h>
+#include <utils/vector_type.h>
+#include <engine/gameobject.h>
 #include <engine/interpoint.h>
 
 /**
@@ -172,6 +170,6 @@ unsigned int Drawable_getTextureID(Drawable* d);
  */
 unsigned int Drawable_getObjectSize(Drawable* d);
 
-#endif //SMUG_GRAPHICS_DRAWABLE_H
+#endif // SMUG_GRAPHICS_DRAWABLE_DRAWABLE_H
 
 /**@}*/

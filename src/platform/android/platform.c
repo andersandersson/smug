@@ -1,11 +1,14 @@
-#include <common/log.h>
-#include <common/common.h>
-#include <platform/platform.h>
 #include <smugstd.h>
+
+#include <common/common.h>
+#include <common/log.h>
+#include <common/signal.h>
+#include <utils/vector.h>
 #include <graphics/graphics.h>
 #include <input/input.h>
-#include <common/signal.h>
 #include <engine/engine.h>
+
+#include <platform/platform.h>
 
 static BOOL isInitialized = FALSE;
 

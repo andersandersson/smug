@@ -1,7 +1,8 @@
 #include <smugstd.h>
-#include "arraylist.h"
 
-#include <stdlib.h>
+#include <common/common.h>
+
+#include <utils/arraylist.h>
 
 ArrayList* ArrayList_new(void)
 {

@@ -1,8 +1,10 @@
-#include "shapes.h"
-
-#include "common/log.h"
-
 #include <stdlib.h>
+
+#include <common/common.h>
+#include <common/log.h>
+#include <utils/rectangle.h>
+
+#include <physics/shapes.h>
 
 Shape* Shape_new(void)
 {

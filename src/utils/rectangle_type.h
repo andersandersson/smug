@@ -2,11 +2,11 @@
   * @brief Defines a rectangle type.
   */
 
-#ifndef UTILS_RECTANGLE_TYPE_H
-#define UTILS_RECTANGLE_TYPE_H
+#ifndef SMUG_UTILS_RECTANGLE_TYPE_H
+#define SMUG_UTILS_RECTANGLE_TYPE_H
 
-#include "utils/vector_type.h"
-#include "utils/point_type.h"
+#include <utils/vector_type.h>
+#include <utils/point_type.h>
 
 /** A simple rectangle type.
   *
@@ -17,4 +17,4 @@ typedef struct Rectangle
     Vector size;
 } Rectangle;
 
-#endif // UTILS_RECTANGLE_TYPE_H
+#endif // SMUG_UTILS_RECTANGLE_TYPE_H

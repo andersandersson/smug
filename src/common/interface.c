@@ -1,5 +1,5 @@
-#include "interface.h"
-#include "log.h"
+#include <common/log.h>
+#include <common/interface.h>
 
 void smugLogSetLevel(int level)
 {

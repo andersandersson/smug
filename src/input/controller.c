@@ -1,11 +1,12 @@
+#include <stdlib.h>
 #include <smugstd.h>
-#include "controller.h"
 
-#include "common/log.h"
-#include "platform/platform.h"
-#include "input/input.h"
+#include <common/common.h>
+#include <common/log.h>
+#include <platform/platform.h>
+#include <input/input.h>
 
-#include "stdlib.h"
+#include <input/controller.h>
 
 Button* Button_new(Controller* controller, unsigned int device, unsigned trigger)
 {

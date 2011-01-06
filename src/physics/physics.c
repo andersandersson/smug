@@ -1,15 +1,17 @@
-#include <smugstd.h>
-#include "physics.h"
-#include "debug.h"
-
-#include "common/log.h"
-
-#include "utils/linkedlist.h"
-#include "utils/vector.h"
-#include "utils/map.h"
-
 #include <math.h>
-#include <stdlib.h>
+#include <smugstd.h>
+
+#include <common/common.h>
+#include <common/log.h>
+#include <graphics/color.h>
+#include <utils/linkedlist.h>
+#include <utils/vector.h>
+#include <utils/rectangle.h>
+#include <utils/point.h>
+#include <utils/map.h>
+#include <physics/debug.h>
+
+#include <physics/physics.h>
 
 typedef struct _CollisionType
 {

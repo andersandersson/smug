@@ -11,12 +11,12 @@
 #ifndef SMUG_GRAPHICS_GRAPHICS_H
 #define SMUG_GRAPHICS_GRAPHICS_H
 
-#include "color.h"
-#include "common/common.h"
-#include "utils/rectangle.h"
-#include "utils/vector.h"
-#include "drawable/drawable.h"
-#include "graphics/camera.h"
+#include <common/common.h>
+#include <graphics/color_type.h>
+#include <utils/rectangle_type.h>
+#include <utils/vector_type.h>
+#include <graphics/drawable/drawable.h>
+#include <graphics/camera.h>
 
 
 // Predefined rendering modes

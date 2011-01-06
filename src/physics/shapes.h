@@ -10,9 +10,7 @@
 #ifndef SMUG_PHYSICS_SHAPES_H
 #define SMUG_PHYSICS_SHAPES_H
 
-#include "utils/rectangle.h"
-#include "utils/point.h"
-#include "utils/vector.h"
+#include <utils/rectangle_type.h>
 
 /** Describes the type of a Shape */
 typedef unsigned int SHAPE_TYPE;

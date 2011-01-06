@@ -1,12 +1,11 @@
-#include "renderbatch.h"
-
 #include <smugstd.h>
 
-#include "common/log.h"
+#include <common/log.h>
+#include <common/common.h>
+#include <graphics/texture/texture.h>
+#include <platform/opengl/opengl.h>
 
-#include "graphics/texture/texture.h"
-#include "platform/opengl/opengl.h"
-
+#include <graphics/renderer/renderbatch.h>
 
 extern int gVBOSupported;
 

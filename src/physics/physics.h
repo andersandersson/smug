@@ -8,11 +8,11 @@
   * @{
   */
 
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#ifndef SMUG_PHYSICS_PHYSICS_H
+#define SMUG_PHYSICS_PHYSICS_H
 
-#include "body.h"
-#include "utils/hook.h"
+#include <utils/hook.h>
+#include <physics/body.h>
 
 /** Data container for a collision
  *
@@ -48,6 +48,6 @@ void Physics_addBody(Body* body);
 void Physics_removeBody(Body* body);
 void Physics_update(TIME time);
 
-#endif
+#endif /* SMUG_PHYSICS_PHYSICS_H */
 
 /**@}*/

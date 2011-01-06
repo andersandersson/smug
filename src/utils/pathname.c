@@ -1,7 +1,8 @@
-#include <stdlib.h>
 #include <smugstd.h>
-#include "pathname.h"
-#include "linkedlist.h"
+
+#include <utils/linkedlist.h>
+
+#include <utils/pathname.h>
 
 static String* _separator = NULL;
 static String* _dot = NULL;

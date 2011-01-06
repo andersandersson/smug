@@ -1,17 +1,16 @@
 #include <smugstd.h>
-#include "engine.h"
 
-#include "stdio.h"
+#include <common/common.h>
+#include <common/signal.h>
+#include <common/console.h>
+#include <common/log.h>
+#include <physics/physics.h>
+#include <graphics/graphics.h>
+#include <input/input.h>
+#include <engine/world.h>
+#include <engine/gameobject.h>
 
-#include "common/signal.h"
-#include "common/console.h"
-#include "physics/physics.h"
-#include "graphics/graphics.h"
-#include "input/input.h"
-#include "common/log.h"
-#include "common/common.h"
-#include "world.h"
-#include "gameobject.h"
+#include <engine/engine.h>
 
 Thread* gConsoleThread = NULL;
 

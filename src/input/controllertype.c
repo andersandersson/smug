@@ -1,6 +1,8 @@
-#include "controllertype.h"
+#include <smugstd.h>
 
-#include "stdlib.h"
+#include <common/common.h>
+
+#include <input/controllertype.h>
 
 ControllerType* ControllerType_new(unsigned int buttons, unsigned int axes)
 {

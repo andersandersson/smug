@@ -1,7 +1,10 @@
-#include "interface.h"
-
+#include <common/common.h>
+#include <utils/rectangle.h>
+#include <graphics/color.h>
 #include <graphics/drawable/box.h>
 #include <graphics/drawable/drawable.h>
+
+#include <graphics/interface.h>
 
 SmugDrawable smugDrawable_newFromRect(SmugRect rect)
 {

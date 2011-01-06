@@ -1,11 +1,11 @@
-#include <smugstd.h>
-#include "log.h"
-#include "common/console.h"
-#include "utils/linkedlist.h"
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <smugstd.h>
+#include <common/console.h>
+#include <utils/linkedlist.h>
+#include <common/log.h>
 
 // As default, include all log output
 static int   gCurrentLogLevel = LOG_ALL ^ LOG_NOTIFICATION;

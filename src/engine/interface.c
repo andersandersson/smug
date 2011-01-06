@@ -1,15 +1,18 @@
+#include <smugstd.h>
+
 #include <common/common.h>
 #include <common/log.h>
-#include "engine.h"
 #include <utils/rectangle.h>
+#include <utils/point.h>
 #include <graphics/color.h>
 #include <graphics/drawable/drawable.h>
 #include <graphics/drawable/box.h>
+#include <platform/platform.h>
+#include <engine/engine.h>
 #include <engine/gameobject.h>
 #include <engine/interpoint.h>
-#include <platform/platform.h>
-#include <smugstd.h>
-#include "interface.h"
+
+#include <engine/interface.h>
 
 SMUGEXPORT int smugInit(void)
 {

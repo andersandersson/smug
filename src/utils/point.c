@@ -1,8 +1,10 @@
-#include "rectangle.h"
+#include <smugstd.h>
 
-#include "common/common.h"
+#include <common/common.h>
+#include <utils/rectangle.h>
 #include <utils/vector.h>
-#include <stdlib.h>
+
+#include <utils/point.h>
 
 static Point sp;
 

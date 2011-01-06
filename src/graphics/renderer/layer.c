@@ -1,11 +1,11 @@
+#include <stdlib.h>
 #include <smugstd.h>
-#include "layer.h"
 
-#include "stdlib.h"
+#include <graphics/renderer/renderbatch.h>
+#include <graphics/texture/texture.h>
+#include <graphics/sprite.h>
 
-#include "graphics/renderer/renderbatch.h"
-#include "graphics/texture/texture.h"
-#include "graphics/sprite.h"
+#include <graphics/renderer/layer.h>
 
 #define OBJECTSIZE_START 4
 #define TEXTURECOUNT_START 4

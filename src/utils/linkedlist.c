@@ -1,7 +1,8 @@
 #include <smugstd.h>
-#include "linkedlist.h"
 
-#include <stdlib.h>
+#include <common/common.h>
+
+#include <utils/linkedlist.h>
 
 static void _clear(LinkedList* list)
 {

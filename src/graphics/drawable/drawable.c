@@ -1,10 +1,12 @@
-#include <smugstd.h>
-#include "drawable.h"
-
-#include "graphics/graphics.h"
-
-#include "common/common.h"
 #include <stdlib.h>
+#include <smugstd.h>
+
+#include <common/common.h>
+#include <utils/point.h>
+#include <graphics/graphics.h>
+#include <graphics/color.h>
+
+#include <graphics/drawable/drawable.h>
 
 Drawable* Drawable_new(unsigned int vertexcount)
 {

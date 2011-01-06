@@ -1,11 +1,11 @@
 #include <smugstd.h>
-#include "common/common.h"
-#include "common/signal.h"
-#include "platform/platform.h"
-#include "graphics/graphics.h"
+#include <common/common.h>
+#include <common/signal.h>
+#include <platform/platform.h>
+#include <graphics/graphics.h>
 
-#include "blocking_engine.h"
-#include "engine.h"
+#include <engine/engine.h>
+#include <engine/blocking_engine.h>
 
 static TIME delay = 0.0;
 static BOOL fpsSet = FALSE;

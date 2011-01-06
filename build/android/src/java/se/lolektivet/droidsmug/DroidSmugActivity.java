@@ -360,21 +360,6 @@ class DroidSmugRenderer implements GLSurfaceView.Renderer
     {
         System.out.println("JAVASMUG: DroidSmugRenderer.onSurfaceCreated");
         activity.surfaceCreatedCallback();
-/*         if (DroidSmugActivity.callNativeInitOnGlInit())
-        {
-            NativeFunctions.nativeInit(Heartbeat.Fps);
-            NativeFunctions.nativeWindowOpened();
-        }
-        DroidSmugGLSurfaceView.startHeartbeat();
-        if (DroidSmugActivity.callWindowRestoredOnGlInit())
-        {
-            NativeFunctions.nativeWindowRestored();
-        }
-        if (DroidSmugActivity.callWindowActivatedOnGlInit())
-        {
-            NativeFunctions.nativeWindowActivated();
-        }
-        DroidSmugActivity.resetGlInitCalls(); */
         _hasGlContext = true;
     }
 

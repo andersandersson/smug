@@ -2,10 +2,10 @@
   * @brief Defines a rectangle type.
   */
 
-#ifndef UTILS_POINT_TYPE_H
-#define UTILS_POINT_TYPE_H
+#ifndef SMUG_UTILS_POINT_TYPE_H
+#define SMUG_UTILS_POINT_TYPE_H
 
-#include "utils/vector_type.h"
+#include <utils/vector_type.h>
 
 /** A simple point type.
   *
@@ -15,4 +15,4 @@ typedef struct Point
     Vector v;
 } Point;
 
-#endif // UTILS_POINT_TYPE_H
+#endif // SMUG_UTILS_POINT_TYPE_H

@@ -1,7 +1,8 @@
-#include "vector.h"
+#include <smugstd.h>
 
-#include <stdio.h>
-#include <math.h>
+#include <common/common.h>
+
+#include <utils/vector.h>
 
 Vector Vector_create2d(float x, float y)
 {
@@ -123,8 +124,8 @@ Vector Vector_normalize(Vector v)
     float length = sqrt(Vector_dotProduct(v, v));
 
     u.size = v.size;
-  
-    for(i=0; i < v.size; i++) 
+
+    for(i=0; i < v.size; i++)
     {
         u.d[i] = v.d[i] / length;
     }
@@ -169,15 +170,15 @@ void Vector_print(Vector v)
 {
     int i;
 
-    fprintf(stderr, "[");
-  
+    smug_printf("[");
+
     for(i=0; i < v.size; i++) {
-        fprintf(stderr, "%.2f", v.d[i]);
+        smug_printf("%.2f", v.d[i]);
 
         if(v.size - i > 1) {
-            fprintf(stderr, ", ");
+            smug_printf(", ");
         }
     }
 
-    fprintf(stderr, "]\n");
+    smug_printf("]\n");
 }

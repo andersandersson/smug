@@ -1,11 +1,12 @@
 #include <smugstd.h>
+
 #include <common/common.h>
 #include <common/log.h>
 #include <platform/opengl/opengl.h>
 #include <graphics/renderer/renderer.h>
 #include <platform/platform.h>
 
-#include "graphics.h"
+#include <graphics/graphics.h>
 
 Renderer* sceneRenderer = NULL;
 

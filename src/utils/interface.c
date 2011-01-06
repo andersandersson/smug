@@ -1,6 +1,8 @@
 #include <smugstd.h>
+
 #include <utils/rectangle.h>
-#include "interface.h"
+
+#include <utils/interface.h>
 
 int smugPrintf(const char* format, ...)
 {

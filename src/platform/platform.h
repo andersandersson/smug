@@ -8,13 +8,12 @@
   * @{
   */
 
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#ifndef SMUG_PLATFORM_PLATFORM_H
+#define SMUG_PLATFORM_PLATFORM_H
 
-#include "threads.h"
-#include "common/common.h"
-
-#include "utils/vector.h"
+#include <common/common.h>
+#include <platform/threads.h>
+#include <utils/vector_type.h>
 
 // Common key identifiers
 typedef float INPUTSTATE;
@@ -304,6 +303,6 @@ INPUTSTATE Platform_getInputState(int device, int trigger);
  */
 void Platform_detectJoysticks(void);
 
-#endif // PLATFORM_H
+#endif // SMUG_PLATFORM_PLATFORM_H
 
 /**@}*/

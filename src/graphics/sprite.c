@@ -1,6 +1,10 @@
 #include <smugstd.h>
-#include "sprite.h"
-#include <stdlib.h>
+
+#include <common/common.h>
+#include <utils/vector.h>
+#include <utils/rectangle.h>
+
+#include <graphics/sprite.h>
 
 Sprite* Sprite_newFromPixelCoords(Texture* texture, Rectangle rect, Vector offset)
 {

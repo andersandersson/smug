@@ -1,6 +1,5 @@
-#include "common.h"
+#include <common/common.h>
 #include <smugstd.h>
-#include "stdio.h"
 
 void swap_float(float* left, float* right)
 {

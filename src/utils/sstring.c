@@ -1,8 +1,7 @@
-#include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <smugstd.h>
-#include "sstring.h"
+
+#include <utils/sstring.h>
 
 // Creates a String object from the C string. The C string is NOT copied.
 String* _new(char* theString)
@@ -80,7 +79,7 @@ BOOL String_isEmpty(String* self)
 
 void String_println(String* self)
 {
-    printf(self->mString);
+    smug_printf(self->mString);
 }
 
 char String_charAt(String* self, int pos)

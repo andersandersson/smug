@@ -1,4 +1,7 @@
 #include <pthread.h>
+
+#include <common/common.h>
+
 #include <platform/threads.h>
 
 struct _Thread

@@ -1,8 +1,9 @@
-#include <smugstd.h>
-#include "color.h"
-
-#include "common/common.h"
 #include <stdlib.h>
+#include <smugstd.h>
+
+#include <common/common.h>
+
+#include <graphics/color.h>
 
 Color Color_create(void)
 {

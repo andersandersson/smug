@@ -1,6 +1,6 @@
-#include "hook.h"
+#include <smugstd.h>
 
-#include <stdlib.h>
+#include <utils/hook.h>
 
 Hook* Hook_new(void)
 {

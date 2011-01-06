@@ -1,5 +1,6 @@
 #include <smugstd.h>
-#include <stdio.h>
+
+#include <common/common.h>
 #include <common/log.h>
 #include <platform/platform.h>
 
@@ -272,7 +273,7 @@ void Platform_detectJoysticks(void)
 // A placeholder for an inputhandler
 static void dummyInputHandler(int device, int trigger, INPUTSTATE state)
 {
-    fprintf(stderr, "Got input event. Device: %i, trigger: %i, state: %f\n", device, trigger, state);
+    smug_printf("Got input event. Device: %i, trigger: %i, state: %f\n", device, trigger, state);
 }
 
 void Platform_update(void)

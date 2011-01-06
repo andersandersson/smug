@@ -12,8 +12,8 @@
 #ifndef SMUG_ENGINE_ENGINE_H
 #define SMUG_ENGINE_ENGINE_H
 
-#include "common/common.h"
-#include "gameobject.h"
+#include <common/common.h>
+#include <engine/gameobject.h>
 
 /**
   * Initialize Engine

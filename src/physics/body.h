@@ -10,7 +10,7 @@
 #ifndef SMUG_PHYSICS_BODY_H
 #define SMUG_PHYSICS_BODY_H
 
-#include "shapes.h"
+#include <physics/shapes.h>
 
 typedef unsigned int BODY_TYPE;
 

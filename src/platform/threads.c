@@ -1,8 +1,9 @@
 #include <GL/glfw.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <smugstd.h>
 
-#include "threads.h"
+#include <common/common.h>
+
+#include <platform/threads.h>
 
 struct _Thread
 {

@@ -1,10 +1,9 @@
-#include "debug.h"
-
+#include <common/common.h>
+#include <common/log.h>
 #include <platform/opengl/opengl.h>
+#include <utils/rectangle.h>
 
-#include "common/log.h"
-
-#include "utils/rectangle.h"
+#include <physics/debug.h>
 
 static void Physics_drawRectangle(Rectangle* rectangle, Point offset, Color color)
 {

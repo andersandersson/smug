@@ -10,7 +10,7 @@
 #ifndef SMUG_COMMON_SIGNAL_H
 #define SMUG_COMMON_SIGNAL_H
 
-#include "common.h"
+#include <common/common.h>
 
 #define SIG_EXIT  0x0001 // Tell engine to stop
 #define SIG_TERM  0x0002 // Tell all systems to shut down

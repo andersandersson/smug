@@ -5,10 +5,9 @@
 #ifndef GRAPHICS_DRAWABLE_BOX_H
 #define GRAPHICS_DRAWABLE_BOX_H
 
-#include "drawable.h"
-#include "graphics/renderer/renderbatch.h"
-#include "utils/rectangle.h"
-#include "utils/vector.h"
+#include <graphics/drawable/drawable.h>
+#include <graphics/renderer/renderbatch.h>
+#include <utils/vector_type.h>
 
 /**
  * Creates new box drawable

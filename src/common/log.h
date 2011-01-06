@@ -10,7 +10,7 @@
 #ifndef SMUG_COMMON_LOG_H
 #define SMUG_COMMON_LOG_H
 
-#include "common.h"
+#include <common/common.h>
 
 // Predefined log levels
 #define LOG_DEBUG           0x01

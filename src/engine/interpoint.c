@@ -1,10 +1,12 @@
 #include <smugstd.h>
-#include <engine/interpoint.h>
+
+#include <common/common.h>
 #include <platform/platform.h>
 #include <utils/point.h>
 #include <utils/vector_type.h>
-#include <common/common.h>
 #include <common/log.h>
+
+#include <engine/interpoint.h>
 
 Interpoint* Interpoint_new(Point p)
 {

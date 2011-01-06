@@ -10,7 +10,7 @@
 #ifndef SMUG_COMMON_CONSOLE_H
 #define SMUG_COMMON_CONSOLE_H
 
-#include "common/common.h" // Using BOOL
+#include <common/common.h> // Using BOOL
 
 /** The maximum size of a line to print to the console
   */

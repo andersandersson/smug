@@ -1,19 +1,18 @@
-#include <smugstd.h>
-#include "renderer.h"
-
-#include <math.h>
-
-#include "renderbatch.h"
-#include "layer.h"
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+#include <smugstd.h>
 
-#include "graphics/graphics.h"
-#include "graphics/sprite.h"
-
+#include <utils/point.h>
+#include <utils/vector.h>
 #include <platform/platform.h>
 #include <platform/opengl/opengl.h>
+#include <graphics/graphics.h>
+#include <graphics/sprite.h>
+#include <graphics/renderer/renderbatch.h>
+#include <graphics/renderer/layer.h>
+
+#include <graphics/renderer/renderer.h>
 
 extern int gVBOSupported;
 extern unsigned int gRenderMode;

@@ -2,8 +2,8 @@
   * @brief Contains functions for multithreading.
   */
 
-#ifndef THREAD_H
-#define THREAD_H
+#ifndef SMUG_PLATFORM_THREADS_H
+#define SMUG_PLATFORM_THREADS_H
 
 #include <common/common.h>
 
@@ -114,4 +114,4 @@ void ConditionVariable_notify(ConditionVariable* cond);
   */
 void ConditionVariable_notifyAll(ConditionVariable* cond);
 
-#endif // THREAD_H
+#endif // SMUG_PLATFORM_THREADS_H

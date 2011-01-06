@@ -2,13 +2,13 @@
   * @brief Defines the point functions.
   */
 
-#ifndef PHYSICS_POINT_H
-#define PHYSICS_POINT_H
+#ifndef SMUG_UTILS_POINT_H
+#define SMUG_UTILS_POINT_H
 
 #include <common/common.h>
+#include <utils/vector_type.h>
 
-#include "utils/vector_type.h"
-#include "utils/point_type.h"
+#include <utils/point_type.h>
 
 /** Create a new Point
   *
@@ -79,5 +79,4 @@ void Point_setX(Point* p, float x);
  */
 void Point_setY(Point* p, float y);
 
-#endif // PHYSICS_POINT_H
-
+#endif // SMUG_UTILS_POINT_H

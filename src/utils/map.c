@@ -1,9 +1,9 @@
-#include "map.h"
+#include <smugstd.h>
 
-#include "common/log.h"
-#include "common/common.h"
+#include <common/common.h>
+#include <common/log.h>
 
-#include <stdlib.h>
+#include <utils/map.h>
 
 static void Map_addLast(Map* map, MapNode* node);
 
@@ -47,11 +47,11 @@ void Map_delete(Map* map)
                 {
                     prev_node = node;
                     node = node->next;
-                    
+
                     MapNode_delete(prev_node);
                 }
-            
-            
+
+
             MapNode_delete(node);
         }
 
@@ -74,7 +74,7 @@ void Map_addLast(Map* map, MapNode* node)
                 }
 
             _node->next = node;
-        }    
+        }
 }
 
 void Map_set(Map* map, void* key, void* value)
@@ -125,7 +125,7 @@ MapNode* Map_findByKey(Map* map, void* key)
                     if(TRUE == map->compareKeys(key, node->key))
                         {
                             return node;
-                        }            
+                        }
                 }
         }
 
@@ -150,7 +150,7 @@ MapNode* Map_findByValue(Map* map, void* value)
                     if(TRUE == map->compareValues(value, node->value))
                         {
                             return node;
-                        }            
+                        }
                 }
         }
 

@@ -1,6 +1,13 @@
-#include "box.h"
 #include <stdlib.h>
 #include <smugstd.h>
+
+#include <common/common.h>
+#include <utils/point.h>
+#include <utils/rectangle.h>
+#include <utils/vector.h>
+#include <graphics/color.h>
+
+#include <graphics/drawable/box.h>
 
 static int getDataSize(Drawable* drawable)
 {
