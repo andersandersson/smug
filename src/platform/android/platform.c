@@ -30,6 +30,10 @@ static TIME gLastHeartbeat;
 static float gInterpolationFactor; /**< Fraction of a whole heartbeat time that has passed since the last heartbeat. */
 static float gFps = 20.0f;
 
+static int gFpsCounter = 0;
+static TIME gLastFpsCheck = 0.0;
+static TIME gFpsCheckInterval = 2.0;
+
 jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
     gJavaVm = vm;
@@ -74,6 +78,8 @@ int Platform_init(int width, int height, BOOL fullscreen)
 
     Platform_stepDiscreteTime();
 
+    gLastFpsCheck = Platform_getTime();
+
     Platform_initInput();
     isInitialized = TRUE;
     return 1;
@@ -110,6 +116,12 @@ Vector Platform_getWindowSize(void)
 
 void Platform_internalHeartbeat(void)
 {
+    if (Platform_getTime() - gLastFpsCheck >= gFpsCheckInterval)
+    {
+        smug_printf("FPS: %i", (int)(((double)gFpsCounter) / gFpsCheckInterval));
+        gLastFpsCheck = Platform_getTime();
+        gFpsCounter = 0;
+    }
     if (gLogicCallbackEnabled && gUserLogicCallback != NULL)
     {
         gUserLogicCallback();
@@ -263,6 +275,7 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeInit)
 SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeRender)
   (JNIEnv* env, jclass clazz)
 {
+    gFpsCounter++;
     Platform_stepDiscreteTime();
     gInterpolationFactor = (gDiscreteTime - gLastHeartbeat) / (1.0 / gFps);
     Graphics_render();
