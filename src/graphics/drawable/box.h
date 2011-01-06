@@ -23,7 +23,7 @@ Drawable* Drawable_newBox(void);
  * @param rect Rectangle
  * @return Drawable
  */
-Drawable* Drawable_newBoxFromRectangle(Rectangle rect);
+Drawable* Drawable_newBoxFromSize(Vector size);
 
 #endif //GRAPHICS_DRAWABLE_BOX_H
 

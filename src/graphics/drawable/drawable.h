@@ -36,7 +36,7 @@ typedef struct Drawable
     Sprite* sprite; // Is NULL for shapes
     Color color;
     unsigned int vertexcount;
-    Vector* vertices;
+    Vector* vertexOffsets;
 
     void (*_writeBatchDataFunc)(struct Drawable* d, BatchData* batch, unsigned int start); /**< Function for writing data */
     int (*_getDataSizeFunc)(struct Drawable* d); /**< Function for getting data size */

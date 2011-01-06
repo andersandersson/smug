@@ -26,10 +26,10 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     texturestart = start*2;
 
     // write vertices in anti-clockwise order
-    x1 = Point_getX(&drawable->pos) + drawable->vertices[0].d[0];
-    x2 = Point_getX(&drawable->pos) + drawable->vertices[1].d[0];
-    y1 = Point_getY(&drawable->pos) + drawable->vertices[0].d[1];
-    y2 = Point_getY(&drawable->pos) + drawable->vertices[1].d[1];
+    x1 = Point_getX(&drawable->pos) + drawable->vertexOffsets[0].d[0];
+    x2 = Point_getX(&drawable->pos) + drawable->vertexOffsets[1].d[0];
+    y1 = Point_getY(&drawable->pos) + drawable->vertexOffsets[0].d[1];
+    y2 = Point_getY(&drawable->pos) + drawable->vertexOffsets[1].d[1];
 
     // smug_printf("Writing box: %f, %f, %f, %f", x1, y1, x2, y2);
 
@@ -115,14 +115,14 @@ Drawable* Drawable_newBox(void)
 #endif
     ret->_writeBatchDataFunc = writeBatchData;
     ret->_getDataSizeFunc = getDataSize;
-    ret->vertices[0].d[0] = 0;
-    ret->vertices[0].d[1] = 0;
-    ret->vertices[1].d[0] = 0;
-    ret->vertices[1].d[1] = 0;
+    ret->vertexOffsets[0].d[0] = 0;
+    ret->vertexOffsets[0].d[1] = 0;
+    ret->vertexOffsets[1].d[0] = 0;
+    ret->vertexOffsets[1].d[1] = 0;
     return ret;
 }
 
-Drawable* Drawable_newBoxFromRectangle(Rectangle rect)
+Drawable* Drawable_newBoxFromSize(Vector size)
 {
 #ifdef SMUG_GLES
     Drawable* ret = Drawable_new(6);
@@ -131,10 +131,10 @@ Drawable* Drawable_newBoxFromRectangle(Rectangle rect)
 #endif
     ret->_writeBatchDataFunc = writeBatchData;
     ret->_getDataSizeFunc = getDataSize;
-    ret->vertices[0].d[0] = Rectangle_getX(&rect);
-    ret->vertices[0].d[1] = Rectangle_getY(&rect);
-    ret->vertices[1].d[0] = Rectangle_getX(&rect) + Rectangle_getW(&rect);
-    ret->vertices[1].d[1] = Rectangle_getY(&rect) + Rectangle_getH(&rect);
+    ret->vertexOffsets[0].d[0] = 0.0f;
+    ret->vertexOffsets[0].d[1] = 0.0f;
+    ret->vertexOffsets[1].d[0] = Vector_getX(&size);
+    ret->vertexOffsets[1].d[1] = Vector_getY(&size);
 
     return ret;
 }

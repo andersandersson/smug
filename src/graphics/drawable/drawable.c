@@ -15,7 +15,7 @@ Drawable* Drawable_new(unsigned int vertexcount)
     ret->color = Color_create();
     ret->followObject = TRUE;
     ret->vertexcount = vertexcount;
-    ret->vertices = (Vector*)malloc(sizeof(Vector) * vertexcount);
+    ret->vertexOffsets = (Vector*)malloc(sizeof(Vector) * vertexcount);
     ret->sprite = NULL;
     ret->type = 0;
     ret->parent = NULL;
@@ -41,7 +41,7 @@ int Drawable_getDataSize(Drawable* d)
 void Drawable_delete(void* d)
 {
     smug_assert(NULL != d);
-    free(((Drawable*)d)->vertices);
+    free(((Drawable*)d)->vertexOffsets);
     free(d);
 }
 
