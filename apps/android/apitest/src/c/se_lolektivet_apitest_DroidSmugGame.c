@@ -19,7 +19,7 @@ static float lastFingerY;
 static const float fingerNearAvatarThreshhold = 20.0f;
 static const float minX = 20.0f;
 static const float maxX = 460.0f;
-static const float avatarSpeed = 200.0f;
+static const float avatarSpeed = 400.0f;
 static const float fps = 20.0f;
 
 void logicCallback(void)
@@ -32,7 +32,7 @@ void logicCallback(void)
 
     if (moveAvatarTowardsFinger)
     {
-        float x = smugObject_getX(avatar);
+        const float x = smugObject_getX(avatar);
         float dir = 0.0f;
         if (lastFingerX < x)
         {
@@ -43,6 +43,11 @@ void logicCallback(void)
             dir = 1.0f;
         }
         smugObject_setPos(avatar, x + dir * (avatarSpeed / fps), smugObject_getY(avatar));
+        if (fabs(lastFingerX - smugObject_getX(avatar)) <= fingerNearAvatarThreshhold)
+        {
+            fingerAvatarConnection = TRUE;
+            moveAvatarTowardsFinger = FALSE;
+        }
     }
 }
 
