@@ -20,16 +20,18 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     static float r, g, b, a;
     static float tx1, ty1, tx2, ty2;
     static Sprite* sprite = NULL;
+    static Point dpos;
 
     vertexstart = start*2;
     colorstart = start*4;
     texturestart = start*2;
 
     // write vertices in anti-clockwise order
-    x1 = Point_getX(&drawable->pos) + drawable->vertexOffsets[0].d[0];
-    x2 = Point_getX(&drawable->pos) + drawable->vertexOffsets[1].d[0];
-    y1 = Point_getY(&drawable->pos) + drawable->vertexOffsets[0].d[1];
-    y2 = Point_getY(&drawable->pos) + drawable->vertexOffsets[1].d[1];
+    dpos = Drawable_getPosForDrawing(drawable);
+    x1 = Point_getX(dpos) + drawable->vertexOffsets[0].d[0];
+    x2 = Point_getX(dpos) + drawable->vertexOffsets[1].d[0];
+    y1 = Point_getY(dpos) + drawable->vertexOffsets[0].d[1];
+    y2 = Point_getY(dpos) + drawable->vertexOffsets[1].d[1];
 
     // smug_printf("Writing box: %f, %f, %f, %f", x1, y1, x2, y2);
 

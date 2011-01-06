@@ -44,7 +44,7 @@ static void renderLayer(Renderer* renderer, Layer* layer)
 
     // TODO: Fix zoom thingies
     glScalef(1.0f + (camera->scale.d[0] - 1.0f)  * p, 1.0f + (camera->scale.d[1] - 1.0f)  * p, 1.0f);
-    glTranslatef(-Point_getX(&camera->pos) * p, -Point_getY(&camera->pos) * p, 0.0f);
+    glTranslatef(-Point_getX(camera->pos) * p, -Point_getY(camera->pos) * p, 0.0f);
 
     Layer_render(layer);
 
@@ -62,12 +62,12 @@ static void renderDebugGrid(Renderer* renderer)
     float scalex = camera->scale.d[0];
     float scaley = camera->scale.d[1];
     glScalef(scalex, scaley, 1.0f);
-    glTranslatef(-Point_getX(&camera->pos), -Point_getY(&camera->pos), 0.0f);
+    glTranslatef(-Point_getX(camera->pos), -Point_getY(camera->pos), 0.0f);
     Vector screenSize = Vector_multiply(Platform_getWindowSize(), 0.5);
     float gridsizex = 16.0f;
     float gridsizey = 16.0f;
-    float cposx = Point_getX(&camera->pos);
-    float cposy = Point_getY(&camera->pos);
+    float cposx = Point_getX(camera->pos);
+    float cposy = Point_getY(camera->pos);
     float offsetx = cposx - (((int)(cposx / gridsizex)) * gridsizex);
     float offsety = cposy - (((int)(cposy / gridsizey)) * gridsizey);
     float ratio = screenSize.d[0] / screenSize.d[1] - 1;

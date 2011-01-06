@@ -1,3 +1,6 @@
+/** This platform version is based on GLFW and the blocking version of the smug engine.
+ */
+
 #include <smugstd.h>
 #include "platform.h"
 
@@ -6,6 +9,7 @@
 #include "stdlib.h"
 
 #include "stdio.h"
+#include <engine/blocking_engine.h>
 
 // Holds information of physical joystick
 typedef struct JoystickInfo
@@ -26,6 +30,8 @@ static BOOL gLogicCallbackEnabled = TRUE;
 
 // Size of window in pixels
 static Vector windowSize;
+
+static TIME gDiscreteTime;
 
 static void GLFWCALL windowResizeCallback(int w, int h)
 {
@@ -307,6 +313,8 @@ int Platform_init(int width, int height, BOOL fullscreen)
     }
     glfwSetWindowSizeCallback(windowResizeCallback);
 
+    Platform_stepDiscreteTime();
+
     Platform_initInput();
     isInitialized = TRUE;
     return 1;
@@ -444,9 +452,24 @@ void Platform_internalHeartbeat(void)
     }
 }
 
+float Platform_getInterpolationFactor(void)
+{
+    return Engine_getInterpolationFactor();
+}
+
 TIME Platform_getTime(void)
 {
     return glfwGetTime();
+}
+
+TIME Platform_getDiscreteTime(void)
+{
+    return gDiscreteTime;
+}
+
+void Platform_stepDiscreteTime(void)
+{
+    gDiscreteTime = Platform_getTime();
 }
 
 void Platform_sleep(TIME seconds)

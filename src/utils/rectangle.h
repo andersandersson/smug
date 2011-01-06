@@ -1,5 +1,5 @@
 /** @file rectangle.h
-  * @brief Defines a rectangle type.
+  * @brief Defines the rectangle functions.
   */
 
 #ifndef UTILS_RECTANGLE_H
@@ -24,6 +24,8 @@ Rectangle Rectangle_createFromXYWH(float x, float y, float w, float h);
   * @relatesalso Rectangle
   */
 void Rectangle_delete(Rectangle* r);
+
+Vector Rectangle_getSize(Rectangle self);
 
 float Rectangle_getX(Rectangle* r);
 float Rectangle_getY(Rectangle* r);

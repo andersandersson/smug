@@ -1,12 +1,12 @@
-/** @file rectangle.h
+/** @file rectangle_type.h
   * @brief Defines a rectangle type.
   */
 
 #ifndef UTILS_RECTANGLE_TYPE_H
 #define UTILS_RECTANGLE_TYPE_H
 
-#include "utils/vector.h"
-#include "utils/point.h"
+#include "utils/vector_type.h"
+#include "utils/point_type.h"
 
 /** A simple rectangle type.
   *

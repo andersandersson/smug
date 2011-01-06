@@ -6,6 +6,7 @@
 #include <graphics/drawable/drawable.h>
 #include <graphics/drawable/box.h>
 #include <engine/gameobject.h>
+#include <engine/interpoint.h>
 #include <platform/platform.h>
 #include <smugstd.h>
 #include "interface.h"
@@ -41,6 +42,11 @@ SMUGEXPORT void smugObject_setPos(SmugObject obj, float x, float y)
     GameObject_setPos(obj, x, y);
 }
 
+SMUGEXPORT void smugObject_moveTo(SmugObject obj, float x, float y)
+{
+    GameObject_moveTo(obj, x, y);
+}
+
 SMUGEXPORT float smugObject_getX(SmugObject obj)
 {
     return GameObject_getX(obj);
@@ -53,6 +59,12 @@ SMUGEXPORT float smugObject_getY(SmugObject obj)
 
 SMUGEXPORT void smugObject_addDrawable(SmugObject obj, SmugDrawable d)
 {
+    GameObject_addDrawable(obj, d);
+}
+
+SMUGEXPORT void smugObject_addDrawableAt(SmugObject obj, SmugDrawable d, float x, float y)
+{
+    Drawable_setPosRelative(d, Point_createFromXY(x, y));
     GameObject_addDrawable(obj, d);
 }
 

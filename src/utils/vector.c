@@ -148,6 +148,23 @@ float Vector_squareLength(Vector v)
     return Vector_dotProduct(v, v);
 }
 
+BOOL Vector_equal(Vector self, Vector other)
+{
+    static int i;
+    if (self.size != other.size)
+    {
+        return FALSE;
+    }
+    for (i = 0; i < self.size; i++)
+    {
+        if (self.d[i] != other.d[i])
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 void Vector_print(Vector v)
 {
     int i;

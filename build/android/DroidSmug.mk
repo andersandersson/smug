@@ -32,6 +32,7 @@ LOCAL_SRC_FILES := \
     engine/interface.c \
     engine/engine.c \
     engine/gameobject.c \
+    engine/interpoint.c \
     graphics/interface.c \
     graphics/camera.c \
     graphics/color.c \

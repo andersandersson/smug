@@ -10,8 +10,8 @@ Drawable* Drawable_new(unsigned int vertexcount)
 {
     Drawable* ret = (Drawable*)malloc(sizeof(Drawable));
     ret->layer = 0;
-    ret->pos = Point_createFromXY(0, 0);
-    ret->relativePos = ret->pos;
+    ret->pos = Interpoint_new(Point_createFromXY(0, 0));
+    ret->relativePos = Interpoint_new(Point_createFromXY(0, 0));
     ret->color = Color_create();
     ret->followObject = TRUE;
     ret->vertexcount = vertexcount;
@@ -42,31 +42,74 @@ void Drawable_delete(void* d)
 {
     smug_assert(NULL != d);
     free(((Drawable*)d)->vertexOffsets);
+    Interpoint_delete(((Drawable*)d)->pos);
+    Interpoint_delete(((Drawable*)d)->relativePos);
     free(d);
 }
 
 void Drawable_setPos(Drawable* d, Point pos)
 {
     smug_assert(NULL != d);
-    d->pos = pos;
+    Interpoint_setTo(d->pos, pos);
     d->followObject = FALSE;
 }
 
-void Drawable_updatePos(Drawable* self)
+void Drawable_moveTo(Drawable* self, Point pos)
 {
-    if (self->parent)
-        self->pos = Point_addVector(self->relativePos, GameObject_getPos(self->parent));
+    smug_assert(NULL != self);
+    Interpoint_moveTo(self->pos, pos);
+    self->followObject = FALSE;
 }
 
 void Drawable_setPosRelative(Drawable* d, Point pos)
 {
     smug_assert(NULL != d);
-    d->relativePos = pos;
-    if (d->parent)
-        d->pos = Point_addVector(pos, GameObject_getPos(d->parent));
-    else
-        d->pos = pos;
+    Interpoint_setTo(d->relativePos, pos);
     d->followObject = TRUE;
+}
+
+void Drawable_moveToRelative(Drawable* d, Point pos)
+{
+    smug_assert(NULL != d);
+    Interpoint_moveTo(d->relativePos, pos);
+    d->followObject = TRUE;
+}
+
+Point Drawable_getPosForDrawing(Drawable* self)
+{
+    if (self->followObject)
+    {
+        if (self->parent != NULL)
+        {
+            return Point_add(Interpoint_getInterpolated(self->relativePos), GameObject_getPosForDrawing(self->parent));
+        }
+        else
+        {
+            return Interpoint_getInterpolated(self->relativePos);
+        }
+    }
+    else
+    {
+        return Interpoint_getInterpolated(self->pos);
+    }
+}
+
+void Drawable_commitPosition(Drawable* self)
+{
+    Interpoint_commit(self->pos);
+    Interpoint_commit(self->relativePos);
+}
+
+void Drawable_setParent(Drawable* self, GameObject* parent)
+{
+    smug_assert(self != NULL);
+    self->parent = parent;
+}
+
+void Drawable_removeParent(Drawable* self)
+{
+    smug_assert(self != NULL);
+    self->parent = NULL;
 }
 
 void Drawable_followObject(Drawable* self, BOOL follow)

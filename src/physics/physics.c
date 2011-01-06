@@ -118,20 +118,20 @@ static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** 
     float t_y_in = 0;
     float t_y_out = 0;
 
-    float left_x_start = Rectangle_getX(left->shape->data) + Point_getX(&left->position);
-    float left_x_end = Rectangle_getX(left->shape->data) + Point_getX(&left->new_position);
+    float left_x_start = Rectangle_getX(left->shape->data) + Point_getX(left->position);
+    float left_x_end = Rectangle_getX(left->shape->data) + Point_getX(left->new_position);
     float left_width = Rectangle_getW(left->shape->data);
 
-    float right_x_start = Rectangle_getX(right->shape->data) + Point_getX(&right->position);
-    float right_x_end = Rectangle_getX(right->shape->data) + Point_getX(&right->new_position);
+    float right_x_start = Rectangle_getX(right->shape->data) + Point_getX(right->position);
+    float right_x_end = Rectangle_getX(right->shape->data) + Point_getX(right->new_position);
     float right_width = Rectangle_getW(right->shape->data);
 
-    float left_y_start = Rectangle_getY(left->shape->data) + Point_getY(&left->position);
-    float left_y_end = Rectangle_getY(left->shape->data) + Point_getY(&left->new_position);
+    float left_y_start = Rectangle_getY(left->shape->data) + Point_getY(left->position);
+    float left_y_end = Rectangle_getY(left->shape->data) + Point_getY(left->new_position);
     float left_height = Rectangle_getH(left->shape->data);
 
-    float right_y_start = Rectangle_getY(right->shape->data) + Point_getY(&right->position);
-    float right_y_end = Rectangle_getY(right->shape->data) + Point_getY(&right->new_position);
+    float right_y_start = Rectangle_getY(right->shape->data) + Point_getY(right->position);
+    float right_y_end = Rectangle_getY(right->shape->data) + Point_getY(right->new_position);
     float right_height = Rectangle_getH(right->shape->data);
 
     BOOL res = TRUE;

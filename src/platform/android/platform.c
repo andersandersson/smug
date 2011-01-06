@@ -5,8 +5,6 @@
 #include <graphics/graphics.h>
 #include <input/input.h>
 #include <common/signal.h>
-
-// Try to get rid of this one. See nativeInit.
 #include <engine/engine.h>
 
 static BOOL isInitialized = FALSE;
@@ -23,6 +21,11 @@ static JavaVM* gJavaVm = NULL;
 
 // Size of window in pixels
 static Vector windowSize;
+
+static TIME gDiscreteTime;
+static TIME gLastHeartbeat;
+static float gInterpolationFactor; /**< Fraction of a whole heartbeat time that has passed since the last heartbeat. */
+static float gFps = 20.0f;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
@@ -65,6 +68,8 @@ int Platform_init(int width, int height, BOOL fullscreen)
     JNIEnv* env = getJniEnvironment();
     gHeartbeatClass = JCALL1(env, FindClass, "se/lolektivet/droidsmug/Heartbeat");
     gHeartbeat_changeFps = JCALL3(env, GetStaticMethodID, gHeartbeatClass, "changeFps", "(F)V");
+
+    Platform_stepDiscreteTime();
 
     Platform_initInput();
     isInitialized = TRUE;
@@ -124,6 +129,7 @@ void Platform_enableLogicCallback(BOOL enable)
 
 void Platform_setLogicFps(float fps)
 {
+    gFps = fps;
     JNIEnv* env = getJniEnvironment();
     JCALL3(env, CallStaticVoidMethod, gHeartbeatClass, gHeartbeat_changeFps, (jfloat)fps);
 }
@@ -201,12 +207,30 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeResize)
 SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeHeartbeat)
   (JNIEnv* env, jclass clazz)
 {
+    Platform_stepDiscreteTime();
+    gLastHeartbeat = Platform_getDiscreteTime();
     Platform_internalHeartbeat();
+    Engine_commitPositionChanges();
+}
+
+float Platform_getInterpolationFactor()
+{
+    return gInterpolationFactor;
 }
 
 TIME Platform_getTime(void)
 {
     return ((double)clock()) / ((double)CLOCKS_PER_SEC);
+}
+
+TIME Platform_getDiscreteTime(void)
+{
+    return gDiscreteTime;
+}
+
+void Platform_stepDiscreteTime(void)
+{
+    gDiscreteTime = Platform_getTime();
 }
 
 void Platform_sleep(TIME seconds)
@@ -236,6 +260,8 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeInit)
 SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeRender)
   (JNIEnv* env, jclass clazz)
 {
+    Platform_stepDiscreteTime();
+    gInterpolationFactor = (gDiscreteTime - gLastHeartbeat) / (1.0 / gFps);
     Graphics_render();
 }
 

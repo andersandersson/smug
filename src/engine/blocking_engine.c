@@ -7,7 +7,12 @@
 #include "blocking_engine.h"
 #include "engine.h"
 
-static TIME delay;
+static TIME delay = 0.0;
+static BOOL fpsSet = FALSE;
+static float gFps = 20.0f;
+
+static float gInterpolationFactor; /**< Fraction of a whole heartbeat time that has passed since the last heartbeat. */
+static TIME gLastHeartbeat;
 
 void Engine_run(void)
 {
@@ -24,7 +29,10 @@ void Engine_run(void)
     int fps = 0;
 
     // Setup timing variables
-    delay = 1.0f/30.0f;
+    if (!fpsSet)
+    {
+        Engine_setLogicFps(30.0f);
+    }
     TIME nexttime;
     TIME time;
     nexttime = Platform_getTime();
@@ -36,9 +44,14 @@ void Engine_run(void)
         if (time >= nexttime)
         {
             nexttime += delay;
+            Platform_stepDiscreteTime();
+            gLastHeartbeat = Platform_getDiscreteTime();
             Platform_internalHeartbeat();
+            Engine_commitPositionChanges();
         }
 
+        Platform_stepDiscreteTime();
+        gInterpolationFactor = (Platform_getDiscreteTime() - gLastHeartbeat) / (1.0 / gFps);
         Graphics_render();
         Platform_refreshWindow();
 
@@ -61,7 +74,14 @@ void Engine_run(void)
     NOTIFY("Engine stopped.");
 }
 
+float Engine_getInterpolationFactor(void)
+{
+    return gInterpolationFactor;
+}
+
 void Engine_setLogicFps(float fps)
 {
+    gFps = fps;
     delay = 1.0 / fps;
+    fpsSet = TRUE;
 }

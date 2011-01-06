@@ -18,6 +18,7 @@
 #include "utils/vector.h"
 
 #include "engine/gameobject.h"
+#include <engine/interpoint.h>
 
 /**
   * A graphical entity on screen. A Drawable is a common interface
@@ -29,8 +30,8 @@ typedef struct Drawable
     unsigned int layer;
 	GameObject* parent;
 
-    Point pos;
-	Point relativePos;
+    Interpoint* pos;
+    Interpoint* relativePos;
 	BOOL followObject;
 
     Sprite* sprite; // Is NULL for shapes
@@ -83,6 +84,8 @@ int Drawable_getDataSize(Drawable* d);
  */
 void Drawable_setPos(Drawable* d, Point pos);
 
+void Drawable_moveTo(Drawable* d, Point pos);
+
 /**
  * Set position of a Drawable relative to its GameObject
  * @relatesalso Drawable
@@ -91,7 +94,18 @@ void Drawable_setPos(Drawable* d, Point pos);
  */
 void Drawable_setPosRelative(Drawable* d, Point pos);
 
-void Drawable_updatePos(Drawable* self);
+void Drawable_moveToRelative(Drawable* d, Point pos);
+
+Point Drawable_getPosForDrawing(Drawable* self);
+
+/**
+ * Called by platform when position will not change again during this heartbeat.
+ */
+void Drawable_commitPosition(Drawable* self);
+
+void Drawable_setParent(Drawable* self, GameObject* parent);
+
+void Drawable_removeParent(Drawable* self);
 
 /** Currently not used.
   */

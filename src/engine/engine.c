@@ -169,3 +169,11 @@ void Engine_removeObject(GameObject* obj)
         Graphics_removeDrawable((Drawable*)node->item);
     }
 }
+
+void Engine_commitPositionChanges()
+{
+    for (Node* node = gGameObjects->first; node != NULL; node = node->next)
+    {
+        GameObject_commitPosition((GameObject*)node->item);
+    }
+}

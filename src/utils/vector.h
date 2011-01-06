@@ -1,5 +1,5 @@
 /** @file vector.h
-  * @brief Defines the Vector type.
+  * @brief Defines the Vector functions.
   * @ingroup smug_utils
   */
 
@@ -10,14 +10,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-/**
- * Simple 2 dimensional vector.
- */
-typedef struct Vector2d
-{
-    int size;    //!< The dimension of the vector
-    float d[2];
-} Vector;
+#include <common/common.h>
+#include <utils/vector_type.h>
 
 
 // 2 dimensional specific functions
@@ -122,6 +116,7 @@ float Vector_length(Vector v);
  */
 float Vector_squareLength(Vector v);
 
+BOOL Vector_equal(Vector self, Vector other);
 
 // Miscellaneous vector functions
 // ------------------------------

@@ -27,7 +27,7 @@ void logicCallback(void)
     double t = smugGetTime();
     double f = sin(t) * 50;
     // smug_printf("Gameobject position: %f, %f. Time: %f, f: %f", Vector_getX(&v), Vector_getY(&v), t, f);
-    smugObject_setPos(obj, f, 0);
+    smugObject_moveTo(obj, f, 0);
     // GameObject_setOpacity(obj, ((f + 1.0) / 4.0) + 0.5);
 
     if (moveAvatarTowardsFinger)
@@ -42,7 +42,7 @@ void logicCallback(void)
         {
             dir = 1.0f;
         }
-        smugObject_setPos(avatar, x + dir * (avatarSpeed / fps), smugObject_getY(avatar));
+        smugObject_moveTo(avatar, x + dir * (avatarSpeed / fps), smugObject_getY(avatar));
         if (fabs(lastFingerX - smugObject_getX(avatar)) <= fingerNearAvatarThreshhold)
         {
             fingerAvatarConnection = TRUE;
@@ -60,15 +60,15 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_DroidSmugGame_nativeGameInit
     smugSetLogicFps(fps);
 
     obj = smugObject_new();
-    SmugDrawable d = smugDrawable_newFromRect(smugRect_create(200.0f, 200.0f, 40.0f, 40.0f));
+    SmugDrawable d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
     smugDrawable_setColor(d, smugColor_create(255, 0, 0, 255));
-    smugObject_addDrawable(obj, d);
+    smugObject_addDrawableAt(obj, d, 240.0f, 100.0f);
     smugAddObject(obj);
 
     avatar = smugObject_new();
-    d = smugDrawable_newFromRect(smugRect_create(-20.0f, -40.0f, 40.0f, 40.0f));
+    d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
     smugDrawable_setColor(d, smugColor_create(255, 255, 0, 255));
-    smugObject_addDrawable(avatar, d);
+    smugObject_addDrawableAt(avatar, d, -20.0f, -40.0f);
     smugObject_setPos(avatar, 20.0f, 240.0f);
     smugAddObject(avatar);
     // smugDestroyObject(obj);
@@ -94,7 +94,7 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_DroidSmugGame_nativeTouchMove
 {
     if (fingerAvatarConnection)
     {
-        smugObject_setPos(avatar, MAX(minX, MIN(maxX, x)), 240.0f);
+        smugObject_moveTo(avatar, MAX(minX, MIN(maxX, x)), 240.0f);
     }
     else if (fabs(x - smugObject_getX(avatar)) <= fingerNearAvatarThreshhold)
     {

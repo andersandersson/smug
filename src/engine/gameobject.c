@@ -6,6 +6,8 @@
 #include "graphics/graphics.h"
 #include "physics/body.h"
 #include "common/log.h"
+#include <platform/platform.h>
+#include <utils/point.h>
 
 static void _invariant(GameObject* self)
 {
@@ -28,7 +30,7 @@ GameObject* GameObject_new(void)
     go->bodies = LinkedList_new();
     go->visible = TRUE;
     go->tag = NULL;
-    go->position = Vector_create2d(0, 0);
+    go->position = Interpoint_new(Point_createFromXY(0, 0));
 
     return go;
 }
@@ -42,6 +44,7 @@ void GameObject_delete(void* self)
     LinkedList_deleteContents(go->bodies, _Body_deleteVoid);
     LinkedList_delete(go->drawables);
     LinkedList_delete(go->bodies);
+    Interpoint_delete(go->position);
 
     free(go);
 }
@@ -49,41 +52,44 @@ void GameObject_delete(void* self)
 void GameObject_setPos(GameObject* self, float x, float y)
 {
     _invariant(self);
-    self->position = Vector_create2d(x, y);
-    // Set position of all bodies and drawables.
-    Node* node;
+    Interpoint_setTo(self->position, Point_createFromXY(x, y));
+}
 
-    for (node = self->drawables->first; node != NULL; node = node->next)
-    {
-        if (node->item != NULL)
-            Drawable_updatePos((Drawable*)node->item);
-    }
+void GameObject_moveTo(GameObject* self, float x, float y)
+{
+    Interpoint_moveTo(self->position, Point_createFromXY(x, y));
+}
 
-    for (node = self->bodies->first; node != NULL; node = node->next)
+void GameObject_commitPosition(GameObject* self)
+{
+    Interpoint_commit(self->position);
+    for (Node* node = self->drawables->first; node != NULL; node = node->next)
     {
-        if (node->item != NULL)
-        {
-            // Body_updatePos((Body*)node->item);
-        }
+        Drawable_commitPosition((Drawable*)node->item);
     }
 }
 
 Vector GameObject_getPos(GameObject* self)
 {
     _invariant(self);
-    return self->position;
+    return Point_getVector(Interpoint_getPoint(self->position));
 }
 
 float GameObject_getX(GameObject* self)
 {
     _invariant(self);
-    return self->position.d[0];
+    return Point_getX(Interpoint_getPoint(self->position));
 }
 
 float GameObject_getY(GameObject* self)
 {
     _invariant(self);
-    return self->position.d[1];
+    return Point_getY(Interpoint_getPoint(self->position));
+}
+
+Point GameObject_getPosForDrawing(GameObject* self)
+{
+    return Interpoint_getInterpolated(self->position);
 }
 
 void GameObject_addDrawable(GameObject* self, Drawable* d)
@@ -110,6 +116,7 @@ void GameObject_addDrawable(GameObject* self, Drawable* d)
     // {   // There was no hole.
         LinkedList_addLast(self->drawables, (void*)d);
     // }
+    Drawable_setParent(d, self);
 
     d->parent = self;
     // Graphics_addDrawable(d);
@@ -139,7 +146,10 @@ void GameObject_removeDrawable(GameObject* self, struct Drawable* drawable)
     // Node* node;
 
     if (!LinkedList_removeItem(self->drawables, drawable))
+    {
         WARNING("Tried to remove a Drawable that wasn't in the GameObject.");
+    }
+    Drawable_removeParent(drawable);
     // for (node = self->drawables->first; node != NULL; node = node->next)
     // {
         // if ((Drawable*)node->item == drawable)

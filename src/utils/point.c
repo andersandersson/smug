@@ -1,6 +1,7 @@
 #include "rectangle.h"
 
 #include "common/common.h"
+#include <utils/vector.h>
 #include <stdlib.h>
 
 static Point sp;
@@ -24,13 +25,13 @@ Point Point_createFromVector(Vector v)
     return sp;
 }
 
-float Point_getX(Point* p)
+float Point_getX(Point self)
 {
-    return p->v.d[0];
+    return Vector_getX(&self.v);
 }
-float Point_getY(Point* p)
+float Point_getY(Point self)
 {
-    return p->v.d[1];
+    return Vector_getY(&self.v);
 }
 
 void Point_setX(Point* p, float x)
@@ -56,4 +57,29 @@ Point Point_addVector(Point p, Vector v)
 Vector Point_distanceToPoint(Point p1, Point p2)
 {
     return Vector_create2d(p2.v.d[0] - p1.v.d[0], p2.v.d[1] - p1.v.d[1]);
+}
+
+Point Point_linearInterpolate(Point p1, Point p2, float fraction)
+{
+    static float oldX;
+    static float oldY;
+    oldX = Point_getX(p1);
+    oldY = Point_getY(p1);
+    return Point_createFromXY(oldX + (Point_getX(p2) - oldX) * fraction,
+                              oldY + (Point_getY(p2) - oldY) * fraction);
+}
+
+Point Point_add(Point p1, Point p2)
+{
+    return Point_createFromXY(Point_getX(p1) + Point_getX(p2), Point_getY(p1) + Point_getY(p2));
+}
+
+Vector Point_getVector(Point self)
+{
+    return self.v;
+}
+
+BOOL Point_equal(Point self, Point other)
+{
+    return Vector_equal(self.v, other.v);
 }

@@ -268,6 +268,12 @@ void Platform_setLogicFps(float fps);
  */
 TIME Platform_getTime(void);
 
+TIME Platform_getDiscreteTime(void);
+
+void Platform_stepDiscreteTime(void);
+
+float Platform_getInterpolationFactor(void);
+
 /**
  * Sleep for a given amount of seconds
  */
