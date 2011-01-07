@@ -31,6 +31,7 @@ void Signal_terminate(void)
 {
     smug_assert(isInitialized);
     Mutex_delete(_signalMutex);
+    isInitialized = FALSE;
 }
 
 void Signal_send(int signal)
