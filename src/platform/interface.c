@@ -15,3 +15,8 @@ SMUGEXPORT void smugSetLogicFps(float fps)
 {
     Platform_setLogicFps(fps);
 }
+
+SMUGEXPORT void smugSetKillCallback(void(*callback)(void))
+{
+    Platform_setKillCallback(callback);
+}

@@ -16,4 +16,6 @@ SMUGEXPORT double smugGetTime(void);
 
 SMUGEXPORT void smugSetLogicFps(float fps);
 
+SMUGEXPORT void smugSetKillCallback(void(*callback)(void));
+
 #endif // SMUG_PLATFORM_INTERFACE_H
