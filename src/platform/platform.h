@@ -254,6 +254,8 @@ void Platform_setWindowResizeCallback(void(*callback)(int, int));
 
 void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHANGE));
 
+void Platform_setKillCallback(void(*callback)(void));
+
 void Platform_setTouchEventCallback(void(*callback)(int, int, int));
 
 void Platform_setLogicCallback(void (*callback)(void));

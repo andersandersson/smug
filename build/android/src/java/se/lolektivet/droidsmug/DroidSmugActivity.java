@@ -97,6 +97,7 @@ public class DroidSmugActivity extends Activity
         super.onDestroy();
         if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onDestroy.");
         NativeFunctions.nativeWindowClosed();
+        NativeFunctions.nativeDeInit();
     }
 
     @Override
@@ -107,6 +108,7 @@ public class DroidSmugActivity extends Activity
         if (mGLView.hasGlContext())
         {
             NativeFunctions.nativeWindowRestored();
+            Heartbeat.getInstance().start();
         }
         else
         {
@@ -119,6 +121,7 @@ public class DroidSmugActivity extends Activity
     {
         super.onStop();
         if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onStop.");
+        Heartbeat.getInstance().stop();
         NativeFunctions.nativeWindowMinimized();
     }
 
@@ -191,16 +194,21 @@ class OrientationHandler extends OrientationEventListener
     }
 }
 
-class Heartbeat extends TimerTask
+class Heartbeat
 {
-    private Timer mUpdateTimer;
-    private float mFps = 20.0f;
     private static Heartbeat mInstance = null;
 
-    @Override
-    public void run()
+    private Timer mUpdateTimer;
+    private HeartbeatTask mTask;
+    private float mFps = 20.0f;
+
+    private class HeartbeatTask extends TimerTask
     {
-        NativeFunctions.nativeHeartbeat();
+        @Override
+        public void run()
+        {
+            NativeFunctions.nativeHeartbeat();
+        }
     }
 
     public static Heartbeat getInstance()
@@ -214,8 +222,24 @@ class Heartbeat extends TimerTask
 
     public void start()
     {
-        mUpdateTimer = new Timer();
-        mUpdateTimer.schedule(this, 0, (int)(1000.0f / mFps));
+        if (mUpdateTimer == null)
+        {
+            mUpdateTimer = new Timer();
+            mTask = new HeartbeatTask();
+            mUpdateTimer.schedule(mTask, 0, (int)(1000.0f / mFps));
+        }
+    }
+
+    public void stop()
+    {
+        if (mUpdateTimer != null)
+        {
+            mTask.cancel();
+            mUpdateTimer.cancel();
+            mUpdateTimer.purge();
+            mUpdateTimer = null;
+            mTask = null;
+        }
     }
 
     public float getFps()
@@ -226,13 +250,14 @@ class Heartbeat extends TimerTask
     private static void changeFps(float fps)
     {
         Heartbeat instance = getInstance();
+        boolean wasStarted = false;
         if (instance.mUpdateTimer != null)
         {
-            instance.mUpdateTimer.cancel();
-            instance.mUpdateTimer.purge();
+            wasStarted = true;
+            instance.stop();
         }
         instance.mFps = fps;
-        if (instance.mUpdateTimer != null)
+        if (wasStarted)
         {
             instance.start();
         }
@@ -344,7 +369,7 @@ class NativeFunctions
     public static native void nativeInit(float fps);
     public static native void nativeResize(int w, int h);
     public static native void nativeRender();
-    public static native void nativeDone();
+    public static native void nativeDeInit();
     public static native boolean nativeTouchDown();
     public static native boolean nativeTouchUp();
     public static native boolean nativeKeyDown(int keyCode);

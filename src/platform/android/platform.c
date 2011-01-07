@@ -16,6 +16,7 @@ static void(*gUserWindowResizeCallback)(int, int) = NULL;
 static void(*gUserWindowStateChangeCallback)(SMUG_WINDOW_STATE_CHANGE) = NULL;
 static void(*gUserTouchEventCallback)(int, int, int) = NULL;
 static void (*gUserLogicCallback)(void) = NULL;
+static void (*gUserKillCallback)(void) = NULL;
 static BOOL gLogicCallbackEnabled = TRUE;
 
 static jclass gHeartbeatClass = NULL;
@@ -130,6 +131,11 @@ void Platform_internalHeartbeat(void)
     {
         Signal_send(SIG_EXIT);
     }
+}
+
+void Platform_setKillCallback(void(*callback)(void))
+{
+    gUserKillCallback = callback;
 }
 
 void Platform_setLogicCallback(void (*callback)(void))
@@ -283,12 +289,17 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeRender)
 
 /*
  * Class:     se_lolektivet_apitest_NativeFunctions
- * Method:    nativeDone
+ * Method:    nativeDeInit
  * Signature: ()V
  */
-SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeDone)
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeDeInit)
   (JNIEnv* env, jclass clazz)
 {
+    if (gUserKillCallback != NULL)
+    {
+        gUserKillCallback();
+    }
+    Engine_terminate();
 }
 
 /*
