@@ -58,6 +58,14 @@ void Log_terminate(void)
 
 void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
 {
+    va_list vl;
+    va_start(vl, fmt);
+    Log_addEntryVa(level, prefix, file, line, fmt, vl);
+    va_end(vl);
+}
+
+void Log_addEntryVa(int level, char* prefix, char* file, int line, char* fmt, va_list args)
+{
     smug_assert(_isInitialized());
     gCurrentlyPrintingLevel = level;
 
@@ -68,7 +76,6 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
     int  c_max = 0;
     int  flag_c = 0;
     BOOL reading_flag = FALSE;
-    va_list vl;
 
     // Get the format string for the used log level
     format = Log_getFormatString(level);
@@ -78,13 +85,11 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
         return;
     }
 
-    va_start(vl, fmt);
-
     // Only print log if correct log level is set
     if(gCurrentLogLevel & level)
     {
         // Print formatted string to the message buffer
-        vsprintf(message, fmt, vl);
+        vsprintf(message, fmt, args);
 
         _writePrefixStack();
 
@@ -145,8 +150,6 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
     // Finally, add a newline
     Console_write("%c", '\n');
     }
-
-    va_end(vl);
 
     gCurrentlyPrintingLevel = LOG_NONE;
 }

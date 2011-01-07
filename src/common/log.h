@@ -49,6 +49,8 @@ void Log_terminate(void);
   */
 void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...);
 
+void Log_addEntryVa(int level, char* prefix, char* file, int line, char* fmt, va_list args);
+
 
 /** Print log text to console
   *
