@@ -18,6 +18,7 @@
 #define LOG_WARNING         0x04
 #define LOG_ERROR           0x08
 #define LOG_ALL             0xFF
+#define LOG_NONE            0x00
 
 // Define macros for the Log_Write function
 #define DEBUG(...) Log_addEntry(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, ##__VA_ARGS__)
@@ -68,6 +69,9 @@ void Log_setLevel(int level);
   * @return A flagset consisting of the log level constants.
   */
 int Log_getLevel(void);
+
+
+int Log_getCurrentlyPrintingLevel(void);
 
 
 /** Set the format string to use for log output

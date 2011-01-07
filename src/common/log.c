@@ -13,6 +13,8 @@ static char* gFormatString = NULL;
 static char  gIndentString[1024] = "\0";
 static LinkedList* gPrefixStack = NULL;
 
+static int gCurrentlyPrintingLevel = LOG_NONE;
+
 static BOOL _isInitialized(void)
 {
     return NULL != gPrefixStack;
@@ -57,6 +59,8 @@ void Log_terminate(void)
 void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
 {
     smug_assert(_isInitialized());
+    gCurrentlyPrintingLevel = level;
+
     char* format;
     char message[CONSOLE_PRINT_BUFFER_SIZE];
     char flag[64];
@@ -143,11 +147,14 @@ void Log_addEntry(int level, char* prefix, char* file, int line, char* fmt, ...)
     }
 
     va_end(vl);
+
+    gCurrentlyPrintingLevel = LOG_NONE;
 }
 
 
 void _Log_print(int level, char* prefix, char* file, int line, int newline, char* fmt, ...)
 {
+    gCurrentlyPrintingLevel = level;
     va_list vl;
     char buffer[1024];
 
@@ -165,6 +172,7 @@ void _Log_print(int level, char* prefix, char* file, int line, int newline, char
         }
 
     va_end(vl);
+    gCurrentlyPrintingLevel = LOG_NONE;
 }
 
 
@@ -177,6 +185,11 @@ void Log_setLevel(int level)
 int Log_getLevel(void)
 {
     return gCurrentLogLevel;
+}
+
+int Log_getCurrentlyPrintingLevel(void)
+{
+    return gCurrentlyPrintingLevel;
 }
 
 void Log_setFormatString(int level, char* format_string)

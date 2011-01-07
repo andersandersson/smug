@@ -1,11 +1,28 @@
 #include <android/log.h>
 #include <smugstd.h>
 
-#include <common/signal.h>
+#include <common/log.h>
 #include <platform/console.h>
 
 static char line_buffer[CONSOLE_PRINT_BUFFER_SIZE + 1];
 static int line_buffer_pos = 0;
+
+static android_LogPriority getAndroidLogLevel(int smugLevel)
+{
+    switch (smugLevel)
+    {
+        case LOG_DEBUG:
+            return ANDROID_LOG_DEBUG;
+        case LOG_NOTIFICATION:
+            return ANDROID_LOG_INFO;
+        case LOG_WARNING:
+            return ANDROID_LOG_WARN;
+        case LOG_ERROR:
+            return ANDROID_LOG_ERROR;
+        default:
+            return ANDROID_LOG_INFO;
+    }
+}
 
 void Console_puts(char* str) {
     Console_write("%s", str);
@@ -44,7 +61,7 @@ void Console_write(char* fmt, ...)
     {
         // Overflow. Panic dump buffer.
         line_buffer[CONSOLE_PRINT_BUFFER_SIZE] = '\0';
-        __android_log_write(ANDROID_LOG_INFO, "SMUG", line_buffer);
+        __android_log_write(getAndroidLogLevel(Log_getCurrentlyPrintingLevel()), "SMUG", line_buffer);
         _reset_line_buffer();
         return;
     }
@@ -60,14 +77,14 @@ void Console_write(char* fmt, ...)
         if (i >= CONSOLE_PRINT_BUFFER_SIZE)
         {
             // Overflow. Panic dump buffer.
-            __android_log_write(ANDROID_LOG_INFO, "SMUG", line_buffer + write_from);
+            __android_log_write(getAndroidLogLevel(Log_getCurrentlyPrintingLevel()), "SMUG", line_buffer + write_from);
             _reset_line_buffer();
             return;
         }
         if (line_buffer[i] == '\n')
         {
             line_buffer[i] = '\0';
-            __android_log_write(ANDROID_LOG_INFO, "SMUG", line_buffer + write_from);
+            __android_log_write(getAndroidLogLevel(Log_getCurrentlyPrintingLevel()), "SMUG", line_buffer + write_from);
             write_from = i + 1;
         }
         if (line_buffer[i] == '\0')
@@ -99,7 +116,7 @@ void Console_writeLine(char* fmt, ...)
     {
         line_buffer[CONSOLE_PRINT_BUFFER_SIZE] = '\0';
     }
-    __android_log_write(ANDROID_LOG_INFO, "SMUG", line_buffer);
+    __android_log_write(getAndroidLogLevel(Log_getCurrentlyPrintingLevel()), "SMUG", line_buffer);
     _reset_line_buffer();
 }
 
