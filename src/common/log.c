@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include <smugstd.h>
-#include <common/console.h>
+#include <platform/console.h>
 #include <utils/linkedlist.h>
 #include <common/log.h>
 

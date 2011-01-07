@@ -8,6 +8,7 @@ import java.util.Timer;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.OrientationEventListener;
@@ -25,6 +26,7 @@ public class DroidSmugActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onCreate.");
         super.onCreate(savedInstanceState);
         mGLView = new DroidSmugGLSurfaceView(this);
         setContentView(mGLView);
@@ -37,7 +39,6 @@ public class DroidSmugActivity extends Activity
         {
             _callNativeInitOnGlInit = true;
         }
-        System.out.println("JAVASMUG: Activity.onCreate returning.");
     }
 
     private void nativeInit()
@@ -94,6 +95,7 @@ public class DroidSmugActivity extends Activity
     public void onDestroy()
     {
         super.onDestroy();
+        if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onDestroy.");
         NativeFunctions.nativeWindowClosed();
     }
 
@@ -101,7 +103,7 @@ public class DroidSmugActivity extends Activity
     public void onStart()
     {
         super.onStart();
-        System.out.println("JAVASMUG: Activity.onStart.");
+        if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onStart.");
         if (mGLView.hasGlContext())
         {
             NativeFunctions.nativeWindowRestored();
@@ -116,7 +118,7 @@ public class DroidSmugActivity extends Activity
     public void onStop()
     {
         super.onStop();
-        System.out.println("JAVASMUG: Activity.onStop.");
+        if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onStop.");
         NativeFunctions.nativeWindowMinimized();
     }
 
@@ -124,7 +126,7 @@ public class DroidSmugActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        System.out.println("JAVASMUG: Activity.onPause.");
+        if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onPause.");
         mGLView.onPause();
         NativeFunctions.nativeWindowDeactivated();
     }
@@ -133,7 +135,7 @@ public class DroidSmugActivity extends Activity
     protected void onResume()
     {
         super.onResume();
-        System.out.println("JAVASMUG: Activity.onResume.");
+        if (Printouts.on()) Log.i(Printouts.tag(), "Activity.onResume.");
         mGLView.onResume();
         if (mGLView.hasGlContext())
         {
@@ -151,6 +153,24 @@ public class DroidSmugActivity extends Activity
     {
         System.loadLibrary("smug");
         System.loadLibrary("apitest");
+    }
+}
+
+class Printouts
+{
+    private static boolean mDoPrintouts = true;
+    private static final String mTag = "SMUG";
+    public static void set(boolean active)
+    {
+        mDoPrintouts = active;
+    }
+    public static boolean on()
+    {
+        return mDoPrintouts;
+    }
+    public static String tag()
+    {
+        return mTag;
     }
 }
 
@@ -257,12 +277,12 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
     {
         if (event.getAction() == MotionEvent.ACTION_DOWN)
         {
-            System.out.println("Java received touch down event.");
+            if (Printouts.on()) Log.i(Printouts.tag(), "Java received touch down event.");
             return NativeFunctions.nativeTouchDown();
         }
         if (event.getAction() == MotionEvent.ACTION_UP)
         {
-            System.out.println("Java received touch up event.");
+            if (Printouts.on()) Log.i(Printouts.tag(), "Java received touch up event.");
             return NativeFunctions.nativeTouchUp();
         }
         return false;
@@ -358,7 +378,7 @@ class DroidSmugRenderer implements GLSurfaceView.Renderer
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
-        System.out.println("JAVASMUG: DroidSmugRenderer.onSurfaceCreated");
+        if (Printouts.on()) Log.i(Printouts.tag(), "DroidSmugRenderer.onSurfaceCreated");
         activity.surfaceCreatedCallback();
         _hasGlContext = true;
     }

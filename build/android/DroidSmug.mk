@@ -27,8 +27,8 @@ LOCAL_C_INCLUDES := \
 LOCAL_SRC_FILES := \
     common/interface.c \
     common/common.c \
-    common/console.c \
     common/log.c \
+    common/signal.c \
     engine/interface.c \
     engine/engine.c \
     engine/gameobject.c \
@@ -36,12 +36,17 @@ LOCAL_SRC_FILES := \
     graphics/interface.c \
     graphics/camera.c \
     graphics/color.c \
+    graphics/graphics.c \
     graphics/sprite.c \
     graphics/drawable/box.c \
     graphics/drawable/drawable.c \
     graphics/image/image.c \
     graphics/image/lodepng/lodepng.c \
     graphics/renderer/layer.c \
+    graphics/renderer/renderer.c \
+    graphics/renderer/renderbatch.c \
+    graphics/renderer/batchdata.c \
+    graphics/texture/texture.c \
     input/interface.c \
     input/input.c \
     input/controller.c \
@@ -50,9 +55,9 @@ LOCAL_SRC_FILES := \
     physics/physics.c \
     physics/body.c \
     physics/shapes.c \
+    utils/interface.c \
     utils/arraylist.c \
     utils/hook.c \
-    utils/interface.c \
     utils/linkedlist.c \
     utils/map.c \
     utils/pathname.c \
@@ -60,21 +65,14 @@ LOCAL_SRC_FILES := \
     utils/rectangle.c \
     utils/sstring.c \
     utils/vector.c \
-    platform/android/platform/opengl/importgl.c \
-    common/signal.c \
     platform/interface.c \
-    platform/android/threads.c \
-    platform/android/platform.c \
+    platform/android/platform/opengl/importgl.c \
+    platform/android/console.c \
     platform/android/input.c \
+    platform/android/platform.c \
     platform/android/smugstd.c \
-    graphics/graphics.c \
-    graphics/texture/texture.c \
-    graphics/renderer/renderer.c \
-    graphics/renderer/renderbatch.c \
-    graphics/renderer/batchdata.c \
+    platform/android/threads.c \
     platform/android/physics_debug.c
-    # platform/platform.c               #depends on GLFW
-    # platform/android/platform.c \
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
 

@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include <common/signal.h>
-#include <common/console.h>
+#include <platform/console.h>
 
 // static unsigned int gIndent = 0;
 // static unsigned int gTabWidth = 4;

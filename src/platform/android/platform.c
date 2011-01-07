@@ -263,8 +263,8 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeInit)
   (JNIEnv* env, jclass clazz, jfloat fps)
 {
     Engine_init(TRUE, TRUE);
-    // smugInit();
-    smug_printf("Hello smug world!");
+    Log_setFormatString(LOG_NOTIFICATION, "%level% - %message% [%file%:%line%]");
+    NOTIFY("Hello smug world!");
 }
 
 /*

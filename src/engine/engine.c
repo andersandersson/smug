@@ -2,8 +2,8 @@
 
 #include <common/common.h>
 #include <common/signal.h>
-#include <common/console.h>
 #include <common/log.h>
+#include <platform/console.h>
 #include <physics/physics.h>
 #include <graphics/graphics.h>
 #include <input/input.h>

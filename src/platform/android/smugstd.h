@@ -5,6 +5,7 @@
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 int smug_printf(const char* format, ...);
 

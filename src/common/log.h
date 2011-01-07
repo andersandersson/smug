@@ -14,16 +14,16 @@
 
 // Predefined log levels
 #define LOG_DEBUG           0x01
-#define LOG_WARNING         0x02
-#define LOG_ERROR           0x04
-#define LOG_NOTIFICATION    0x08
+#define LOG_NOTIFICATION    0x02
+#define LOG_WARNING         0x04
+#define LOG_ERROR           0x08
 #define LOG_ALL             0xFF
 
 // Define macros for the Log_Write function
 #define DEBUG(...) Log_addEntry(LOG_DEBUG, "DEBUG", __FILE__, __LINE__, ##__VA_ARGS__)
+#define NOTIFY(...) Log_addEntry(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, ##__VA_ARGS__)
 #define WARNING(...) Log_addEntry(LOG_WARNING, "WARNING", __FILE__, __LINE__, ##__VA_ARGS__)
 #define ERROR(...) Log_addEntry(LOG_ERROR, "ERROR", __FILE__, __LINE__, ##__VA_ARGS__)
-#define NOTIFY(...) Log_addEntry(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, ##__VA_ARGS__)
 #define Log_print(...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, 0, ##__VA_ARGS__)
 #define Log_printLine(...) _Log_print(LOG_NOTIFICATION, "NOTICE", __FILE__, __LINE__, 1, ##__VA_ARGS__)
 
