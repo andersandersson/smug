@@ -23,7 +23,10 @@ static const float maxX = 460.0f;
 static const float avatarSpeed = 400.0f;
 static const float fps = 20.0f;
 
-void logicCallback(void)
+static void logicCallback(void);
+static void killCallback(void);
+
+static void logicCallback(void)
 {
     double t = smugGetTime();
     double f = sin(t*2) * 200;
@@ -60,6 +63,7 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_DroidSmugGame_nativeGameInit
     smugLogSetLevel(SMUG_LOG_LEVEL_ALL);
     smugSetLogicCallback(logicCallback);
     smugSetLogicFps(fps);
+    smugSetKillCallback(killCallback);
 
     obj1 = smugObject_new();
     SmugDrawable d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
@@ -80,6 +84,14 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_DroidSmugGame_nativeGameInit
     smugObject_setPos(avatar, 20.0f, 240.0f);
     smugAddObject(avatar);
     // smugDestroyObject(obj);
+}
+
+static void killCallback(void)
+{
+    smugLog(SMUG_LOG_LEVEL_NOTIFICATION, "Killing game!");
+    smugObject_delete(obj1);
+    smugObject_delete(obj2);
+    smugObject_delete(avatar);
 }
 
 JNIEXPORT void JNICALL Java_se_lolektivet_apitest_DroidSmugGame_nativeTouchDown
