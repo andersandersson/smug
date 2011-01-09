@@ -10,7 +10,7 @@
 #ifndef SMUG_PHYSICS_BODY_H
 #define SMUG_PHYSICS_BODY_H
 
-#include <physics/shapes.h>
+#include <utils/shapes.h>
 #include <physics/waypoint.h>
 #include <utils/linkedlist.h>
 #include <graphics/color_type.h>

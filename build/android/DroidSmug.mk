@@ -67,6 +67,7 @@ LOCAL_SRC_FILES := \
     utils/pathname.c \
     utils/point.c \
     utils/rectangle.c \
+    utils/shapes.c \
     utils/sstring.c \
     utils/vector.c \
     platform/interface.c \

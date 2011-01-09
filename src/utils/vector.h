@@ -23,6 +23,8 @@
   * Create a new 2 dimensional vector.
   */
 Vector Vector_create2d(float x, float y);
+Vector* Vector_new2d(float x, float y);
+void Vector_delete2d(void* self);
 
 
 /**
