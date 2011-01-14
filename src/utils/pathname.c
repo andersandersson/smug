@@ -1,6 +1,8 @@
-#include <stdlib.h>
-#include "pathname.h"
-#include "linkedlist.h"
+#include <smugstd.h>
+
+#include <utils/linkedlist.h>
+
+#include <utils/pathname.h>
 
 static String* _separator = NULL;
 static String* _dot = NULL;
@@ -112,7 +114,7 @@ static BOOL _validPath(String* inputString)
             }
             break;
         default:
-            assert(FALSE);
+            smug_assert(FALSE);
             break;
         }
         pos++;
@@ -196,13 +198,13 @@ PathName* PathName_new(String* string, BOOL isFile)
     }
 
     String_delete(separators);
-    assert(_invariant(newPn));
+    smug_assert(_invariant(newPn));
     return newPn;
 }
 
 void PathName_delete(PathName* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     if (self->root)
     {
         String_delete(self->root);
@@ -215,7 +217,7 @@ void PathName_delete(PathName* self)
             String_delete(self->extension);
         }
     }
-    LinkedList_deleteContents(self->path, String_delete);
+    LinkedList_deleteContents(self->path, String_deleteVoid);
     LinkedList_delete(self->path);
     free(self);
 }
@@ -224,7 +226,7 @@ PathName* PathName_newCopy(PathName* self)
 {
     PathName* newPn;
 
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     newPn = (PathName*)malloc(sizeof(PathName));
     if (self->root)
@@ -239,9 +241,9 @@ PathName* PathName_newCopy(PathName* self)
             newPn->extension = String_newCopy(self->extension);
         }
     }
-    newPn->path = LinkedList_deepCopy(self->path, String_newCopy);
+    newPn->path = LinkedList_deepCopy(self->path, String_newCopyVoid);
 
-    assert(_invariant(newPn));
+    smug_assert(_invariant(newPn));
     return newPn;
 }
 
@@ -259,7 +261,7 @@ String* PathName_getFileName(PathName* self)
     String* ret;
     String* temp;
 
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     if (NULL == self->bareName) return NULL;
 
@@ -278,21 +280,21 @@ String* PathName_getFileName(PathName* self)
 
 String* PathName_getExtension(PathName* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     if (NULL == self->extension) return NULL;
     return String_newCopy(self->extension);
 }
 
 String* PathName_getBareName(PathName* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     if (NULL == self->bareName) return NULL;
     return String_newCopy(self->bareName);
 }
 
 String* PathName_getAsString(PathName* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     String* path;
     String* fullPath;
 
@@ -311,30 +313,30 @@ String* PathName_getAsString(PathName* self)
 
 BOOL PathName_isRelative(PathName* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     return (NULL == self->root);
 }
 
 BOOL PathName_isAbsolute(PathName* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     return (NULL != self->root);
 }
 
 BOOL PathName_isFile(PathName* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     return (NULL != self->bareName);
 }
 
 void PathName_addBase(PathName* self, PathName* base)
 {
-    assert(_invariant(self));
-    assert(_invariant(base));
-    assert(PathName_isRelative(self));
+    smug_assert(_invariant(self));
+    smug_assert(_invariant(base));
+    smug_assert(PathName_isRelative(self));
 
-    assert(_invariant(self));
-    assert(_invariant(base));
+    smug_assert(_invariant(self));
+    smug_assert(_invariant(base));
 
     LinkedList* basePath;
 
@@ -343,7 +345,7 @@ void PathName_addBase(PathName* self, PathName* base)
         self->root = String_newCopy(base->root);
     }
 
-    basePath = LinkedList_deepCopy(base->path, String_newCopy);
+    basePath = LinkedList_deepCopy(base->path, String_newCopyVoid);
     LinkedList_concat(basePath, self->path);
     self->path = basePath;
 }

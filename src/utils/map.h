@@ -1,7 +1,7 @@
 #ifndef SMUG_UTILS_MAP_H
 #define SMUG_UTILS_MAP_H
 
-#include "common/common.h"
+#include <common/common.h>
 
 typedef struct MapNode
 {

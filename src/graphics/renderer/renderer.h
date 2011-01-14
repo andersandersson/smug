@@ -1,10 +1,9 @@
-#ifndef SMUG_GRAPHICS_RENDERER_H
-#define SMUG_GRAPHICS_RENDERER_H
+#ifndef SMUG_GRAPHICS_RENDERER_RENDERER_H
+#define SMUG_GRAPHICS_RENDERER_RENDERER_H
 
-#include "utils/arraylist.h"
-#include "graphics/drawable/drawable.h"
-
-#include "graphics/camera.h"
+#include <utils/arraylist.h>
+#include <graphics/drawable/drawable.h>
+#include <graphics/camera.h>
 
 // A renderer renders one layer of graphics objects from an internal list of drawables.
 // A renderer should be able to take z-order into consideration if configured as such.
@@ -27,4 +26,4 @@ Camera* Renderer_getCamera(Renderer* renderer);
 
 void Renderer_setupLayer(Renderer* renderer, unsigned int id, float parallax);
 
-#endif //SMUG_GRAPHICS_RENDERER_H
+#endif // SMUG_GRAPHICS_RENDERER_RENDERER_H

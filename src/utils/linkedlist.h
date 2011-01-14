@@ -7,10 +7,10 @@
   * @{
   */
 
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+#ifndef SMUG_UTILS_LINKEDLIST_H
+#define SMUG_UTILS_LINKEDLIST_H
 
-#include "common/common.h"
+#include <common/common.h>
 
 /** A struct for the node type in a linked list.
   *
@@ -191,6 +191,6 @@ void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(voi
 
 LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*));
 
-#endif // LINKEDLIST_H
+#endif // SMUG_UTILS_LINKEDLIST_H
 
 /**@}*/

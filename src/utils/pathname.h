@@ -10,8 +10,8 @@
 #ifndef SMUG_UTILS_PATHNAME_H
 #define SMUG_UTILS_PATHNAME_H
 
-#include "common/common.h"
-#include "sstring.h"
+#include <common/common.h>
+#include <utils/sstring.h>
 
 /** The PathName type.
   */

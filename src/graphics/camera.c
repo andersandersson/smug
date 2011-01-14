@@ -1,5 +1,11 @@
-#include "camera.h"
 #include <stdlib.h>
+#include <smugstd.h>
+
+#include <common/common.h>
+#include <utils/point.h>
+#include <utils/vector.h>
+
+#include <graphics/camera.h>
 
 Camera* Camera_new(Vector center)
 {
@@ -14,28 +20,28 @@ Camera* Camera_new(Vector center)
 
 void Camera_delete(void* camera)
 {
-    assert(NULL != camera);
+    smug_assert(NULL != camera);
     Camera* thecamera = (Camera*)camera;
     free(thecamera);
 }
 
 void Camera_setPosition(Camera* camera, Point p)
 {
-    assert(NULL != camera);
+    smug_assert(NULL != camera);
 
     camera->pos = p;
 }
 
 void Camera_setRotation(Camera* camera, float r)
 {
-    assert(NULL != camera);
+    smug_assert(NULL != camera);
 
     camera->rot = r;
 }
 
 void Camera_setZoom(Camera* camera, float zoom)
 {
-    assert(NULL != camera);
+    smug_assert(NULL != camera);
 
     if (zoom <= 0.01)
         zoom = 0.01;

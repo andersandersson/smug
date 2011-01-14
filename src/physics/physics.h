@@ -8,15 +8,15 @@
   * @{
   */
 
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#ifndef SMUG_PHYSICS_PHYSICS_H
+#define SMUG_PHYSICS_PHYSICS_H
 
-#include "body.h"
-#include "utils/hook.h"
-#include "utils/linkedlist.h"
-#include "utils/vector.h"
-#include "utils/map.h"
-
+#include <utils/hook.h>
+#include <physics/body.h>
+#include <utils/hook.h>
+#include <utils/linkedlist.h>
+#include <utils/vector.h>
+#include <utils/map.h>
 
 typedef unsigned int COLLISION_TYPE;
 
@@ -148,6 +148,6 @@ void Physics_update(TIME time, BOOL do_update);
  */
 void Physics_setDefaultCollisionHandler(BODY_TYPE left, BODY_TYPE right);
 
-#endif
+#endif /* SMUG_PHYSICS_PHYSICS_H */
 
 /**@}*/

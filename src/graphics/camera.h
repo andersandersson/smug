@@ -10,10 +10,10 @@
 #ifndef SMUG_GRAPHICS_CAMERA_H
 #define SMUG_GRAPHICS_CAMERA_H
 
-#include "common/common.h"
+#include <common/common.h>
 
-#include "utils/point.h"
-#include "utils/vector.h"
+#include <utils/point_type.h>
+#include <utils/vector_type.h>
 
 /**
  * A versatile camera for viewing the world.

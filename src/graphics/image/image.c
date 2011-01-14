@@ -1,11 +1,11 @@
-#include "image.h"
+#include <stdlib.h>
+#include <string.h>
 
-#include "stdlib.h"
-#include "string.h"
+#include <common/common.h>
+#include <common/log.h>
+#include <graphics/image/lodepng/lodepng.h>
 
-#include "lodepng/lodepng.h"
-#include "common/log.h"
-#include "common/common.h"
+#include <graphics/image/image.h>
 
 Image* Image_new(void)
 {

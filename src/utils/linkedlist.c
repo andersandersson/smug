@@ -1,6 +1,8 @@
-#include "linkedlist.h"
+#include <smugstd.h>
 
-#include <stdlib.h>
+#include <common/common.h>
+
+#include <utils/linkedlist.h>
 
 static void _clear(LinkedList* list)
 {
@@ -59,14 +61,14 @@ LinkedList* LinkedList_new()
     new_list->last = NULL;
     new_list->length = 0;
 
-    assert(_invariant(new_list));
+    smug_assert(_invariant(new_list));
 
     return new_list;
 }
 
 void LinkedList_delete(LinkedList* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     _clear(self);
     free(self);
@@ -74,7 +76,7 @@ void LinkedList_delete(LinkedList* self)
 
 void LinkedList_addLast(LinkedList* self, void* item)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* node = Node_new();
 
@@ -95,7 +97,7 @@ void LinkedList_addLast(LinkedList* self, void* item)
 
 void LinkedList_addFirst(LinkedList* self, void* item)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* node = Node_new();
 
@@ -116,7 +118,7 @@ void LinkedList_addFirst(LinkedList* self, void* item)
 
 void LinkedList_insertAfter(LinkedList* self, Node* node, void* item)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* newNode = Node_new();
     newNode->item = item;
@@ -127,7 +129,7 @@ void LinkedList_insertAfter(LinkedList* self, Node* node, void* item)
 
 void LinkedList_insertBefore(LinkedList* self, Node* node, void* item)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* newNode = Node_new();
     newNode->item = item;
@@ -138,21 +140,21 @@ void LinkedList_insertBefore(LinkedList* self, Node* node, void* item)
 
 BOOL LinkedList_isEmpty(LinkedList* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     return (NULL == self->first && NULL == self->last);
 }
 
 int LinkedList_length(LinkedList* self)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     return self->length;
 }
 
 void LinkedList_remove(LinkedList* self, Node* node)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     if (node == self->first)
     {
@@ -178,7 +180,7 @@ void LinkedList_remove(LinkedList* self, Node* node)
 
 BOOL LinkedList_removeItem(LinkedList* self, void* item)
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* node = self->first;
     while(NULL != node)
@@ -198,7 +200,7 @@ BOOL LinkedList_removeItem(LinkedList* self, void* item)
 
 void LinkedList_doList(LinkedList* self, void (*func)(void*))
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* node = self->first;
     while(NULL != node)
@@ -210,7 +212,7 @@ void LinkedList_doList(LinkedList* self, void (*func)(void*))
 
 void LinkedList_doListIf(LinkedList* self, void (*func)(void*), BOOL(*pred)(void*))
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* node = self->first;
     while(NULL != node)
@@ -225,7 +227,7 @@ void LinkedList_doListIf(LinkedList* self, void (*func)(void*), BOOL(*pred)(void
 
 LinkedList* LinkedList_getThose(LinkedList* self, BOOL(*pred)(void*))
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     LinkedList* newList = LinkedList_new();
     Node* node = self->first;
@@ -242,7 +244,7 @@ LinkedList* LinkedList_getThose(LinkedList* self, BOOL(*pred)(void*))
 
 LinkedList* LinkedList_map(LinkedList* self, void* (*func)(void*))
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     LinkedList* newList = LinkedList_new();
     Node* node = self->first;
@@ -256,7 +258,7 @@ LinkedList* LinkedList_map(LinkedList* self, void* (*func)(void*))
 
 BOOL LinkedList_forAll(LinkedList* self, BOOL(*pred)(void*))
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* node = self->first;
     while(NULL != node)
@@ -272,7 +274,7 @@ BOOL LinkedList_forAll(LinkedList* self, BOOL(*pred)(void*))
 
 BOOL LinkedList_exists(LinkedList* self, BOOL(*pred)(void*))
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     Node* node = self->first;
     while(NULL != node)
@@ -288,8 +290,8 @@ BOOL LinkedList_exists(LinkedList* self, BOOL(*pred)(void*))
 
 void LinkedList_concat(LinkedList* self, LinkedList* other)
 {
-    assert(_invariant(self));
-    assert(_invariant(other));
+    smug_assert(_invariant(self));
+    smug_assert(_invariant(other));
     self->last->next = other->first;
     other->first->prev = self->last;
 }
@@ -299,7 +301,7 @@ void LinkedList_interleave(LinkedList* self, void* item, void* (*itemCopier)(voi
     Node* iter;
     //void* itemCopy; is not used
 
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     iter = self->first;
     iter = iter->next;
@@ -316,7 +318,7 @@ LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*))
     LinkedList* newList;
     Node* iter;
 
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
 
     newList = LinkedList_new();
     iter = self->first;
@@ -331,7 +333,7 @@ LinkedList* LinkedList_deepCopy(LinkedList* self, void* (*itemCopier)(void*))
 
 void LinkedList_deleteContents(LinkedList* self, void (*deleter)(void*))
 {
-    assert(_invariant(self));
+    smug_assert(_invariant(self));
     //LinkedList_traverse(self, deleter);
     _clear(self);
 }

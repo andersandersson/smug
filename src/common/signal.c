@@ -1,5 +1,6 @@
-#include "signal.h"
-#include "platform/threads.h"
+#include <smugstd.h>
+#include <platform/threads.h>
+#include <common/signal.h>
 
 static int _signals = 0;
 static Mutex* _signalMutex = NULL;
@@ -7,10 +8,10 @@ static BOOL isInitialized = FALSE;
 
 int Signal_init(void)
 {
-    assert(!isInitialized);
+    smug_assert(!isInitialized);
     _signalMutex = Mutex_new();
-   
-    if(NULL == _signalMutex || NULL == _signalMutex->_mutex)
+
+    if(!Mutex_isInitialized(_signalMutex))
     {
         isInitialized = FALSE;
     }
@@ -28,8 +29,9 @@ BOOL Signal_isInitialized(void)
 
 void Signal_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     Mutex_delete(_signalMutex);
+    isInitialized = FALSE;
 }
 
 void Signal_send(int signal)
@@ -48,14 +50,14 @@ BOOL Signal_check(int signal)
             Mutex_unlock(_signalMutex);
             return TRUE;
         }
-   
+
     Mutex_unlock(_signalMutex);
 
     return FALSE;
 }
 
 void Signal_clear(int signal)
-{ 
+{
     Mutex_lock(_signalMutex);
     _signals = (_signals & ~signal);
     Mutex_unlock(_signalMutex);

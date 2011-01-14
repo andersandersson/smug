@@ -1,17 +1,18 @@
-#include "renderer.h"
-
-#include <math.h>
-
-#include "renderbatch.h"
-#include "layer.h"
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+#include <smugstd.h>
 
-#include "graphics/graphics.h"
-#include "graphics/sprite.h"
+#include <utils/point.h>
+#include <utils/vector.h>
+#include <platform/platform.h>
+#include <platform/opengl/opengl.h>
+#include <graphics/graphics.h>
+#include <graphics/sprite.h>
+#include <graphics/renderer/renderbatch.h>
+#include <graphics/renderer/layer.h>
 
-#include "platform/opengl/opengl.h"
+#include <graphics/renderer/renderer.h>
 
 extern int gVBOSupported;
 extern unsigned int gRenderMode;
@@ -21,7 +22,8 @@ Renderer* Renderer_new(void)
     Renderer* ret = (Renderer*)malloc(sizeof(Renderer));
     ret->layers = ArrayList_new();
     ret->layercount = 0;
-    ret->camera = Camera_new(Vector_multiply(Graphics_getScreenSize(), 0.5));
+    // ret->camera = Camera_new(Vector_multiply(Platform_getWindowSize(), 0.5));
+    ret->camera = Camera_new(Vector_create2d(0.0, 0.0));
 
     return ret;
 }
@@ -41,7 +43,7 @@ static void renderLayer(Renderer* renderer, Layer* layer)
 
     // TODO: Fix zoom thingies
     glScalef(1.0f + (camera->scale.d[0] - 1.0f)  * p, 1.0f + (camera->scale.d[1] - 1.0f)  * p, 1.0f);
-    glTranslatef(-Point_getX(&camera->pos) * p, -Point_getY(&camera->pos) * p, 0.0f);
+    glTranslatef(-Point_getX(camera->pos) * p, -Point_getY(camera->pos) * p, 0.0f);
 
     Layer_render(layer);
 
@@ -50,6 +52,8 @@ static void renderLayer(Renderer* renderer, Layer* layer)
 
 static void renderDebugGrid(Renderer* renderer)
 {
+// TODO: Implement this function without using openGL's immediate mode.
+#ifndef SMUG_GLES
     Camera* camera = renderer->camera;
 
     glPushMatrix();
@@ -57,12 +61,12 @@ static void renderDebugGrid(Renderer* renderer)
     float scalex = camera->scale.d[0];
     float scaley = camera->scale.d[1];
     glScalef(scalex, scaley, 1.0f);
-    glTranslatef(-Point_getX(&camera->pos), -Point_getY(&camera->pos), 0.0f);
-    Vector screenSize = Vector_multiply(Graphics_getScreenSize(), 0.5);
+    glTranslatef(-Point_getX(camera->pos), -Point_getY(camera->pos), 0.0f);
+    Vector screenSize = Vector_multiply(Platform_getWindowSize(), 0.5);
     float gridsizex = 16.0f;
     float gridsizey = 16.0f;
-    float cposx = Point_getX(&camera->pos);
-    float cposy = Point_getY(&camera->pos);
+    float cposx = Point_getX(camera->pos);
+    float cposy = Point_getY(camera->pos);
     float offsetx = cposx - (((int)(cposx / gridsizex)) * gridsizex);
     float offsety = cposy - (((int)(cposy / gridsizey)) * gridsizey);
     float ratio = screenSize.d[0] / screenSize.d[1] - 1;
@@ -110,6 +114,7 @@ static void renderDebugGrid(Renderer* renderer)
     glEnd();
 
     glPopMatrix();
+#endif /* SMUG_GLES */
 }
 
 void Renderer_render(Renderer* renderer)
@@ -143,8 +148,8 @@ void Renderer_render(Renderer* renderer)
 
 void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
 {
-    assert(NULL != renderer);
-    assert(NULL != drawable);
+    smug_assert(NULL != renderer);
+    smug_assert(NULL != drawable);
 
 
     Layer* layer = ArrayList_get(renderer->layers, Drawable_getLayer(drawable));
@@ -159,14 +164,14 @@ void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
 
 Camera* Renderer_getCamera(Renderer* renderer)
 {
-    assert(NULL != renderer);
+    smug_assert(NULL != renderer);
 
     return renderer->camera;
 }
 
 void Renderer_setupLayer(Renderer* renderer, unsigned int id, float parallax)
 {
-    assert(NULL != renderer);
+    smug_assert(NULL != renderer);
 
     Layer* layer = ArrayList_get(renderer->layers, id);
     if (NULL == layer )

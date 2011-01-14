@@ -1,8 +1,8 @@
-#ifndef SMUG_GRAPHICS_TEXTURE_H
-#define SMUG_GRAPHICS_TEXTURE_H
+#ifndef SMUG_GRAPHICS_TEXTURE_TEXTURE_H
+#define SMUG_GRAPHICS_TEXTURE_TEXTURE_H
 
-#include "common/common.h"
-#include "graphics/image/image.h"
+#include <common/common.h>
+#include <graphics/image/image.h>
 
 typedef struct Texture
 {
@@ -22,4 +22,4 @@ void Texture_release(Texture* texture);
 void Texture_reload(Texture* texture);
 void Texture_delete(void* texture);
 
-#endif //SMUG_GRAPHICS_TEXTURE_H
+#endif // SMUG_GRAPHICS_TEXTURE_TEXTURE_H

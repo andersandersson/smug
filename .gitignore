@@ -18,6 +18,7 @@
 # Top level files
 #
 !.gitignore
+output
 
 # Build generated files
 #

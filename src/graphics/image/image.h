@@ -1,7 +1,7 @@
-#ifndef SMUG_GRAPHICS_IMAGE_H
-#define SMUG_GRAPHICS_IMAGE_H
+#ifndef SMUG_GRAPHICS_IMAGE_IMAGE_H
+#define SMUG_GRAPHICS_IMAGE_IMAGE_H
 
-#include "common/common.h"
+#include <common/common.h>
 
 typedef struct Image
 {
@@ -20,4 +20,4 @@ void Image_delete(Image* image);
 BOOL Image_loadFromFile(Image* image, const char* filename);
 BOOL Image_saveToFile(Image* image, const char* filename);
 
-#endif //SMUG_GRAPHICS_IMAGE_H
+#endif // SMUG_GRAPHICS_IMAGE_IMAGE_H

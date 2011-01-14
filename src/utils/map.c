@@ -1,9 +1,9 @@
-#include "map.h"
+#include <smugstd.h>
 
-#include "common/log.h"
-#include "common/common.h"
+#include <common/common.h>
+#include <common/log.h>
 
-#include <stdlib.h>
+#include <utils/map.h>
 
 MapNode* MapNode_new(void)
 {
@@ -92,7 +92,6 @@ Map* Map_new(void)
 void Map_delete(Map* map)
 {
     MapNode_deleteRecursive(map->root);
-
     free(map);
 }
 

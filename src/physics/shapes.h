@@ -10,9 +10,7 @@
 #ifndef SMUG_PHYSICS_SHAPES_H
 #define SMUG_PHYSICS_SHAPES_H
 
-#include "utils/rectangle.h"
-#include "utils/point.h"
-#include "utils/vector.h"
+#include <utils/rectangle_type.h>
 
 /** Describes the type of a Shape */
 typedef unsigned int SHAPE_TYPE;
@@ -43,7 +41,7 @@ typedef struct Shape
  *
  * @relatesalso Shape
  * @return Shape
- */ 
+ */
 Shape* Shape_new(void);
 
 
@@ -53,7 +51,7 @@ Shape* Shape_new(void);
 void Shape_delete(Shape* shape);
 
 
-/** Create a new Shape based on a Rectangle 
+/** Create a new Shape based on a Rectangle
  *
  * This function takes a Rectangle object and creates a new
  * Shape object from it.

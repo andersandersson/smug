@@ -4,19 +4,18 @@
   */
 
 /** @defgroup smug_input Input
-  * 
+  *
   * @{
   */
 
-#ifndef SMUG_INPUT_H
-#define SMUG_INPUT_H
+#ifndef SMUG_INPUT_INPUT_H
+#define SMUG_INPUT_INPUT_H
 
-#include "common/common.h"
-#include "utils/hook.h"
-#include "utils/point.h"
-#include "platform/platform.h"
-
-#include "controller.h"
+#include <common/common.h>
+#include <utils/hook.h>
+#include <utils/point_type.h>
+#include <platform/platform.h>
+#include <input/controller.h>
 
 /**
  * Initialize Input subsystem
@@ -29,22 +28,22 @@ int Input_init(void);
  */
 BOOL Input_isInitialized(void);
 
-/** 
+/**
  * Terminate the input component of the engine.
  * @pre the Input module must be initialized via Input_init(...)
  */
 void Input_terminate(void);
 
 /**
- * Get the state of a keyboard key, returns 
+ * Get the state of a keyboard key, returns
  * either INPUTSTATE_RELEASED or INPUTSTATE_PRESSED
  * @param key which key
- * @return INPUTSTATE 
+ * @return INPUTSTATE
  */
 INPUTSTATE Input_getKey(unsigned int key);
 
 /**
- * Get the state of a mouse button, returns 
+ * Get the state of a mouse button, returns
  * either INPUTSTATE_RELEASED or INPUTSTATE_PRESSED
  * @param button which mousebutton
  * @return INPUTSTATE
@@ -52,31 +51,31 @@ INPUTSTATE Input_getKey(unsigned int key);
 INPUTSTATE Input_getMouseButton(unsigned int button);
 
 /**
- * Get the relative screen movement of the mouse in screen coordinates. 
- * The position is centered with origo in the center of the screen. 
+ * Get the relative screen movement of the mouse in screen coordinates.
+ * The position is centered with origo in the center of the screen.
  * @return Vector with relative values.
  */
 Vector Input_getMouseScreenMovement(void);
 
 /**
  * Get the screen position of the mouse. The position
- * is centered with origo in the center of the screen. 
+ * is centered with origo in the center of the screen.
  * @return Point with absoulte values.
  */
 Point Input_getMouseScreenPosition(void);
 
 /**
- * Get the relative movement of the mouse as an INPUTSTATE. 
+ * Get the relative movement of the mouse as an INPUTSTATE.
  * This will treat the mouse as a generic axis.
- * The position is centered with origo in the center of the screen. 
+ * The position is centered with origo in the center of the screen.
  * @return Vector of INPUTSTATE with relative values.
  */
 Vector Input_getMouseMovement(void);
 
 /**
- * Get the position of the mouse as an INPUTSTATE. 
+ * Get the position of the mouse as an INPUTSTATE.
  * This will treat the mouse as a generic axis. The position
- * is centered with origo in the center of the screen. 
+ * is centered with origo in the center of the screen.
  * @return Point of INPUTSTATE with absoulte values.
  */
 Point Input_getMousePosition(void);

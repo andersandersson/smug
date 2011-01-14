@@ -1,5 +1,5 @@
-#ifndef SMUG_CONTROLLERTYPE_H
-#define SMUG_CONTROLLERTYPE_H
+#ifndef SMUG_INPUT_CONTROLLERTYPE_H
+#define SMUG_INPUT_CONTROLLERTYPE_H
 
 /**
  * ControllerType
@@ -22,4 +22,4 @@ typedef struct ControllerType
 ControllerType* ControllerType_new(unsigned int buttons, unsigned int axes);
 
 
-#endif // SMUG_CONTROLLERTYPE_H
+#endif // SMUG_INPUT_CONTROLLERTYPE_H

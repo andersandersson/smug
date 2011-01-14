@@ -1,9 +1,14 @@
-#include "sprite.h"
-#include <stdlib.h>
+#include <smugstd.h>
+
+#include <common/common.h>
+#include <utils/vector.h>
+#include <utils/rectangle.h>
+
+#include <graphics/sprite.h>
 
 Sprite* Sprite_newFromPixelCoords(Texture* texture, Rectangle rect, Vector offset)
 {
-    assert(texture != NULL);
+    smug_assert(texture != NULL);
     Sprite* s = (Sprite*)malloc(sizeof(Sprite));
     s->texture = texture;
     s->rect = rect;
@@ -13,7 +18,7 @@ Sprite* Sprite_newFromPixelCoords(Texture* texture, Rectangle rect, Vector offse
 
 Sprite* Sprite_newFromTextureCoords(Texture* texture, Rectangle rect, Vector offset)
 {
-    assert(texture != NULL);
+    smug_assert(texture != NULL);
     Sprite* s = (Sprite*)malloc(sizeof(Sprite));
     s->texture = texture;
     s->rect = Rectangle_multiplyVector(rect, Vector_create2d(texture->width, texture->height));

@@ -12,8 +12,8 @@
 #ifndef SMUG_ENGINE_ENGINE_H
 #define SMUG_ENGINE_ENGINE_H
 
-#include "common/common.h"
-#include "gameobject.h"
+#include <common/common.h>
+#include <engine/gameobject.h>
 
 /**
   * Initialize Engine
@@ -35,10 +35,6 @@ int Engine_init(BOOL verbose, BOOL console);
   */
 BOOL Engine_isInitialized(void);
 
-void Engine_setLogicCallback(void (*logicCallback)(void));
-
-void Engine_enableLogicCallback(BOOL enable);
-
 /**
   * Close down Engine
   *
@@ -46,16 +42,14 @@ void Engine_enableLogicCallback(BOOL enable);
 void Engine_terminate(void);
 
 /**
-  * Run the engine.
-  *
-  * @pre The engine must be initialized.
-  */
-void Engine_run(void);
-
-/**
   *
   */
 void Engine_addObject(GameObject* newObj);
+
+/**
+ * Called by blocking engine OR platform once after each logic heartbeat.
+ */
+void Engine_commitPositionChanges();
 
 #endif // SMUG_ENGINE_ENGINE_H
 

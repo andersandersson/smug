@@ -1,13 +1,11 @@
-#include "renderbatch.h"
+#include <smugstd.h>
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <common/log.h>
+#include <common/common.h>
+#include <graphics/texture/texture.h>
+#include <platform/opengl/opengl.h>
 
-#include "common/log.h"
-
-#include "graphics/texture/texture.h"
-#include "platform/opengl/opengl.h"
-
+#include <graphics/renderer/renderbatch.h>
 
 extern int gVBOSupported;
 
@@ -53,7 +51,7 @@ RenderBatch* RenderBatch_new(unsigned int objectSize, Texture* texture, unsigned
 
 void RenderBatch_delete(void* batch)
 {
-    assert(NULL != batch);
+    smug_assert(NULL != batch);
 
     RenderBatch* thebatch = (RenderBatch*)batch;
     BatchData_delete(thebatch->data);
@@ -71,16 +69,16 @@ void RenderBatch_delete(void* batch)
 
 unsigned int RenderBatch_getSize(RenderBatch* batch)
 {
-    assert(NULL != batch);
+    smug_assert(NULL != batch);
     return batch->dataSize;
 }
 
 void RenderBatch_addDrawable(RenderBatch* batch, Drawable* drawable)
 {
-    assert(NULL != batch);
-    assert(NULL != drawable);
-    assert(Drawable_getTexture(drawable) == batch->texture);
-    assert(Drawable_getObjectSize(drawable) == batch->objectSize);
+    smug_assert(NULL != batch);
+    smug_assert(NULL != drawable);
+    smug_assert(Drawable_getTexture(drawable) == batch->texture);
+    smug_assert(Drawable_getObjectSize(drawable) == batch->objectSize);
 
     // Add drawable to list
     LinkedList_addLast(batch->drawables, drawable);
@@ -122,7 +120,6 @@ void RenderBatch_write(RenderBatch* currentBatch)
 
         node = node->next;
     }
-
     currentBatch->dataSize = writepos;
 
 }
@@ -131,7 +128,7 @@ void RenderBatch_render(RenderBatch* currentBatch)
 {
     static BOOL texture_enabled = FALSE;
 
-    int tex = 0;
+    // int tex = 0;
     if (NULL != currentBatch->texture)
     {
         if (texture_enabled != TRUE)
@@ -187,15 +184,18 @@ void RenderBatch_render(RenderBatch* currentBatch)
             break;
         }
         case 3:
+        case 6:
         {
             glDrawArrays(GL_TRIANGLES, 0, batchSize);
             break;
         }
+#ifndef SMUG_GLES
         case 4:
         {
             glDrawArrays(GL_QUADS, 0, batchSize);
             break;
         }
+#endif /* SMUG_GLES */
         default:
         {
             glDrawArrays(GL_TRIANGLE_FAN, 0, batchSize);

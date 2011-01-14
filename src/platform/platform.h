@@ -4,17 +4,16 @@
   */
 
 /** @defgroup smug_platform Platform
-  * 
+  *
   * @{
   */
 
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#ifndef SMUG_PLATFORM_PLATFORM_H
+#define SMUG_PLATFORM_PLATFORM_H
 
-#include "threads.h"
-#include "common/common.h"
-
-#include "utils/vector.h"
+#include <common/common.h>
+#include <platform/threads.h>
+#include <utils/vector_type.h>
 
 // Common key identifiers
 typedef float INPUTSTATE;
@@ -150,7 +149,7 @@ typedef float INPUTSTATE;
 #define JOYSTICK_BUTTON_COUNT      JOYSTICK_BUTTON_LAST-JOYSTICK_BUTTON_BASE
 
 // Joystick axis identifiers
-#define JOYSTICK_AXIS_BASE JOYSTICK_BUTTON_LAST+1 
+#define JOYSTICK_AXIS_BASE JOYSTICK_BUTTON_LAST+1
 #define JOYSTICK_AXIS_1_XPOS JOYSTICK_AXIS_BASE+0
 #define JOYSTICK_AXIS_1_XNEG JOYSTICK_AXIS_BASE+1
 #define JOYSTICK_AXIS_1_YPOS JOYSTICK_AXIS_BASE+2
@@ -174,7 +173,7 @@ typedef float INPUTSTATE;
 #define JOYSTICK_LAST JOYSTICK_AXIS_BASE
 #define JOYSTICK_COUNT JOYSTICK_LAST-JOYSTICK_BASE
 
-//Device identifiers 
+//Device identifiers
 #define DEVICE_KEYBOARD 0
 #define DEVICE_MOUSE 1
 #define DEVICE_JOYSTICK_BASE 2
@@ -199,6 +198,16 @@ typedef float INPUTSTATE;
 #define DEVICE_BASE DEVICE_KEYBOARD
 #define DEVICE_COUNT DEVICE_LAST-DEVICE_BASE
 
+typedef enum
+{
+    SMUG_OPENED,
+    SMUG_RESTORED,
+    SMUG_ACTIVATED,
+    SMUG_DEACTIVATED,
+    SMUG_MINIMIZED,
+    SMUG_CLOSED
+} SMUG_WINDOW_STATE_CHANGE;
+
 /**
  * Initializes the platform layer and opens a window.
  * @param width the width of the window in pixels
@@ -207,6 +216,8 @@ typedef float INPUTSTATE;
  * @return int 0 on fail, 1 on succes
  */
 int Platform_init(int width, int height, BOOL fullscreen);
+
+void Platform_initInput(void);
 
 /**
  * Returns true if the system is initialized
@@ -218,8 +229,12 @@ BOOL Platform_isInitialized(void);
  */
 void Platform_terminate(void);
 
+/** Will be called by the platform OR the blocking version of the smug engine at the set fps
+ *  interval.
+ */
+void Platform_internalHeartbeat(void);
 
-/** 
+/**
  * Check if the window is open
  */
 BOOL Platform_isWindowOpen(void);
@@ -233,12 +248,32 @@ void Platform_refreshWindow(void);
 /**
  * Returns the current size of the window
  */
-Vector Platform_getWindowSize(void); 
+Vector Platform_getWindowSize(void);
+
+void Platform_setWindowResizeCallback(void(*callback)(int, int));
+
+void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHANGE));
+
+void Platform_setKillCallback(void(*callback)(void));
+
+void Platform_setTouchEventCallback(void(*callback)(int, int, int));
+
+void Platform_setLogicCallback(void (*callback)(void));
+
+void Platform_enableLogicCallback(BOOL enable);
+
+void Platform_setLogicFps(float fps);
 
 /**
  * Get the current system time
  */
 TIME Platform_getTime(void);
+
+TIME Platform_getDiscreteTime(void);
+
+void Platform_stepDiscreteTime(void);
+
+float Platform_getInterpolationFactor(void);
 
 /**
  * Sleep for a given amount of seconds
@@ -270,6 +305,6 @@ INPUTSTATE Platform_getInputState(int device, int trigger);
  */
 void Platform_detectJoysticks(void);
 
-#endif // PLATFORM_H
+#endif // SMUG_PLATFORM_PLATFORM_H
 
 /**@}*/

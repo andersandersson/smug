@@ -1,11 +1,10 @@
-#ifndef SMUG_GRAPHICS_RENDERBATCH_H
-#define SMUG_GRAPHICS_RENDERBATCH_H
+#ifndef SMUG_GRAPHICS_RENDERER_RENDERBATCH_H
+#define SMUG_GRAPHICS_RENDERER_RENDERBATCH_H
 
-#include "common/common.h"
-
-#include "utils/linkedlist.h"
-#include "graphics/drawable/drawable.h"
-#include "graphics/renderer/batchdata.h"
+#include <common/common.h>
+#include <utils/linkedlist.h>
+#include <graphics/drawable/drawable.h>
+#include <graphics/renderer/batchdata.h>
 
 // Holds all data necessary for one render batch
 
@@ -39,4 +38,4 @@ void RenderBatch_write(RenderBatch* batch);
 void RenderBatch_addDrawable(RenderBatch* batch, Drawable* drawable);
 unsigned int RenderBatch_getDrawableCount(RenderBatch* batch);
 
-#endif //SMUG_GRAPHICS_RENDERBATCH_H
+#endif // SMUG_GRAPHICS_RENDERER_RENDERBATCH_H

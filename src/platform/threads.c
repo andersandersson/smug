@@ -1,8 +1,32 @@
 #include <GL/glfw.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <smugstd.h>
 
-#include "threads.h"
+#include <common/common.h>
+
+#include <platform/threads.h>
+
+struct _Thread
+{
+    GLFWthread id;
+
+    // "Private" data
+    void (*_callback)(void*);
+    void* _callbackParam;
+    GLFWcond _loopCond;
+    GLFWmutex _loopMutex;
+    int _alive;
+    int _awake;
+};
+
+struct _Mutex
+{
+    GLFWmutex _mutex;
+};
+
+struct _ConditionVariable
+{
+    GLFWcond _cond;
+};
 
 // Internal functions that should not be used
 // outside threads.c
@@ -24,7 +48,7 @@ static void Thread_release(Thread* thread);
 Thread* Thread_new(char* name)
 {
    Thread* thread = malloc(sizeof(Thread));
-   
+
    thread->_alive = 0;
    thread->_awake = 0;
    thread->_callbackParam = NULL;
@@ -34,7 +58,7 @@ Thread* Thread_new(char* name)
 
    // Create a new thread and have it run the Thread_Loop
    thread->id = glfwCreateThread(Thread_loop, (void*) thread);
-   
+
    // Acquire the loop lock
    glfwLockMutex(thread->_loopMutex);
 
@@ -72,12 +96,12 @@ void Thread_release(Thread* thread)
 void Thread_join(Thread* thread)
 {
    Thread_lock(thread);
-  
+
    while(1 == thread->_awake) {
       Thread_signal(thread);
       glfwWaitCond(thread->_loopCond, thread->_loopMutex, GLFW_INFINITY);
    }
-  
+
    Thread_release(thread);
 }
 
@@ -131,7 +155,7 @@ void GLFWCALL Thread_loop(void* arg)
 
    glfwSignalCond(thread->_loopCond);
 
-   while(1 == thread->_alive) {    
+   while(1 == thread->_alive) {
       while(0 == thread->_awake) {
          Thread_signal(thread);
          glfwWaitCond(thread->_loopCond, thread->_loopMutex, GLFW_INFINITY);
@@ -141,7 +165,7 @@ void GLFWCALL Thread_loop(void* arg)
          thread->_callback(thread->_callbackParam);
       }
 
-      thread->_awake = 0;    
+      thread->_awake = 0;
    }
 
    Thread_signal(thread);
@@ -165,6 +189,12 @@ void Mutex_delete(Mutex* mutex)
    glfwDestroyMutex(mutex->_mutex);
 
    free(mutex);
+}
+
+
+BOOL Mutex_isInitialized(Mutex* self)
+{
+    return self != NULL && self->_mutex != NULL;
 }
 
 

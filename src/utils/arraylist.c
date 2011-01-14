@@ -1,6 +1,8 @@
-#include "arraylist.h"
+#include <smugstd.h>
 
-#include <stdlib.h>
+#include <common/common.h>
+
+#include <utils/arraylist.h>
 
 ArrayList* ArrayList_new(void)
 {
@@ -12,7 +14,7 @@ ArrayList* ArrayList_new(void)
 
 ArrayList* ArrayList_newFromCapacity(unsigned int capacity)
 {
-    ArrayList* ret = (ArrayList*)malloc(sizeof(ArrayList));          
+    ArrayList* ret = (ArrayList*)malloc(sizeof(ArrayList));
     ret->capacity = capacity;
     if (capacity > 0)
     {
@@ -27,13 +29,13 @@ ArrayList* ArrayList_newFromCapacity(unsigned int capacity)
     {
         ret->list = NULL;
     }
-    
+
     return ret;
 }
 
 void ArrayList_delete(void* list)
 {
-    assert(NULL != list);
+    smug_assert(NULL != list);
     ArrayList* thelist = (ArrayList*)list;
     free(thelist->list);
     free(thelist);
@@ -45,7 +47,7 @@ static void grow(ArrayList* list, unsigned int newsize)
     void** newlist;
     unsigned int oldcap = list->capacity;
     unsigned int newcap = oldcap + 1;
-    
+
     while (newsize >= newcap)
     {
         newcap*=2;
@@ -55,13 +57,13 @@ static void grow(ArrayList* list, unsigned int newsize)
     int i;
     for (i = 0; i < oldcap; i++)
     {
-        newlist[i] = list->list[i];   
+        newlist[i] = list->list[i];
     }
     for (i = oldcap; i < newcap; i++)
     {
         newlist[i] = NULL;
     }
-    
+
     free(list->list);
     list->list = newlist;
     list->capacity = newcap;
@@ -71,7 +73,7 @@ static void grow(ArrayList* list, unsigned int newsize)
 
 void ArrayList_set(ArrayList* list, unsigned int index, void* obj)
 {
-    assert(NULL != list);
+    smug_assert(NULL != list);
     if (index < list->capacity)
     {
         list->list[index] = obj;
@@ -84,8 +86,8 @@ void ArrayList_set(ArrayList* list, unsigned int index, void* obj)
 }
 
 void* ArrayList_get(ArrayList* list, unsigned int index)
-{   
-    assert(NULL != list);
+{
+    smug_assert(NULL != list);
     if (index < list->capacity)
     {
         return list->list[index];
@@ -95,7 +97,7 @@ void* ArrayList_get(ArrayList* list, unsigned int index)
 
 void* ArrayList_remove(ArrayList* list, unsigned int index)
 {
-    assert(NULL != list);
+    smug_assert(NULL != list);
     void* retval = ArrayList_get(list, index);
     if (index < list->capacity)
     {
@@ -106,13 +108,13 @@ void* ArrayList_remove(ArrayList* list, unsigned int index)
 
 unsigned int ArrayList_getCapacity(ArrayList* list)
 {
-    assert(NULL != list);
+    smug_assert(NULL != list);
     return list->capacity;
 }
 
 void ArrayList_deleteContents(ArrayList* list, void (*deletefunc)(void*))
 {
-    assert(NULL != list);
+    smug_assert(NULL != list);
     int i;
     for (i = 0; i < list->capacity; i++)
     {

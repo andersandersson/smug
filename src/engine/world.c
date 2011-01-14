@@ -1,11 +1,12 @@
+#include <smugstd.h>
 #include <stdlib.h>
 #include "world.h"
 #include "string.h"
 
 static void World_invariant(World* w)
 {
-    assert(NULL != w);
-    assert(NULL != w->gameObjects);
+    smug_assert(NULL != w);
+    smug_assert(NULL != w->gameObjects);
 }
 
 World* World_new(void)
@@ -20,7 +21,7 @@ void World_delete(void* world)
 {
     World* w = (World*)world;
     World_invariant(w);
-    
+
     LinkedList_deleteContents(w->gameObjects, GameObject_delete);
     LinkedList_delete(w->gameObjects);
     free(w);

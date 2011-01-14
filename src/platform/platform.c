@@ -1,10 +1,14 @@
-#include "platform.h"
+/** This platform version is based on GLFW and the blocking version of the smug engine.
+ */
 
-#include "GL/glfw.h"
-#include "common/log.h"
-#include "stdlib.h"
+#include <GL/glfw.h>
+#include <smugstd.h>
 
-#include "stdio.h"
+#include <common/common.h>
+#include <common/log.h>
+#include <engine/blocking_engine.h>
+
+#include <platform/platform.h>
 
 // Holds information of physical joystick
 typedef struct JoystickInfo
@@ -17,9 +21,26 @@ typedef struct JoystickInfo
 
 static BOOL isInitialized = FALSE;
 
+static void(*gUserWindowResizeCallback)(int, int) = NULL;
+static void(*gUserWindowStateChangeCallback)(void) = NULL;
+static void (*gUserLogicCallback)(void) = NULL;
+
+static BOOL gLogicCallbackEnabled = TRUE;
+
 // Size of window in pixels
 static Vector windowSize;
 
+static TIME gDiscreteTime;
+
+static void GLFWCALL windowResizeCallback(int w, int h)
+{
+    setWindowSize(w, h);
+    Graphics_setWindowSize(w, h);
+    if (gUserWindowResizeCallback != NULL)
+    {
+        gUserWindowResizeCallback(w, h);
+    }
+}
 // State array for keyboard
 static INPUTSTATE keyState[KEY_LAST - KEY_BASE];
 
@@ -72,7 +93,7 @@ static void clearInputState(void)
 // Callback for platform key events
 static void GLFWCALL keyCallback(int key, int action)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static int trigger;
     trigger = convertKeyToTrigger(key);
     keyState[trigger] = (INPUTSTATE)action;
@@ -82,7 +103,7 @@ static void GLFWCALL keyCallback(int key, int action)
 // Callback for platform mousebutton events
 static void GLFWCALL mouseButtonCallback(int button, int action)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static int trigger;
     trigger = convertMouseButtonToTrigger(button);
     mouseState[trigger] = (INPUTSTATE)action;
@@ -92,14 +113,14 @@ static void GLFWCALL mouseButtonCallback(int button, int action)
 // Callback for platform mouse move events
 static void GLFWCALL mousePosCallback(int x, int y)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static float absx;
     static float absy;
     static float abs_posx;
     static float abs_posy;
     static float abs_negx;
     static float abs_negy;
-    
+
     // Calc centered position on window
     absx = ((float)x - windowSize.d[0]/2) / windowSize.d[0]*2;
     absy = ((float)y - windowSize.d[1]/2) / windowSize.d[1]*2;
@@ -138,19 +159,19 @@ static void GLFWCALL mousePosCallback(int x, int y)
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_XPOS, abs_posx);
         mouseState[MOUSE_AXIS_XPOS] = abs_posx;
     }
-    
+
     if (abs_posy - mouseState[MOUSE_AXIS_YPOS])
     {
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_YPOS, abs_posy);
         mouseState[MOUSE_AXIS_YPOS] = abs_posy;
     }
-    
+
     if (abs_negx - mouseState[MOUSE_AXIS_XNEG])
     {
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_XNEG, abs_negx);
         mouseState[MOUSE_AXIS_XNEG] = abs_negx;
     }
-    
+
     if (abs_negy - mouseState[MOUSE_AXIS_YNEG])
     {
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_YNEG, abs_negy);
@@ -161,9 +182,9 @@ static void GLFWCALL mousePosCallback(int x, int y)
 // Callback for platform mouse wheel events
 static void GLFWCALL mouseWheelCallback(int pos)
 {
-    assert(NULL != inputHandler);
+    smug_assert(NULL != inputHandler);
     static int old_pos = 0;
-    
+
     // Handle mousewheel as two digital triggers.
     // Since we won't get an event for "trigger released" we have
     // to send both pressed and released to simulate a tapped trigger.
@@ -177,8 +198,8 @@ static void GLFWCALL mouseWheelCallback(int pos)
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELNEG, INPUTSTATE_PRESSED);
         inputHandler(DEVICE_MOUSE, MOUSE_AXIS_WHEELNEG, INPUTSTATE_RELEASED);
     }
-    
-    old_pos = pos;    
+
+    old_pos = pos;
 }
 
 // Update the state of all connected joysticks
@@ -265,9 +286,14 @@ static void dummyInputHandler(int device, int trigger, INPUTSTATE state)
     fprintf(stderr, "Got input event. Device: %i, trigger: %i, state: %f\n", device, trigger, state);
 }
 
+static void setWindowSize(int w, int h)
+{
+    windowSize = Vector_create2d(w, h);
+}
+
 int Platform_init(int width, int height, BOOL fullscreen)
 {
-    assert(!isInitialized);
+    smug_assert(!isInitialized);
     NOTIFY("Initializing platform layer");
     if (!glfwInit())
     {
@@ -278,13 +304,23 @@ int Platform_init(int width, int height, BOOL fullscreen)
     glfwEnable(GLFW_STICKY_KEYS);
     glfwEnable(GLFW_STICKY_MOUSE_BUTTONS);
 
-    windowSize = Vector_create2d(width, height);
+    setWindowSize(width, height);
     if (!glfwOpenWindow(width, height, 8, 8, 8, 8, 24, 0, fullscreen? GLFW_FULLSCREEN : GLFW_WINDOW))
     {
         ERROR("Could not open window.");
         return 0;
     }
+    glfwSetWindowSizeCallback(windowResizeCallback);
 
+    Platform_stepDiscreteTime();
+
+    Platform_initInput();
+    isInitialized = TRUE;
+    return 1;
+}
+
+void Platform_initInput(void)
+{
     // Initialize device state arrays
     clearInputState();
 
@@ -298,9 +334,6 @@ int Platform_init(int width, int height, BOOL fullscreen)
     glfwSetKeyCallback(&keyCallback);
 
     //Platform_detectJoysticks();
-
-    isInitialized = TRUE;
-    return 1;
 }
 
 BOOL Platform_isInitialized(void)
@@ -310,7 +343,7 @@ BOOL Platform_isInitialized(void)
 
 void Platform_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     NOTIFY("Terminating platform layer");
     glfwCloseWindow();
     glfwTerminate();
@@ -332,9 +365,110 @@ Vector Platform_getWindowSize(void)
     return windowSize;
 }
 
+void Platform_setWindowResizeCallback(void(*callback)(int, int))
+{
+    gUserWindowResizeCallback = callback;
+}
+
+void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHANGE))
+{
+    gUserWindowStateChangeCallback = callback;
+}
+
+void Platform_setTouchEventCallback(void(*callback)(int, int, int))
+{
+    ERROR("Touch events are not supported on this platform");
+}
+
+void Platform_setLogicCallback(void (*callback)(void))
+{
+    gUserLogicCallback = callback;
+}
+
+void Platform_enableLogicCallback(BOOL enable)
+{
+    gLogicCallbackEnabled = enable;
+}
+
+void Platform_setLogicFps(float fps)
+{
+    Engine_setLogicFps(fps);
+}
+
+void Platform_internalHeartbeat(void)
+{
+    if (gLogicCallbackEnabled && gUserLogicCallback != NULL)
+    {
+        gUserLogicCallback();
+    }
+
+    BOOL gWindowOpen = FALSE;       // Open == FALSE means dead
+    BOOL gWindowVisible = FALSE;    // Open == TRUE && Visible == FALSE means minimized
+    BOOL gWindowActive = FALSE;     // Open == TRUE && Visible == TRUE && Active == FALSE means background
+                                    // Active == TRUE means foreground
+
+    BOOL windowOpenNow = glfwGetWindowParam(GLFW_OPENED) == GL_TRUE;
+    BOOL windowVisibleNow = glfwGetWindowParam(GLFW_ICONIFIED) == GL_FALSE;
+    BOOL windowActiveNow = glfwGetWindowParam(GLFW_ACTIVE) == GL_TRUE;
+
+    if (gUserWindowStateChangeCallback != NULL)
+    {
+        if (!gWindowOpen && windowOpenNow)
+        {
+            gWindowOpen = TRUE;
+            gUserWindowStateChangeCallback(SMUG_OPENED);
+        }
+        if (!gWindowVisible && windowVisibleNow)
+        {
+            gWindowVisible = TRUE;
+            gUserWindowStateChangeCallback(SMUG_RESTORED);
+        }
+        if (!gWindowActive && windowActiveNow)
+        {
+            gWindowActive = TRUE;
+            gUserWindowStateChangeCallback(SMUG_ACTIVATED);
+        }
+        if (gWindowActive && !windowActiveNow)
+        {
+            gWindowActive = FALSE;
+            gUserWindowStateChangeCallback(SMUG_DEACTIVATED);
+        }
+        if (gWindowVisible && !windowVisibleNow)
+        {
+            gWindowVisible = FALSE;
+            gUserWindowStateChangeCallback(SMUG_MINIMIZED);
+        }
+        if (gWindowOpen && !windowOpenNow)
+        {
+            gWindowOpen = FALSE;
+            gUserWindowStateChangeCallback(SMUG_CLOSED);
+        }
+    }
+
+    if(Input_getKey(KEY_ESC) || !Platform_isWindowOpen())
+    {
+        Signal_send(SIG_EXIT);
+    }
+}
+
+float Platform_getInterpolationFactor(void)
+{
+    return Engine_getInterpolationFactor();
+}
+
 TIME Platform_getTime(void)
 {
     return glfwGetTime();
+}
+
+TIME Platform_getDiscreteTime(void)
+{
+    return gDiscreteTime;
+}
+
+void Platform_stepDiscreteTime(void)
+{
+    gDiscreteTime = Platform_getTime();
 }
 
 void Platform_sleep(TIME seconds)
@@ -351,36 +485,36 @@ void Platform_update(void)
 
 void Platform_registerInputHandler(void (*handler)(int device, int trigger, INPUTSTATE state))
 {
-    assert(NULL != handler);
+    smug_assert(NULL != handler);
 
     inputHandler = handler;
 }
 
 void Platform_unregisterInputHandler(void)
-{   
+{
     Platform_registerInputHandler(&dummyInputHandler);
 }
 
 INPUTSTATE Platform_getInputState(int device, int trigger)
 {
-    assert(device >= DEVICE_BASE && device <= DEVICE_LAST);
+    smug_assert(device >= DEVICE_BASE && device <= DEVICE_LAST);
     switch (device)
     {
         case DEVICE_KEYBOARD:
         {
-            assert(trigger >= KEY_BASE && trigger <= KEY_LAST);
+            smug_assert(trigger >= KEY_BASE && trigger <= KEY_LAST);
             return keyState[trigger];
             break;
         }
         case DEVICE_MOUSE:
         {
-            assert(trigger >= MOUSE_BASE && trigger <= MOUSE_LAST);
+            smug_assert(trigger >= MOUSE_BASE && trigger <= MOUSE_LAST);
             return mouseState[trigger];
             break;
         }
         default:
         {
-            assert(trigger >= JOYSTICK_BASE && trigger <= JOYSTICK_LAST);
+            smug_assert(trigger >= JOYSTICK_BASE && trigger <= JOYSTICK_LAST);
             return joyState[device - DEVICE_JOYSTICK_BASE].state[trigger];
             break;
         }

@@ -7,10 +7,10 @@
   * @{
   */
 
-#ifndef UTILS_HOOK_H
-#define UTILS_HOOK_H
+#ifndef SMUG_UTILS_HOOK_H
+#define SMUG_UTILS_HOOK_H
 
-#include "linkedlist.h"
+#include <utils/linkedlist.h>
 
 /** A struct for a callable object
   *
@@ -96,6 +96,6 @@ int Hook_callAllWhile(LinkedList* list, void* arg, int condition); // FIXFIX: Sa
   */
 int Hook_callAllWhileNot(LinkedList* list, void* arg, int condition); // FIXFIX: Same as above
 
-#endif // UTILS_HOOK_H
+#endif // SMUG_UTILS_HOOK_H
 
 /**@}*/

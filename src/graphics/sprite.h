@@ -10,9 +10,10 @@
 #ifndef SMUG_GRAPHICS_SPRITE_H
 #define SMUG_GRAPHICS_SPRITE_H
 
-#include "graphics/texture/texture.h"
-#include "utils/rectangle.h"
-#include "utils/vector.h"
+#include <common/common.h>
+#include <graphics/texture/texture.h>
+#include <utils/rectangle_type.h>
+#include <utils/vector_type.h>
 
 /**
  * Holds a texture and a rectangular area on it.

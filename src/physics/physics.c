@@ -1,15 +1,21 @@
-#include "physics.h"
-#include "debug.h"
+#include <math.h>
+#include <smugstd.h>
 
-#include "common/log.h"
-
-#include "utils/linkedlist.h"
-#include "utils/vector.h"
-#include "utils/map.h"
+#include <common/common.h>
+#include <common/log.h>
+#include <graphics/color.h>
+#include <utils/linkedlist.h>
+#include <utils/vector.h>
+#include <utils/rectangle.h>
+#include <utils/point.h>
+#include <utils/map.h>
+#include <physics/debug.h>
+#include <physics/physics.h>
 
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 
 #define EPSILON 0.0001
 
@@ -47,6 +53,7 @@ static Map* collision_list;
 
 /** Whether or not the physics is initialized. */
 static BOOL isInitialized = FALSE;
+<<<<<<< HEAD
 
 /** Whether or not to draw debug frames. */
 static BOOL debugMode = FALSE;
@@ -77,16 +84,39 @@ BOOL _default_handleExitCollision(void* lparam, void* rparam);
 
 /** Allocate memory for _CollisionType */
 static _CollisionHookType* _CollisionHookType_new(void)
+=======
+// static BOOL debugMode = FALSE;
+
+static _CollisionType* _CollisionType_new(void);
+// static void _CollisionType_delete(_CollisionType* type);
+static BOOL _compareCollisionType(void* left, void* right);
+// static BOOL _collidePoints1D(float x1_start, float x1_end, float x2_start, float x2_end, float *t);
+// static BOOL _collideInterval1D(float i1_x1_start, float i1_x1_end, float i1_x2_start, float i1_x2_end,
+			       // float i2_x1_start, float i2_x1_end, float i2_x2_start, float i2_x2_end,
+			       // float* t_in, float* t_out);
+static BOOL _collideRectangleRectangle(Body* left, Body* right, CollisionData** collision_data);
+static void _detectCollisions(LinkedList* left, LinkedList* right, LinkedList* collisions);
+static void _handleCollisions(LinkedList* collisions, LinkedList* hooks);
+
+static _CollisionType* _CollisionType_new(void)
+>>>>>>> 8071788fb7707d89bbbe09a531ea541cd4f57096
 {
     return malloc(sizeof(_CollisionHookType));
 }
 
+<<<<<<< HEAD
 
 /** Free memory for _CollisionType */
 static void _CollisionHookType_delete(_CollisionHookType* type)
 {
     free(type);
 }
+=======
+// static void _CollisionType_delete(_CollisionType* type)
+// {
+    // free(type);
+// }
+>>>>>>> 8071788fb7707d89bbbe09a531ea541cd4f57096
 
 /** Compare two _CollisionTypes, used for Map */
 static int _compareCollisionHookType(void* self, void* other)
@@ -770,6 +800,7 @@ BOOL _default_handleEnterCollision(void* lparam, void* rparam)
 {
   CollisionData* data = (CollisionData*) rparam;
 
+<<<<<<< HEAD
   DEBUG("ENTER [0x%x] (w 0x%x) COLLISION: %f", data->self, data->other, data->absoluteTime);
 
   Vector movement = data->selfMovement;
@@ -782,6 +813,23 @@ BOOL _default_handleEnterCollision(void* lparam, void* rparam)
   //DEBUG("Times: %f, %f, %f, %f", data->absoluteTime, data->absoluteTimeStart, data->deltaTime, data->absoluteTime - data->absoluteTimeStart);
   //Vector_print(Vector_multiply(data->self->acceleration, data->absoluteTime - data->absoluteTimeStart));
   Vector other_velocity = Vector_add(data->otherVelocity, Vector_multiply(data->other->acceleration, data->absoluteTime - data->absoluteTimeStart));
+=======
+    float left_x_start = Rectangle_getX(left->shape->data) + Point_getX(left->position);
+    float left_x_end = Rectangle_getX(left->shape->data) + Point_getX(left->new_position);
+    float left_width = Rectangle_getW(left->shape->data);
+
+    float right_x_start = Rectangle_getX(right->shape->data) + Point_getX(right->position);
+    float right_x_end = Rectangle_getX(right->shape->data) + Point_getX(right->new_position);
+    float right_width = Rectangle_getW(right->shape->data);
+
+    float left_y_start = Rectangle_getY(left->shape->data) + Point_getY(left->position);
+    float left_y_end = Rectangle_getY(left->shape->data) + Point_getY(left->new_position);
+    float left_height = Rectangle_getH(left->shape->data);
+
+    float right_y_start = Rectangle_getY(right->shape->data) + Point_getY(right->position);
+    float right_y_end = Rectangle_getY(right->shape->data) + Point_getY(right->new_position);
+    float right_height = Rectangle_getH(right->shape->data);
+>>>>>>> 8071788fb7707d89bbbe09a531ea541cd4f57096
 
   Vector velocity_self_n = Vector_projection(self_velocity, data->normal);
   Vector velocity_self_p = Vector_sub(self_velocity, velocity_self_n);
@@ -810,6 +858,23 @@ BOOL _default_handleEnterCollision(void* lparam, void* rparam)
 
   float new_length = Vector_length(new_velocity);
 
+<<<<<<< HEAD
+=======
+    if(t_x_in < 1.0 && t_y_in < 1.0 && t_x_out > 0.0 && t_y_out > 0.0) {
+        (*collision_data) = CollisionData_new();
+        (*collision_data)->left = left;
+        (*collision_data)->right = right;
+
+	if(t_x_in > t_y_in) {
+	  (*collision_data)->collisionTime =  t_x_in;
+	  (*collision_data)->normal = Vector_create2d( (left_x_start - right_x_start) / abs(left_x_start - right_x_start), 0.0f);
+	} else {
+	  (*collision_data)->collisionTime =  t_y_in;
+	  (*collision_data)->normal = Vector_create2d(0.0f, (left_y_start - right_y_start) / abs(left_y_start - right_y_start));
+	}
+
+	(*collision_data)->movement = Point_distanceToPoint(left->position, left->new_position);
+>>>>>>> 8071788fb7707d89bbbe09a531ea541cd4f57096
 
   if(fabs(new_v1 - v1) < V_EPSILON)
     {
@@ -840,9 +905,16 @@ BOOL _default_handleEnterCollision(void* lparam, void* rparam)
 
 BOOL _default_handleInCollision(void* lparam, void* rparam)
 {
+<<<<<<< HEAD
   CollisionData* data = (CollisionData*) rparam;
   float length = Vector_length(data->wayout);
   Node* node;
+=======
+    CollisionData* collision_data;
+    // Vector result;
+    Node* left_node;
+    Node* right_node;
+>>>>>>> 8071788fb7707d89bbbe09a531ea541cd4f57096
 
   if(data->self->immovable == TRUE)
     {
@@ -1029,7 +1101,7 @@ void CollisionData_delete(CollisionData* data)
 
 int Physics_init(void)
 {
-    assert(!isInitialized);
+    smug_assert(!isInitialized);
 
     float t;
     body_map = Map_new();
@@ -1054,7 +1126,7 @@ BOOL Physics_isInitialized(void)
 
 void Physics_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     MapNode* node;
 
     /*
@@ -1214,7 +1286,23 @@ void Physics_update(TIME time, BOOL do_update)
         }
     
 
+<<<<<<< HEAD
     _clearCollisions(collision_list);
+=======
+    for(node = collision_hooks->first; node != NULL; node = node->next)
+        {
+            LinkedList* left;
+            LinkedList* right;
+
+            left = Map_get(body_map, &((_CollisionType *) node->key)->left);
+            right = Map_get(body_map, &((_CollisionType *) node->key)->right);
+
+            if(NULL != left && NULL != right)
+                {
+                    _detectCollisions(left, right, collision_list);
+                }
+        }
+>>>>>>> 8071788fb7707d89bbbe09a531ea541cd4f57096
 
     // Iterate over all objects with an associated CollisionHook and detect
     // their collision. Without hooks their will be no handling of the collision
@@ -1256,12 +1344,19 @@ void Physics_update(TIME time, BOOL do_update)
             for(list_node = list->first; list_node != NULL; list_node = list_node->next)
                 {
                     Body* body = list_node->item;
+<<<<<<< HEAD
 		    
 		    if(FALSE == body->immovable)
 		      {			
 			body->acceleration = Vector_create2d(0.0, 0.0);
 			//body->velocity = body->_newVelocity;
 		      }
+=======
+
+                    Physics_drawShape(body->shape, body->position, Color_createFromRGBAf(1.0, 0.0, 0.0, 1.0));
+                    Physics_drawLine(body->position, body->new_position, Color_createFromRGBAf(0.0,1.0,0.0,1.0));
+                    Physics_drawShape(body->shape, body->new_position, Color_createFromRGBAf(0.0, 1.0, 0.0, 1.0));
+>>>>>>> 8071788fb7707d89bbbe09a531ea541cd4f57096
                 }
         }
     */

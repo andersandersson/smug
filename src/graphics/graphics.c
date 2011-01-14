@@ -1,14 +1,16 @@
-#include "graphics.h"
-#include "platform/opengl/opengl.h"
-#include "renderer/renderer.h"
-#include "platform/platform.h"
+#include <smugstd.h>
 
-#include "common/log.h"
+#include <common/common.h>
+#include <common/log.h>
+#include <platform/opengl/opengl.h>
+#include <graphics/renderer/renderer.h>
+#include <platform/platform.h>
+
+#include <graphics/graphics.h>
 
 Renderer* sceneRenderer = NULL;
 
 int gVBOSupported = 0;
-Vector screenSize;
 unsigned int gRenderMode = RENDER_NORMAL;
 
 static BOOL isInitialized = FALSE;
@@ -68,9 +70,9 @@ static int setupGL(void)
     glDisable(GL_CULL_FACE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      // 4-byte pixel alignment
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, screenSize.d[0], screenSize.d[1], 0, -1, 1);
+    Vector screenSize = Platform_getWindowSize();
+    Graphics_setWindowSize(screenSize.d[0], screenSize.d[1]);
+
 	glMatrixMode(GL_MODELVIEW);
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
@@ -85,15 +87,25 @@ static int setupGL(void)
     return 1;
 }
 
-int Graphics_init(int width, int height)
+void Graphics_setWindowSize(double w, double h)
 {
-    assert(!isInitialized);
-	assert(Platform_isInitialized());
-	assert(Platform_isWindowOpen());
+    // glViewport(0, 0, (int)w, (int)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+#ifdef SMUG_GLES
+	glOrthof(0.0f, (float)w, (float)h, 0.0f, -1.0f, 1.0f);
+#else
+	glOrtho(0, w, h, 0, -1, 1);
+#endif /* SMUG_GLES */
 
-    screenSize = Vector_create2d(width, height);
+    glMatrixMode(GL_MODELVIEW);
+}
 
-    DEBUG("Graphics resolution set to %ix%i", width, height);
+int Graphics_init()
+{
+    smug_assert(!isInitialized);
+	smug_assert(Platform_isInitialized());
+	smug_assert(Platform_isWindowOpen());
 
     if (!setupGL())
         return 0;
@@ -109,14 +121,9 @@ BOOL Graphics_isInitialized(void)
     return isInitialized;
 }
 
-Vector Graphics_getScreenSize(void)
-{
-    return screenSize;
-}
-
 void Graphics_terminate(void)
 {
-    assert(isInitialized);
+    smug_assert(isInitialized);
     Renderer_delete(sceneRenderer);
     sceneRenderer = NULL;
     isInitialized = FALSE;
@@ -128,6 +135,8 @@ void Graphics_render(void)
     //glLoadIdentity(); (called in Renderer_render)
 
     Renderer_render(sceneRenderer);
+    // glFlush();
+    // glFinish();
 }
 
 void Graphics_addDrawable(Drawable* d)
@@ -142,7 +151,7 @@ void Graphics_removeDrawable(Drawable* d)
 
 Camera* Graphics_getCamera()
 {
-    assert(NULL != sceneRenderer);
+    smug_assert(NULL != sceneRenderer);
     return Renderer_getCamera(sceneRenderer);
 
 }
