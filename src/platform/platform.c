@@ -23,9 +23,10 @@ typedef struct JoystickInfo
 
 static BOOL isInitialized = FALSE;
 
-static void(*gUserWindowResizeCallback)(int, int) = NULL;
-static void(*gUserWindowStateChangeCallback)(SMUG_WINDOW_STATE_CHANGE) = NULL;
+static void (*gUserWindowResizeCallback)(int, int) = NULL;
+static void (*gUserWindowStateChangeCallback)(SMUG_WINDOW_STATE_CHANGE) = NULL;
 static void (*gUserLogicCallback)(void) = NULL;
+static void (*gUserKillCallback)(void) = NULL;
 static void setWindowSize(int w, int h);
 
 static BOOL gLogicCallbackEnabled = TRUE;
@@ -376,6 +377,11 @@ void Platform_setWindowResizeCallback(void(*callback)(int, int))
 void Platform_setWindowStateChangeCallback(void(*callback)(SMUG_WINDOW_STATE_CHANGE))
 {
     gUserWindowStateChangeCallback = callback;
+}
+
+void Platform_setKillCallback(void(*callback)(void))
+{
+    gUserKillCallback = callback;
 }
 
 void Platform_setTouchEventCallback(void(*callback)(int, int, int))

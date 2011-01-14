@@ -1,5 +1,5 @@
-#ifndef SMUG_UTILS_ORDEREDSET_H
-#define SMUG_UTILS_ORDEREDSET_H
+#ifndef SMUG_UTILS_MAP_H
+#define SMUG_UTILS_MAP_H
 
 #include <common/common.h>
 #include <utils/pair.h>
@@ -7,7 +7,7 @@
 typedef struct Map
 {
     struct BinarySearchTree* tree;
-    int (*compare)(void*, void*, void*);
+    int (*compare)(void*, void*);
 } Map;
 
 
@@ -19,7 +19,7 @@ typedef struct MapIterator
 
 Map* Map_new(void);
 void Map_delete(Map* set);
-void Map_setCompare(Map* set, int (*compare)(void*, void*, void*));
+void Map_setCompare(Map* set, int (*compare)(void*, void*));
 void Map_set(Map* set, void* key, void* value);
 Pair Map_remove(Map* set, void* key);
 void* Map_get(Map* set, void* key);
@@ -34,4 +34,4 @@ BOOL MapIterator_valid(MapIterator* iter);
 void* MapIterator_get(MapIterator* iter);
 
 
-#endif // SMUG_UTILS_ORDEREDSET_H
+#endif // SMUG_UTILS_MAP_H

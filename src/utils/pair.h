@@ -7,7 +7,7 @@ typedef struct Pair
   void* right;
 } Pair;
 
-Pair* Pair_new();
+Pair* Pair_new(void);
 void Pair_delete(Pair* pair);
 
 #endif // SMUG_UTILS_PAIR_H

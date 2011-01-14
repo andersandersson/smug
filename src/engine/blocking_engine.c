@@ -1,6 +1,7 @@
 #include <smugstd.h>
 #include <common/common.h>
 #include <common/signal.h>
+#include <common/log.h>
 #include <platform/platform.h>
 #include <graphics/graphics.h>
 

@@ -9,6 +9,7 @@
 #include <utils/rectangle.h>
 #include <utils/point.h>
 #include <utils/orderedset.h>
+#include <utils/map.h>
 #include <physics/debug.h>
 #include <physics/physics.h>
 
@@ -39,12 +40,6 @@ static Map* body_map;
 
 /** Map of all added collision hooks. Maps _CollisionType => LinkedList<Hook*> */
 static Map* collision_hooks;
-
-/** Map of collision types. Maps (type => LinkedList<type>) */
-static Map* collision_types;
-
-/** Map with CollisionData for each collision that occured the last tick. Maps Body* => Map<CollisionData* => NULL> */
-static Map* collision_list;
 
 /** Whether or not the physics is initialized. */
 static BOOL isInitialized = FALSE;
@@ -934,7 +929,7 @@ static BOOL _addCollision(Map* collisions, Body* self, CollisionData* collision_
   if(NULL == body_collisions)
     {
       body_collisions = Map_new();
-      body_collisions->compareKeys = _compareCollisionData;
+      Map_setCompare(body_collisions, _compareCollisionData);
       Map_set(collisions, self, body_collisions);
     }
   
@@ -1034,10 +1029,7 @@ int Physics_init(void)
     body_map = Map_new();
 
     collision_hooks = Map_new();
-    collision_hooks->compareKeys = _compareCollisionHookType;
-
-    collision_list = Map_new();
-    collision_types = Map_new();
+    Map_setCompare(collision_hooks, _compareCollisionHookType);
 
     DEBUG("Initializing physics");
     isInitialized = TRUE;
@@ -1054,7 +1046,6 @@ BOOL Physics_isInitialized(void)
 void Physics_terminate(void)
 {
     smug_assert(isInitialized);
-    MapNode* node;
 
     /*
     for(node = body_map->first; node != NULL; node = node->next)
@@ -1062,10 +1053,9 @@ void Physics_terminate(void)
             LinkedList_delete((LinkedList*) node->value);
         }
     */
-    Map_delete(collision_list);
+
     Map_delete(body_map);
     Map_delete(collision_hooks);
-    Map_delete(collision_types);
     
     isInitialized = FALSE;
 }
@@ -1095,35 +1085,6 @@ void Physics_setCollisionHandler(BODY_TYPE self, BODY_TYPE other, COLLISION_TYPE
         }
 
     Map_set(map, (void*) type, hook);
-
-
-    // Add the collision type to the list of types
-    
-    LinkedList* types = Map_get(collision_types, (void*) self);
-
-    if(NULL == types)
-      {
-	types = LinkedList_new();
-	Map_set(collision_types, (void*) self, types);
-      }
-
-    Node* node;
-    BOOL found = FALSE;
-
-    for(node = types->first; node != NULL; node = node->next)
-      {
-	if( *((BODY_TYPE*)node->item) == other)
-	  {
-	    found = TRUE;
-	  }
-      }
-
-    if(FALSE == found)
-      {
-	BODY_TYPE* new_type = malloc(sizeof(BODY_TYPE));
-	*new_type = other;
-	LinkedList_addLast(types, (void*) new_type);
-      }
 }
 
 
@@ -1157,8 +1118,6 @@ float _last_time = -10.0;
 
 void Physics_update(TIME time, BOOL do_update)
 {
-    MapNode* node;
-
     if(_last_time < 0.0)
       {
 	_last_time = time;

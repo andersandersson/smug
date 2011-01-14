@@ -11,12 +11,14 @@
 #ifndef SMUG_PHYSICS_PHYSICS_H
 #define SMUG_PHYSICS_PHYSICS_H
 
+#include <common/common.h>
 #include <utils/hook.h>
-#include <physics/body.h>
 #include <utils/hook.h>
 #include <utils/linkedlist.h>
 #include <utils/vector.h>
 #include <utils/map.h>
+
+#include <physics/body.h>
 
 typedef unsigned int COLLISION_TYPE;
 

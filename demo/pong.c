@@ -1,13 +1,14 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "physics/shapes.h"
-#include "physics/physics.h"
-#include "physics/body.h"
-#include "platform/platform.h"
-#include "graphics/graphics.h"
-#include "common/log.h"
-#include "common/common.h"
+#include <physics/shapes.h>
+#include <physics/physics.h>
+#include <physics/body.h>
+#include <platform/platform.h>
+#include <graphics/graphics.h>
+#include <common/log.h>
+#include <common/common.h>
+#include <utils/rectangle.h>
 
 #include "input/input.h"
 
@@ -34,10 +35,6 @@ int main()
 
     if (!Graphics_init(640, 480))
         return 0;
-
-    float ts[4];
-    _collideMovingInterval1D(440.000092, -0.731938779, 30.0, 30.0, 470.0, 0.0, 0.0, 10.0, &ts[0], &ts[1], &ts[2], &ts[3]);
-    _collideMovingInterval1D(440.000092, 0.731938779, 30.0, 30.0, 470.0, 0.0, 0.0, 10.0, &ts[0], &ts[1], &ts[2], &ts[3]);
 
     TIME t, next_t;
     t = Platform_getTime();
@@ -157,7 +154,7 @@ int main()
 
             if(t >= next_t)
                 {
-                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		    Physics_update(t, FALSE == do_update || Input_getKey(KEY_ENTER));
 		    do_update = FALSE;
                     next_t += 0.03;

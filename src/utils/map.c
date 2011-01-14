@@ -9,10 +9,10 @@ static int _pair_compare(void* map, void* left, void* right)
   Pair* _right = (Pair*) right;
   Map* _map = (BinarySearchTree*) map;
 
-  return _map->compare(NULL, _left->left, _right->left);
+  return _map->compare(_left->left, _right->left);
 }
 
-static int _default_compare(void* map, void* left, void* right)
+static int _default_compare(void* left, void* right)
 {
   if(left < right)
     {
@@ -48,7 +48,7 @@ void Map_delete(Map* map)
 }
 
 
-void Map_setCompare(Map* map, int (*compare)(void*, void*, void*))
+void Map_setCompare(Map* map, int (*compare)(void*, void*))
 {
   map->compare = compare;
   BinarySearchTree_setCompare(map->tree, map, _pair_compare);
@@ -66,12 +66,11 @@ void Map_set(Map* map, void* key, void* value)
 
 Pair Map_remove(Map* map, void* key)
 {
-  Pair* search = Pair_new();
-  search->left = key;
+  Pair search;
 
-  Pair* found = BinarySearchTree_remove(map->tree, search);
+  search.left = key;
 
-  Pair_delete(search);
+  Pair* found = BinarySearchTree_remove(map->tree, &search);
 
   Pair pair;
 
@@ -93,12 +92,10 @@ Pair Map_remove(Map* map, void* key)
 
 void* Map_get(Map* map, void* key)
 {
-  Pair* search = Pair_new();
-  search->left = key;
+  Pair search;
+  search.left = key;
 
-  Pair* pair = BinarySearchTree_find(map->tree, search);
-
-  Pair_delete(search);
+  Pair* pair = BinarySearchTree_find(map->tree, &search);
 
   if(NULL == pair)
     {
