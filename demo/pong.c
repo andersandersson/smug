@@ -1,3 +1,6 @@
+#include <math.h>
+#include <stdlib.h>
+
 #include "physics/shapes.h"
 #include "physics/physics.h"
 #include "physics/body.h"
@@ -12,17 +15,17 @@ int handle_collision = 0;
 
 int collision_hook(void* lparam, void* rparam)
 {
+  return 0;
 }
 
 int main()
 {
-    Log_init();
+    if (!Log_init())
+        return 0;
     
     if (!Platform_init(640, 480, FALSE))
         return 0;
         
-    Log_print("Initializing\n");
-    
     if (!Input_init())
         return 0;
     
@@ -32,155 +35,144 @@ int main()
     if (!Graphics_init(640, 480))
         return 0;
 
-
-    Shape* shape = Shape_createFromRectangle(Rectangle_createFromXYWH(-30.0, -30.0, 60.0, 60.0));
-    Body* body = Body_new();
-    body->type = 0;
-    Body_setPosition(body, 370.0, 300.0);
-    Body_setShape(body, shape);
-
-    Shape* shape2 = Shape_createFromRectangle(Rectangle_createFromXYWH(-40.0, -40.0, 80.0, 80.0));
-    Body* body2 = Body_new();
-    body2->type = 1;
-    Body_setPosition(body2, 300.0, 100.0);
-    Body_setShape(body2, shape2);
+    float ts[4];
+    _collideMovingInterval1D(440.000092, -0.731938779, 30.0, 30.0, 470.0, 0.0, 0.0, 10.0, &ts[0], &ts[1], &ts[2], &ts[3]);
+    _collideMovingInterval1D(440.000092, 0.731938779, 30.0, 30.0, 470.0, 0.0, 0.0, 10.0, &ts[0], &ts[1], &ts[2], &ts[3]);
 
     TIME t, next_t;
     t = Platform_getTime();
     next_t = t;
 
-    Physics_addBody(body);
-    Physics_addBody(body2);
+    Physics_setDefaultCollisionHandler(1, 0);
+    Physics_setDefaultCollisionHandler(1, 1);
+
+    Body* left_wall = Body_new();
+    Body* right_wall = Body_new();
+    Body* top_wall = Body_new();
+    Body* bottom_wall = Body_new();
+
+    left_wall->type = 0;
+    right_wall->type = 0;
+    top_wall->type = 0;
+    bottom_wall->type = 0;
+
+    left_wall->immovable = TRUE;
+    right_wall->immovable = TRUE;
+    top_wall->immovable = TRUE;
+    bottom_wall->immovable = TRUE;
+
+    Body_setShape(left_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 10.0, 480.0)));
+    Body_setShape(right_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 10.0, 480.0)));
+    Body_setShape(top_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 640.0, 10.0)));
+    Body_setShape(bottom_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 640.0, 10.0)));
+
+    Body_setPosition(left_wall, Point_createFromXY(0.0, 0.0));
+    Body_setPosition(right_wall, Point_createFromXY(630.0, 0.0));
+    Body_setPosition(top_wall, Point_createFromXY(0.0, 0.0));
+    Body_setPosition(bottom_wall, Point_createFromXY(0.0, 470.0));
 
     Hook* hook = Hook_newFromFunction(NULL, collision_hook);
-    Physics_setCollisionHandler_SolidGliding(body->type, body2->type);
-    Physics_setCollisionHandler_SolidGliding(body2->type, body->type);
+    //Physics_addCollisionHook(1, 0, hook);
+    //Physics_addCollisionHook(1, 1, hook);
 
-    Body* other_body = body;
-    Body* current_body = body2;
-    int tab_lock = 0;
-    int space_lock = 0;
-    float x_dir = 5.0;
-    float y_dir = 2.0;
+    Physics_addBody(left_wall);
+    Physics_addBody(right_wall);
+    Physics_addBody(top_wall);
+    Physics_addBody(bottom_wall);
+
+    int i;
+    for(i = 0; i < 10; i++)
+      {	
+	int x = i % 10;
+	int y = i / 10;
+
+	Body* ball = Body_new();
+	Body_setShape(ball, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
+	Body_setPosition(ball, Point_createFromXY(10.0+x*45.0, 110.0+y*45.0));
+	Body_setVelocity(ball, Vector_create2d(pow(1, i)*5.0, 5.0));
+	ball->mass = 1.0;
+	ball->elasticity = 1.0;
+	ball->type = 1;
+	Physics_addBody(ball);
+      }
+    
+
+    Body* ball1 = Body_new();
+    Body_setShape(ball1, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
+    Body_setPosition(ball1, Point_createFromXY(534.016724, 439.973694));
+    Body_setVelocity(ball1, Vector_create2d(-5, 0.55177784));
+    ball1->mass = 1.0;
+    ball1->elasticity = 1.0;
+    ball1->type = 1;
+    //Physics_addBody(ball1);
+
+    Body* ball2 = Body_new();
+    Body_setShape(ball2, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
+    Body_setPosition(ball2, Point_createFromXY(200.0, 434.0));
+    Body_setVelocity(ball2, Vector_create2d(0.0, 10.0));
+    ball2->mass = 1.0;
+    ball2->elasticity = 0.9;
+    ball2->type = 1;
+    //Physics_addBody(ball2);
+
+    int space_lock = 1;
+    BOOL do_update = FALSE;
     while (1)
         {   
-            float x, y;
-
             if (Input_getKey(KEY_ESC))
                 break;
 
-
-            if (Input_getKey(KEY_DOWN))
-                {
-                    y = 10.0;
-                } 
-            else if(Input_getKey(KEY_UP))
-                {
-                    y = -10.0;
-                }
-            else
-                {
-                    y = 0.0;
-                }
-
-
-            if (Input_getKey(KEY_RIGHT))
-                {
-                    x = 10.0;
-                } 
-            else if(Input_getKey(KEY_LEFT))
-                {
-                    x = -10.0;
-                }
-            else
-                {
-                    x = 0.0;
-                }
-
-            if (Input_getKey(KEY_ENTER))
-	    {
-	      current_body->position = current_body->new_position;
-	    }
-
-            if (Input_getKey(KEY_TAB))
-                {
-                    if(tab_lock == 0)
-                        {
-                            tab_lock = 1;
-                            if(current_body == body2) 
-                                {
-                                    current_body = body;
-                                }
-                            else
-                                {
-                                    current_body = body2;
-                                }
-                        }
-                } 
-            else
-                {
-                    tab_lock = 0;
-                }
-
-            if (Input_getKey(KEY_SPACE))
-                {
-                    if(space_lock == 0)
-                        {
-                            space_lock = 1;
-                            handle_collision = 1 - handle_collision;
-                        }
-                } 
-            else
-                {
-                    space_lock = 0;
-                }
-
-            if(Point_getX(&other_body->position) >= 640 ||
-               Point_getX(&other_body->position) <= 0)
-                {
-                    x_dir *= -1;
-                }
-
-            if(Point_getY(&other_body->position) >= 480 ||
-               Point_getY(&other_body->position) <= 0)
-                {
-                    y_dir *= -1;
-                }
-
-
-            Body_move(other_body, x_dir, y_dir);
-            Body_move(current_body, x, y);
-
             t = Platform_getTime();
+
+	    if(0 == space_lock && Input_getKey(KEY_SPACE))
+	      {
+		do_update = TRUE;
+		space_lock = 1;
+	      }
+
+	    if(1 == space_lock && !Input_getKey(KEY_SPACE))
+	      {
+		space_lock = 0;
+	      }
+
+	    if(Input_getKey(KEY_UP))
+	      {
+		ball1->acceleration = Vector_create2d(0.0, -100.0);
+	      }
+
+	    if(Input_getKey(KEY_DOWN))
+	      {
+		ball1->acceleration = Vector_create2d(0.0, 100.0);
+	      }
+
+	    if(Input_getKey(KEY_LEFT))
+	      {
+		ball1->acceleration = Vector_create2d(-100.0, 0.0);
+	      }
+
+	    if(Input_getKey(KEY_RIGHT))
+	      {
+		ball1->acceleration = Vector_create2d(100.0, 0.0);
+	      }
 
             if(t >= next_t)
                 {
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                    Physics_update(0);
+		    Physics_update(t, FALSE == do_update || Input_getKey(KEY_ENTER));
+		    do_update = FALSE;
                     next_t += 0.03;
 		    Platform_refreshWindow();
                 }
 	    Platform_sleep(next_t-t);
         }
-    Physics_removeBody(body);
-    Physics_removeBody(body2);
-
-    Body_delete(body);
-    Shape_delete(shape);
-    Body_delete(body2);
-    Shape_delete(shape2);
 
     Hook_delete(hook);
     
-    Log_print("Stopped\n");
-
     Graphics_terminate();
 
     Physics_terminate();
     
     Platform_terminate();
-    
-    Log_print("Done\n");
     
     Log_terminate();
  

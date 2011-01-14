@@ -109,7 +109,14 @@ Vector Vector_normalize(Vector v);
  * Calculate the projection of the Vector v
  * in the plane specified by the normal n.
  */
-Vector Vector_projection(Vector v, Vector n);
+Vector Vector_projectionPlane(Vector v, Vector n);
+
+
+/**
+ * Calculate the projection of the Vector v
+ * in vector w
+ */
+Vector Vector_projection(Vector v, Vector w);
 
 
 /**

@@ -13,6 +13,32 @@
 
 #include "body.h"
 #include "utils/hook.h"
+#include "utils/linkedlist.h"
+#include "utils/vector.h"
+#include "utils/map.h"
+
+
+typedef unsigned int COLLISION_TYPE;
+
+#define COLLISION_NONE    0x00
+#define COLLISION_ENTER   0x01
+#define COLLISION_PERSIST 0x02
+#define COLLISION_EXIT    0x04
+
+int _collideMovingPoints1D(float x1, float v1, float a1, float x2, float v2, float a2, float *t1, float* t2);
+
+int _collideMovingInterval1D(float i1_start, float i1_vel, float i1_acc, float i1_width,
+			     float i2_start, float i2_vel, float i2_acc, float i2_width,
+			     float* t1_in, float* t1_out, float* t2_int, float* t2_out);
+
+BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* self_velocity, Vector* self_acceleration, 
+				Body* other, Point* other_start, Vector* other_velocity, Vector* other_acceleration,
+				float delta_time, LinkedList* collisions);
+
+int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_width, float *width);
+
+
+BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_time, Map* collision_list);
 
 /** Data container for a collision
  *
@@ -21,20 +47,42 @@
  */
 typedef struct CollisionData
 {
+    /** The kind of collision, entering, exiting, persistent. */
+    COLLISION_TYPE type;
+
     /** The left hand of the collision, and the object to modify position for. */
     Body* self;
 
     /** The object we collided with. Should probably not be altered. */
     Body* other;
 
-    /** The attempted movement of "self". */
+    /** The normal for the surface of "other" that "self" collided with. */
+    Vector normal;
+
+    /** The self objects velocity */  
+    Vector selfVelocity;
+
+    /** The self starting point. May differ from self->position. */
+    Point selfStart;
     Vector selfMovement;
 
-    /** The normal for the surface of "other" that "self" collided with. */
-    Vector contactNormal;
+    /** The other objects velocity */  
+    Vector otherVelocity;
 
-    /** A floating point number form 0.0 to 1.0 with the time for when along selfMovement the collision occured. */
-    float collisionTime;
+    Vector wayout;
+
+    /** The self starting point. May differ from self->position. */
+    Point otherStart;
+    Vector otherMovement;
+
+    /** A floating point number form 0.0 to 1.0 with the time for when along selfMovement the collision stopped. */
+    float time;
+
+    float absoluteTime;
+
+    float absoluteTimeStart;
+
+    float deltaTime;
 } CollisionData;
 
 
@@ -71,7 +119,7 @@ void Physics_terminate(void);
  * bodies of the speficied types collide with eachother, the
  * hook is called with the corresponding CollisionData
  */
-void Physics_addCollisionHook(BODY_TYPE self, BODY_TYPE other, Hook* hook);
+void Physics_setCollisionHandler(BODY_TYPE self, BODY_TYPE other, COLLISION_TYPE type, Hook* hook);
 
 
 /** Add a Body to the physics engine
@@ -93,16 +141,12 @@ void Physics_removeBody(Body* body);
  *
  * @param time Time since application start
  */
-void Physics_update(TIME time);
+void Physics_update(TIME time, BOOL do_update);
 
-
-/** Default collision handler for solid, gliding objects.
- */
-int Physics_collisionHandler_SolidGliding(void* lparam, void* rparam);
 
 /** Add default handler Hook for solid, gliding objects
  */
-void Physics_setCollisionHandler_SolidGliding(BODY_TYPE left, BODY_TYPE right);
+void Physics_setDefaultCollisionHandler(BODY_TYPE left, BODY_TYPE right);
 
 #endif
 

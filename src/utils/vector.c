@@ -133,10 +133,17 @@ Vector Vector_normalize(Vector v)
 }
 
 
-Vector Vector_projection(Vector v, Vector n)
+Vector Vector_projectionPlane(Vector v, Vector n)
 {
     return Vector_sub(v, Vector_multiply(n, Vector_dotProduct(v, n)));
 }
+
+
+Vector Vector_projection(Vector v, Vector w)
+{
+  return Vector_multiply(w, Vector_dotProduct(v, w) / Vector_squareLength(w));
+}
+
 
 float Vector_length(Vector v)
 {

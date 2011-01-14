@@ -16,4 +16,5 @@ noinst_LTLIBRARIES = libphysics.la
 libphysics_la_SOURCES = interface.c interface.h physics.c physics.h\
 shapes.c shapes.h\
 body.c body.h \
-debug.c debug.h
+debug.c debug.h \
+waypoint.c waypoint.h
