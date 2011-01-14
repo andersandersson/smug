@@ -12,11 +12,6 @@
 #include <physics/debug.h>
 #include <physics/physics.h>
 
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-
 #define EPSILON 0.0001
 
 // Position epsilon

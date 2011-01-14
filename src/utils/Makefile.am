@@ -20,6 +20,9 @@ hook.c hook.h \
 vector.c vector.h \
 rectangle.h rectangle.c \
 point.h point.c \
-map.c map.h \
 sstring.c sstring.h \
-pathname.c pathname.h
+pathname.c pathname.h \
+binarysearchtree.c binarysearchtree.h \
+pair.c pair.h \
+orderedset.c orderedset.h
+
