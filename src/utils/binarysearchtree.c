@@ -6,7 +6,7 @@
 #include <utils/binarysearchtree.h>
 
 
-static int _default_compare(void* left, void* right);
+static int _default_compare(void* self, void* left, void* right);
 static void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element, int height);
 static void _remove_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element);
 static BinarySearchTreeNode* _find_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element);
@@ -14,7 +14,7 @@ static BinarySearchTreeNode* _find_min_node(BinarySearchTreeNode* node);
 static void _print_tree(BinarySearchTreeNode* node, int level);
 static BinarySearchTreeNode* _find_unvisited_above(BinarySearchTreeNode* parent, BinarySearchTreeNode* right);
 
-int _default_compare(void* left, void* right)
+int _default_compare(void* self, void* left, void* right)
 {
   if(left < right)
     {
@@ -106,8 +106,9 @@ void BinarySearchTree_delete(BinarySearchTree* tree)
 }
 
 
-void BinarySearchTree_setCompare(BinarySearchTree* tree, int (*compare)(void*, void*))
+void BinarySearchTree_setCompare(BinarySearchTree* tree, void* data, int (*compare)(void*, void*, void*))
 {
+    tree->compareData = data;
     tree->compare = compare;
 }
 
@@ -127,7 +128,7 @@ void BinarySearchTree_insert(BinarySearchTree* tree, void* element)
 
 void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element, int height)
 {
-  int side = tree->compare(element, node->element);
+  int side = tree->compare(tree->compareData, element, node->element);
 
   if(0 == side)
     {
@@ -176,18 +177,22 @@ void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
 }
 
 
-void BinarySearchTree_remove(BinarySearchTree* tree, void* element)
+void* BinarySearchTree_remove(BinarySearchTree* tree, void* element)
 {
   BinarySearchTreeNode* node = _find_node(tree, tree->root, element);
+  void* _element;
 
   if(NULL == node)
     {
-      return;
+      return NULL;
     }
   else
     {
+      _element = node->element;
       _remove_node(tree, tree->root, element);
     }
+
+  return _element;
 }
 
 void _remove_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element)
@@ -197,7 +202,7 @@ void _remove_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
       return;
     }
 
-  int side = tree->compare(element, node->element);
+  int side = tree->compare(tree->compareData, element, node->element);
 
   if(-1 == side)
     {      
@@ -268,7 +273,7 @@ BinarySearchTreeNode* _find_node(BinarySearchTree* tree, BinarySearchTreeNode* n
       return NULL;
     }
 
-  int side = tree->compare(element, node->element);
+  int side = tree->compare(tree->compareData, element, node->element);
 
   if(-1 == side)
     {

@@ -24,5 +24,5 @@ sstring.c sstring.h \
 pathname.c pathname.h \
 binarysearchtree.c binarysearchtree.h \
 pair.c pair.h \
-orderedset.c orderedset.h
-
+orderedset.c orderedset.h \
+map.c map.h

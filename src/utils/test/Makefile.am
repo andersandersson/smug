@@ -8,12 +8,12 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-TESTS = test-linkedlist test-arraylist test-hook test-vector test-map test-string test-pathname test-orderedset
+TESTS = test-linkedlist test-arraylist test-hook test-vector test-map test-string test-pathname test-orderedset test-map
 
 AM_LDFLAGS = -L../ -L../../common -lutils -lcommon
 AM_CFLAGS = -I../ -I../../ -I../../common 
 
-check_PROGRAMS = test-linkedlist test-arraylist test-hook test-vector test-binarysearchtree test-string test-pathname test-orderedset
+check_PROGRAMS = test-linkedlist test-arraylist test-hook test-vector test-binarysearchtree test-string test-pathname test-orderedset test-map
 
 test_linkedlist_SOURCES = test-linkedlist.c 
 test_arraylist_SOURCES = test-arraylist.c
@@ -23,3 +23,4 @@ test_binarysearchtree_SOURCES = test-binarysearchtree.c
 test_orderedset_SOURCES = test-orderedset.c
 test_string_SOURCES = test-string.c
 test_pathname_SOURCES = test-pathname.c
+test_map_SOURCES = test-map.c

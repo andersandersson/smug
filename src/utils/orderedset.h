@@ -20,9 +20,9 @@ typedef struct OrderedSetIterator
 
 OrderedSet* OrderedSet_new(void);
 void OrderedSet_delete(OrderedSet* set);
-void OrderedSet_setCompare(OrderedSet* set, int (*compare)(void*, void*));
+void OrderedSet_setCompare(OrderedSet* set, int (*compare)(void*, void*, void*));
 void OrderedSet_insert(OrderedSet* set, void* element);
-void OrderedSet_remove(OrderedSet* set, void* element);
+void* OrderedSet_remove(OrderedSet* set, void* element);
 void* OrderedSet_find(OrderedSet* set, void* element);
 void OrderedSet_print(OrderedSet* set);
 

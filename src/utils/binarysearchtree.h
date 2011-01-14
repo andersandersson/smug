@@ -19,7 +19,8 @@ typedef struct BinarySearchTree
 {
     struct BinarySearchTreeNode* root;
 
-    int (*compare)(void*, void*);
+    void* compareData;
+    int (*compare)(void*, void*, void*);
 } BinarySearchTree;
 
 
@@ -39,9 +40,9 @@ BinarySearchTreeNode* BinarySearchTreeNode_findMax(BinarySearchTreeNode* node);
 
 BinarySearchTree* BinarySearchTree_new(void);
 void BinarySearchTree_delete(BinarySearchTree* tree);
-void BinarySearchTree_setCompare(BinarySearchTree* tree, int (*compare)(void*, void*));
+void BinarySearchTree_setCompare(BinarySearchTree* tree, void* data, int (*compare)(void*, void*, void*));
 void BinarySearchTree_insert(BinarySearchTree* tree, void* element);
-void BinarySearchTree_remove(BinarySearchTree* tree, void* element);
+void* BinarySearchTree_remove(BinarySearchTree* tree, void* element);
 void* BinarySearchTree_find(BinarySearchTree* tree, void* element);
 void BinarySearchTree_print(BinarySearchTree* tree);
 

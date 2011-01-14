@@ -3,7 +3,7 @@
 
 #include "orderedset.h"
 
-int compare(int x, int y)
+int compare(void* tree, int x, int y)
 {
     if(x == y)
       {

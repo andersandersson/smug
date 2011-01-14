@@ -23,14 +23,14 @@ void OrderedSet_insert(OrderedSet* set, void* element)
   BinarySearchTree_insert(set->tree, element);
 }
 
-void OrderedSet_setCompare(OrderedSet* set, int (*compare)(void*, void*))
+void OrderedSet_setCompare(OrderedSet* set, int (*compare)(void*, void*, void*))
 {
-  BinarySearchTree_setCompare(set->tree, compare);
+  BinarySearchTree_setCompare(set->tree, NULL, compare);
 }
 
-void OrderedSet_remove(OrderedSet* set, void* element)
+void* OrderedSet_remove(OrderedSet* set, void* element)
 {
-  BinarySearchTree_remove(set->tree, element);
+  return BinarySearchTree_remove(set->tree, element);
 }
 
 void* OrderedSet_find(OrderedSet* set, void* element)
