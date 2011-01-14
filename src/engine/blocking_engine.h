@@ -15,6 +15,6 @@ void Engine_run(void);
 
 void Engine_setLogicFps(float fps);
 
-float Engine_getInterpolationFactor(void)
+float Engine_getInterpolationFactor(void);
 
 #endif // SMUG_ENGINE_BLOCKING_ENGINE_H

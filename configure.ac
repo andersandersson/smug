@@ -41,6 +41,9 @@ AM_PROG_CC_C_O
 # Check for library function
 LT_INIT
 
+# Default value for define
+AC_DEFINE([SMUGSTD_H], [<platform/smugstd.h>], [Path to platforms smugstd.h])
+
 # Check the OS and run corresponding init script
 case $host_os in
      linux*) AC_INIT_LINUX() ;;

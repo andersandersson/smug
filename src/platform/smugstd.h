@@ -1,6 +1,8 @@
 #ifndef SMUGSTD_H_INCLUDED
 #define SMUGSTD_H_INCLUDED
 
+#include <common/common.h>
+
 #include <stdarg.h>
 #include <time.h>
 #include <math.h>

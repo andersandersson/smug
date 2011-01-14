@@ -1,6 +1,7 @@
 #include <common/common.h>
 #include <common/log.h>
 #include <platform/opengl/opengl.h>
+#include <utils/point.h>
 #include <utils/rectangle.h>
 
 #include <physics/debug.h>

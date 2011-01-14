@@ -64,7 +64,8 @@ void GameObject_moveTo(GameObject* self, float x, float y)
 void GameObject_commitPosition(GameObject* self)
 {
     Interpoint_commit(self->position);
-    for (Node* node = self->drawables->first; node != NULL; node = node->next)
+    Node* node;
+    for (node = self->drawables->first; node != NULL; node = node->next)
     {
         Drawable_commitPosition((Drawable*)node->item);
     }

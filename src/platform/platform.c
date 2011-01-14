@@ -6,9 +6,11 @@
 
 #include <common/common.h>
 #include <common/log.h>
+#include <common/signal.h>
 #include <engine/blocking_engine.h>
-
+#include <graphics/graphics.h>
 #include <platform/platform.h>
+#include <utils/vector.h>
 
 // Holds information of physical joystick
 typedef struct JoystickInfo
@@ -22,8 +24,9 @@ typedef struct JoystickInfo
 static BOOL isInitialized = FALSE;
 
 static void(*gUserWindowResizeCallback)(int, int) = NULL;
-static void(*gUserWindowStateChangeCallback)(void) = NULL;
+static void(*gUserWindowStateChangeCallback)(SMUG_WINDOW_STATE_CHANGE) = NULL;
 static void (*gUserLogicCallback)(void) = NULL;
+static void setWindowSize(int w, int h);
 
 static BOOL gLogicCallbackEnabled = TRUE;
 
@@ -32,7 +35,7 @@ static Vector windowSize;
 
 static TIME gDiscreteTime;
 
-static void GLFWCALL windowResizeCallback(int w, int h)
+void GLFWCALL windowResizeCallback(int w, int h)
 {
     setWindowSize(w, h);
     Graphics_setWindowSize(w, h);
@@ -286,7 +289,7 @@ static void dummyInputHandler(int device, int trigger, INPUTSTATE state)
     fprintf(stderr, "Got input event. Device: %i, trigger: %i, state: %f\n", device, trigger, state);
 }
 
-static void setWindowSize(int w, int h)
+void setWindowSize(int w, int h)
 {
     windowSize = Vector_create2d(w, h);
 }
@@ -520,4 +523,3 @@ INPUTSTATE Platform_getInputState(int device, int trigger)
         }
     }
 }
-

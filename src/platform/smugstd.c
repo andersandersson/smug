@@ -1,7 +1,7 @@
 #include <platform/smugstd.h>
 
 #ifndef DISABLE_ASSERTS
-void Smug_assert(int result, char* expression, char* file, int line)
+void Smug_assert(BOOL result, char* expression, char* file, int line)
 {
     if(!result)
     {

@@ -14,4 +14,4 @@ AM_CFLAGS = $(LIBGLFWCFLAGS) -I..
 
 noinst_LTLIBRARIES = libcommon.la
 
-libcommon_la_SOURCES = interface.c interface.h signal.c signal.h common.c common.h console.c console.h log.c log.h
+libcommon_la_SOURCES = interface.c interface.h signal.c signal.h common.c common.h log.c log.h
