@@ -100,6 +100,7 @@ void BinarySearchTree_insert(BinarySearchTree* tree, void* element);
   * @relatesalso BinarySearchTree
   * @param tree    The tree to remove from
   * @param element The element to remove
+  * @return A pointer to the element in the removed node
   */
 void* BinarySearchTree_remove(BinarySearchTree* tree, void* element);
 
