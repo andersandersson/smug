@@ -28,9 +28,9 @@ typedef unsigned int COLLISION_TYPE;
 
 BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* self_velocity, Vector* self_acceleration, 
 				Body* other, Point* other_start, Vector* other_velocity, Vector* other_acceleration,
-				float delta_time, LinkedList* collisions);
+				TIME delta_time, LinkedList* collisions);
 
-BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_time, OrderedSet* collisions);
+BOOL _detectCollisions(LinkedList* self, LinkedList* other, TIME delta_time, OrderedSet* collisions);
 
 /** Data container for a collision
  *
@@ -68,13 +68,13 @@ typedef struct CollisionData
     Vector otherMovement;
 
     /** A floating point number form 0.0 to 1.0 with the time for when along selfMovement the collision stopped. */
-    float time;
+    TIME time;
 
-    float absoluteTime;
+    TIME absoluteTime;
 
-    float absoluteTimeStart;
+    TIME absoluteTimeStart;
 
-    float deltaTime;
+    TIME deltaTime;
 } CollisionData;
 
 

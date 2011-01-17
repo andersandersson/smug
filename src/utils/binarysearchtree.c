@@ -5,6 +5,32 @@
 
 #include <utils/binarysearchtree.h>
 
+/** The node type building the tree
+  * 
+  * The building blocks of the tree. It holds a pointer to its
+  * parent to make iteration easier.
+  * 
+  * @sa ::BinarySearchTree
+  */
+typedef struct BinarySearchTreeNode
+{
+  struct BinarySearchTreeNode* parent; /**< Pointer to parent, will make iteration easier */
+  struct BinarySearchTreeNode* left;   /**< Pointer to the left child, the one considered "lesser" */
+  struct BinarySearchTreeNode* right;  /**< Pointer to the right child, the one considered "greater" */
+  
+  void* element; /**< Pointer to the element of the node */
+
+  int height;    /**< The height of the subtree of the node */
+} BinarySearchTreeNode;
+
+
+/** Create and return a new BinarySearchTreeNode
+  *
+  */
+static BinarySearchTreeNode* BinarySearchTreeNode_new(void);
+static void BinarySearchTreeNode_delete(BinarySearchTreeNode* node);
+static void BinarySearchTreeNode_deleteRecursive(BinarySearchTreeNode* node);
+static void BinarySearchTreeNode_copy(BinarySearchTreeNode* left, BinarySearchTreeNode* right);
 
 static int _default_compare(void* self, void* left, void* right);
 static void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element, int height);

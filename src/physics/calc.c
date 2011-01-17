@@ -1,5 +1,6 @@
 #include <physics/calc.h>
 #include <common/common.h>
+#include <common/log.h>
 #include <utils/point.h>
 #include <utils/vector.h>
 #include <math.h>
@@ -46,7 +47,7 @@ int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_
       {
 	float q = 2.0 * (x1 - x2) / (a1 - a2);
 	float p = 2.0 * (v1 - v2) / (a1 - a2);
-	
+
 	if(p*p < 4.0*q)
 	  {
 	    *t1 = FP_NAN;
@@ -132,7 +133,7 @@ int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_
     float t_left_1, t_left_2, t_right_1, t_right_2;
     int num1; 
     int num2;
-    
+
     // Check the first intervals right point against the second intervals left point
     num1 = _collideMovingPoints1D(i1_start+i1_width, i1_vel, i1_acc, i2_start, i2_vel, i2_acc, &t_left_1, &t_left_2);
     num2 = _collideMovingPoints1D(i1_start, i1_vel, i1_acc, i2_start+i2_width, i2_vel, i2_acc, &t_right_1, &t_right_2);

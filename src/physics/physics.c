@@ -55,15 +55,6 @@ static void _CollisionHookType_delete(_CollisionHookType* type);
 static int _compareCollisionHookType(void* self, void* left, void* right);
 static int _compareCollisionData(void* self, void* left, void* right);
 
-static BOOL _addCollision(Map* collisions, Body* self, CollisionData* collision_data);
-
-static BOOL _handleCollisions(Map* collisions, Map* hooks);
-static BOOL _updateCollisions(Map* collisions);
-static BOOL _removeCollision(Map* collisions, Body* self, Body* other);
-static BOOL _inCollision(Map* collisions, Body* self, Body* other);
-static void _clearCollisions(Map* collisions);
-static void _clearCollisionsAfterTime(Map* collisions, float time);
-
 int _default_handleEnterCollision(void* lparam, void* rparam);
 int _default_handleInCollision(void* lparam, void* rparam);
 int _default_handleExitCollision(void* lparam, void* rparam);
@@ -186,7 +177,7 @@ static int _compareCollisionData(void* self, void* left, void* right)
  */
 static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* self_velocity, Vector* self_acceleration, 
 				       Body* other, Point* other_start, Vector* other_velocity, Vector* other_acceleration,
-				       float delta_time, LinkedList* collisions)
+				       TIME delta_time, LinkedList* collisions)
 {
     CollisionData* collision_data;
   
@@ -349,7 +340,7 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
 		}
 	    }
 
-	  if(t_out < delta_time)
+	  if(t_out < delta_time && t_out > 0.0)
 	    {
 	      collision_data = CollisionData_new();
 	      collision_data->self = self;
@@ -369,7 +360,7 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
 }
 
 
-static BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_time, OrderedSet* collisions)
+static BOOL _detectCollisions(LinkedList* self, LinkedList* other, TIME delta_time, OrderedSet* collisions)
 {
     LinkedList* new_collisions = LinkedList_new();
 
@@ -437,7 +428,6 @@ static BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_t
 			    if(SHAPE_RECTANGLE == self_body->shape->type &&
 			       SHAPE_RECTANGLE == other_body->shape->type)
 			      {
-				//DEBUG("%f -> %f", t_start, t_end);
 				if(TRUE == _collideRectangleRectangle(self_body, &self_start, &self_velocity, &self_body->acceleration, 
 								      other_body, &other_start, &other_velocity, &other_body->acceleration,
 								      t_end - t_start, new_collisions))
@@ -713,8 +703,6 @@ void Physics_removeBody(Body* body)
 }
 
 
-float _last_time = -10.0;
-
 void _Physics_drawBodies(float time, Color color)
 {
   MapIterator* iter = MapIterator_new();
@@ -744,6 +732,8 @@ void _Physics_drawBodies(float time, Color color)
   MapIterator_delete(iter);
 }
 
+static TIME _last_time = -10.0;
+
 void Physics_update(TIME time, BOOL do_update)
 {
   MapIterator* iter = MapIterator_new();
@@ -757,7 +747,7 @@ void Physics_update(TIME time, BOOL do_update)
   
   TIME delta_time = time - _last_time;
   _last_time = time;
-  delta_time *= 10.0;
+  //delta_time *= 10.0;
   
   
   /////////////////////////////////
@@ -795,12 +785,13 @@ void Physics_update(TIME time, BOOL do_update)
 	      Vector velocity = calculate_velocity(body->velocity, body->acceleration, delta_time);
 	      
 	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(0.0, start, body->velocity));
-	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(0.0, end, velocity));	  
+	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(delta_time, end, velocity));	  
 	    }
 	  else
 	    {
 	      Body_clearWaypoints(body);	  	  
 	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(0.0, body->position, body->velocity));
+	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(delta_time, body->position, body->velocity));
 	    }
 	}
       }
@@ -820,8 +811,12 @@ void Physics_update(TIME time, BOOL do_update)
       _detectCollisions(self_bodies, other_bodies, delta_time, collisions);
     }
   
+  int i = 0;
   for(OrderedSetIterator_reset(collisions, set_iter); TRUE == OrderedSetIterator_valid(set_iter); OrderedSetIterator_step(set_iter))
     {
+      i++;
+      CollisionData* data = OrderedSetIterator_get(set_iter);
+      DEBUG("DATA!: %d - 0x%x vs 0x%x", i, data->self, data->other);
     }
   _Physics_drawBodies(0.0, Color_createFromRGBAf(1.0, 0.0, 0.0, 1.0));
 
