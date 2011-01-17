@@ -23,7 +23,7 @@ static void _clear(LinkedList* list)
 
 static BOOL _invariant(LinkedList* self)
 {
-    return (self != NULL &&
+    BOOL ret = (self != NULL &&
             (   (self->first == NULL &&
                 self->last == NULL)
                 ||
@@ -33,6 +33,12 @@ static BOOL _invariant(LinkedList* self)
                 self->last->next == NULL)
             )
         );
+    if (!ret)
+    {
+        LinkedList* ll;
+        ll->first = Node_new();
+    }
+    return ret;
 }
 
 Node* Node_new()
@@ -136,6 +142,30 @@ void LinkedList_insertBefore(LinkedList* self, Node* node, void* item)
     newNode->next = node;
     newNode->prev = node->prev;
     node->prev = newNode;
+}
+
+void* LinkedList_getLast(LinkedList* self)
+{
+    return self->last->item;
+}
+
+void* LinkedList_popLast(LinkedList* self)
+{
+    void* data = self->last->item;
+    LinkedList_remove(self, self->last);
+    return data;
+}
+
+void* LinkedList_getFirst(LinkedList* self)
+{
+    return self->first->item;
+}
+
+void* LinkedList_popFirst(LinkedList* self)
+{
+    void* data = self->first->item;
+    LinkedList_remove(self, self->first);
+    return data;
 }
 
 BOOL LinkedList_isEmpty(LinkedList* self)
