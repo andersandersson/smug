@@ -66,7 +66,7 @@ AC_GLFW_DEVEL([2.6.0])
 
 # Append Python and GLFW flags to default flags
 LIBS="$LIBS $GLFW_LIBS $GLEW_LIBS $PYTHON_LIBS"
-CFLAGS="$CFLAGS $GLFW_CFLAGS $GLEW_CFLAGS $PYTHON_CFLAGS -Wall -g -O0"  #-Werror=implicit-function-declaration"
+CFLAGS="$CFLAGS $GLFW_CFLAGS $GLEW_CFLAGS $PYTHON_CFLAGS -Wall -g -O0 -Werror=implicit-function-declaration -Werror=strict-prototypes"
 LDFLAGS="$LDFLAGS $GLFW_LDFLAGS $GLEW_LDFLAGS $PYTHON_LDFLAGS"
 
 # Allow the user to disable use of asserts

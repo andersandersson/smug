@@ -12,6 +12,8 @@
 #include <utils/map.h>
 #include <physics/debug.h>
 #include <physics/physics.h>
+#include <physics/calc.h>
+#include <platform/platform.h>
 
 #define EPSILON 0.0001
 
@@ -50,8 +52,8 @@ static BOOL debugMode = FALSE;
 /* FUNCTION DECLARATION */
 static _CollisionHookType* _CollisionHookType_new(void);
 static void _CollisionHookType_delete(_CollisionHookType* type);
-static int _compareCollisionHookType(void* self, void* other);
-static int _compareCollisionData(void* self, void* other);
+static int _compareCollisionHookType(void* self, void* left, void* right);
+static int _compareCollisionData(void* self, void* left, void* right);
 
 static BOOL _addCollision(Map* collisions, Body* self, CollisionData* collision_data);
 
@@ -62,9 +64,9 @@ static BOOL _inCollision(Map* collisions, Body* self, Body* other);
 static void _clearCollisions(Map* collisions);
 static void _clearCollisionsAfterTime(Map* collisions, float time);
 
-BOOL _default_handleEnterCollision(void* lparam, void* rparam);
-BOOL _default_handleInCollision(void* lparam, void* rparam);
-BOOL _default_handleExitCollision(void* lparam, void* rparam);
+int _default_handleEnterCollision(void* lparam, void* rparam);
+int _default_handleInCollision(void* lparam, void* rparam);
+int _default_handleExitCollision(void* lparam, void* rparam);
 
   
 //===========================================
@@ -84,10 +86,10 @@ static void _CollisionHookType_delete(_CollisionHookType* type)
 }
 
 /** Compare two _CollisionTypes, used for Map */
-static int _compareCollisionHookType(void* self, void* other)
+static int _compareCollisionHookType(void* self, void* left, void* right)
 {
-    _CollisionHookType* _self = (_CollisionHookType*) self;
-    _CollisionHookType* _other = (_CollisionHookType*) other;
+    _CollisionHookType* _self = (_CollisionHookType*) left;
+    _CollisionHookType* _other = (_CollisionHookType*) right;
  
     if(_self->self == _other->self && _self->other == _other->other)
       {
@@ -113,10 +115,10 @@ static int _compareCollisionHookType(void* self, void* other)
 
 
 /** Compare two _CollisionKeys, used for Map */
-static int _compareCollisionData(void* self, void* other)
+static int _compareCollisionData(void* self, void* left, void* right)
 {
-    CollisionData* _self = (CollisionData*) self;
-    CollisionData* _other = (CollisionData*) other;
+    CollisionData* _self = (CollisionData*) left;
+    CollisionData* _other = (CollisionData*) right;
 
     // Always let the same object equal itself
     if(_self == _other)
@@ -169,190 +171,6 @@ static int _compareCollisionData(void* self, void* other)
       {
 	return 1;
       }
-}
-
-
-int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_width, float *width)
-{
-  float i1 = x1_start + x1_width - x2_start;
-  float i2 = x2_start + x2_width - x1_start;
-
-  if(fabs(i1) < fabs(i2))
-    {
-      *width = i1;
-      return -1;
-    }
-  else if(fabs(i1) > fabs(i2))
-    {
-      *width = i2;
-      return 1;
-    }
-  else 
-    {
-      *width = i1;
-      return 0;
-    }
-}
-
-/** Find the collision time of two moving points in 1 dimension.
- *
- * Given two points on the X-axis, we will find when (if) they collide.
- *
- * @param x1_start First points starting position
- * @param x1_end   First points ending position
- * @param x2_start Second points starting position
- * @param x2_end   Second points ending position
- * @param[out] t   Time for collision
- *
- * @return Whether or not the points collide
- */
- int _collideMovingPoints1D(float x1, float v1, float a1, float x2, float v2, float a2, float *t1, float *t2)
-{
-    BOOL result = TRUE;
-
-    if(a1 != a2)
-      {
-	float q = 2.0 * (x1 - x2) / (a1 - a2);
-	float p = 2.0 * (v1 - v2) / (a1 - a2);
-	
-	if(p*p < 4.0*q)
-	  {
-	    *t1 = FP_NAN;
-	    *t2 = FP_NAN;
-	    result = 0;
-	  }
-	else if(p*p == 4.0*q)
-	  {
-	    *t1 = -p/2.0;
-	    *t2 = FP_NAN;
-	    result = 1;
-	  }
-	else
-	  {
-	    float sq = sqrt((p/2.0)*(p/2.0) - q);
-	    *t1 = -p/2.0 - sq;
-	    *t2 = -p/2.0 + sq;
-	    result = 2;
-	  }
-      }
-    else
-      {
-	if(v1 == v2)
-	  {
-	    if(x1 == x2)
-	      {
-		*t1 = 0.0;
-		*t2 = 0.0;
-		result = 1;
-	      }
-	    else
-	      {
-		*t1 = FP_NAN;
-		*t2 = FP_NAN;
-		result = 0;
-	      }
-	  }
-	else
-	  {
-	    *t1 = -(x1 - x2) / (v1 - v2);
-	    *t2 = FP_NAN;
-	    result = 1;
-	  }
-      }
-
-    return result;
-}
-
-
-/** Find the collision time for two moving intervals in 1 dimension.
- *
- * Given two intervals on the X-axis, we will find when (if) they collide. 
- * This is done by comparing the collision times of the moving ending points
- * for each interval.
- *
- * The moving intervals can be interpreted as:
- *
- * 0s: [i1_x1_start]----[i1_x2_start]
- * 0s:                                    [i2_x1_start]-----------[i2_x2_start]
- *
- * 1s:         [i1_x1_end]----[i1_x2_end]
- * 1s:                         [i2_x1_end]-----------[i2_x2_end]
- *
- * @relatesalso _collideMovingPoints1D
- *
- * @param i1_x1_start  First intervals left starting point
- * @param i1_x1_end    First intervals left ending point
- * @param i1_x2_start  First intervals right starting point
- * @param i1_x2_end    First intervals right ending point
- * @param i2_x1_start  Second intervals left starting point
- * @param i2_x1_end    Second intervals left ending point
- * @param i2_x2_start  Second intervals right starting point
- * @param i2_x2_end    Second intervals right ending point
- * @param[out] t_in    Starting time for interval overlap
- * @param[out] t_out   Ending time for interval overlap
- *
- * @return Whether or not the intervals are moving with the same speed
- */
- int _collideMovingInterval1D(float i1_start, float i1_vel, float i1_acc, float i1_width,
-				     float i2_start, float i2_vel, float i2_acc, float i2_width,
-				    float* t1_in, float* t1_out, float* t2_in, float* t2_out)
-{
-    float t_left_1, t_left_2, t_right_1, t_right_2;
-    int num1; 
-    int num2;
-    
-    // Check the first intervals right point against the second intervals left point
-    num1 = _collideMovingPoints1D(i1_start+i1_width, i1_vel, i1_acc, i2_start, i2_vel, i2_acc, &t_left_1, &t_left_2);
-    num2 = _collideMovingPoints1D(i1_start, i1_vel, i1_acc, i2_start+i2_width, i2_vel, i2_acc, &t_right_1, &t_right_2);
-
-    if(1 == num1 && 1 == num2)
-      {
-	*t1_in = min(t_left_1, t_right_1);
-	*t1_out = max(t_left_1, t_right_1);
-
-	*t2_in = FP_NAN;
-	*t2_out = FP_NAN;
-
-	return 1;
-      }
-    else if(2 == num1 && 2 == num2)
-      {
-	*t1_in = min(min(t_left_1, t_left_2), min(t_right_1, t_right_2));
-	*t1_out = max(min(t_left_1, t_left_2), min(t_right_1, t_right_2));
-
-	*t2_in = min(max(t_left_1, t_left_2), max(t_right_1, t_right_2));
-	*t2_out = max(max(t_left_1, t_left_2), max(t_right_1, t_right_2));
-
-	return 2;
-      }
-    else if(2 == num1 && 0 == num2)
-      {
-	*t1_in = min(t_left_1, t_left_2);
-	*t1_out = max(t_left_1, t_left_2);
-
-	*t2_in = FP_NAN;
-	*t2_out = FP_NAN;
-
-	return 1;
-      }
-    else if(0 == num1 && 2 == num2)
-      {
-	*t1_in = min(t_right_1, t_right_2);
-	*t1_out = max(t_right_1, t_right_2);
-
-	*t2_in = FP_NAN;
-	*t2_out = FP_NAN;
-
-	return 1;
-      }
-
-    *t1_in = FP_NAN;
-    *t1_out = FP_NAN;
-    
-    *t2_in = FP_NAN;
-    *t2_out = FP_NAN;
-
-    return 0;
 }
 
 
@@ -548,101 +366,10 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
 	      LinkedList_addLast(collisions, collision_data);
 	    }
 	}
-
-    /*
-    // Check if the collision will occur during entire 0.0 -> delta_time interval
-    if((TRUE == same_y_speed && y_overlap && (t_x_in < 0.0 && t_x_out > delta_time)) || // Overlapping y, and x entire time
-       (TRUE == same_x_speed && x_overlap && (t_y_in < 0.0 && t_y_out > delta_time)) || // Overlapping x, and y entire time
-       (FALSE == same_x_speed && FALSE == same_y_speed && t_x_in < 0.0 && t_x_out > delta_time && t_y_in < 0.0 && t_y_out > delta_time))         // Both x and y entire time
-      {
-        collision_data = CollisionData_new();
-        collision_data->self = self;
-        collision_data->other = other;
-	collision_data->wayout = wayout_start;
-	collision_data->time = 0.0;
-	collision_data->type = COLLISION_PERSIST;
-	LinkedList_addLast(collisions, collision_data);
-
-	return TRUE;
-      }
-
-    // Check if the collision will occur during entire 0.0 -> delta_time interval
-    if((TRUE == same_y_speed && y_overlap && t_x_in >= 0.0 && t_x_in < delta_time) || // Overlapping y, and x enters after 0 and enters before 1
-       (TRUE == same_x_speed && x_overlap && t_y_in >= 0.0 && t_y_in < delta_time) || // Overlapping x, and y enters after 0 and enters before 1
-       (FALSE == same_x_speed && FALSE == same_y_speed && t_x_in >= 0.0  && t_x_in < delta_time && t_y_in <= t_x_in) ||       // Y enters before X, and X enters after 0 and before 1
-       (FALSE == same_x_speed && FALSE == same_y_speed && t_y_in >= 0.0  && t_y_in < delta_time && t_x_in <= t_y_in))         // X enters before Y, and Y enters after 0 and before 1
-      {
-        collision_data = CollisionData_new();
-        collision_data->self = self;
-        collision_data->other = other;
-	collision_data->type = COLLISION_ENTER;
-
-	// If X-axis enters before Y-axis
-	if((FALSE == same_x_speed && FALSE == same_y_speed && t_x_in > t_y_in) || TRUE == same_y_speed) {
-	  collision_data->time =  t_x_in;
-	  collision_data->normal = Vector_create2d( (self_x_start - other_x_start) / fabs(self_x_start - other_x_start), 0.0f);
-	} else {
-	  collision_data->time =  t_y_in;
-	  collision_data->normal = Vector_create2d(0.0f, (self_y_start - other_y_start) / fabs(self_y_start - other_y_start));
-	}
-
-	float persist_time = collision_data->time;
-	LinkedList_addLast(collisions, collision_data);
-
-	// Add an persistent collision after enter
-        collision_data = CollisionData_new();
-        collision_data->self = self;
-        collision_data->other = other;
-	collision_data->wayout = wayout_end;
-	collision_data->type = COLLISION_PERSIST;
-	collision_data->time = persist_time;
-	LinkedList_addLast(collisions, collision_data);
-      }
-
-    // Check if the collision will end during the interval 0.0 -> delta_time
-    if((TRUE == same_y_speed && y_overlap && (t_x_out >= 0.0 && t_x_out < delta_time)) || // Overlapping y, and x exits after 0 and exits before 1
-       (TRUE == same_x_speed && x_overlap && (t_y_out >= 0.0 && t_y_out < delta_time)) || // Overlapping x, and y exits after 0 and exits before 1
-       (FALSE == same_x_speed && FALSE == same_y_speed && t_x_out >= 0.0 && t_x_out < delta_time && t_y_out >= t_x_out) ||                  // X exits before Y, and X exits after 0 and before 1
-       (FALSE == same_x_speed && FALSE == same_y_speed && t_y_out >= 0.0 && t_y_out < delta_time && t_x_out >= t_y_out))                    // Y exits before X, and Y exits after 0 and before 1
-      {
-	// Add an persistent collision before exit
-        collision_data = CollisionData_new();
-        collision_data->self = self;
-        collision_data->other = other;
-	collision_data->wayout = wayout_start;
-	collision_data->type = COLLISION_PERSIST;
-	collision_data->time = 0.0;
-	LinkedList_addLast(collisions, collision_data);
-
-        collision_data = CollisionData_new();
-        collision_data->self = self;
-        collision_data->other = other;
-	collision_data->type = COLLISION_EXIT;
-
-	// If X-axis exits before Y-axis
-	if((FALSE == same_x_speed && FALSE == same_y_speed && t_x_out < t_y_out) || TRUE == same_y_speed) {
-	  collision_data->time =  t_x_out;
-	  collision_data->normal = Vector_create2d( (self_x_start - other_x_start) / fabs(self_x_start - other_x_start), 0.0f);
-	} else {
-	  collision_data->time =  t_y_out;
-	  collision_data->normal = Vector_create2d(0.0f, (self_y_start - other_y_start) / fabs(self_y_start - other_y_start));
-	}
-
-	LinkedList_addLast(collisions, collision_data);
-      }
-
-    if(NULL == collisions->first) 
-      {
-	return FALSE;
-      } 
-    else
-      {
-	return TRUE;
-      }*/
 }
 
 
-static BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_time, Map* collisions)
+static BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_time, OrderedSet* collisions)
 {
     LinkedList* new_collisions = LinkedList_new();
 
@@ -733,7 +460,7 @@ static BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_t
 					data->absoluteTimeStart = t_start;
 					data->deltaTime = delta_time;
 					
-					_addCollision(collisions, self_body, data);
+					OrderedSet_insert(collisions, data);
 					
 					LinkedList_removeItem(new_collisions, (void*) data);
 				      } // while
@@ -761,7 +488,7 @@ static BOOL _detectCollisions(LinkedList* self, LinkedList* other, float delta_t
 }
 
 
-BOOL _default_handleEnterCollision(void* lparam, void* rparam)
+int _default_handleEnterCollision(void* lparam, void* rparam)
 {
   CollisionData* data = (CollisionData*) rparam;
 
@@ -832,7 +559,7 @@ BOOL _default_handleEnterCollision(void* lparam, void* rparam)
   return TRUE;
 }
 
-BOOL _default_handleInCollision(void* lparam, void* rparam)
+int _default_handleInCollision(void* lparam, void* rparam)
 {
   CollisionData* data = (CollisionData*) rparam;
   float length = Vector_length(data->wayout);
@@ -870,140 +597,12 @@ BOOL _default_handleInCollision(void* lparam, void* rparam)
   return result;
 }
 
-BOOL _default_handleExitCollision(void* lparam, void* rparam)
+int _default_handleExitCollision(void* lparam, void* rparam)
 {
   CollisionData* data = (CollisionData*) rparam;
   //DEBUG("COLLISION EXIT: %f", data->time);
   return FALSE;
 }
-
-static BOOL _handleCollisions(Map* collisions, Map* handlers)
-{
-  /*
-  MapNode* top;
-  MapNode* node;
-  MapNode* hook_node;
-  _CollisionHookType type;
-  Hook* hook;
-  Map* hooks;
-  CollisionData* data;
-  BOOL changes_made = FALSE;
-
-  //  DEBUG("HANDLING");
-  for(top = collisions->first; top != NULL; top = top->next)
-    {
-      Map* body_collisions = (Map*) top->value;
-      
-      for(node = body_collisions->first; node != NULL; node = node->next)
-	{
-	  data = (CollisionData*) node->key;
-	  
-	  type.self = data->self->type;
-	  type.other = data->other->type;
-
-	  hooks = (Map*) Map_get(handlers, &type);
-	  hook = (Hook*) Map_get(hooks, (void*) data->type);
-
-	  if(TRUE == Hook_call(hook, (void*) data))
-	    {
-	      _clearCollisionsAfterTime(body_collisions, data->absoluteTime);
-	      changes_made = TRUE;
-	      break;
-	    }
-	}
-    }
-
-  return changes_made;
-  */
-}
-
-static BOOL _updateCollisions(Map* collisions)
-{
-  return FALSE;
-}
-
-static BOOL _addCollision(Map* collisions, Body* self, CollisionData* collision_data)
-{  
-  Map* body_collisions = Map_get(collisions, self);
-
-  if(NULL == body_collisions)
-    {
-      body_collisions = Map_new();
-      Map_setCompare(body_collisions, _compareCollisionData);
-      Map_set(collisions, self, body_collisions);
-    }
-  
-  Map_set(body_collisions, collision_data, NULL);
-}
-
-static BOOL _removeCollision(Map* collisions, Body* self, Body* other)
-{  
-  return FALSE;
-}
-
-static BOOL _inCollision(Map* collisions, Body* self, Body* other)
-{
-  return FALSE;
-}
-
-static void _clearCollisionsAfterTime(Map* collisions, float time)
-{
-  /*  MapNode* node = collisions->first;
-  MapNode* prev_node = node;
-  CollisionData* data;
-
-  while(node != NULL)
-    {      
-      data = (CollisionData*) node->key;
-
-      if(data->absoluteTime >= time)
-	{
-	  node = NULL;
-	}
-      else
-	{
-	  prev_node = node;
-	  node = node->next;
-	}
-    }
-
-  if(NULL != prev_node)
-    {
-      while(prev_node->next != NULL)
-	{
-	  data = (CollisionData*) prev_node->next->key;
-	  
-	  Map_remove(collisions, (void*) data);
-	  CollisionData_delete(data);
-	}      
-    }
-  */
-}
-
-static void _clearCollisions(Map* collisions)
-{
-  /*
-  Body* body;
-  Map* body_collisions;
-  CollisionData* data;
-  
-  while(collisions->first != NULL)
-    {
-      body = (Body*) collisions->first->key;
-      body_collisions = (Map*) collisions->first->value;
-
-      while(body_collisions->first != NULL)
-	{
-	  data = (CollisionData*) body_collisions->first->key;
-	  Map_remove(body_collisions, (void*) data);
-	  CollisionData_delete(data);
-	}
-
-      Map_remove(collisions, (void*) body);
-    }
-  */
-}
-
 
 //===========================================
 // PUBLIC FUNCTIONS
@@ -1116,21 +715,122 @@ void Physics_removeBody(Body* body)
 
 float _last_time = -10.0;
 
+void _Physics_drawBodies(float time, Color color)
+{
+  MapIterator* iter = MapIterator_new();
+
+  for(MapIterator_reset(body_map, iter); TRUE == MapIterator_valid(iter); MapIterator_step(iter))
+    {
+      Pair* pair = (Pair*) MapIterator_get(iter);
+      LinkedList* list = (LinkedList*) pair->right;
+      Node* node;
+
+      for(node = list->first; NULL != node; node = node->next)
+	{
+	  Body* body = (Body*) node->item;
+
+	  Body_drawBody(body, time, color);
+	  
+	  Node* wp_node;
+
+	  for(wp_node = body->waypoints->first; NULL != wp_node; wp_node = wp_node->next)
+	    {
+	      Waypoint* wp = (Waypoint*) wp_node->item;
+	      Physics_drawShape(body->shape, wp->point, color);
+	    }
+	}
+    }
+
+  MapIterator_delete(iter);
+}
+
 void Physics_update(TIME time, BOOL do_update)
 {
-    if(_last_time < 0.0)
-      {
-	_last_time = time;
+  MapIterator* iter = MapIterator_new();
+  OrderedSet* collisions = OrderedSet_new();
+  OrderedSetIterator* set_iter = OrderedSetIterator_new();
+  
+  if(_last_time < 0.0)
+    {
+      _last_time = time;
+    }
+  
+  TIME delta_time = time - _last_time;
+  _last_time = time;
+  delta_time *= 10.0;
+  
+  
+  /////////////////////////////////
+  // Reset waypoints of all objects
+  /////////////////////////////////
+  for(MapIterator_reset(body_map, iter); TRUE == MapIterator_valid(iter); MapIterator_step(iter))
+    {
+      Pair* pair = (Pair*) MapIterator_get(iter);
+      LinkedList* list = (LinkedList*) pair->right;
+      Node* node;
+      
+      for(node = list->first; NULL != node; node = node->next)
+	{
+	  Body* body = (Body*) node->item;
+
+	  // Don't do anything with immovable bodies
+	  if(FALSE == body->immovable)
+	    {
+	      // Update body with last waypoints data
+	      if(NULL != body->waypoints->last)
+		{
+		  Waypoint* wp = (Waypoint*) body->waypoints->last->item;
+		  body->position = wp->point;
+		  body->velocity = wp->velocity;
+		}
+	      
+	      // Clear waypoints
+	      Body_clearWaypoints(body);	  	  
+
+	      // Reset acceleration to default
+	      body->acceleration = Vector_create2d(0.0, 10.0);
+	      
+	      Point start = body->position;
+	      Point end = calculate_position(body->position, body->velocity, body->acceleration, delta_time);
+	      Vector velocity = calculate_velocity(body->velocity, body->acceleration, delta_time);
+	      
+	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(0.0, start, body->velocity));
+	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(0.0, end, velocity));	  
+	    }
+	  else
+	    {
+	      Body_clearWaypoints(body);	  	  
+	      Body_addWaypoint(body, Waypoint_createFromTimePositionVelocity(0.0, body->position, body->velocity));
+	    }
+	}
       }
+ 
+  
+  //////////////////////////////////////////////////////////////
+  // Calculate an initial list of collisions between all objects
+  //////////////////////////////////////////////////////////////
+  for(MapIterator_reset(collision_hooks, iter); TRUE == MapIterator_valid(iter); MapIterator_step(iter))
+    {
+      Pair* pair = (Pair*) MapIterator_get(iter);
+      _CollisionHookType* type = (_CollisionHookType*) pair->left;
 
-    float delta_time = time - _last_time;
-    _last_time = time;
+      LinkedList* self_bodies = (LinkedList*) Map_get(body_map, type->self);
+      LinkedList* other_bodies = (LinkedList*) Map_get(body_map, type->other);
 
-    delta_time *= 10.0;
+      _detectCollisions(self_bodies, other_bodies, delta_time, collisions);
+    }
+  
+  for(OrderedSetIterator_reset(collisions, set_iter); TRUE == OrderedSetIterator_valid(set_iter); OrderedSetIterator_step(set_iter))
+    {
+    }
+  _Physics_drawBodies(0.0, Color_createFromRGBAf(1.0, 0.0, 0.0, 1.0));
 
-    /*
-    for(node = body_map->first; node != NULL; node = node->next)
-        {
+  Platform_refreshWindow();
+
+  MapIterator_delete(iter);
+  OrderedSet_delete(collisions);
+  OrderedSetIterator_delete(set_iter);
+  /*
             LinkedList* list;
             Node* list_node;
 

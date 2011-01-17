@@ -101,7 +101,7 @@ void Graphics_setWindowSize(double w, double h)
     glMatrixMode(GL_MODELVIEW);
 }
 
-int Graphics_init()
+int Graphics_init(void)
 {
     smug_assert(!isInitialized);
 	smug_assert(Platform_isInitialized());

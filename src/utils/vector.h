@@ -20,8 +20,8 @@
 
 
 /**
- * Create a new 2 dimensional vector.
- */
+  * Create a new 2 dimensional vector.
+  */
 Vector Vector_create2d(float x, float y);
 
 

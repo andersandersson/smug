@@ -11,6 +11,7 @@
 #include <graphics/graphics.h>
 #include <platform/platform.h>
 #include <utils/vector.h>
+#include <input/input.h>
 
 // Holds information of physical joystick
 typedef struct JoystickInfo

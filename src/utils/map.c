@@ -9,10 +9,10 @@ static int _pair_compare(void* map, void* left, void* right)
   Pair* _right = (Pair*) right;
   Map* _map = (BinarySearchTree*) map;
 
-  return _map->compare(_left->left, _right->left);
+  return _map->compare(map, _left->left, _right->left);
 }
 
-static int _default_compare(void* left, void* right)
+static int _default_compare(void* self, void* left, void* right)
 {
   if(left < right)
     {
@@ -48,7 +48,7 @@ void Map_delete(Map* map)
 }
 
 
-void Map_setCompare(Map* map, int (*compare)(void*, void*))
+void Map_setCompare(Map* map, int (*compare)(void*, void*, void*))
 {
   map->compare = compare;
   BinarySearchTree_setCompare(map->tree, map, _pair_compare);

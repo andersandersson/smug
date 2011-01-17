@@ -10,9 +10,10 @@
 #ifndef SMUG_PHYSICS_BODY_H
 #define SMUG_PHYSICS_BODY_H
 
-#include "shapes.h"
-#include "waypoint.h"
-#include "utils/linkedlist.h"
+#include <physics/shapes.h>
+#include <physics/waypoint.h>
+#include <utils/linkedlist.h>
+#include <graphics/color_type.h>
 
 typedef unsigned int BODY_TYPE;
 
@@ -90,6 +91,7 @@ void Body_clearWaypoints(Body* body);
 void Body_addWaypoint(Body* body, Waypoint* waypoint);
 void Body_removeWaypointsAfterTime(Body* body, float time);
 
+void Body_drawBody(Body* body, float time, Color color);
 void Body_dump(Body* body);
 void Body_dumpWaypoints(Body* body);
 #endif // SMUG_PHYSICS_BODY_H

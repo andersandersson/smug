@@ -7,7 +7,7 @@
 typedef struct Map
 {
     struct BinarySearchTree* tree;
-    int (*compare)(void*, void*);
+  int (*compare)(void*, void*, void*);
 } Map;
 
 
@@ -19,7 +19,7 @@ typedef struct MapIterator
 
 Map* Map_new(void);
 void Map_delete(Map* set);
-void Map_setCompare(Map* set, int (*compare)(void*, void*));
+void Map_setCompare(Map* set, int (*compare)(void*, void*, void*));
 void Map_set(Map* set, void* key, void* value);
 Pair Map_remove(Map* set, void* key);
 void* Map_get(Map* set, void* key);

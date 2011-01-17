@@ -43,7 +43,7 @@
  * This creates a view, mapping a screen to the current window.
  * The width and height are read from the platform module.
  */
-int Graphics_init();
+int Graphics_init(void);
 
 /**
  * Returns true if system is initialized

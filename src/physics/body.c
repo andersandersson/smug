@@ -6,6 +6,7 @@
 #include <utils/vector.h>
 
 #include <physics/body.h>
+#include <physics/debug.h>
 
 Body* Body_new(void)
 {
@@ -156,4 +157,10 @@ void Body_dumpWaypoints(Body* body)
     }
 
   DEBUG("%s", buffer);
+}
+
+
+void Body_drawBody(Body* body, float time, Color color)
+{
+  Physics_drawShape(body->shape, body->position, color);
 }

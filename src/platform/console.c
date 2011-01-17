@@ -9,7 +9,7 @@
 // static unsigned int gTabWidth = 4;
 
 // Internal function for printing a character
-static char _getChar()
+static char _getChar(void)
 {
     return getc(stdin);
 }

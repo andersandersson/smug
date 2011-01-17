@@ -169,7 +169,7 @@ void Engine_removeObject(GameObject* obj)
     }
 }
 
-void Engine_commitPositionChanges()
+void Engine_commitPositionChanges(void)
 {
     Node* node;
     for (node = gGameObjects->first; node != NULL; node = node->next)

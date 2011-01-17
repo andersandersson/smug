@@ -49,7 +49,7 @@ void Engine_addObject(GameObject* newObj);
 /**
  * Called by blocking engine OR platform once after each logic heartbeat.
  */
-void Engine_commitPositionChanges();
+void Engine_commitPositionChanges(void);
 
 #endif // SMUG_ENGINE_ENGINE_H
 
