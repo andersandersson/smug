@@ -64,6 +64,9 @@ esac
 # Check for GLFW
 AC_GLFW_DEVEL([2.6.0])
 
+# Check for GLEW
+AC_GLEW_DEVEL([1.5.1])
+
 # Append Python and GLFW flags to default flags
 LIBS="$LIBS $GLFW_LIBS $GLEW_LIBS $PYTHON_LIBS"
 CFLAGS="$CFLAGS $GLFW_CFLAGS $GLEW_CFLAGS $PYTHON_CFLAGS -Wall -g -O0 -Werror=implicit-function-declaration -Werror=strict-prototypes"

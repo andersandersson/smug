@@ -19,7 +19,7 @@ int collision_hook(void* lparam, void* rparam)
   return 0;
 }
 
-int main()
+int main(void)
 {
     if (!Log_init())
         return 0;
@@ -33,7 +33,7 @@ int main()
     if (!Physics_init())
         return 0;       
 
-    if (!Graphics_init(640, 480))
+    if (!Graphics_init())
         return 0;
 
     TIME t, next_t;
