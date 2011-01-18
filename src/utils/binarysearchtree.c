@@ -421,6 +421,22 @@ void _remove_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
 }
 
 
+void* BinarySearchTree_findMin(BinarySearchTree* tree)
+{
+  if(NULL == tree)
+    {
+      return NULL;
+    }
+
+  BinarySearchTreeNode* node = _find_min_node(tree->root);  
+
+  if(NULL != node)
+    return node->element;
+
+  return NULL;
+}
+
+
 void* BinarySearchTree_find(BinarySearchTree* tree, void* element)
 {
   BinarySearchTreeNode* node = _find_node(tree, tree->root, element);
@@ -458,6 +474,7 @@ BinarySearchTreeNode* _find_node(BinarySearchTree* tree, BinarySearchTreeNode* n
     }
 }
 
+
 BinarySearchTreeNode* _find_min_node(BinarySearchTreeNode* node)
 {
   if(node == NULL)
@@ -472,7 +489,6 @@ BinarySearchTreeNode* _find_min_node(BinarySearchTreeNode* node)
 
   return node;
 }
-
 
 
 void BinarySearchTree_print(BinarySearchTree* tree)

@@ -119,6 +119,17 @@ void* BinarySearchTree_remove(BinarySearchTree* tree, void* element);
 void* BinarySearchTree_find(BinarySearchTree* tree, void* element);
 
 
+/** Find the minimum element in the tree
+  *
+  * Get the leftmost item in the tree.
+  *
+  * @relatesalso BinarySearchTree
+  * @param tree The tree to search
+  * @return The found item or NULL
+  */
+void* BinarySearchTree_findMin(BinarySearchTree* tree);
+
+
 /** Print a tree to stdout
   *
   * This is mostly for debugging purpose.

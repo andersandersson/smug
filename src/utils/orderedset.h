@@ -84,6 +84,26 @@ void* OrderedSet_remove(OrderedSet* set, void* element);
 void* OrderedSet_find(OrderedSet* set, void* element);
 
 
+/** Fetch and remove the least item
+  *
+  * Find the least item in the set, remove and
+  * return it.
+  *
+  * @relatesalso OrderedSet
+  * @param set The OrderedSet to pop from
+  * @return The item found or NULL if the set is empty
+  */
+void* OrderedSet_popMin(OrderedSet* set);
+
+
+/** Print the set to stdout
+  *
+  * @relatesalso OrderedSet
+  * @param set The OrderedSet to print
+  */
+void OrderedSet_print(OrderedSet* set);
+
+
 /** Create a new OrderedSetIterator
   *
   * @relatesalso OrderedSetIterator
@@ -133,6 +153,5 @@ BOOL OrderedSetIterator_valid(OrderedSetIterator* iter);
   * @return The value or NULL if the iterator is invalid
   */
 void* OrderedSetIterator_get(OrderedSetIterator* iter);
-
 
 #endif // SMUG_UTILS_ORDEREDSET_H

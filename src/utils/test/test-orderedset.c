@@ -20,7 +20,7 @@ int compare(void* tree, int x, int y)
       }
 }
 
-int main()
+int main(void)
 {
     OrderedSet* tree = OrderedSet_new();
  
@@ -49,18 +49,18 @@ int main()
       }
 
     printf("===========================\n");
+    OrderedSet_popMin(tree);
     OrderedSet_print(tree);
-
-    OrderedSet_remove(tree, (void*)8);
-
     printf("===========================\n");
+    OrderedSet_popMin(tree);
     OrderedSet_print(tree);
-
-    OrderedSet_remove(tree, (void*)7);
-
     printf("===========================\n");
+    OrderedSet_popMin(tree);
     OrderedSet_print(tree);
-    printf("Getting 10: %d\n", (int) OrderedSet_find(tree, (void*)10));
+    printf("===========================\n");
+    OrderedSet_popMin(tree);
+    OrderedSet_print(tree);
+
     OrderedSet_delete(tree);
     return 0;
 }
