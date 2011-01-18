@@ -38,12 +38,6 @@ void* OrderedSet_find(OrderedSet* set, void* element)
   return BinarySearchTree_find(set->tree, element);
 }
 
-void OrderedSet_print(OrderedSet* set)
-{
-  BinarySearchTree_print(set->tree);
-}
-
-
 
 
 OrderedSetIterator* OrderedSetIterator_new(void)

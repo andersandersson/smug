@@ -3,15 +3,37 @@
 #include <utils/pair.h>
 #include <utils/binarysearchtree.h>
 
+/** Comparison function for maps
+  *
+  * Takes the comparison arguments, pick out the key parts
+  * of these pairs, and send them to the maps comparison
+  * function that is specified by the user of the map.
+  *
+  * @relatesalso Map
+  * @param map Pointer to the Map containing the tree
+  * @param left The left Pair
+  * @param right The right Pair
+  * @return -1, 0 or 1
+  */
 static int _pair_compare(void* map, void* left, void* right)
 {
   Pair* _left = (Pair*) left;
   Pair* _right = (Pair*) right;
-  Map* _map = (BinarySearchTree*) map;
-
+  Map* _map = (Map*) map;
+  
   return _map->compare(map, _left->left, _right->left);
 }
 
+/** Default comparison function for maps
+  *
+  * Simply compare the pointer addresses
+  *
+  * @relatesalso Map
+  * @param self Ignored
+  * @param left The left key
+  * @param right The right key
+  * @return -1, 0 or 1
+  */
 static int _default_compare(void* self, void* left, void* right)
 {
   if(left < right)
@@ -70,6 +92,7 @@ Pair Map_remove(Map* map, void* key)
 
   search.left = key;
 
+  // Search and store the element to be removed
   Pair* found = BinarySearchTree_remove(map->tree, &search);
 
   Pair pair;
@@ -81,6 +104,7 @@ Pair Map_remove(Map* map, void* key)
     }
   else
     {
+      // Store the key and value pointer addresses
       pair.left = found->left;
       pair.right = found->right;
     }
@@ -104,12 +128,6 @@ void* Map_get(Map* map, void* key)
 
   return pair->right;
 }
-
-void Map_print(Map* map)
-{
-  BinarySearchTree_print(map->tree);
-}
-
 
 
 
