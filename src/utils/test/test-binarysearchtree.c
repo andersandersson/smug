@@ -3,7 +3,7 @@
 
 #include "binarysearchtree.h"
 
-int compare(int x, int y)
+int compare(void* data, int x, int y)
 {
     if(x == y)
       {
@@ -20,15 +20,23 @@ int compare(int x, int y)
       }
 }
 
-int main()
+int main(void)
 {
     BinarySearchTree* tree = BinarySearchTree_new();
  
-    BinarySearchTree_setCompare(tree, compare);
+    BinarySearchTree_setCompare(tree, tree, compare);
 
-    BinarySearchTree_insert(tree, (void*)3);
-    BinarySearchTree_insert(tree, (void*)10);
-    BinarySearchTree_insert(tree, (void*)2);
+    while(1)
+      {
+	int c;
+	BinarySearchTree_insert(tree, (void*)3);
+	BinarySearchTree_insert(tree, (void*)10);
+	BinarySearchTree_insert(tree, (void*)2);
+	c = BinarySearchTree_remove(tree, (void*)2);
+	c = BinarySearchTree_remove(tree, (void*)3);
+	c = BinarySearchTree_remove(tree, (void*)10);
+      }
+      return 0;
     BinarySearchTree_insert(tree, (void*)1);
     BinarySearchTree_insert(tree, (void*)8);
     BinarySearchTree_insert(tree, (void*)9);

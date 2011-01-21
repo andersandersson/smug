@@ -332,6 +332,7 @@ void* BinarySearchTree_remove(BinarySearchTree* tree, void* element)
     {
       return NULL;
     }
+
   // Otherwise, save the element for returning, and remove the 
   // element from the tree.
   else
@@ -386,15 +387,35 @@ void _remove_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
 	  // the right and remove it from the subtree
 	  if(node->left == NULL && node->right != NULL)
 	    {
+	      BinarySearchTreeNode* parent = node->parent;
+	      BinarySearchTreeNode* right = node->right;
 	      BinarySearchTreeNode_copy(node->right, node);
-	      BinarySearchTreeNode_delete(node->right);
+	      BinarySearchTreeNode_delete(right);
+
+	      node->parent = parent;
+	      if(NULL != node->left) {
+		node->left->parent = node;
+	      }
+	      if(NULL != node->right) {
+		node->right->parent = node;
+	      }
 	    }
 	  // If it has only a left subtree, copy the node below 
 	  // the left and remove it from the subtree
 	  else if(node->right == NULL && node->left != NULL)
 	    {
+	      BinarySearchTreeNode* parent = node->parent;
+	      BinarySearchTreeNode* left = node->left;
 	      BinarySearchTreeNode_copy(node->left, node);
-	      BinarySearchTreeNode_delete(node->left);
+	      BinarySearchTreeNode_delete(left);
+
+	      node->parent = parent;
+	      if(NULL != node->left) {
+		node->left->parent = node;
+	      }
+	      if(NULL != node->right) {
+		node->right->parent = node;
+	      }
 	    }
 	  // Otherwise, we are removing a single leaf
 	  else {	    
@@ -409,6 +430,12 @@ void _remove_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
 	      {
 		node->parent->right = NULL;
 		BinarySearchTreeNode_delete(node);
+	      }
+	    // If it is the root node
+	    else if(node->parent == NULL)
+	      {
+		BinarySearchTreeNode_delete(node);
+		tree->root = NULL;
 	      }
 	  }
 	}

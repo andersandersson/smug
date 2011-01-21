@@ -22,10 +22,32 @@ int compare(void* tree, int x, int y)
 
 int main(void)
 {
-    OrderedSet* tree = OrderedSet_new();
+  OrderedSet* tree;
+    int i;
+    for(i = 0; i > -1; i++)
+      {
+	tree = OrderedSet_new();
+
+	OrderedSet_setCompare(tree, compare);
+	OrderedSet_insert(tree, (void*)3);
+	OrderedSet_insert(tree, (void*)10);
+	OrderedSet_insert(tree, (void*)2);
+	OrderedSet_popMin(tree);
+	OrderedSet_popMin(tree);
+	OrderedSet_popMin(tree);
+
+        OrderedSet_delete(tree);
+      }
+    {
+	tree = OrderedSet_new();
+        OrderedSet_delete(tree);
+	tree = OrderedSet_new();
+        OrderedSet_delete(tree);
+	tree = OrderedSet_new();
+        OrderedSet_delete(tree);
+	tree = OrderedSet_new();
  
     OrderedSet_setCompare(tree, compare);
-
     OrderedSet_insert(tree, (void*)3);
     OrderedSet_insert(tree, (void*)10);
     OrderedSet_insert(tree, (void*)2);
@@ -60,7 +82,25 @@ int main(void)
     printf("===========================\n");
     OrderedSet_popMin(tree);
     OrderedSet_print(tree);
-
+    printf("===========================\n");
+    OrderedSet_popMin(tree);
+    OrderedSet_print(tree);
+    printf("===========================\n");
+    OrderedSet_popMin(tree);
+    OrderedSet_print(tree);
+    printf("===========================\n");
+    OrderedSet_popMin(tree);
+    OrderedSet_print(tree);
+    printf("===========================\n");
+    OrderedSet_popMin(tree);
+    OrderedSet_print(tree);
+    printf("===========================\n");
+    OrderedSet_popMin(tree);
+    OrderedSet_print(tree);
+    printf("===========================\n");
+    OrderedSet_popMin(tree);
+    OrderedSet_print(tree);
     OrderedSet_delete(tree);
+      }
     return 0;
 }

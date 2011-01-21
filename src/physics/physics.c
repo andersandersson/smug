@@ -703,11 +703,11 @@ void Physics_removeBody(Body* body)
 }
 
 
-void _Physics_drawBodies(float time, Color color)
+void _Physics_drawBodies(Map* bodies, float time, Color color)
 {
   MapIterator* iter = MapIterator_new();
 
-  for(MapIterator_reset(body_map, iter); TRUE == MapIterator_valid(iter); MapIterator_step(iter))
+  for(MapIterator_reset(bodies, iter); TRUE == MapIterator_valid(iter); MapIterator_step(iter))
     {
       Pair* pair = (Pair*) MapIterator_get(iter);
       LinkedList* list = (LinkedList*) pair->right;
@@ -778,7 +778,7 @@ void Physics_update(TIME time, BOOL do_update)
 	      Body_clearWaypoints(body);	  	  
 
 	      // Reset acceleration to default
-	      body->acceleration = Vector_create2d(0.0, 10.0);
+	      body->acceleration = Vector_create2d(0.0, 100.0);
 	      
 	      Point start = body->position;
 	      Point end = calculate_position(body->position, body->velocity, body->acceleration, delta_time);
@@ -811,14 +811,15 @@ void Physics_update(TIME time, BOOL do_update)
       _detectCollisions(self_bodies, other_bodies, delta_time, collisions);
     }
   
-  int i = 0;
-  for(OrderedSetIterator_reset(collisions, set_iter); TRUE == OrderedSetIterator_valid(set_iter); OrderedSetIterator_step(set_iter))
+
+  CollisionData* data;
+  while(NULL != (data = OrderedSet_popMin(collisions)))
     {
-      i++;
-      CollisionData* data = OrderedSetIterator_get(set_iter);
-      DEBUG("DATA!: %d - 0x%x vs 0x%x", i, data->self, data->other);
+      DEBUG("Poping: 0x%x", data);
+      CollisionData_delete(data);
     }
-  _Physics_drawBodies(0.0, Color_createFromRGBAf(1.0, 0.0, 0.0, 1.0));
+  
+  _Physics_drawBodies(body_map, 0.0, Color_createFromRGBAf(1.0, 0.0, 0.0, 1.0));
 
   Platform_refreshWindow();
 

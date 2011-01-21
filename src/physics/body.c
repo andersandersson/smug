@@ -72,7 +72,9 @@ void Body_clearWaypoints(Body* body)
 
   while(body->waypoints->first != NULL)
     {
+      Waypoint* wp = (Waypoint*) body->waypoints->first->item;
       LinkedList_remove(body->waypoints, body->waypoints->first);
+      Waypoint_delete(wp);
     }
 }
 
