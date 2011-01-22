@@ -27,35 +27,35 @@ GameObject* GameObjectIterator_getNext(GameObjectIterator* self)
     {
         // First time:
         self->mHasReturnedRoot = TRUE;
-		// smug_printf("GameObjectIterator returning root object.");
+        // smug_printf("GameObjectIterator returning root object.");
         return LinkedListIterator_getNext(iter);
     }
     GameObject* obj = (GameObject*)LinkedListIterator_getSame(iter);
     // Check for more child objects:
     if (GameObject_hasChildObjects(obj))
     {
-		// smug_printf("GameObjectIterator returning child object of last object.");
+        // smug_printf("GameObjectIterator returning child object of last object.");
         LinkedListIterator* childIterator = GameObject_getChildIterator(obj);
         LinkedList_addFirst(self->mChildIterators, childIterator);
         return LinkedListIterator_getNext(childIterator);
     }
     // Check for more siblings, or siblings of parents and grandparents:
-	int levels = 0;
+    int levels = 0;
     while (!LinkedListIterator_hasMore(iter))
     {
-		levels++;
+        levels++;
         LinkedList_popFirst(self->mChildIterators);
         if (LinkedList_isEmpty(self->mChildIterators))
         {
-			// smug_printf("GameObjectIterator has reached the end.");
+            // smug_printf("GameObjectIterator has reached the end.");
             return NULL;
         }
         iter = LinkedList_getFirst(self->mChildIterators);
     }
-	// if (levels == 0)
-		// smug_printf("GameObjectIterator returning sibling of last object.");
-	// else
-		// smug_printf("GameObjectIterator returning ancestor of last object.");
+    // if (levels == 0)
+        // smug_printf("GameObjectIterator returning sibling of last object.");
+    // else
+        // smug_printf("GameObjectIterator returning ancestor of last object.");
     return (GameObject*)LinkedListIterator_getNext(iter);
 }
 
@@ -96,7 +96,7 @@ BOOL GameObjectIterator_hasMore(GameObjectIterator* self)
     if (!self->mHasReturnedRoot)
     {
         // Hasn't started iterating yet.
-		// smug_printf("GameObjectIterator has not started iterating yet..");
+        // smug_printf("GameObjectIterator has not started iterating yet..");
         return TRUE;
     }
     LinkedListIterator* metaIterator = LinkedList_getIterator(self->mChildIterators);

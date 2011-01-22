@@ -49,7 +49,7 @@ typedef struct GameObject InternalGameObject;
 
 typedef struct GenericGameObjectData
 {
-	struct LinkedList* mSubObjects;
+    struct LinkedList* mSubObjects;
     struct GameObject* mParent;
 } GenericGameObjectData;
 

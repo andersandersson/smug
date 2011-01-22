@@ -85,7 +85,7 @@ static GenericGameObjectData* GenericGameObjectData_new(void)
 {
     GenericGameObjectData* data = (GenericGameObjectData*)malloc(sizeof(GenericGameObjectData));
     data->mSubObjects = LinkedList_new();
-	data->mParent = NULL;
+    data->mParent = NULL;
     smug_assert(_dataInvariant(data));
     return data;
 }
@@ -133,11 +133,11 @@ int GameObject_addObject(GameObject* self, GameObject* obj)
     smug_assert(_dataInvariant(_getGenericGameObjectData(self)));
     smug_assert(_dataInvariant(_getGenericGameObjectData(obj)));
 #ifndef LINUSNDEBUG
-	int old = GameObject_nrChildObjects(self);
+    int old = GameObject_nrChildObjects(self);
 #endif
     if (_getGenericGameObjectData(obj)->mParent != NULL)
     {
-		smug_assert(!"Tried to add a child object to another object!");
+        smug_assert(!"Tried to add a child object to another object!");
         // It is an error to add an object to more than one superobject.
         return 1;
     }
@@ -146,8 +146,8 @@ int GameObject_addObject(GameObject* self, GameObject* obj)
         LinkedList_addLast(_getGenericGameObjectData(self)->mSubObjects, InternalGameObject_getAsGeneric(obj));
         _getGenericGameObjectData(obj)->mParent = self;
 #ifndef LINUSNDEBUG
-		smug_assert(GameObject_nrChildObjects(self) == old + 1);
-		smug_assert(GameObject_hasChildObjects(self));
+        smug_assert(GameObject_nrChildObjects(self) == old + 1);
+        smug_assert(GameObject_hasChildObjects(self));
 #endif
         return 0;
     }
@@ -166,7 +166,7 @@ BOOL GameObject_hasChildObjects(GameObject* self)
 
 int GameObject_nrChildObjects(GameObject* self)
 {
-	return LinkedList_length(_getGenericGameObjectData(self)->mSubObjects);
+    return LinkedList_length(_getGenericGameObjectData(self)->mSubObjects);
 }
 
 BOOL GameObject_isRootObject(GameObject* self)
@@ -182,8 +182,8 @@ struct LinkedListIterator* GameObject_getChildIterator(GameObject* self)
 GameObject* GameObject_getParent(GameObject* self)
 {
     smug_assert(_objectInvariant((GameObject*)self));
-	smug_assert(!GameObject_isRootObject(self));
-	return _getGenericGameObjectData(self)->mParent;
+    smug_assert(!GameObject_isRootObject(self));
+    return _getGenericGameObjectData(self)->mParent;
 }
 
 void GameObject_delete(void* self)

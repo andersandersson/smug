@@ -41,7 +41,7 @@ static int getDataSize(GameObject* self)
 
 static void writeBatchData(GameObject* drawable, BatchData* batchdata, unsigned int start)
 {
-	smug_assert(GameObject_isType(drawable, SMUG_TYPE_DRAWABLE));
+    smug_assert(GameObject_isType(drawable, SMUG_TYPE_DRAWABLE));
     static unsigned int vertexstart, colorstart, texturestart;
     static float x1, x2, y1, y2;
     static float r, g, b, a;

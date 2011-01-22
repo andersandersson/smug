@@ -22,7 +22,7 @@ static LinkedList* gGameObjects = NULL;
 // Checks that all subsystems have been initialized.
 void _assertSubsystemsInitialized(void)
 {
-	smug_assert(Log_isInitialized());
+    smug_assert(Log_isInitialized());
     smug_assert(Platform_isInitialized());
     smug_assert(Signal_isInitialized());
     smug_assert(Input_isInitialized());
@@ -32,7 +32,7 @@ void _assertSubsystemsInitialized(void)
 
 BOOL _subsystemsInitialized(void)
 {
-	return Log_isInitialized() &&
+    return Log_isInitialized() &&
            Platform_isInitialized() &&
            Signal_isInitialized() &&
            Input_isInitialized() &&
@@ -71,8 +71,8 @@ int Engine_init(BOOL verbose, BOOL console)
     if (!Signal_init())
         return 0;
 
-	if (!Input_init())
-		return 0;
+    if (!Input_init())
+        return 0;
 
     if (!Graphics_init())
         return 0;
@@ -133,7 +133,7 @@ void Engine_terminate(void)
 
     Graphics_terminate();
 
-	Input_terminate();
+    Input_terminate();
 
     Signal_terminate();
 

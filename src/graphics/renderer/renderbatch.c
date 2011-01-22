@@ -170,7 +170,7 @@ void RenderBatch_render(RenderBatch* currentBatch)
 
     } else
     {
-        glVertexPointer( 2, GL_FLOAT, 0, currentBatch->data->vertexData );	// Set The Vertex Pointer To Our Vertex Data
+        glVertexPointer( 2, GL_FLOAT, 0, currentBatch->data->vertexData );    // Set The Vertex Pointer To Our Vertex Data
         glTexCoordPointer( 2, GL_FLOAT, 0, currentBatch->data->textureData );
         glColorPointer(4, GL_FLOAT, 0, currentBatch->data->colorData);
     }
