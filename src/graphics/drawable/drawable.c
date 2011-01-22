@@ -12,32 +12,15 @@
 struct BatchData;
 struct Sprite;
 
-/************************/
-/** Convenience macros **/
-/************************/
 
 #define _isColorInheritType(type) (type == SMUG_COLOR_INHERIT || type == SMUG_COLOR_KEEP || type == SMUG_COLOR_BLEND)
 #define _isOpacityInheritType(type) (type == SMUG_OPACITY_INHERIT || type == SMUG_OPACITY_KEEP)
 #define _isVisibilityInheritType(type) (type == SMUG_VISIBILITY_INHERIT || type == SMUG_VISIBILITY_KEEP)
 
-#define _getData(self) ((DrawableObjectData*)InternalGameObject_getData(self, SMUG_TYPE_DRAWABLE))
 
-/******************************************************/
-/** 'Overriding' 'inherited' methods from GameObject **/
-/******************************************************/
-
-static BOOL _isExactType(GameObject* self, SmugType type)
-{
-    if (type == SMUG_TYPE_DRAWABLE)
-    {
-        return TRUE;
-    }
-    else
-    {
-        // smug_printf("Type was not %s, but SMUG_TYPE_DRAWABLE", InternalGameObject_getTypeString(type));
-        return FALSE;
-    }
-}
+/*************************************************/
+/** Local methods overriding ones in GameObject **/
+/*************************************************/
 
 static BOOL _hasAttribute(GameObject* self, SmugAttribute attr)
 {
@@ -53,21 +36,21 @@ static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritT
         case SMUG_ATTR_COLOR:
             if (_isColorInheritType(type))
             {
-                _getData(self)->mColorInheritance = type;
+                ((Drawable*)self)->mColorInheritance = type;
                 return TRUE;
             }
             return FALSE;
         case SMUG_ATTR_OPACITY:
             if (_isOpacityInheritType(type))
             {
-                _getData(self)->mOpacityInheritance = type;
+                ((Drawable*)self)->mOpacityInheritance = type;
                 return TRUE;
             }
             return FALSE;
         case SMUG_ATTR_VISIBILITY:
             if (_isVisibilityInheritType(type))
             {
-                _getData(self)->mVisibilityInheritance = type;
+                ((Drawable*)self)->mVisibilityInheritance = type;
                 return TRUE;
             }
             return FALSE;
@@ -76,159 +59,128 @@ static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritT
     }
 }
 
-static void _deleteData(void* self)
+static void _delete(void* self)
 {
-    free((DrawableObjectData*)self);
+	Drawable_deInit((Drawable*)self);
+    free((Drawable*)self);
 }
 
-/**************************/
-/** Local helper methods **/
-/**************************/
 
-static DrawableObjectData* DrawableObjectData_new(void)
+/***************************/
+/** 'Protected' functions **/
+/***************************/
+
+void Drawable_deInit(Drawable* self)
 {
-    DrawableObjectData* newObj = malloc(sizeof(DrawableObjectData));
-    newObj->mColor = Color_createFromRGBAi(0, 0, 0, 0);
-    newObj->mColorInheritance = SMUG_COLOR_INHERIT;
-    newObj->mVisible = TRUE;
-    newObj->mVisibilityInheritance = SMUG_VISIBILITY_INHERIT;
-    newObj->mOpacity = 1.0f;
-    newObj->mOpacityInheritance = SMUG_OPACITY_INHERIT;
-    newObj->mType = 0;  // TODO: proper value, whatever that is.
-    newObj->mLayer = 0;
+    self->mColorInheritance = SMUG_INHERIT_UNDEFINED;
+    self->mVisibilityInheritance = SMUG_INHERIT_UNDEFINED;
+    self->mOpacityInheritance = SMUG_INHERIT_UNDEFINED;
+    self->mType = 0;
+    self->mLayer = 0;
+    self->_writeBatchDataFunc = NULL;
+    self->_getDataSizeFunc = NULL;
+    self->_getObjectSizeFunc = NULL;
+	PositionedObject_deInit((PositionedObject*)self);
+}
+
+void Drawable_init(Drawable* self)
+{
+	PositionedObject_init((PositionedObject*)self);
+    ((GameObject*)self)->hasAttribute = _hasAttribute;
+    ((GameObject*)self)->inheritAttribute = _inheritAttribute;
+    ((GameObject*)self)->deleteMe = _delete;
+    ((GameObject*)self)->mTypes |= SMUG_TYPE_DRAWABLE;
+
+    self->mColor = Color_createFromRGBAi(0, 0, 0, 0);
+    self->mColorInheritance = SMUG_COLOR_INHERIT;
+    self->mVisible = TRUE;
+    self->mVisibilityInheritance = SMUG_VISIBILITY_INHERIT;
+    self->mOpacity = 1.0f;
+    self->mOpacityInheritance = SMUG_OPACITY_INHERIT;
+    self->mType = 0;  // TODO: proper value, whatever that is.
+    self->mLayer = 0;
+    self->_writeBatchDataFunc = NULL;
+    self->_getDataSizeFunc = NULL;
+    self->_getObjectSizeFunc = NULL;
+}
+
+
+/**********************/
+/** public functions **/
+/**********************/
+
+Drawable* Drawable_newGeneric()
+{
+	Drawable* newObj = (Drawable*)malloc(sizeof(Drawable*));
+	Drawable_init(newObj);
     return newObj;
 }
 
-/*************************/
-/** 'Protected' methods **/
-/*************************/
-
-GameObject* Drawable_newInherit(
-    void(*writeBatchDataFunc)(GameObject* d, struct BatchData* batch, unsigned int start),
-    int (*getDataSizeFunc)(GameObject* d),
-    unsigned int (*getObjectSizeFunc)(struct GameObject* d))
-{
-    GameObject* obj = Drawable_new();
-    DrawableObjectData* data = _getData(obj);
-    data->_writeBatchDataFunc = writeBatchDataFunc;
-    data->_getDataSizeFunc = getDataSizeFunc;
-    data->_getObjectSizeFunc = getObjectSizeFunc;
-    return obj;
-}
-
-
-/**************************/
-/** New 'public' methods **/
-/**************************/
-
-GameObject* Drawable_new()
-{
-    InternalGameObject* leaf = InternalGameObject_inherit(InternalGameObject_getMostSpecific(PositionObject_new()), DrawableObjectData_new());
-    leaf->hasAttribute = _hasAttribute;
-    leaf->isExactType = _isExactType;
-    leaf->inheritAttribute = _inheritAttribute;
-    leaf->deleteData = _deleteData;
-    return InternalGameObject_getAsGeneric(leaf);
-}
-
-void Drawable_writeBatchData(GameObject* self, struct BatchData* batchdata, unsigned int start)
+void Drawable_writeBatchData(Drawable* self, struct BatchData* batchdata, unsigned int start)
 {
     smug_assert(NULL != self);
-    DrawableObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        smug_assert(FALSE);
-        return;
-    }
-    data->_writeBatchDataFunc(self, batchdata, start);
+    self->_writeBatchDataFunc(self, batchdata, start);
 }
 
-int Drawable_getDataSize(GameObject* self)
+int Drawable_getDataSize(Drawable* self)
 {
     smug_assert(NULL != self);
-    DrawableObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        smug_assert(FALSE);
-        return 0;
-    }
-    return data->_getDataSizeFunc(self);
+    return self->_getDataSizeFunc(self);
 }
 
-void Drawable_setLayer(GameObject* self, unsigned int layer)
+void Drawable_setLayer(Drawable* self, unsigned int layer)
 {
     smug_assert(NULL != self);
-    _getData(self)->mLayer = layer;
+    self->mLayer = layer;
 }
 
-unsigned int Drawable_getLayer(GameObject* self)
+unsigned int Drawable_getLayer(Drawable* self)
 {
     smug_assert(NULL != self);
-    return _getData(self)->mLayer;
+    return self->mLayer;
 }
 
-unsigned int Drawable_getObjectSize(GameObject* self)
+unsigned int Drawable_getObjectSize(Drawable* self)
 {
     smug_assert(NULL != self);
-    smug_assert(_getData(self) != NULL);
-    return _getData(self)->_getObjectSizeFunc(self);
+    return self->_getObjectSizeFunc(self);
 }
 
-struct Sprite* Drawable_getSprite(GameObject* self)
+struct Sprite* Drawable_getSprite(Drawable* self)
 {
     return NULL;
 }
 
-BOOL Drawable_setColor(GameObject* self, Color c)
+BOOL Drawable_setColor(Drawable* self, Color c)
 {
-    DrawableObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    data->mColor = c;
+    self->mColor = c;
     return TRUE;
 }
 
-BOOL Drawable_getColor(GameObject* self, Color* c)
+BOOL Drawable_getColor(Drawable* self, Color* c)
 {
-    DrawableObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    *c = data->mColor;
+    *c = self->mColor;
     return TRUE;
 }
 
-BOOL Drawable_setOpacity(GameObject* self, float opacity)
+BOOL Drawable_setOpacity(Drawable* self, float opacity)
 {
-    DrawableObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    data->mOpacity = opacity;
+    self->mOpacity = opacity;
     return TRUE;
 }
 
-BOOL Drawable_getOpacity(GameObject* self, float* opacity)
+BOOL Drawable_getOpacity(Drawable* self, float* opacity)
 {
-    DrawableObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    *opacity = data->mOpacity;
+    *opacity = self->mOpacity;
     return TRUE;
 }
 
-struct Texture* Drawable_getTexture(struct GameObject* d)
+struct Texture* Drawable_getTexture(struct Drawable* d)
 {
     return NULL;
 }
 
-unsigned int Drawable_getTextureID(struct GameObject* d)
+unsigned int Drawable_getTextureID(struct Drawable* d)
 {
     return 0;
 }

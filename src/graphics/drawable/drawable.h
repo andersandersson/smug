@@ -8,27 +8,25 @@ struct GameObject;
 struct Sprite;
 struct BatchData;
 struct Texture;
+struct Drawable;
 
+struct Drawable* Drawable_new();
 
-struct GameObject* Drawable_new();
+BOOL Drawable_getColor(struct Drawable* self, Color* c);
+BOOL Drawable_setColor(struct Drawable* self, Color c);
+BOOL Drawable_getOpacity(struct Drawable* self, float* opacity);
+BOOL Drawable_setOpacity(struct Drawable* self, float opacity);
+struct Sprite* Drawable_getSprite(struct Drawable* self);
+unsigned int Drawable_getLayer(struct Drawable* self);
+void Drawable_setLayer(struct Drawable* self, unsigned int layer);
+void Drawable_writeBatchData(struct Drawable* self, struct BatchData* batchdata, unsigned int start);
+int Drawable_getDataSize(struct Drawable* self);
+unsigned int Drawable_getObjectSize(struct Drawable* self);
 
-BOOL Drawable_getColor(struct GameObject* self, Color* c);
-BOOL Drawable_setColor(struct GameObject* self, Color c);
-BOOL Drawable_getOpacity(struct GameObject* self, float* opacity);
-BOOL Drawable_setOpacity(struct GameObject* self, float opacity);
-struct Sprite* Drawable_getSprite(struct GameObject* self);
-unsigned int Drawable_getLayer(struct GameObject* self);
-void Drawable_setLayer(struct GameObject* self, unsigned int layer);
-void Drawable_writeBatchData(struct GameObject* self, struct BatchData* batchdata, unsigned int start);
-int Drawable_getDataSize(struct GameObject* self);
-unsigned int Drawable_getObjectSize(struct GameObject* self);
+struct Texture* Drawable_getTexture(struct Drawable* d);
+unsigned int Drawable_getTextureID(struct Drawable* d);
 
-struct Texture* Drawable_getTexture(struct GameObject* d);
-unsigned int Drawable_getTextureID(struct GameObject* d);
-
-struct GameObject* Drawable_newInherit(
-    void(*writeBatchDataFunc)(struct GameObject* d, struct BatchData* batch, unsigned int start),
-    int (*getDataSizeFunc)(struct GameObject* d),
-    unsigned int (*getObjectSizeFunc)(struct GameObject* d));
+void Drawable_deInit(struct Drawable* self);
+void Drawable_init(struct Drawable* self);
 
 #endif // SMUG_GRAPHICS_DRAWABLE_DRAWABLE_H

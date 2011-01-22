@@ -13,6 +13,9 @@
 
 #include <engine/engine.h>
 
+struct PositionedObject;
+struct Drawable;
+
 Thread* gConsoleThread = NULL;
 
 static BOOL gInitialized = FALSE;
@@ -151,7 +154,7 @@ static void _recursiveAddDrawable(GameObject* object)
 {
     if (GameObject_isType(object, SMUG_TYPE_DRAWABLE))
     {
-        Graphics_addDrawable((GameObject*)object);
+        Graphics_addDrawable((struct Drawable*)object);
     }
 }
 
@@ -180,9 +183,9 @@ void Engine_commitPositionChanges(void)
     Node* node;
     for (node = gGameObjects->first; node != NULL; node = node->next)
     {
-        if (GameObject_isType((GameObject*)node->item, SMUG_TYPE_POSITION))
+        if (GameObject_isType((GameObject*)node->item, SMUG_TYPE_POSITIONED))
         {
-            PositionObject_commitPosition((GameObject*)node->item);
+            PositionedObject_commitPosition((struct PositionedObject*)node->item);
         }
     }
 }

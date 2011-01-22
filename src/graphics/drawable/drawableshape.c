@@ -6,39 +6,16 @@
 #include <utils/shapes.h>
 #include <graphics/drawable/drawable.h>
 #include <graphics/drawable/drawable_type.h>
+#include <graphics/drawable/drawableshape_type.h>
 
 #include <graphics/drawable/drawableshape.h>
 
 struct BatchData;
 
-/************************/
-/** Convenience macros **/
-/************************/
 
-#define _getData(self) ((DrawableShapeData*)InternalGameObject_getData(self, SMUG_TYPE_SHAPE))
-
-/*********************/
-/** Internal struct **/
-/*********************/
-
-#include <graphics/drawable/drawableshape_type.h>
-
-/******************************************************/
-/** 'Overriding' 'inherited' methods from GameObject **/
-/******************************************************/
-
-static BOOL _isExactType(GameObject* self, SmugType type)
-{
-    if (type == SMUG_TYPE_SHAPE)
-    {
-        return TRUE;
-    }
-    else
-    {
-        // smug_printf("Type was not %s, but SMUG_TYPE_SHAPE", InternalGameObject_getTypeString(type));
-        return FALSE;
-    }
-}
+/*************************************************/
+/** Local methods overriding ones in GameObject **/
+/*************************************************/
 
 static BOOL _hasAttribute(GameObject* self, SmugAttribute attr)
 {
@@ -53,59 +30,57 @@ static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritT
     // No faking this one without keeping function pointers in all classes in the hierarchy, i.e., need to call super.function() here.
 }
 
-unsigned int _getObjectSize(GameObject* self)
+unsigned int _getObjectSize(Drawable* self)
 {
     smug_assert(NULL != self);
-    return Shape_getNrPoints(_getData(self)->mShape);
+    return Shape_getNrPoints(((DrawableShape*)self)->mShape);
 }
 
-static void _deleteData(void* data)
+static void _delete(void* data)
 {
-    Shape_delete(((DrawableShapeData*)data)->mShape);
-    free((DrawableShapeData*)data);
+	DrawableShape_deInit((DrawableShape*)data);
+    free((DrawableShape*)data);
 }
+
 
 /*************************/
 /** 'Protected' methods **/
 /*************************/
 
-InternalGameObject* DrawableShape_newInherit(
-    DrawableShapeData* data,
-    void(*writeBatchDataFunc)(GameObject* d, struct BatchData* batch, unsigned int start),
-    int (*getDataSizeFunc)(GameObject* d))
+void DrawableShape_deInit(DrawableShape* self)
 {
-    InternalGameObject* leaf = InternalGameObject_inherit(
-        InternalGameObject_getMostSpecific(Drawable_newInherit(writeBatchDataFunc, getDataSizeFunc, _getObjectSize)),
-        data);
-    leaf->hasAttribute = _hasAttribute;
-    leaf->isExactType = _isExactType;
-    leaf->inheritAttribute = _inheritAttribute;
-    leaf->deleteData = _deleteData;
-    return leaf;
+	if (self->mShape != NULL)
+	{
+		Shape_delete(self->mShape);
+	}
+	Drawable_deInit((Drawable*)self);
 }
+
+void DrawableShape_init(DrawableShape* self)
+{
+	Drawable_init((Drawable*)self);
+
+    ((GameObject*)self)->hasAttribute = _hasAttribute;
+    ((GameObject*)self)->inheritAttribute = _inheritAttribute;
+    ((GameObject*)self)->deleteMe = _delete;
+    ((GameObject*)self)->mTypes |= SMUG_TYPE_SHAPE;
+
+	((Drawable*)self)->_getObjectSizeFunc = _getObjectSize;
+}
+
 
 /**************************/
 /** New 'public' methods **/
 /**************************/
 
-BOOL DrawableShape_getShape(struct GameObject* self, struct Shape** shape)
+BOOL DrawableShape_getShape(DrawableShape* self, struct Shape** shape)
 {
-    DrawableShapeData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    *shape = data->mShape;
+    *shape = self->mShape;
     return TRUE;
 }
 
-BOOL DrawableShape_setShape(struct GameObject* self, struct Shape* shape)
+BOOL DrawableShape_setShape(DrawableShape* self, struct Shape* shape)
 {
-    DrawableShapeData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    data->mShape = shape;
+    self->mShape = shape;
     return TRUE;
 }

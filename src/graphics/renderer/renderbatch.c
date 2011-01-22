@@ -76,7 +76,7 @@ unsigned int RenderBatch_getSize(RenderBatch* batch)
     return batch->dataSize;
 }
 
-void RenderBatch_addDrawable(RenderBatch* batch, struct GameObject* drawable)
+void RenderBatch_addDrawable(RenderBatch* batch, struct Drawable* drawable)
 {
     smug_assert(NULL != batch);
     smug_assert(NULL != drawable);

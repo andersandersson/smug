@@ -3,6 +3,9 @@
 
 #include <engine/gameobject.h>
 
+void GameObject_deInit(GameObject* self);
+void GameObject_init(GameObject* self);
+
 InternalGameObject* InternalGameObject_getParent(InternalGameObject* self);
 InternalGameObject* InternalGameObject_getChild(InternalGameObject* self);
 GameObject* InternalGameObject_getAsGeneric(InternalGameObject* self);

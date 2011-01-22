@@ -12,6 +12,8 @@
 #define TEXTURECOUNT_START 4
 #define VERTEXCOUNT_START 100
 
+struct Drawable;
+
 Layer* Layer_new()
 {
     Layer* ret = (Layer*)malloc(sizeof(Layer*));
@@ -40,7 +42,7 @@ void Layer_delete(void* layer)
     free(thelayer);
 }
 
-void Layer_addDrawable(Layer* layer, struct GameObject* drawable)
+void Layer_addDrawable(Layer* layer, struct Drawable* drawable)
 {
     smug_assert(NULL != layer);
     smug_assert(NULL != drawable);
@@ -113,6 +115,7 @@ float Layer_getParallax(Layer* layer)
     smug_assert(NULL != layer);
     return layer->parallax;
 }
+
 void Layer_setParallax(Layer* layer, float value)
 {
     smug_assert(NULL != layer);

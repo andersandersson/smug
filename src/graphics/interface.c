@@ -8,15 +8,17 @@
 
 #include <graphics/interface.h>
 
+struct Drawable;
+
 SmugObject smugDrawable_newFromRect(SmugRect rect)
 {
-    return DrawableShape_newBoxFromSize(Rectangle_getSize(rect));
+    return (SmugObject)DrawableShape_newBoxFromSize(Rectangle_getSize(rect));
 }
 
 void smugDrawable_setColor(SmugObject drawable, SmugColor color)
 {
     smug_error(GameObject_isType(drawable, SMUG_TYPE_DRAWABLE), "Wrong type for smugDrawable_setColor!");
-    Drawable_setColor(drawable, color);
+    Drawable_setColor((struct Drawable*)drawable, color);
 }
 
 SmugColor smugColor_create(int r, int g, int b, int a)

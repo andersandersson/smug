@@ -63,9 +63,9 @@ void Graphics_render(void);
 /**
  * Registers a drawable for rendering.
  */
-void Graphics_addDrawable(struct GameObject* d);
+void Graphics_addDrawable(struct Drawable* d);
 
-void Graphics_removeDrawable(struct GameObject* d);
+void Graphics_removeDrawable(struct Drawable* d);
 
 /**
  * Terminate the graphics component of the engine.

@@ -1,10 +1,16 @@
+#ifndef SMUG_GRAPHICS_DRAWABLE_DRAWABLE_TYPE_H
+#define SMUG_GRAPHICS_DRAWABLE_DRAWABLE_TYPE_H
+
 #include <graphics/color_type.h>
+#include <engine/position_object_type.h>
 struct GameObject;
 struct _PositionObject;
 struct BatchData;
 
-typedef struct DrawableObjectData
+typedef struct Drawable
 {
+	PositionedObject base; // Inherit from PositionedObject
+
     Color mColor;
     SmugInheritType mColorInheritance;
 
@@ -19,11 +25,9 @@ typedef struct DrawableObjectData
     // Sprite* sprite; // Is NULL for shapes
     // unsigned int vertexcount;
     // Vector* vertexOffsets;
-    void (*_writeBatchDataFunc)(struct GameObject* d, struct BatchData* batch, unsigned int start); /**< Function for writing data */
-    int (*_getDataSizeFunc)(struct GameObject* d); /**< Function for getting data size */
-    unsigned int (*_getObjectSizeFunc)(struct GameObject* d); /**< Function for getting data size */
+    void (*_writeBatchDataFunc)(struct Drawable* d, struct BatchData* batch, unsigned int start); /**< Function for writing data */
+    int (*_getDataSizeFunc)(struct Drawable* d); /**< Function for getting data size */
+    unsigned int (*_getObjectSizeFunc)(struct Drawable* d); /**< Function for getting data size */
+} Drawable;
 
-    // void* mData; // For subtypes, shape, image, etc.
-    // struct _PositionObject* mParent;
-
-} DrawableObjectData;
+#endif /* SMUG_GRAPHICS_DRAWABLE_DRAWABLE_TYPE_H */

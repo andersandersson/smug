@@ -1,18 +1,17 @@
-struct _DrawableObject;
+#ifndef SMUG_GRAPHICS_DRAWABLE_DRAWABLESHAPE_TYPE_H
+#define SMUG_GRAPHICS_DRAWABLE_DRAWABLESHAPE_TYPE_H
+
 struct Shape;
 
-typedef struct DrawableShapeData
+#include <graphics/drawable/drawable_type.h>
+
+typedef struct DrawableShape
 {
+	Drawable base; // Inherit from Drawable
+
     struct Shape* mShape;
     // Can shape be inherited???
 
-    // int type;
-    // unsigned int mLayer;
+} DrawableShape;
 
-    // void (*_writeBatchDataFunc)(GameObject* d, BatchData* batch, unsigned int start); /**< Function for writing data */
-    // int (*_getDataSizeFunc)(GameObject* d); /**< Function for getting data size */
-
-    // void* mData; // For subtypes.
-    // struct _DrawableObject* mParent;
-
-} DrawableShapeData;
+#endif /* SMUG_GRAPHICS_DRAWABLE_DRAWABLESHAPE_TYPE_H */

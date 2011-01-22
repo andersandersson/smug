@@ -7,19 +7,22 @@ struct Vector;
 struct Point;
 struct GameObject;
 
-struct GameObject* PositionObject_new();
+struct PositionedObject* PositionedObject_new();
 
-BOOL PositionObject_setPos(struct GameObject* self, float x, float y);
-BOOL PositionObject_getPos(struct GameObject* self, struct Vector* v);
-BOOL PositionObject_getX(struct GameObject* self, float* x);
-BOOL PositionObject_getY(struct GameObject* self, float* y);
-BOOL PositionObject_moveTo(struct GameObject* self, float x, float y);
-BOOL PositionObject_getPosForDrawing(struct GameObject* self, struct Point* p);
+BOOL PositionedObject_setPos(struct PositionedObject* self, float x, float y);
+BOOL PositionedObject_getPos(struct PositionedObject* self, struct Vector* v);
+BOOL PositionedObject_getX(struct PositionedObject* self, float* x);
+BOOL PositionedObject_getY(struct PositionedObject* self, float* y);
+BOOL PositionedObject_moveTo(struct PositionedObject* self, float x, float y);
+BOOL PositionedObject_getPosForDrawing(struct PositionedObject* self, struct Point* p);
 /**
  * Called by platform when position will not change again during this heartbeat.
  */
-BOOL PositionObject_commitPosition(struct GameObject* self);
+BOOL PositionedObject_commitPosition(struct PositionedObject* self);
 
-int PositionObject_addObjectAt(struct GameObject* self, struct GameObject* other, float x, float y);
+int PositionedObject_addObjectAt(struct PositionedObject* self, struct PositionedObject* other, float x, float y);
+
+void PositionedObject_init(struct PositionedObject* self);
+void PositionedObject_deInit(struct PositionedObject* self);
 
 #endif // SMUG_ENGINE_POSITION_OBJECT_H

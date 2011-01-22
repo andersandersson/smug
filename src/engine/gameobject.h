@@ -8,8 +8,11 @@ struct LinkedListIterator;
 
 typedef unsigned int SmugType;
 
+#define MAX_INHERITANCE_DEPTH 4
+
+#define SMUG_TYPE_NONE               (0x0)
 #define SMUG_TYPE_OBJECT             (0x0001)
-#define SMUG_TYPE_POSITION           (0x0002)
+#define SMUG_TYPE_POSITIONED         (0x0002)
 #define SMUG_TYPE_BODY               (0x0004)
 #define SMUG_TYPE_DRAWABLE           (0x0008)
 #define SMUG_TYPE_SHAPE              (0x0010)
@@ -41,31 +44,24 @@ typedef enum SmugInheritType
     SMUG_POSITION_KEEP,
     SMUG_POSITION_RELATIVE,
     SMUG_WEIGHT_COLLECT,
-    SMUG_WEIGHT_LOCAL
+    SMUG_WEIGHT_LOCAL,
+	SMUG_INHERIT_UNDEFINED
 } SmugInheritType;
 
 struct GameObject;
 typedef struct GameObject InternalGameObject;
 
-typedef struct GenericGameObjectData
+typedef struct GameObject
 {
     struct LinkedList* mSubObjects;
     struct GameObject* mParent;
-} GenericGameObjectData;
-
-typedef struct GameObject
-{
-    InternalGameObject* mParent;
-    InternalGameObject* mChild;
-    InternalGameObject* mRoot;
-    InternalGameObject* mLeaf;
-
-    void* mData;
+	SmugType mTypes;
     BOOL (*hasAttribute)(struct GameObject* self, SmugAttribute attr);
-    BOOL (*isExactType)(struct GameObject* self, SmugType type);
     BOOL (*inheritAttribute)(struct GameObject* self, SmugAttribute attr, SmugInheritType type);
-    void (*deleteData)(void* data);
+    void (*deleteMe)(void* data);
 } GameObject;
+
+
 
 int GameObject_addObject(GameObject* self, GameObject* obj);
 void GameObject_removeObject(GameObject* self, GameObject* child);

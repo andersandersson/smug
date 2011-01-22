@@ -5,7 +5,7 @@
 #ifndef GRAPHICS_DRAWABLE_BOX_H
 #define GRAPHICS_DRAWABLE_BOX_H
 
-struct GameObject;
+struct DrawableShape;
 #include <utils/vector_type.h>
 
 /**
@@ -13,7 +13,7 @@ struct GameObject;
  * @relatesalso Drawable
  * @return Drawable
  */
-struct GameObject* DrawableShape_newBox(void);
+struct DrawableShape* DrawableShape_newBox(void);
 
 /**
  * Creates new box drawable from a rectangle
@@ -21,7 +21,7 @@ struct GameObject* DrawableShape_newBox(void);
  * @param rect Rectangle
  * @return Drawable
  */
-struct GameObject* DrawableShape_newBoxFromSize(Vector size);
+struct DrawableShape* DrawableShape_newBoxFromSize(Vector size);
 
 #endif //GRAPHICS_DRAWABLE_BOX_H
 

@@ -9,31 +9,13 @@
 
 #include <engine/position_object_type.h>
 
-/************************/
-/** Convenience macros **/
-/************************/
 
 #define _isPositionInheritType(type) (type == SMUG_POSITION_INHERIT || type == SMUG_POSITION_KEEP || type == SMUG_POSITION_RELATIVE)
 
-// Returns the PositionObjectData associated with an object, or NULL if the object is not a PositionObject.
-#define _getData(self) ((PositionObjectData*)InternalGameObject_getData(self, SMUG_TYPE_POSITION))
 
-/******************************************************/
-/** 'Overriding' 'inherited' methods from GameObject **/
-/******************************************************/
-
-static BOOL _isExactType(GameObject* self, SmugType type)
-{
-    if (type == SMUG_TYPE_POSITION)
-    {
-        return TRUE;
-    }
-    else
-    {
-        // smug_printf("Type was not %s, but SMUG_TYPE_POSITION", InternalGameObject_getTypeString(type));
-        return FALSE;
-    }
-}
+/*************************************************/
+/** Local methods overriding ones in GameObject **/
+/*************************************************/
 
 static BOOL _hasAttribute(GameObject* self, SmugAttribute attr)
 {
@@ -48,155 +30,123 @@ static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritT
     {
         if (_isPositionInheritType(type))
         {
-            _getData(self)->mPositionInheritance = type;
+            ((PositionedObject*)self)->mPositionInheritance = type;
             return TRUE;
         }
     }
     return FALSE;
 }
 
-static void _deleteData(void* data)
+static void _delete(void* self)
 {
-    // smug_printf("Deleting position object.");
-    Interpoint_delete(((PositionObjectData*)data)->mPosition);
-    // Interpoint_delete(((PositionObjectData*)data)->mRelativePos);
-    free(data);
+	PositionedObject_deInit((PositionedObject*)self);
+    free((PositionedObject*)self);
 }
 
-/**************************/
-/** Local helper methods **/
-/**************************/
 
-static PositionObjectData* PositionObjectData_new(void)
+/*************************/
+/** protected functions **/
+/*************************/
+
+void PositionedObject_deInit(PositionedObject* self)
 {
-    PositionObjectData* data = (PositionObjectData*)malloc(sizeof(PositionObjectData));
-    data->mPosition = Interpoint_new(Point_createFromXY(0,0));
-    // data->mRelativePos = Interpoint_new(Point_createFromXY(0,0));
-    data->mPositionInheritance = SMUG_POSITION_RELATIVE;
-    return data;
+	Interpoint_delete(self->mPosition);
+    self->mPosition = NULL;
+    self->mPositionInheritance = SMUG_INHERIT_UNDEFINED;
+	GameObject_deInit((GameObject*)self);
 }
+
+void PositionedObject_init(PositionedObject* self)
+{
+	GameObject_init((GameObject*)self);
+
+    ((GameObject*)self)->mTypes |= SMUG_TYPE_POSITIONED;
+    ((GameObject*)self)->hasAttribute = _hasAttribute;
+    ((GameObject*)self)->inheritAttribute = _inheritAttribute;
+    ((GameObject*)self)->deleteMe = _delete;
+
+    self->mPosition = Interpoint_new(Point_createFromXY(0,0));
+    self->mPositionInheritance = SMUG_POSITION_RELATIVE;
+}
+
 
 /**************************/
 /** New 'public' methods **/
 /**************************/
 
-GameObject* PositionObject_new()
+PositionedObject* PositionedObject_new()
 {
-    InternalGameObject* leaf = InternalGameObject_inherit(GameObject_newGeneric(), PositionObjectData_new());
-    leaf->hasAttribute = _hasAttribute;
-    leaf->isExactType = _isExactType;
-    leaf->inheritAttribute = _inheritAttribute;
-    leaf->deleteData = _deleteData;
-    return InternalGameObject_getAsGeneric(leaf);
+    PositionedObject* newObj = (PositionedObject*)malloc(sizeof(PositionedObject));
+	PositionedObject_init(newObj);
+    return newObj;
 }
 
-BOOL PositionObject_setPos(GameObject* self, float x, float y)
+BOOL PositionedObject_setPos(PositionedObject* self, float x, float y)
 {
     // smug_printf("Setting object position to %f, %f", x, y);
-    PositionObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    Interpoint_setTo(data->mPosition, Point_createFromXY(x, y));
+    Interpoint_setTo(self->mPosition, Point_createFromXY(x, y));
     return TRUE;
 }
 
-BOOL PositionObject_getPos(GameObject* self, Vector* v)
+BOOL PositionedObject_getPos(PositionedObject* self, Vector* v)
 {
-    PositionObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    *v = Point_getVector(Interpoint_getPoint(data->mPosition));
+    *v = Point_getVector(Interpoint_getPoint(self->mPosition));
     return TRUE;
 }
 
-BOOL PositionObject_getX(GameObject* self, float* x)
+BOOL PositionedObject_getX(PositionedObject* self, float* x)
 {
-    PositionObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    *x = Point_getX(Interpoint_getPoint(data->mPosition));
+    *x = Point_getX(Interpoint_getPoint(self->mPosition));
     return TRUE;
 }
 
-BOOL PositionObject_getY(GameObject* self, float* y)
+BOOL PositionedObject_getY(PositionedObject* self, float* y)
 {
-    PositionObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    *y = Point_getY(Interpoint_getPoint(data->mPosition));
+    *y = Point_getY(Interpoint_getPoint(self->mPosition));
     return TRUE;
 }
 
-BOOL PositionObject_moveTo(GameObject* self, float x, float y)
+BOOL PositionedObject_moveTo(PositionedObject* self, float x, float y)
 {
     // smug_printf("Moving object to %f, %f", x, y);
-    PositionObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    Interpoint_moveTo(data->mPosition, Point_createFromXY(x, y));
+    Interpoint_moveTo(self->mPosition, Point_createFromXY(x, y));
     return TRUE;
 }
 
-BOOL PositionObject_getPosForDrawing(GameObject* self, Point* p)
+BOOL PositionedObject_getPosForDrawing(PositionedObject* self, Point* p)
 {
-    PositionObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    if (data->mPositionInheritance == SMUG_POSITION_RELATIVE
-        && !GameObject_isRootObject(self)
-        && GameObject_isType(GameObject_getParent(self), SMUG_TYPE_POSITION))
+    if (self->mPositionInheritance == SMUG_POSITION_RELATIVE
+        && !GameObject_isRootObject((GameObject*)self)
+        && GameObject_isType(GameObject_getParent((GameObject*)self), SMUG_TYPE_POSITIONED))
     {
         Point pp;
-        PositionObject_getPosForDrawing(GameObject_getParent(self), &pp);
-        Point p1 = Interpoint_getInterpolated(data->mPosition);
-        // Point p1 = Interpoint_getPoint(data->mPosition);
+        PositionedObject_getPosForDrawing((PositionedObject*)GameObject_getParent((GameObject*)self), &pp);
+        Point p1 = Interpoint_getInterpolated(self->mPosition);
         // smug_printf("Object %i has pos (%i) %f, %f relative to %f, %f", self, data->mPosition, Point_getX(p1), Point_getY(p1), Point_getX(pp), Point_getY(pp));
         *p = Point_add(p1, pp);
     }
     else
     {
-        // smug_printf("Object %i did not inherit position.", self);
-        *p = Interpoint_getInterpolated(data->mPosition);
-        // *p = Interpoint_getPoint(data->mPosition);
+        *p = Interpoint_getInterpolated(self->mPosition);
         // smug_printf("Object %i has pos %f, %f", self, Point_getX(*p), Point_getY(*p));
     }
     return TRUE;
 }
 
-BOOL PositionObject_commitPosition(GameObject* self)
+BOOL PositionedObject_commitPosition(PositionedObject* self)
 {
-    PositionObjectData* data = _getData(self);
-    if (data == NULL)
-    {
-        return FALSE;
-    }
-    Interpoint_commit(data->mPosition);
+    Interpoint_commit(self->mPosition);
     return TRUE;
 }
 
-int PositionObject_addObjectAt(struct GameObject* self, struct GameObject* other, float x, float y)
+int PositionedObject_addObjectAt(struct PositionedObject* self, struct PositionedObject* other, float x, float y)
 {
-    if (0 != GameObject_addObject(self, other))
+    if (0 != GameObject_addObject((GameObject*)self, (GameObject*)other))
     {
         return 1;
     }
-    PositionObject_setPos(other, x, y);
-    PositionObjectData* data = _getData(self);
-    // Interpoint_setTo(data->mPosition, Point_createFromXY(x, y));
+    PositionedObject_setPos(other, x, y);
     // smug_assert(Point_equal(Interpoint_getPoint(data->mPosition), Point_createFromXY(x, y)));
-    // smug_printf("Added positioned object %i to object %i at %f, %f", other, self, Point_getX(Point_createFromXY(x, y)), Point_getY(Point_createFromXY(x, y)));
-    data->mPositionInheritance = SMUG_POSITION_RELATIVE;
+    other->mPositionInheritance = SMUG_POSITION_RELATIVE;
     return 0;
 }

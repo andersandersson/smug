@@ -4,6 +4,7 @@
 struct ArrayList;
 struct GameObject;
 struct Camera;
+struct Drawable;
 
 // A renderer renders one layer of graphics objects from an internal list of drawables.
 // A renderer should be able to take z-order into consideration if configured as such.
@@ -20,7 +21,7 @@ void Renderer_delete(void* renderer);
 
 void Renderer_render(Renderer* renderer);
 
-void Renderer_addDrawable(Renderer* renderer, struct GameObject* drawable);
+void Renderer_addDrawable(Renderer* renderer, struct Drawable* drawable);
 
 struct Camera* Renderer_getCamera(Renderer* renderer);
 

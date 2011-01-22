@@ -3,7 +3,7 @@
 
 #include <common/common.h>
 struct LinkedList;
-struct GameObject;
+struct Drawable;
 struct BatchData;
 
 struct Texture;
@@ -37,7 +37,7 @@ unsigned int RenderBatch_getDataSize(RenderBatch* batch);
 void RenderBatch_render(RenderBatch* batch);
 void RenderBatch_write(RenderBatch* batch);
 
-void RenderBatch_addDrawable(RenderBatch* batch, struct GameObject* drawable);
+void RenderBatch_addDrawable(RenderBatch* batch, struct Drawable* drawable);
 unsigned int RenderBatch_getDrawableCount(RenderBatch* batch);
 
 #endif // SMUG_GRAPHICS_RENDERER_RENDERBATCH_H

@@ -18,15 +18,15 @@
 
 #include <graphics/drawable/box.h>
 
-static BOOL _invariant(DrawableShapeData* data)
+static BOOL _invariant(DrawableShape* self)
 {
-    smug_assert(data != NULL);
-    smug_assert(data->mShape != NULL);
-    smug_assert(data->mShape->type == SHAPE_RECTANGLE);
-    return (data != NULL && data->mShape != NULL && data->mShape->type == SHAPE_RECTANGLE);
+    smug_assert(self != NULL);
+    smug_assert(self->mShape != NULL);
+    smug_assert(self->mShape->type == SHAPE_RECTANGLE);
+    return (self != NULL && self->mShape != NULL && self->mShape->type == SHAPE_RECTANGLE);
 }
 
-static int getDataSize(GameObject* self)
+static int getDataSize(Drawable* self)
 {
     // TODO: smug_assert("That 'self' is actually a box, or at least a DrawableShape");
 
@@ -39,9 +39,10 @@ static int getDataSize(GameObject* self)
 #endif /* SMUG_GLES */
 }
 
-static void writeBatchData(GameObject* drawable, BatchData* batchdata, unsigned int start)
+static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned int start)
 {
-    smug_assert(GameObject_isType(drawable, SMUG_TYPE_DRAWABLE));
+	smug_assert(_invariant((DrawableShape*)drawable));
+    smug_assert(GameObject_isType((GameObject*)drawable, SMUG_TYPE_SHAPE));
     static unsigned int vertexstart, colorstart, texturestart;
     static float x1, x2, y1, y2;
     static float r, g, b, a;
@@ -56,11 +57,11 @@ static void writeBatchData(GameObject* drawable, BatchData* batchdata, unsigned 
     colorstart = start*4;
     texturestart = start*2;
 
-    DrawableShape_getShape(drawable, &shape);
+    DrawableShape_getShape((DrawableShape*)drawable, &shape);
     box = Shape_getAsRectangle(shape);
 
     // write vertices in anti-clockwise order
-    PositionObject_getPosForDrawing(drawable, &dpos);
+    PositionedObject_getPosForDrawing((PositionedObject*)drawable, &dpos);
     x1 = Point_getX(dpos) + Rectangle_getX(&box);
     y1 = Point_getY(dpos) + Rectangle_getY(&box);
     x2 = Point_getX(dpos) + Rectangle_getW(&box);
@@ -148,27 +149,24 @@ static void writeBatchData(GameObject* drawable, BatchData* batchdata, unsigned 
 #endif /* SMUG_GLES */
 }
 
-static DrawableShapeData* DrawableShapeData_newBox(Vector size)
-{
-    DrawableShapeData* data = (DrawableShapeData*)malloc(sizeof(DrawableShapeData));
-    struct Shape* newShape = Shape_newFromRectangle(Rectangle_createFromXYWH(0, 0, Vector_getX(&size), Vector_getY(&size)));
-    data->mShape = newShape;
-    smug_assert(_invariant(data));
-    return data;
-}
 
-GameObject* DrawableShape_newBox(void)
+DrawableShape* DrawableShape_newBox(void)
 {
     return DrawableShape_newBoxFromSize(Vector_create2d(0,0));
 }
 
-GameObject* DrawableShape_newBoxFromSize(Vector size)
+DrawableShape* DrawableShape_newBoxFromSize(Vector size)
 {
-    InternalGameObject* leaf = DrawableShape_newInherit(DrawableShapeData_newBox(size), writeBatchData, getDataSize);
-    smug_assert(InternalGameObject_isExactType(leaf, SMUG_TYPE_SHAPE));
-    smug_assert(GameObject_isType(leaf, SMUG_TYPE_SHAPE));
-    smug_assert(GameObject_isType(leaf, SMUG_TYPE_DRAWABLE));
-    smug_assert(GameObject_isType(leaf, SMUG_TYPE_POSITION));
-    smug_assert(GameObject_isType(leaf, SMUG_TYPE_OBJECT));
-    return InternalGameObject_getAsGeneric(leaf);
+    DrawableShape* newObj = (DrawableShape*)malloc(sizeof(DrawableShape));
+	DrawableShape_init(newObj);
+    ((Drawable*)newObj)->_writeBatchDataFunc = writeBatchData;
+    ((Drawable*)newObj)->_getDataSizeFunc = getDataSize;
+    newObj->mShape = Shape_newFromRectangle(Rectangle_createFromXYWH(0, 0, Vector_getX(&size), Vector_getY(&size)));
+	smug_assert(_invariant(newObj));
+	return newObj;
+/*	smug_assert(GameObject_isExactType(newObj, SMUG_TYPE_SHAPE));
+    smug_assert(GameObject_isType(newObj, SMUG_TYPE_SHAPE));
+    smug_assert(GameObject_isType(newObj, SMUG_TYPE_DRAWABLE));
+    smug_assert(GameObject_isType(newObj, SMUG_TYPE_POSITION));
+    smug_assert(GameObject_isType(newObj, SMUG_TYPE_OBJECT)); */
 }
