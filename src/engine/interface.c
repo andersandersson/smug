@@ -18,7 +18,7 @@
 
 #include <engine/interface.h>
 
-#define DO_WRONG_TYPE_ERROR(obj, type, func) smug_error(GameObject_isType((GameObject*)obj, type), "Wrong type for " #func)
+#define DO_WRONG_TYPE_ERROR(obj, type, func) smug_error(GameObject_isType((struct GameObject*)obj, type), "Wrong type for " #func)
 
 void smugRunTest(void)
 {

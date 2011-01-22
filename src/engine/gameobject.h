@@ -3,12 +3,13 @@
 
 #include <common/common.h>
 
-struct LinkedList;
 struct LinkedListIterator;
-
-typedef unsigned int SmugType;
+struct GameObject;
 
 #define MAX_INHERITANCE_DEPTH 4
+
+
+typedef unsigned int SmugType;
 
 #define SMUG_TYPE_NONE               (0x0)
 #define SMUG_TYPE_OBJECT             (0x0001)
@@ -48,42 +49,27 @@ typedef enum SmugInheritType
     SMUG_INHERIT_UNDEFINED
 } SmugInheritType;
 
-struct GameObject;
-typedef struct GameObject InternalGameObject;
+int GameObject_addObject(struct GameObject* self, struct GameObject* obj);
+void GameObject_removeObject(struct GameObject* self, struct GameObject* child);
+BOOL GameObject_hasChildObjects(struct GameObject* self);
+int GameObject_nrChildObjects(struct GameObject* self);
+BOOL GameObject_isRootObject(struct GameObject* self);
+struct LinkedListIterator* GameObject_getChildIterator(struct GameObject* self);
+struct GameObject* GameObject_getParent(struct GameObject* self);
 
-typedef struct GameObject
-{
-    struct LinkedList* mSubObjects;
-    struct GameObject* mParent;
-    SmugType mTypes;
-    BOOL (*hasAttribute)(struct GameObject* self, SmugAttribute attr);
-    BOOL (*inheritAttribute)(struct GameObject* self, SmugAttribute attr, SmugInheritType type);
-    void (*deleteMe)(void* data);
-} GameObject;
+BOOL GameObject_isType(struct GameObject* self, SmugType type);
+BOOL GameObject_isExactType(struct GameObject* self, SmugType type);
+BOOL GameObject_hasAttribute(struct GameObject* self, SmugAttribute attr);
+BOOL GameObject_inheritAttribute(struct GameObject* self, SmugAttribute attr, SmugInheritType type);
 
-
-
-int GameObject_addObject(GameObject* self, GameObject* obj);
-void GameObject_removeObject(GameObject* self, GameObject* child);
-BOOL GameObject_hasChildObjects(GameObject* self);
-int GameObject_nrChildObjects(GameObject* self);
-BOOL GameObject_isRootObject(GameObject* self);
-struct LinkedListIterator* GameObject_getChildIterator(GameObject* self);
-GameObject* GameObject_getParent(GameObject* self);
-
-BOOL GameObject_isType(GameObject* self, SmugType type);
-BOOL GameObject_isExactType(GameObject* self, SmugType type);
-BOOL GameObject_hasAttribute(GameObject* self, SmugAttribute attr);
-BOOL GameObject_inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritType type);
-
-void GameObject_doRecursive(GameObject* self, void(*function)(GameObject*));
+void GameObject_doRecursive(struct GameObject* self, void(*function)(struct GameObject*));
 
 /** Constructor for a generic GameObject. A generic GameObject can only be used to attach other objects to.
   *
   * @relatesalso GameObject
   * @return A pointer to the GameObject just created.
   */
-GameObject* GameObject_newGeneric(void);
+struct GameObject* GameObject_newGeneric(void);
 
 /** Destructor for any GameObject.
   *

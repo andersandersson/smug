@@ -2,6 +2,8 @@
 #define SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H
 
 #include <engine/gameobject.h>
+#include <engine/gameobject_type.h>
+
 struct Interpoint;
 
 typedef struct PositionedObject

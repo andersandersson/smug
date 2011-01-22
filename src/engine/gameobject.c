@@ -3,6 +3,8 @@
 #include <utils/linkedlist.h>
 #include <utils/linkedlistiterator.h>
 
+#include <engine/gameobject.h>
+#include <engine/gameobject_type.h>
 #include <engine/gameobject_protected.h>
 
 
