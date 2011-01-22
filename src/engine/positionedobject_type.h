@@ -1,15 +1,9 @@
 #ifndef SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H
 #define SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H
 
-#include <engine/gameobject_internal.h>
+/* To be included from header files that use 'PositionedObject*' type. */
 
-struct Interpoint;
-
-typedef struct PositionedObject
-{
-    _GameObject base; // Inherit from GameObject
-    struct Interpoint* mPosition;
-    SmugInheritType mPositionInheritance;
-} PositionedObject;
+struct _PositionedObject;
+typedef struct _PositionedObject PositionedObject;
 
 #endif /* SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H */

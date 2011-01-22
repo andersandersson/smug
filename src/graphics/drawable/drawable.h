@@ -4,7 +4,6 @@
 #include <common/common.h>
 #include <graphics/color_type.h>
 
-struct GameObject;
 struct Sprite;
 struct BatchData;
 struct Texture;

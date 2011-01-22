@@ -2,14 +2,13 @@
 #define SMUG_GRAPHICS_DRAWABLE_DRAWABLE_TYPE_H
 
 #include <graphics/color_type.h>
-#include <engine/positionedobject_type.h>
-struct GameObject;
-struct _PositionObject;
+#include <engine/positionedobject_internal.h>
+
 struct BatchData;
 
 typedef struct Drawable
 {
-    PositionedObject base; // Inherit from PositionedObject
+    _PositionedObject base; // Inherit from PositionedObject
 
     Color mColor;
     SmugInheritType mColorInheritance;

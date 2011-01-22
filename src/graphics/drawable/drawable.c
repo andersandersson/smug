@@ -5,8 +5,9 @@
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
 #include <engine/positionedobject.h>
-#include <graphics/drawable/drawable.h>
+#include <engine/positionedobject_type.h>
 
+#include <graphics/drawable/drawable.h>
 #include <graphics/drawable/drawable_type.h>
 
 struct BatchData;

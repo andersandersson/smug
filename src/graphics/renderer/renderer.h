@@ -2,7 +2,6 @@
 #define SMUG_GRAPHICS_RENDERER_RENDERER_H
 
 struct ArrayList;
-struct GameObject;
 struct Camera;
 struct Drawable;
 
