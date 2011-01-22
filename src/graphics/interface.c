@@ -4,11 +4,10 @@
 #include <utils/rectangle.h>
 #include <graphics/color.h>
 #include <graphics/drawable/box.h>
+#include <graphics/drawable/drawable_type.h>
 #include <graphics/drawable/drawable.h>
 
 #include <graphics/interface.h>
-
-struct Drawable;
 
 SmugObject smugDrawable_newFromRect(SmugRect rect)
 {
@@ -18,7 +17,7 @@ SmugObject smugDrawable_newFromRect(SmugRect rect)
 void smugDrawable_setColor(SmugObject drawable, SmugColor color)
 {
     smug_error(GameObject_isType(drawable, SMUG_TYPE_DRAWABLE), "Wrong type for smugDrawable_setColor!");
-    Drawable_setColor((struct Drawable*)drawable, color);
+    Drawable_setColor((Drawable*)drawable, color);
 }
 
 SmugColor smugColor_create(int r, int g, int b, int a)

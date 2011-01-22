@@ -3,11 +3,11 @@
 
 struct Shape;
 
-#include <graphics/drawable/drawable_type.h>
+#include <graphics/drawable/drawable_internal.h>
 
 typedef struct DrawableShape
 {
-    Drawable base; // Inherit from Drawable
+    _Drawable base; // Inherit from Drawable
 
     struct Shape* mShape;
     // Can shape be inherited???

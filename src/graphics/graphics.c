@@ -3,12 +3,11 @@
 #include <common/common.h>
 #include <common/log.h>
 #include <platform/opengl/opengl.h>
-#include <graphics/renderer/renderer.h>
 #include <platform/platform.h>
+#include <graphics/renderer/renderer.h>
+#include <graphics/drawable/drawable_type.h>
 
 #include <graphics/graphics.h>
-
-struct Drawable;
 
 Renderer* sceneRenderer = NULL;
 
@@ -141,13 +140,13 @@ void Graphics_render(void)
     // glFinish();
 }
 
-void Graphics_addDrawable(struct Drawable* d)
+void Graphics_addDrawable(Drawable* d)
 {
     // TODO: Assert right type.
     Renderer_addDrawable(sceneRenderer, d);
 }
 
-void Graphics_removeDrawable(struct Drawable* d)
+void Graphics_removeDrawable(Drawable* d)
 {
     WARNING("Unimplemented function Graphics_removeDrawable");
 }

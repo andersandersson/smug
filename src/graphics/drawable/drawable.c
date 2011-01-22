@@ -8,7 +8,7 @@
 #include <engine/positionedobject_type.h>
 
 #include <graphics/drawable/drawable.h>
-#include <graphics/drawable/drawable_type.h>
+#include <graphics/drawable/drawable_internal.h>
 
 struct BatchData;
 struct Sprite;
@@ -176,12 +176,12 @@ BOOL Drawable_getOpacity(Drawable* self, float* opacity)
     return TRUE;
 }
 
-struct Texture* Drawable_getTexture(struct Drawable* d)
+struct Texture* Drawable_getTexture(Drawable* d)
 {
     return NULL;
 }
 
-unsigned int Drawable_getTextureID(struct Drawable* d)
+unsigned int Drawable_getTextureID(Drawable* d)
 {
     return 0;
 }
