@@ -61,7 +61,7 @@ static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritT
 
 static void _delete(void* self)
 {
-	Drawable_deInit((Drawable*)self);
+    Drawable_deInit((Drawable*)self);
     free((Drawable*)self);
 }
 
@@ -80,12 +80,12 @@ void Drawable_deInit(Drawable* self)
     self->_writeBatchDataFunc = NULL;
     self->_getDataSizeFunc = NULL;
     self->_getObjectSizeFunc = NULL;
-	PositionedObject_deInit((PositionedObject*)self);
+    PositionedObject_deInit((PositionedObject*)self);
 }
 
 void Drawable_init(Drawable* self)
 {
-	PositionedObject_init((PositionedObject*)self);
+    PositionedObject_init((PositionedObject*)self);
     ((GameObject*)self)->hasAttribute = _hasAttribute;
     ((GameObject*)self)->inheritAttribute = _inheritAttribute;
     ((GameObject*)self)->deleteMe = _delete;
@@ -111,8 +111,8 @@ void Drawable_init(Drawable* self)
 
 Drawable* Drawable_newGeneric()
 {
-	Drawable* newObj = (Drawable*)malloc(sizeof(Drawable*));
-	Drawable_init(newObj);
+    Drawable* newObj = (Drawable*)malloc(sizeof(Drawable*));
+    Drawable_init(newObj);
     return newObj;
 }
 

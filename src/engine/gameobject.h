@@ -45,7 +45,7 @@ typedef enum SmugInheritType
     SMUG_POSITION_RELATIVE,
     SMUG_WEIGHT_COLLECT,
     SMUG_WEIGHT_LOCAL,
-	SMUG_INHERIT_UNDEFINED
+    SMUG_INHERIT_UNDEFINED
 } SmugInheritType;
 
 struct GameObject;
@@ -55,7 +55,7 @@ typedef struct GameObject
 {
     struct LinkedList* mSubObjects;
     struct GameObject* mParent;
-	SmugType mTypes;
+    SmugType mTypes;
     BOOL (*hasAttribute)(struct GameObject* self, SmugAttribute attr);
     BOOL (*inheritAttribute)(struct GameObject* self, SmugAttribute attr, SmugInheritType type);
     void (*deleteMe)(void* data);

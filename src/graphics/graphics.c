@@ -59,8 +59,8 @@ static int setupGL(void)
 #endif //WIN32
 
     DEBUG("Checking for VBO support");
-	if(GL_ARB_vertex_buffer_object)
-	{
+    if(GL_ARB_vertex_buffer_object)
+    {
         gVBOSupported = 1;
     }
     else
@@ -75,7 +75,7 @@ static int setupGL(void)
     Vector screenSize = Platform_getWindowSize();
     Graphics_setWindowSize(screenSize.d[0], screenSize.d[1]);
 
-	glMatrixMode(GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -92,12 +92,12 @@ static int setupGL(void)
 void Graphics_setWindowSize(double w, double h)
 {
     // glViewport(0, 0, (int)w, (int)h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 #ifdef SMUG_GLES
-	glOrthof(0.0f, (float)w, (float)h, 0.0f, -1.0f, 1.0f);
+    glOrthof(0.0f, (float)w, (float)h, 0.0f, -1.0f, 1.0f);
 #else
-	glOrtho(0, w, h, 0, -1, 1);
+    glOrtho(0, w, h, 0, -1, 1);
 #endif /* SMUG_GLES */
 
     glMatrixMode(GL_MODELVIEW);
@@ -106,8 +106,8 @@ void Graphics_setWindowSize(double w, double h)
 int Graphics_init(void)
 {
     smug_assert(!isInitialized);
-	smug_assert(Platform_isInitialized());
-	smug_assert(Platform_isWindowOpen());
+    smug_assert(Platform_isInitialized());
+    smug_assert(Platform_isWindowOpen());
 
     if (!setupGL())
         return 0;

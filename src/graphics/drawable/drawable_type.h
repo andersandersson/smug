@@ -9,7 +9,7 @@ struct BatchData;
 
 typedef struct Drawable
 {
-	PositionedObject base; // Inherit from PositionedObject
+    PositionedObject base; // Inherit from PositionedObject
 
     Color mColor;
     SmugInheritType mColorInheritance;

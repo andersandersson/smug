@@ -6,7 +6,7 @@ struct Interpoint;
 
 typedef struct PositionedObject
 {
-	GameObject base; // Inherit from GameObject
+    GameObject base; // Inherit from GameObject
     struct Interpoint* mPosition;
     SmugInheritType mPositionInheritance;
 } PositionedObject;

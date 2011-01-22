@@ -57,7 +57,7 @@ static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritT
 
 static void _delete(void* self)
 {
-	GameObject_deInit((GameObject*)self);
+    GameObject_deInit((GameObject*)self);
     free((GameObject*)self);
 }
 
@@ -69,7 +69,7 @@ static void _delete(void* self)
 GameObject* GameObject_newGeneric(void)
 {
     GameObject* newObj = (GameObject*)malloc(sizeof(GameObject));
-	GameObject_init(newObj);
+    GameObject_init(newObj);
     return newObj;
 }
 
@@ -134,7 +134,7 @@ GameObject* GameObject_getParent(GameObject* self)
 void GameObject_delete(void* self)
 {
     smug_assert(_objectInvariant((GameObject*)self));
-	((GameObject*)self)->deleteMe(self);
+    ((GameObject*)self)->deleteMe(self);
 }
 
 BOOL GameObject_isType(GameObject* self, SmugType type)
@@ -145,10 +145,10 @@ BOOL GameObject_isType(GameObject* self, SmugType type)
 
 BOOL GameObject_isExactType(GameObject* self, SmugType type)
 {
-	// TODO: Make a proper implementation. This one is borked.
+    // TODO: Make a proper implementation. This one is borked.
     // smug_assert(_objectInvariant(self));
     // return self->mTypes == type;
-	return FALSE;
+    return FALSE;
 }
 
 BOOL GameObject_hasAttribute(GameObject* self, SmugAttribute attr)
@@ -177,20 +177,20 @@ void GameObject_doRecursive(GameObject* self, void(*function)(GameObject*))
 void GameObject_deInit(GameObject* self)
 {
     // LinkedList_deleteContents(data->mSubObjects, GameObject_delete);
-	LinkedList_delete(self->mSubObjects);
-	self->mSubObjects = NULL;
-	self->mParent = NULL;
-	self->mTypes = SMUG_TYPE_NONE;
-	self->hasAttribute = NULL;
-	self->inheritAttribute = NULL;
-	self->deleteMe = NULL;
+    LinkedList_delete(self->mSubObjects);
+    self->mSubObjects = NULL;
+    self->mParent = NULL;
+    self->mTypes = SMUG_TYPE_NONE;
+    self->hasAttribute = NULL;
+    self->inheritAttribute = NULL;
+    self->deleteMe = NULL;
 }
 
 void GameObject_init(GameObject* self)
 {
     self->mParent = NULL;
     self->mSubObjects = LinkedList_new();
-	self->mTypes = SMUG_TYPE_OBJECT;
+    self->mTypes = SMUG_TYPE_OBJECT;
     self->hasAttribute = _hasAttribute;
     self->inheritAttribute = _inheritAttribute;
     self->deleteMe = _delete;

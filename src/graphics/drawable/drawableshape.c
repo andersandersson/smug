@@ -38,7 +38,7 @@ unsigned int _getObjectSize(Drawable* self)
 
 static void _delete(void* data)
 {
-	DrawableShape_deInit((DrawableShape*)data);
+    DrawableShape_deInit((DrawableShape*)data);
     free((DrawableShape*)data);
 }
 
@@ -49,23 +49,23 @@ static void _delete(void* data)
 
 void DrawableShape_deInit(DrawableShape* self)
 {
-	if (self->mShape != NULL)
-	{
-		Shape_delete(self->mShape);
-	}
-	Drawable_deInit((Drawable*)self);
+    if (self->mShape != NULL)
+    {
+        Shape_delete(self->mShape);
+    }
+    Drawable_deInit((Drawable*)self);
 }
 
 void DrawableShape_init(DrawableShape* self)
 {
-	Drawable_init((Drawable*)self);
+    Drawable_init((Drawable*)self);
 
     ((GameObject*)self)->hasAttribute = _hasAttribute;
     ((GameObject*)self)->inheritAttribute = _inheritAttribute;
     ((GameObject*)self)->deleteMe = _delete;
     ((GameObject*)self)->mTypes |= SMUG_TYPE_SHAPE;
 
-	((Drawable*)self)->_getObjectSizeFunc = _getObjectSize;
+    ((Drawable*)self)->_getObjectSizeFunc = _getObjectSize;
 }
 
 

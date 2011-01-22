@@ -39,7 +39,7 @@ static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritT
 
 static void _delete(void* self)
 {
-	PositionedObject_deInit((PositionedObject*)self);
+    PositionedObject_deInit((PositionedObject*)self);
     free((PositionedObject*)self);
 }
 
@@ -50,15 +50,15 @@ static void _delete(void* self)
 
 void PositionedObject_deInit(PositionedObject* self)
 {
-	Interpoint_delete(self->mPosition);
+    Interpoint_delete(self->mPosition);
     self->mPosition = NULL;
     self->mPositionInheritance = SMUG_INHERIT_UNDEFINED;
-	GameObject_deInit((GameObject*)self);
+    GameObject_deInit((GameObject*)self);
 }
 
 void PositionedObject_init(PositionedObject* self)
 {
-	GameObject_init((GameObject*)self);
+    GameObject_init((GameObject*)self);
 
     ((GameObject*)self)->mTypes |= SMUG_TYPE_POSITIONED;
     ((GameObject*)self)->hasAttribute = _hasAttribute;
@@ -77,7 +77,7 @@ void PositionedObject_init(PositionedObject* self)
 PositionedObject* PositionedObject_new()
 {
     PositionedObject* newObj = (PositionedObject*)malloc(sizeof(PositionedObject));
-	PositionedObject_init(newObj);
+    PositionedObject_init(newObj);
     return newObj;
 }
 
