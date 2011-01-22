@@ -1,18 +1,9 @@
 #ifndef SMUG_ENGINE_GAMEOBJECT_TYPE_H
 #define SMUG_ENGINE_GAMEOBJECT_TYPE_H
 
-#include <engine/gameobject_decl.h>
+/* To be included from header files that use 'GameObject*' type. */
 
-struct LinkedList;
-
-typedef struct _GameObject
-{
-    struct LinkedList* mSubObjects;
-    GameObject* mParent;
-    SmugType mTypes;
-    BOOL (*hasAttribute)(GameObject* self, SmugAttribute attr);
-    BOOL (*inheritAttribute)(GameObject* self, SmugAttribute attr, SmugInheritType type);
-    void (*deleteMe)(void* data);
-} _GameObject;
+struct _GameObject;
+typedef struct _GameObject GameObject;
 
 #endif /* SMUG_ENGINE_GAMEOBJECT_TYPE_H */

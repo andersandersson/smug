@@ -1,8 +1,7 @@
 #ifndef SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H
 #define SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H
 
-#include <engine/gameobject.h>
-#include <engine/gameobject_type.h>
+#include <engine/gameobject_internal.h>
 
 struct Interpoint;
 

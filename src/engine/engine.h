@@ -13,7 +13,7 @@
 #define SMUG_ENGINE_ENGINE_H
 
 #include <common/common.h>
-#include <engine/gameobject_decl.h>
+#include <engine/gameobject_type.h>
 
 /**
   * Initialize Engine

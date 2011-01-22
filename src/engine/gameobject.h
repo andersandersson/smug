@@ -3,7 +3,7 @@
 
 #include <common/common.h>
 
-#include <engine/gameobject_decl.h>
+#include <engine/gameobject_type.h>
 
 struct LinkedListIterator;
 
