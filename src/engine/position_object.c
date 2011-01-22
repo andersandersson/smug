@@ -74,7 +74,7 @@ void PositionedObject_init(PositionedObject* self)
 /** New 'public' methods **/
 /**************************/
 
-PositionedObject* PositionedObject_new()
+PositionedObject* PositionedObject_new(void)
 {
     PositionedObject* newObj = (PositionedObject*)malloc(sizeof(PositionedObject));
     PositionedObject_init(newObj);

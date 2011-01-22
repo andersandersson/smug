@@ -109,7 +109,7 @@ void Drawable_init(Drawable* self)
 /** public functions **/
 /**********************/
 
-Drawable* Drawable_newGeneric()
+Drawable* Drawable_newGeneric(void)
 {
     Drawable* newObj = (Drawable*)malloc(sizeof(Drawable*));
     Drawable_init(newObj);

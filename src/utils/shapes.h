@@ -66,7 +66,7 @@ void Shape_delete(Shape* shape);
 Shape* Shape_newFromRectangle(Rectangle rect);
 Rectangle Shape_getAsRectangle(Shape* self);
 
-Shape* Shape_newMultipoint();
+Shape* Shape_newMultipoint(void);
 Shape* Shape_addPoint(Shape* self, Vector point);
 Shape* Shape_finishMultipoint(Shape* self);
 

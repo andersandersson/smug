@@ -40,11 +40,11 @@ extern "C" {
  * Should be called once on application initialization.
  * Returns non-zero on success and 0 on failure.
  */
-extern int importGLInit();
+extern int importGLInit(void);
 
 /* Frees the handle to egl & gl functions library.
  */
-extern void importGLDeinit();
+extern void importGLDeinit(void);
 
 
 /* Use DISABLE_IMPORTGL if you want to link the OpenGL ES at

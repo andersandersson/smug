@@ -4,8 +4,7 @@
 struct Shape;
 struct BatchData;
 struct GameObject;
-
-struct DrawableShape* DrawableShape_new();
+struct DrawableShape;
 
 BOOL DrawableShape_getShape(struct DrawableShape* self, struct Shape** shape);
 BOOL DrawableShape_setShape(struct DrawableShape* self, struct Shape* shape);

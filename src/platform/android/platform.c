@@ -41,7 +41,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
     return (jint)JNI_VERSION_1_2;
 }
 
-static JNIEnv* getJniEnvironment()
+static JNIEnv* getJniEnvironment(void)
 {
     smug_assert(gJavaVm != NULL);
     JNIEnv* env;
@@ -234,7 +234,7 @@ SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeHeartbeat)
     Engine_commitPositionChanges();
 }
 
-float Platform_getInterpolationFactor()
+float Platform_getInterpolationFactor(void)
 {
     return gInterpolationFactor;
 }

@@ -7,7 +7,7 @@ struct Vector;
 struct Point;
 struct GameObject;
 
-struct PositionedObject* PositionedObject_new();
+struct PositionedObject* PositionedObject_new(void);
 
 BOOL PositionedObject_setPos(struct PositionedObject* self, float x, float y);
 BOOL PositionedObject_getPos(struct PositionedObject* self, struct Vector* v);

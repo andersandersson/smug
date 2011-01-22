@@ -12,7 +12,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := smug
 
-LOCAL_CFLAGS := -DANDROID_NDK -DHAS_CONFIG_H -Wall -std=c99 -Wno-variadic-macros
+LOCAL_CFLAGS := -DANDROID_NDK -DHAS_CONFIG_H -Wall -std=c99 -Wno-variadic-macros -Werror=strict-prototypes
 
 ifeq ($(SMUG_DEBUG),true)
 # debug defines

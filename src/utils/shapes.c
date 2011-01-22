@@ -64,7 +64,7 @@ Rectangle Shape_getAsRectangle(Shape* self)
     return *(Rectangle*)self->data;
 }
 
-Shape* Shape_newMultipoint()
+Shape* Shape_newMultipoint(void)
 {
     Shape* newShape = Shape_new();
     newShape->type = SHAPE_UNFINISHED;

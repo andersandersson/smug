@@ -28,7 +28,7 @@ void Console_puts(char* str) {
     Console_write("%s", str);
 }
 
-static void _reset_line_buffer()
+static void _reset_line_buffer(void)
 {
     line_buffer_pos = 0;
     memset(line_buffer, '\0', CONSOLE_PRINT_BUFFER_SIZE + 1);

@@ -10,7 +10,7 @@ struct BatchData;
 struct Texture;
 struct Drawable;
 
-struct Drawable* Drawable_new();
+struct Drawable* Drawable_new(void);
 
 BOOL Drawable_getColor(struct Drawable* self, Color* c);
 BOOL Drawable_setColor(struct Drawable* self, Color c);

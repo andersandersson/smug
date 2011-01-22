@@ -61,7 +61,7 @@ static void *sGLESSO = NULL;
  * "funcPtr_". Standard gl/egl calls are redirected to the function pointers
  * with preprocessor macros (see importgl.h).
  */
-int importGLInit()
+int importGLInit(void)
 {
     int result = 1;
 
@@ -154,7 +154,7 @@ int importGLInit()
 }
 
 
-void importGLDeinit()
+void importGLDeinit(void)
 {
 #ifndef DISABLE_IMPORTGL
 #ifdef WIN32
