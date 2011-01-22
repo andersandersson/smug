@@ -4,98 +4,115 @@
 
 OrderedSet* OrderedSet_new(void)
 {
-  OrderedSet* set = malloc(sizeof(OrderedSet));
+    OrderedSet* set = malloc(sizeof(OrderedSet));
 
-  set->tree = BinarySearchTree_new();
+    OrderedSet_init(set);
 
-  return set;
+    return set;
+}
+
+void OrderedSet_init(OrderedSet* set)
+{
+    BinarySearchTree_init((BinarySearchTree*) set);
 }
 
 void OrderedSet_delete(OrderedSet* set)
 {
-  BinarySearchTree_delete(set->tree);
-
-  free(set);
+    free(set);
 }
 
 void OrderedSet_insert(OrderedSet* set, void* element)
 {
-  BinarySearchTree_insert(set->tree, element);
+    BinarySearchTree_insert((BinarySearchTree*) set, element);
 }
 
 void OrderedSet_setCompare(OrderedSet* set, int (*compare)(void*, void*, void*))
 {
-  BinarySearchTree_setCompare(set->tree, NULL, compare);
+    BinarySearchTree_setCompare((BinarySearchTree*) set, NULL, compare);
 }
 
 void* OrderedSet_remove(OrderedSet* set, void* element)
 {
-  return BinarySearchTree_remove(set->tree, element);
+    return BinarySearchTree_remove((BinarySearchTree*) set, element);
+}
+
+LinkedList* OrderedSet_removeIf(OrderedSet* set, BOOL (*predicate)(void*, void*), void* param)
+{
+    return BinarySearchTree_removeIf((BinarySearchTree*) set, predicate, param);
 }
 
 void* OrderedSet_find(OrderedSet* set, void* element)
 {
-  return BinarySearchTree_find(set->tree, element);
+    return BinarySearchTree_find((BinarySearchTree*) set, element);
+}
+
+LinkedList* OrderedSet_findIf(OrderedSet* set, BOOL (*predicate)(void*, void*), void* param)
+{
+    return BinarySearchTree_findIf((BinarySearchTree*) set, predicate, param);
 }
 
 void* OrderedSet_popMin(OrderedSet* set)
 {
-  void* element = BinarySearchTree_findMin(set->tree);
-  BinarySearchTree_remove(set->tree, element);
-  return element;
+    void* element = BinarySearchTree_findMin((BinarySearchTree*) set);
+    BinarySearchTree_remove((BinarySearchTree*) set, element);
+    return element;
 }
 
 void OrderedSet_print(OrderedSet* set)
 {
-  BinarySearchTree_print(set->tree);
+    BinarySearchTree_print((BinarySearchTree*) set);
 }
 
 
 
 OrderedSetIterator* OrderedSetIterator_new(void)
 {
-  OrderedSetIterator* iter = malloc(sizeof(OrderedSetIterator));
+    OrderedSetIterator* iter = malloc(sizeof(OrderedSetIterator));
 
-  iter->iterator = BinarySearchTreeIterator_new();
+    OrderedSetIterator_init(iter);
 
-  return iter;
+    return iter;
+}
+
+
+void OrderedSetIterator_init(OrderedSetIterator* iter)
+{
+    BinarySearchTreeIterator_init((BinarySearchTreeIterator*) iter);
 }
 
 
 void OrderedSetIterator_delete(OrderedSetIterator* iter)
 {
-  if(NULL == iter)
+    if(NULL == iter)
     {
-      return;
+        return;
     }
 
-  BinarySearchTreeIterator_delete(iter->iterator);
-  
-  free(iter);
+    free(iter);
 }
 
 
 void OrderedSetIterator_reset(OrderedSet* set, OrderedSetIterator* iter)
 {
-  BinarySearchTreeIterator_reset(set->tree, iter->iterator);
+    BinarySearchTreeIterator_reset((BinarySearchTree*) set, (BinarySearchTreeIterator*) iter);
 }
 
 
 void OrderedSetIterator_step(OrderedSetIterator* iter)
 {
-  BinarySearchTreeIterator_step(iter->iterator);
+    BinarySearchTreeIterator_step((BinarySearchTreeIterator*) iter);
 }
 
 
 BOOL OrderedSetIterator_valid(OrderedSetIterator* iter)
 {
-  return BinarySearchTreeIterator_valid(iter->iterator);
+    return BinarySearchTreeIterator_valid((BinarySearchTreeIterator*) iter);
 }
 
 
 void* OrderedSetIterator_get(OrderedSetIterator* iter)
 {
-  return BinarySearchTreeIterator_get(iter->iterator);
+    return BinarySearchTreeIterator_get((BinarySearchTreeIterator*) iter);
 }
 
 

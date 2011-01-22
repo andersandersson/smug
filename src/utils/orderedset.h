@@ -2,20 +2,16 @@
 #define SMUG_UTILS_ORDEREDSET_H
 
 #include <common/common.h>
-
-// Forward declarations
-struct BinarySearchTree;
-struct BinarySearchTreeIterator;
-
+#include <utils/binarysearchtree.h>
 
 /** Orderd set structure
-  * 
+  *
   * A set data structure. Keeping a bunch of elements
   * ordered and uniquely.
   */
 typedef struct OrderedSet
 {
-  struct BinarySearchTree* tree; //< Pointer to implementation
+  struct BinarySearchTree base; //< Inherit BinarySearchTree
 } OrderedSet;
 
 
@@ -23,9 +19,9 @@ typedef struct OrderedSet
   *
   * Struct for iterating over an OrderedSet
   */
-typedef struct OrderedSetIterator 
+typedef struct OrderedSetIterator
 {
-  struct BinarySearchTreeIterator* iterator; //< Pointer to implementation
+  struct BinarySearchTreeIterator base; //< Inherit BinarySearchTreeIterator
 } OrderedSetIterator;
 
 
@@ -35,6 +31,14 @@ typedef struct OrderedSetIterator
   * @return The created OrderedSet
   */
 OrderedSet* OrderedSet_new(void);
+
+
+/** Initialize a set
+  *
+  * @relatesalso OrderedSet
+  * @param set The set to initialize
+  */
+void OrderedSet_init(OrderedSet* set);
 
 
 /** Delete an OrderedSet
@@ -60,7 +64,7 @@ void OrderedSet_setCompare(OrderedSet* set, int (*compare)(void*, void*, void*))
   * @relatesalso OrderedSet
   * @param set The set to insert into
   * @param element The element to isnert
-  */ 
+  */
 void OrderedSet_insert(OrderedSet* set, void* element);
 
 
@@ -74,6 +78,17 @@ void OrderedSet_insert(OrderedSet* set, void* element);
 void* OrderedSet_remove(OrderedSet* set, void* element);
 
 
+/** Conditionally remove items from a set
+  *
+  * @relatesalso OrderedSet
+  * @param set The set to remove from
+  * @param predicate The predicate function for matching elements
+  * @param parma The left side of the comparison
+  * @return A list pointer with removed elements
+  */
+LinkedList* OrderedSet_removeIf(OrderedSet* set, BOOL (*predicate)(void*, void*), void* param);
+
+
 /** Search for an element in the set
   *
   * @relatesalso OrderedSet
@@ -82,6 +97,17 @@ void* OrderedSet_remove(OrderedSet* set, void* element);
   * @return The found element or NULL
   */
 void* OrderedSet_find(OrderedSet* set, void* element);
+
+
+/** Conditionally find items from a set
+  *
+  * @relatesalso OrderedSet
+  * @param set The set to search in
+  * @param predicate The predicate function for matching elements
+  * @param parma The left side of the comparison
+  * @return A list pointer with found elements
+  */
+LinkedList* OrderedSet_findIf(OrderedSet* set, BOOL (*predicate)(void*, void*), void* param);
 
 
 /** Fetch and remove the least item
@@ -110,6 +136,14 @@ void OrderedSet_print(OrderedSet* set);
   * @return The created OrderedSetIterator
   */
 OrderedSetIterator* OrderedSetIterator_new(void);
+
+
+/** Initializes an iterator
+  *
+  * @relatesalso OrderedSetIterator
+  * @param iter The iterator to init
+  */
+void OrderedSetIterator_init(OrderedSetIterator* iter);
 
 
 /** Delete an OrderedSetIterator

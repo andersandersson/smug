@@ -1,9 +1,9 @@
-#include <stdio.h>                                       
-#include "test-utils/assert.h"                           
+#include <stdio.h>
+#include "test-utils/assert.h"
 
 #include "map.h"
 
-int compare(int x, int y)
+int compare(void* param, int x, int y)
 {
     if(x == y)
       {
@@ -13,21 +13,21 @@ int compare(int x, int y)
     if(x > y)
       {
 	return -1;
-      } 
+      }
     else
       {
 	return 1;
       }
 }
 
-int main()
+int main(void)
 {
     Map* tree = Map_new();
 
     Map_get(tree, (void*)2);
- 
+
     Map_setCompare(tree, compare);
-    
+
     Map_get(tree, (void*)2);
 
     Map_set(tree, (void*)3, (void*)1);
@@ -44,7 +44,7 @@ int main()
     for(MapIterator_reset(tree, iter); MapIterator_valid(iter) && i++ < 10; MapIterator_step(iter))
       {
 	Pair* element = (Pair*) MapIterator_get(iter);
-	
+
 	printf("Now at %d = %d\n", element->left, element->right);
       }
 
