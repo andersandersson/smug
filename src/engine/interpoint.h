@@ -4,7 +4,7 @@
 #include <common/common.h>
 #include <utils/point_type.h>
 
-typedef struct
+typedef struct Interpoint
 {
     Point point;
     Point oldPoint;

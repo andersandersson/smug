@@ -1,175 +1,34 @@
-/** @file drawable.h
-  * @brief Defines the Drawable type.
-  * @ingroup smug_graphics
-  */
-
-/** @addtogroup smug_graphics
-  * @{
-  */
-
 #ifndef SMUG_GRAPHICS_DRAWABLE_DRAWABLE_H
 #define SMUG_GRAPHICS_DRAWABLE_DRAWABLE_H
 
+#include <common/common.h>
 #include <graphics/color_type.h>
-#include <graphics/sprite.h>
-#include <graphics/renderer/batchdata.h>
-#include <utils/point_type.h>
-#include <utils/vector_type.h>
-#include <engine/gameobject.h>
-#include <engine/interpoint.h>
 
-/**
-  * A graphical entity on screen. A Drawable is a common interface
-  * for a collection of different graphic components.
-  */
-typedef struct Drawable
-{
-    int type;
-    unsigned int layer;
-	GameObject* parent;
+struct GameObject;
+struct Sprite;
+struct BatchData;
+struct Texture;
 
-    Interpoint* pos;
-    Interpoint* relativePos;
-	BOOL followObject;
 
-    Sprite* sprite; // Is NULL for shapes
-    Color color;
-    unsigned int vertexcount;
-    Vector* vertexOffsets;
+struct GameObject* Drawable_new();
 
-    void (*_writeBatchDataFunc)(struct Drawable* d, BatchData* batch, unsigned int start); /**< Function for writing data */
-    int (*_getDataSizeFunc)(struct Drawable* d); /**< Function for getting data size */
+BOOL Drawable_getColor(struct GameObject* self, Color* c);
+BOOL Drawable_setColor(struct GameObject* self, Color c);
+BOOL Drawable_getOpacity(struct GameObject* self, float* opacity);
+BOOL Drawable_setOpacity(struct GameObject* self, float opacity);
+struct Sprite* Drawable_getSprite(struct GameObject* self);
+unsigned int Drawable_getLayer(struct GameObject* self);
+void Drawable_setLayer(struct GameObject* self, unsigned int layer);
+void Drawable_writeBatchData(struct GameObject* self, struct BatchData* batchdata, unsigned int start);
+int Drawable_getDataSize(struct GameObject* self);
+unsigned int Drawable_getObjectSize(struct GameObject* self);
 
-} Drawable;
+struct Texture* Drawable_getTexture(struct GameObject* d);
+unsigned int Drawable_getTextureID(struct GameObject* d);
 
-/**
- * Creates new drawable
- * @relatesalso Drawable
- * @param vertexcount size of drawable in vertices
- * @return Drawable
- */
-Drawable* Drawable_new(unsigned int vertexcount);
-
-/**
- * Deletes a Drawable
- * @relatesalso Drawable
- * @param d Drawable to be deleted
- */
-void Drawable_delete(void* d);
-
-/**
- * Write all vertex data to batchdata
- * @relatesalso Drawable
- * @param d Drawable containing data
- * @param batchdata batch for data to be written to
- * @param start where to start writing in batch
- */
-void Drawable_writeBatchData(Drawable* d, BatchData* batchdata, unsigned int start);
-
-/**
- * Get the size of the data that will be written
- * @relatesalso Drawable
- * @param d Drawable
- * @return size of data in vertices
- */
-int Drawable_getDataSize(Drawable* d);
-
-/**
- * Set absolute position of a Drawable
- * @relatesalso Drawable
- * @param d the Drawable
- * @param pos Position
- */
-void Drawable_setPos(Drawable* d, Point pos);
-
-void Drawable_moveTo(Drawable* d, Point pos);
-
-/**
- * Set position of a Drawable relative to its GameObject
- * @relatesalso Drawable
- * @param d the Drawable
- * @param pos Position
- */
-void Drawable_setPosRelative(Drawable* d, Point pos);
-
-void Drawable_moveToRelative(Drawable* d, Point pos);
-
-Point Drawable_getPosForDrawing(Drawable* self);
-
-/**
- * Called by platform when position will not change again during this heartbeat.
- */
-void Drawable_commitPosition(Drawable* self);
-
-void Drawable_setParent(Drawable* self, GameObject* parent);
-
-void Drawable_removeParent(Drawable* self);
-
-/** Currently not used.
-  */
-void Drawable_followObject(Drawable* self, BOOL follow);
-
-/**
- * Set sprite of a Drawable
- * @relatesalso Drawable
- * @param d the Drawable
- * @param sprite a pointer to a Sprite
- */
-void Drawable_setSprite(Drawable* d, Sprite* sprite);
-
-/**
- * Set the graphical layer of a drawable
- * @relatesalso Drawable
- * @param d Drawable
- * @param layer the layer
- */
-void Drawable_setLayer(Drawable* d, unsigned int layer);
-
-/**
- * Set color of a Drawable
- * @relatesalso Drawable
- * @param d Drawable
- * @param color Color
- */
-void Drawable_setColor(Drawable* d, Color color);
-
-void Drawable_setOpacity(Drawable* self, float opacity);
-
-/**
- * Get the layer of a Drawable
- * @relatesalso Drawable
- * @param d the Drawable
- * @return layer id
- */
-unsigned int Drawable_getLayer(Drawable* d);
-
-/**
- * Get the texture of a drawable as pointer
- * @relatesalso Drawable
- * @param d the Drawable
- * @return Texture
- */
-Texture* Drawable_getTexture(Drawable* d);
-
-/**
- * Get texture of a drawable as an id
- * @relatesalso Drawable
- * @param d the Drawable
- * @return texture id
- */
-unsigned int Drawable_getTextureID(Drawable* d);
-
-/**
- * Get the size of an element of the drawable.
- * This size is the size of each component of a drawable,
- * if a drawable consists of several rectangles (such as a font)
- * then the objectsize is the number of vertices in one rectangle.
- * @relatesalso Drawable
- * @param d the Drawable
- * @return
- */
-unsigned int Drawable_getObjectSize(Drawable* d);
+struct GameObject* Drawable_newInherit(
+    void(*writeBatchDataFunc)(struct GameObject* d, struct BatchData* batch, unsigned int start),
+    int (*getDataSizeFunc)(struct GameObject* d),
+    unsigned int (*getObjectSizeFunc)(struct GameObject* d));
 
 #endif // SMUG_GRAPHICS_DRAWABLE_DRAWABLE_H
-
-/**@}*/

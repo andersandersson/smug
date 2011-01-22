@@ -5,12 +5,31 @@
 #include <utils/point.h>
 #include <utils/rectangle.h>
 #include <utils/vector.h>
+#include <utils/shapes.h>
+#include <engine/gameobject.h>
+#include <engine/gameobject_protected.h>
+#include <engine/position_object.h>
 #include <graphics/color.h>
+#include <graphics/sprite.h>
+#include <graphics/renderer/batchdata.h>
+#include <graphics/drawable/drawable.h>
+#include <graphics/drawable/drawableshape.h>
+#include <graphics/drawable/drawableshape_type.h>
 
 #include <graphics/drawable/box.h>
 
-static int getDataSize(Drawable* drawable)
+static BOOL _invariant(DrawableShapeData* data)
 {
+    smug_assert(data != NULL);
+    smug_assert(data->mShape != NULL);
+    smug_assert(data->mShape->type == SHAPE_RECTANGLE);
+    return (data != NULL && data->mShape != NULL && data->mShape->type == SHAPE_RECTANGLE);
+}
+
+static int getDataSize(GameObject* self)
+{
+    // TODO: smug_assert("That 'self' is actually a box, or at least a DrawableShape");
+
     // number of vertices that shall be written
     // OpenGL ES does not support GL_QUADS
 #ifdef SMUG_GLES
@@ -20,61 +39,74 @@ static int getDataSize(Drawable* drawable)
 #endif /* SMUG_GLES */
 }
 
-static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned int start)
+static void writeBatchData(GameObject* drawable, BatchData* batchdata, unsigned int start)
 {
+	smug_assert(GameObject_isType(drawable, SMUG_TYPE_DRAWABLE));
     static unsigned int vertexstart, colorstart, texturestart;
     static float x1, x2, y1, y2;
     static float r, g, b, a;
     static float tx1, ty1, tx2, ty2;
     static Sprite* sprite = NULL;
     static Point dpos;
+    static Shape* shape;
+    static Rectangle box;
+    static Color color;
 
     vertexstart = start*2;
     colorstart = start*4;
     texturestart = start*2;
 
-    // write vertices in anti-clockwise order
-    dpos = Drawable_getPosForDrawing(drawable);
-    x1 = Point_getX(dpos) + drawable->vertexOffsets[0].d[0];
-    x2 = Point_getX(dpos) + drawable->vertexOffsets[1].d[0];
-    y1 = Point_getY(dpos) + drawable->vertexOffsets[0].d[1];
-    y2 = Point_getY(dpos) + drawable->vertexOffsets[1].d[1];
+    DrawableShape_getShape(drawable, &shape);
+    box = Shape_getAsRectangle(shape);
 
-    // smug_printf("Writing box: %f, %f, %f, %f", x1, y1, x2, y2);
+    // write vertices in anti-clockwise order
+    PositionObject_getPosForDrawing(drawable, &dpos);
+    x1 = Point_getX(dpos) + Rectangle_getX(&box);
+    y1 = Point_getY(dpos) + Rectangle_getY(&box);
+    x2 = Point_getX(dpos) + Rectangle_getW(&box);
+    y2 = Point_getY(dpos) + Rectangle_getH(&box);
 
     batchdata->vertexData[vertexstart + 0 * 2 + 0] = x1;
     batchdata->vertexData[vertexstart + 0 * 2 + 1] = y1;
+
     batchdata->vertexData[vertexstart + 1 * 2 + 0] = x1;
     batchdata->vertexData[vertexstart + 1 * 2 + 1] = y2;
+
     batchdata->vertexData[vertexstart + 2 * 2 + 0] = x2;
     batchdata->vertexData[vertexstart + 2 * 2 + 1] = y2;
+
     batchdata->vertexData[vertexstart + 3 * 2 + 0] = x2;
     batchdata->vertexData[vertexstart + 3 * 2 + 1] = y1;
 #ifdef SMUG_GLES
     batchdata->vertexData[vertexstart + 4 * 2 + 0] = x1;
     batchdata->vertexData[vertexstart + 4 * 2 + 1] = y1;
+
     batchdata->vertexData[vertexstart + 5 * 2 + 0] = x2;
     batchdata->vertexData[vertexstart + 5 * 2 + 1] = y2;
 #endif /* SMUG_GLES */
 
     // write colordata
-    r = Color_Rf(drawable->color);
-    g = Color_Gf(drawable->color);
-    b = Color_Bf(drawable->color);
-    a = Color_Af(drawable->color);
+    Drawable_getColor(drawable, &color);
+    r = Color_Rf(color);
+    g = Color_Gf(color);
+    b = Color_Bf(color);
+    a = Color_Af(color);
 
     batchdata->colorData[colorstart + 0 * 4 + 0] = r;
     batchdata->colorData[colorstart + 0 * 4 + 1] = g;
     batchdata->colorData[colorstart + 0 * 4 + 2] = b;
     batchdata->colorData[colorstart + 0 * 4 + 3] = a;
+
     batchdata->colorData[colorstart + 1 * 4 + 0] = r;
     batchdata->colorData[colorstart + 1 * 4 + 1] = g;
     batchdata->colorData[colorstart + 1 * 4 + 2] = b;
     batchdata->colorData[colorstart + 1 * 4 + 3] = a;
+
     batchdata->colorData[colorstart + 2 * 4 + 0] = r;
     batchdata->colorData[colorstart + 2 * 4 + 1] = g;
     batchdata->colorData[colorstart + 2 * 4 + 2] = b;
     batchdata->colorData[colorstart + 2 * 4 + 3] = a;
+
     batchdata->colorData[colorstart + 3 * 4 + 0] = r;
     batchdata->colorData[colorstart + 3 * 4 + 1] = g;
     batchdata->colorData[colorstart + 3 * 4 + 2] = b;
@@ -84,6 +116,7 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     batchdata->colorData[colorstart + 4 * 4 + 1] = g;
     batchdata->colorData[colorstart + 4 * 4 + 2] = b;
     batchdata->colorData[colorstart + 4 * 4 + 3] = a;
+
     batchdata->colorData[colorstart + 5 * 4 + 0] = r;
     batchdata->colorData[colorstart + 5 * 4 + 1] = g;
     batchdata->colorData[colorstart + 5 * 4 + 2] = b;
@@ -91,7 +124,7 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
 #endif /* SMUG_GLES */
 
     // write texture data only if sprite exists
-    if ((sprite = drawable->sprite) == NULL)
+    if ((sprite = Drawable_getSprite(drawable)) == NULL)
         return;
 
     tx1 = Rectangle_getX(&sprite->rect) * sprite->texture->px;
@@ -115,35 +148,27 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
 #endif /* SMUG_GLES */
 }
 
-Drawable* Drawable_newBox(void)
+static DrawableShapeData* DrawableShapeData_newBox(Vector size)
 {
-#ifdef SMUG_GLES
-    Drawable* ret = Drawable_new(6);
-#else
-    Drawable* ret = Drawable_new(4);
-#endif
-    ret->_writeBatchDataFunc = writeBatchData;
-    ret->_getDataSizeFunc = getDataSize;
-    ret->vertexOffsets[0].d[0] = 0;
-    ret->vertexOffsets[0].d[1] = 0;
-    ret->vertexOffsets[1].d[0] = 0;
-    ret->vertexOffsets[1].d[1] = 0;
-    return ret;
+    DrawableShapeData* data = (DrawableShapeData*)malloc(sizeof(DrawableShapeData));
+    struct Shape* newShape = Shape_newFromRectangle(Rectangle_createFromXYWH(0, 0, Vector_getX(&size), Vector_getY(&size)));
+    data->mShape = newShape;
+    smug_assert(_invariant(data));
+    return data;
 }
 
-Drawable* Drawable_newBoxFromSize(Vector size)
+GameObject* DrawableShape_newBox(void)
 {
-#ifdef SMUG_GLES
-    Drawable* ret = Drawable_new(6);
-#else
-    Drawable* ret = Drawable_new(4);
-#endif
-    ret->_writeBatchDataFunc = writeBatchData;
-    ret->_getDataSizeFunc = getDataSize;
-    ret->vertexOffsets[0].d[0] = 0.0f;
-    ret->vertexOffsets[0].d[1] = 0.0f;
-    ret->vertexOffsets[1].d[0] = Vector_getX(&size);
-    ret->vertexOffsets[1].d[1] = Vector_getY(&size);
+    return DrawableShape_newBoxFromSize(Vector_create2d(0,0));
+}
 
-    return ret;
+GameObject* DrawableShape_newBoxFromSize(Vector size)
+{
+    InternalGameObject* leaf = DrawableShape_newInherit(DrawableShapeData_newBox(size), writeBatchData, getDataSize);
+    smug_assert(InternalGameObject_isExactType(leaf, SMUG_TYPE_SHAPE));
+    smug_assert(GameObject_isType(leaf, SMUG_TYPE_SHAPE));
+    smug_assert(GameObject_isType(leaf, SMUG_TYPE_DRAWABLE));
+    smug_assert(GameObject_isType(leaf, SMUG_TYPE_POSITION));
+    smug_assert(GameObject_isType(leaf, SMUG_TYPE_OBJECT));
+    return InternalGameObject_getAsGeneric(leaf);
 }

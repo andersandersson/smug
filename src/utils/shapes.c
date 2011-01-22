@@ -45,7 +45,7 @@ void Shape_delete(Shape* self)
     free(self);
 }
 
-Shape* Shape_createFromRectangle(Rectangle rect)
+Shape* Shape_newFromRectangle(Rectangle rect)
 {
     Shape* shape = Shape_new();
     Rectangle* new_rect = Rectangle_new();
@@ -58,6 +58,12 @@ Shape* Shape_createFromRectangle(Rectangle rect)
     return shape;
 }
 
+Rectangle Shape_getAsRectangle(Shape* self)
+{
+    smug_assert(self->type == SHAPE_RECTANGLE);
+    return *(Rectangle*)self->data;
+}
+
 Shape* Shape_newMultipoint()
 {
     Shape* newShape = Shape_new();
@@ -68,6 +74,7 @@ Shape* Shape_newMultipoint()
 
 Shape* Shape_addPoint(Shape* self, Vector point)
 {
+    smug_assert(self != NULL);
     smug_assert(self->type = SHAPE_UNFINISHED);
     Vector* v = Vector_new2d(Vector_getX(&point), Vector_getY(&point));
     LinkedList_addLast((LinkedList*)self->data, v);
@@ -76,6 +83,7 @@ Shape* Shape_addPoint(Shape* self, Vector point)
 
 Shape* Shape_finishMultipoint(Shape* self)
 {
+    smug_assert(self != NULL);
     smug_assert(self->type = SHAPE_UNFINISHED);
     LinkedList* list = (LinkedList*)self->data;
     int nrPoints = LinkedList_length(list);
@@ -98,19 +106,38 @@ Shape* Shape_finishMultipoint(Shape* self)
 
 Vector Shape_getFirstPoint(Shape* self)
 {
+    smug_assert(self != NULL);
+    smug_assert(self->type == SHAPE_MULTIPOINT);
     ((Multipoint*)self->data)->pointIndex = 0;
     return Shape_getNextPoint(self);
 }
 
 BOOL Shape_morePoints(Shape* self)
 {
+    smug_assert(self != NULL);
     smug_assert(self->type == SHAPE_MULTIPOINT);
     return ((Multipoint*)self->data)->pointIndex < ((Multipoint*)self->data)->nrPoints;
 }
 
 Vector Shape_getNextPoint(Shape* self)
 {
+    smug_assert(self != NULL);
     smug_assert(self->type == SHAPE_MULTIPOINT);
     smug_assert(Shape_morePoints(self));
     return ((Multipoint*)self->data)->points[((Multipoint*)self->data)->pointIndex++];
+}
+
+int Shape_getNrPoints(Shape* self)
+{
+    smug_assert(self != NULL);
+    switch (self->type)
+    {
+        case SHAPE_RECTANGLE:
+            return 4;
+        case SHAPE_MULTIPOINT:
+            return ((Multipoint*)self->data)->nrPoints;
+        default:
+            smug_assert(!"Bad shape type!");
+            return 0;
+    }
 }

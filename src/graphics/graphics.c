@@ -139,12 +139,13 @@ void Graphics_render(void)
     // glFinish();
 }
 
-void Graphics_addDrawable(Drawable* d)
+void Graphics_addDrawable(struct GameObject* d)
 {
+    // TODO: Assert right type.
     Renderer_addDrawable(sceneRenderer, d);
 }
 
-void Graphics_removeDrawable(Drawable* d)
+void Graphics_removeDrawable(struct GameObject* d)
 {
     WARNING("Unimplemented function Graphics_removeDrawable");
 }

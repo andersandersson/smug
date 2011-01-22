@@ -63,7 +63,8 @@ void Shape_delete(Shape* shape);
  * @relatesalso Shape
  * @return Shape
  */
-Shape* Shape_createFromRectangle(Rectangle rect);
+Shape* Shape_newFromRectangle(Rectangle rect);
+Rectangle Shape_getAsRectangle(Shape* self);
 
 Shape* Shape_newMultipoint();
 Shape* Shape_addPoint(Shape* self, Vector point);
@@ -72,6 +73,7 @@ Shape* Shape_finishMultipoint(Shape* self);
 Vector Shape_getFirstPoint(Shape* self);
 BOOL Shape_morePoints(Shape* self);
 Vector Shape_getNextPoint(Shape* self);
+int Shape_getNrPoints(Shape* self);
 
 #endif // SMUG_UTILS_SHAPES_H
 

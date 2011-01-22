@@ -146,7 +146,7 @@ void Renderer_render(Renderer* renderer)
 
 }
 
-void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
+void Renderer_addDrawable(Renderer* renderer, struct GameObject* drawable)
 {
     smug_assert(NULL != renderer);
     smug_assert(NULL != drawable);

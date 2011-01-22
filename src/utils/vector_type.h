@@ -13,7 +13,7 @@
 /**
  * Simple 2 dimensional vector.
  */
-typedef struct Vector2d
+typedef struct Vector
 {
     int size;    //!< The dimension of the vector
     float d[2];

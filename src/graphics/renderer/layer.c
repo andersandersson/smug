@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <smugstd.h>
 
+#include <graphics/drawable/drawable.h>
 #include <graphics/renderer/renderbatch.h>
 #include <graphics/texture/texture.h>
 #include <graphics/sprite.h>
@@ -39,14 +40,14 @@ void Layer_delete(void* layer)
     free(thelayer);
 }
 
-void Layer_addDrawable(Layer* layer, Drawable* drawable)
+void Layer_addDrawable(Layer* layer, struct GameObject* drawable)
 {
     smug_assert(NULL != layer);
     smug_assert(NULL != drawable);
 
     // find the proper batch to put the drawable in
 
-    unsigned int osize = Drawable_getObjectSize(drawable);
+    unsigned int osize = Drawable_getDataSize(drawable);
 
     // Check object size and extend batcharrays if needed
     ArrayList* batcharray = ArrayList_get(layer->batcharrays, osize);

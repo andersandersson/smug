@@ -1,190 +1,343 @@
 #include <smugstd.h>
-#include <stdlib.h>
 
-#include <graphics/drawable/drawable.h>
-#include <graphics/graphics.h>
-#include <physics/body.h>
-#include <common/log.h>
-#include <platform/platform.h>
-#include <utils/point.h>
+#include <utils/linkedlist.h>
+#include <utils/linkedlistiterator.h>
 
-#include <engine/gameobject.h>
+#include <engine/gameobject_protected.h>
 
-static void _invariant(GameObject* self)
+/* Function implementations for a generic game object */
+
+static BOOL _dataInvariant(GenericGameObjectData* data)
 {
-    smug_assert(NULL != self);
+    BOOL ret = (data != NULL &&
+                data->mSubObjects != NULL);
+    return ret;
 }
 
-void _Body_deleteVoid(void* body)
+static BOOL _objectInvariant(GameObject* obj)
 {
-    Body_delete((Body*)body);
+    BOOL ret = (obj != NULL);
+    smug_assert(obj != NULL);
+    InternalGameObject* tier = obj;
+    while (tier->mParent != NULL)
+    {
+        tier = tier->mParent;
+    }
+    InternalGameObject* root = tier;
+    ret = ret && root->isExactType(root, SMUG_TYPE_OBJECT);
+    smug_assert(root->isExactType(root, SMUG_TYPE_OBJECT));
+    tier = obj;
+    while (tier->mChild != NULL)
+    {
+        tier = tier->mChild;
+    }
+    InternalGameObject* leaf = tier;
+    while (tier->mParent != NULL)
+    {
+        ret = (ret && tier->mRoot == root && tier->mLeaf == leaf && tier->mParent->mChild == tier && tier->mData != NULL);
+        smug_assert(tier->mRoot == root);
+        smug_assert(tier->mLeaf == leaf);
+        smug_assert(tier->mParent->mChild == tier);
+        smug_assert(tier->mData != NULL);
+        tier = tier->mParent;
+    }
+    return ret;
+    // return TRUE;
 }
 
-GameObject* GameObject_new(void)
+static BOOL _isExactType(GameObject* self, SmugType type)
 {
-    GameObject* go = (GameObject*)malloc(sizeof(GameObject));
+    if (type == SMUG_TYPE_OBJECT)
+    {
+        return TRUE;
+    }
+    else
+    {
+        // smug_printf("Type was not %s, but SMUG_TYPE_OBJECT", InternalGameObject_getTypeString(type));
+        return FALSE;
+    }
+}
 
-    // go->x = 0.0f;
-    // go->y = 0.0f;
+static BOOL _hasAttribute(GameObject* self, SmugAttribute attr)
+{
+    smug_assert(_objectInvariant(self));
+    // Base object has no attributes.
+    return FALSE;
+}
 
-    go->drawables = LinkedList_new();
-    go->bodies = LinkedList_new();
-    go->visible = TRUE;
-    go->tag = NULL;
-    go->position = Interpoint_new(Point_createFromXY(0, 0));
+static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritType type)
+{
+    smug_assert(_objectInvariant(self));
+    // Base object has no attributes, so cannot inherit anything.
+    return FALSE;
+}
 
-    return go;
+static void _deleteData(void* self)
+{
+    // LinkedList_deleteContents(data->mSubObjects, GameObject_delete);
+    LinkedList_delete(((GenericGameObjectData*)self)->mSubObjects);
+    free((GenericGameObjectData*)self);
+}
+
+/* Internal helper functions */
+
+static GenericGameObjectData* GenericGameObjectData_new(void)
+{
+    GenericGameObjectData* data = (GenericGameObjectData*)malloc(sizeof(GenericGameObjectData));
+    data->mSubObjects = LinkedList_new();
+	data->mParent = NULL;
+    smug_assert(_dataInvariant(data));
+    return data;
+}
+
+static InternalGameObject* InternalGameObject_new(void* data)
+{
+    InternalGameObject* newObj = (InternalGameObject*)malloc(sizeof(InternalGameObject));
+    newObj->mParent = NULL;
+    newObj->mChild = NULL;
+    newObj->mRoot = newObj;
+    newObj->mLeaf = newObj;
+    newObj->mData = data;
+    newObj->hasAttribute = NULL;
+    newObj->isExactType = NULL;
+    newObj->inheritAttribute = NULL;
+    newObj->deleteData = NULL;
+    return newObj;
+}
+
+static GenericGameObjectData* _getGenericGameObjectData(GameObject* self)
+{
+    smug_assert(_objectInvariant(self));
+    return (GenericGameObjectData*)(InternalGameObject_getAsGeneric(self)->mData);
+}
+
+/* Public functions for GameObject. */
+
+GameObject* GameObject_newGeneric(void)
+{
+    InternalGameObject* newObj = InternalGameObject_new(GenericGameObjectData_new());
+
+    newObj->hasAttribute = _hasAttribute;
+    // newObj->isType = _isType;
+    newObj->isExactType = _isExactType;
+    newObj->inheritAttribute = _inheritAttribute;
+    newObj->deleteData = _deleteData;
+    smug_assert(_objectInvariant(newObj));
+    return newObj;
+}
+
+int GameObject_addObject(GameObject* self, GameObject* obj)
+{
+    smug_assert(_objectInvariant(self));
+    smug_assert(_objectInvariant(obj));
+    smug_assert(_dataInvariant(_getGenericGameObjectData(self)));
+    smug_assert(_dataInvariant(_getGenericGameObjectData(obj)));
+#ifndef LINUSNDEBUG
+	int old = GameObject_nrChildObjects(self);
+#endif
+    if (_getGenericGameObjectData(obj)->mParent != NULL)
+    {
+		smug_assert(!"Tried to add a child object to another object!");
+        // It is an error to add an object to more than one superobject.
+        return 1;
+    }
+    else
+    {
+        LinkedList_addLast(_getGenericGameObjectData(self)->mSubObjects, InternalGameObject_getAsGeneric(obj));
+        _getGenericGameObjectData(obj)->mParent = self;
+#ifndef LINUSNDEBUG
+		smug_assert(GameObject_nrChildObjects(self) == old + 1);
+		smug_assert(GameObject_hasChildObjects(self));
+#endif
+        return 0;
+    }
+}
+
+void GameObject_removeObject(GameObject* self, GameObject* child)
+{
+    smug_assert(_objectInvariant(self));
+    // TODO: implement.
+}
+
+BOOL GameObject_hasChildObjects(GameObject* self)
+{
+    return !LinkedList_isEmpty(_getGenericGameObjectData(self)->mSubObjects);
+}
+
+int GameObject_nrChildObjects(GameObject* self)
+{
+	return LinkedList_length(_getGenericGameObjectData(self)->mSubObjects);
+}
+
+BOOL GameObject_isRootObject(GameObject* self)
+{
+    return _getGenericGameObjectData(self)->mParent == NULL;
+}
+
+struct LinkedListIterator* GameObject_getChildIterator(GameObject* self)
+{
+    return LinkedList_getIterator(_getGenericGameObjectData(self)->mSubObjects);
+}
+
+GameObject* GameObject_getParent(GameObject* self)
+{
+    smug_assert(_objectInvariant((GameObject*)self));
+	smug_assert(!GameObject_isRootObject(self));
+	return _getGenericGameObjectData(self)->mParent;
 }
 
 void GameObject_delete(void* self)
 {
-    GameObject* go = (GameObject*)self;
-    _invariant(go);
-
-    LinkedList_deleteContents(go->drawables, Drawable_delete);
-    LinkedList_deleteContents(go->bodies, _Body_deleteVoid);
-    LinkedList_delete(go->drawables);
-    LinkedList_delete(go->bodies);
-    Interpoint_delete(go->position);
-
+    smug_assert(_objectInvariant((GameObject*)self));
+    InternalGameObject* go = InternalGameObject_getMostSpecific((InternalGameObject*)self);
+    while (go->mParent != NULL)
+    {
+        go = go->mParent;
+        go->mChild->deleteData(go->mChild->mData);
+        free(go->mChild);
+    }
+    go->deleteData(go->mData);
     free(go);
 }
 
-void GameObject_setPos(GameObject* self, float x, float y)
+InternalGameObject* InternalGameObject_inherit(InternalGameObject* self, void* data)
 {
-    _invariant(self);
-    Interpoint_setTo(self->position, Point_createFromXY(x, y));
-}
-
-void GameObject_moveTo(GameObject* self, float x, float y)
-{
-    Interpoint_moveTo(self->position, Point_createFromXY(x, y));
-}
-
-void GameObject_commitPosition(GameObject* self)
-{
-    Interpoint_commit(self->position);
-    Node* node;
-    for (node = self->drawables->first; node != NULL; node = node->next)
+    smug_assert(_objectInvariant(self));
+    smug_assert(_dataInvariant(_getGenericGameObjectData(self)));
+    smug_assert(self->mChild == NULL);
+    InternalGameObject* newNode = InternalGameObject_new(data);
+    newNode->mParent = self;
+    self->mChild = newNode;
+    newNode->mLeaf = newNode;
+    self->mLeaf = newNode;
+    while (self->mParent != NULL)
     {
-        Drawable_commitPosition((Drawable*)node->item);
+        self = self->mParent;
+        self->mLeaf = newNode;
     }
+    newNode->mRoot = self;
+    smug_assert(_objectInvariant(newNode));
+    return newNode;
 }
 
-Vector GameObject_getPos(GameObject* self)
+static BOOL InternalGameObject_isType(InternalGameObject* self, SmugType type)
 {
-    _invariant(self);
-    return Point_getVector(Interpoint_getPoint(self->position));
+    smug_assert(_objectInvariant(self));
+    // return InternalGameObject_getMostSpecific(self)->isType(self, type);
+    return InternalGameObject_isExactType(self, type) || (self->mParent != NULL && InternalGameObject_isType(self->mParent, type));
 }
 
-float GameObject_getX(GameObject* self)
+BOOL InternalGameObject_isExactType(InternalGameObject* self, SmugType type)
 {
-    _invariant(self);
-    return Point_getX(Interpoint_getPoint(self->position));
+    smug_assert(_objectInvariant(self));
+    return self->isExactType(self, type);
 }
 
-float GameObject_getY(GameObject* self)
+void* InternalGameObject_getData(InternalGameObject* self, SmugType type)
 {
-    _invariant(self);
-    return Point_getY(Interpoint_getPoint(self->position));
+    smug_assert(_objectInvariant(self));
+    smug_assert(_dataInvariant(_getGenericGameObjectData(self)));
+    self = InternalGameObject_getAsGeneric(self);
+    while (!InternalGameObject_isExactType(self, type))
+    {
+        if (self->mChild == NULL)
+        {
+            // Not an object of the specified type.
+            return NULL;
+        }
+        self = self->mChild;
+    }
+    return self->mData;
 }
 
-Point GameObject_getPosForDrawing(GameObject* self)
+BOOL GameObject_isType(GameObject* self, SmugType type)
 {
-    return Interpoint_getInterpolated(self->position);
+    smug_assert(_objectInvariant(self));
+    return InternalGameObject_isType(InternalGameObject_getMostSpecific(self), type);
 }
 
-void GameObject_addDrawable(GameObject* self, Drawable* d)
+BOOL GameObject_isExactType(GameObject* self, SmugType type)
 {
-    _invariant(self);
+    smug_assert(_objectInvariant(self));
+    return InternalGameObject_getMostSpecific(self)->isExactType(self, type);
+}
 
-    // Node* node;
-    // int i;
+BOOL GameObject_hasAttribute(GameObject* self, SmugAttribute attr)
+{
+    smug_assert(_objectInvariant(self));
+    return self->hasAttribute(self, attr);
+}
 
-    // node = self->drawables->first;
+BOOL GameObject_inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritType type)
+{
+    smug_assert(_objectInvariant(self));
+    return self->inheritAttribute(self, attr, type);
+}
 
-    // See if there is a "hole" in the list to fill.
-    // for (i = 0; i < LinkedList_length(self->drawables); i++)
+void GameObject_doRecursive(GameObject* self, void(*function)(GameObject*))
+{
+    LinkedList_doList(((GenericGameObjectData*)InternalGameObject_getData(self, SMUG_TYPE_OBJECT))->mSubObjects, (void(*)(void*))function);
+    function(self);
+}
+
+/* Protected functions for (Internal)GameObject */
+
+InternalGameObject* InternalGameObject_getParent(InternalGameObject* self)
+{
+    smug_assert(_objectInvariant(self));
+    return self->mParent;
+}
+
+InternalGameObject* InternalGameObject_getChild(InternalGameObject* self)
+{
+    smug_assert(_objectInvariant(self));
+    return self->mChild;
+}
+
+GameObject* InternalGameObject_getAsGeneric(InternalGameObject* self)
+{
+    smug_assert(_objectInvariant(self));
+    // while (self->mParent != NULL)
     // {
-        // if (node->item == NULL)
-        // {
-            // node->item = d;
-            // break;
-        // }
-        // node = node->next;
+        // self = self->mParent;
     // }
-
-    // if (i >= LinkedList_length(self->drawables))
-    // {   // There was no hole.
-        LinkedList_addLast(self->drawables, (void*)d);
-    // }
-    Drawable_setParent(d, self);
-
-    d->parent = self;
-    // Graphics_addDrawable(d);
-
-    // return i;
+    // return self;
+    return self->mRoot;
 }
 
-// Drawable* GameObject_getDrawable(GameObject* self, int drawableIndex)
-// {
-    // Node* node;
-    // int i;
-
-    // node = self->drawables->first;
-    // for (i = 0; i < drawableIndex; i++)
+InternalGameObject* InternalGameObject_getMostSpecific(InternalGameObject* self)
+{
+    smug_assert(_objectInvariant(self));
+    // while (self->mChild != NULL)
     // {
-        // node = node->next;
-        // smug_assert(node != NULL);
+        // self = self->mChild;
     // }
-    // smug_assert(node->item != NULL);
-    // return (Drawable*)node->item;
-// }
-
-void GameObject_removeDrawable(GameObject* self, struct Drawable* drawable)
-{
-    _invariant(self);
-
-    // Node* node;
-
-    if (!LinkedList_removeItem(self->drawables, drawable))
-    {
-        WARNING("Tried to remove a Drawable that wasn't in the GameObject.");
-    }
-    Drawable_removeParent(drawable);
-    // for (node = self->drawables->first; node != NULL; node = node->next)
-    // {
-        // if ((Drawable*)node->item == drawable)
-        // {
-            // LinkedList_remove(self->drawables, node);
-            // break;
-        // }
-    // }
+    // return self;
+    return self->mLeaf;
 }
 
-void GameObject_setOpacity(GameObject* self, float opacity)
+char* InternalGameObject_getTypeString(SmugType type)
 {
-    Node* node;
-    for (node = self->drawables->first; node != NULL; node = node->next)
-    {
-        Drawable_setOpacity((Drawable*)node->item, opacity);
-    }
+    if (type == SMUG_TYPE_OBJECT)
+        return "SMUG_TYPE_OBJECT";
+    else if (type == SMUG_TYPE_POSITION)
+        return "SMUG_TYPE_POSITION";
+    else if (type == SMUG_TYPE_BODY)
+        return "SMUG_TYPE_BODY";
+    else if (type == SMUG_TYPE_DRAWABLE)
+        return "SMUG_TYPE_DRAWABLE";
+    else if (type == SMUG_TYPE_SHAPE)
+        return "SMUG_TYPE_SHAPE";
+    else if (type == SMUG_TYPE_IMAGE)
+        return "SMUG_TYPE_IMAGE";
+    else if (type == SMUG_TYPE_ANIMATED_SPRITE)
+        return "SMUG_TYPE_ANIMATED_SPRITE";
+    else if (type == SMUG_TYPE_TIMER)
+        return "SMUG_TYPE_TIMER";
+    else if (type == SMUG_TYPE_DATA)
+        return "SMUG_TYPE_DATA";
+    else if (type == SMUG_TYPE_ANY)
+        return "SMUG_TYPE_ANY";
+    else
+        return "UNKNKOWN";
 }
-
-int GameObject_addBody(GameObject* self, Body* b)
-{
-    _invariant(self);
-
-    LinkedList_addLast(self->bodies, (void*)b);
-    return LinkedList_length(self->bodies) - 1;
-}
-
-/*
-void GameObject_render(GameObject* obj)
-{
-    _invariant(obj);
-    if (NULL != obj->drawable && obj->visible)
-    {
-        Drawable_render(obj->drawable, obj->x, obj->y);
-    }
-}*/

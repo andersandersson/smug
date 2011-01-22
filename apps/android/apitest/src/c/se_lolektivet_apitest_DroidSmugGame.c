@@ -64,23 +64,24 @@ JNIEXPORT void JNICALL Java_se_lolektivet_apitest_DroidSmugGame_nativeGameInit
     smugSetLogicCallback(logicCallback);
     smugSetLogicFps(fps);
     smugSetKillCallback(killCallback);
+    smugRunTest();
 
-    obj1 = smugObject_new();
-    SmugDrawable d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
+    obj1 = smugObject_newPositioned();
+    SmugObject d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
     smugDrawable_setColor(d, smugColor_create(255, 0, 0, 255));
-    smugObject_addDrawableAt(obj1, d, 240.0f, 100.0f);
+    smugObject_addObjectAt(obj1, d, 240.0f, 100.0f);
     smugAddObject(obj1);
 
-    obj2 = smugObject_new();
+    obj2 = smugObject_newPositioned();
     d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
     smugDrawable_setColor(d, smugColor_create(0, 255, 0, 255));
-    smugObject_addDrawableAt(obj2, d, 240.0f, 60.0f);
+    smugObject_addObjectAt(obj2, d, 240.0f, 60.0f);
     smugAddObject(obj2);
 
-    avatar = smugObject_new();
+    avatar = smugObject_newPositioned();
     d = smugDrawable_newFromRect(smugRect_create(0.0f, 0.0f, 40.0f, 40.0f));
     smugDrawable_setColor(d, smugColor_create(255, 255, 0, 255));
-    smugObject_addDrawableAt(avatar, d, -20.0f, -40.0f);
+    smugObject_addObjectAt(avatar, d, -20.0f, -40.0f);
     smugObject_setPos(avatar, 20.0f, 240.0f);
     smugAddObject(avatar);
     // smugDestroyObject(obj);

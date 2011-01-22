@@ -9,6 +9,7 @@
 #include <input/input.h>
 #include <engine/world.h>
 #include <engine/gameobject.h>
+#include <engine/position_object.h>
 
 #include <engine/engine.h>
 
@@ -146,27 +147,32 @@ void Engine_terminate(void)
     gInitialized = FALSE;
 }
 
+static void _recursiveAddDrawable(GameObject* object)
+{
+    if (GameObject_isType(object, SMUG_TYPE_DRAWABLE))
+    {
+        Graphics_addDrawable((GameObject*)object);
+    }
+}
+
 void Engine_addObject(GameObject* newObj)
 {
     smug_assert(gInitialized);
     LinkedList_addLast(gGameObjects, newObj);
     // Add all drawables in the object to the graphics engine.
-    Node* node;
-    for (node = newObj->drawables->first; node != NULL; node = node->next)
-    {
-        Graphics_addDrawable((Drawable*)node->item);
-    }
+    GameObject_doRecursive(newObj, _recursiveAddDrawable);
+
 }
 
 void Engine_removeObject(GameObject* obj)
 {
     smug_assert(gInitialized);
     LinkedList_removeItem(gGameObjects, obj);
-    Node* node;
-    for (node = obj->drawables->first; node != NULL; node = node->next)
-    {
-        Graphics_removeDrawable((Drawable*)node->item);
-    }
+    // Node* node;
+    // for (node = obj->drawables->first; node != NULL; node = node->next)
+    // {
+        // Graphics_removeDrawable((Drawable*)node->item);
+    // }
 }
 
 void Engine_commitPositionChanges(void)
@@ -174,6 +180,9 @@ void Engine_commitPositionChanges(void)
     Node* node;
     for (node = gGameObjects->first; node != NULL; node = node->next)
     {
-        GameObject_commitPosition((GameObject*)node->item);
+        if (GameObject_isType((GameObject*)node->item, SMUG_TYPE_POSITION))
+        {
+            PositionObject_commitPosition((GameObject*)node->item);
+        }
     }
 }

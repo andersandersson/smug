@@ -2,8 +2,11 @@
 
 #include <common/log.h>
 #include <common/common.h>
+#include <utils/linkedlist.h>
 #include <graphics/texture/texture.h>
+#include <graphics/drawable/drawable.h>
 #include <platform/opengl/opengl.h>
+#include <graphics/renderer/batchdata.h>
 
 #include <graphics/renderer/renderbatch.h>
 
@@ -73,12 +76,12 @@ unsigned int RenderBatch_getSize(RenderBatch* batch)
     return batch->dataSize;
 }
 
-void RenderBatch_addDrawable(RenderBatch* batch, Drawable* drawable)
+void RenderBatch_addDrawable(RenderBatch* batch, struct GameObject* drawable)
 {
     smug_assert(NULL != batch);
     smug_assert(NULL != drawable);
     smug_assert(Drawable_getTexture(drawable) == batch->texture);
-    smug_assert(Drawable_getObjectSize(drawable) == batch->objectSize);
+    smug_assert(Drawable_getDataSize(drawable) == batch->objectSize);
 
     // Add drawable to list
     LinkedList_addLast(batch->drawables, drawable);
@@ -102,11 +105,13 @@ void RenderBatch_write(RenderBatch* currentBatch)
 
     int writepos = 0;
     unsigned int capacity = BatchData_getCapacity(currentBatch->data);
-    unsigned int datasize;
+    unsigned int datasize = 0;
     Node* node;
     node = currentBatch->drawables->first;
+    int count = 0;
     while (NULL != node)
     {
+        count++;
         // find out how much data space the drawable needs
         datasize = Drawable_getDataSize(node->item);
 
@@ -121,7 +126,6 @@ void RenderBatch_write(RenderBatch* currentBatch)
         node = node->next;
     }
     currentBatch->dataSize = writepos;
-
 }
 
 void RenderBatch_render(RenderBatch* currentBatch)
