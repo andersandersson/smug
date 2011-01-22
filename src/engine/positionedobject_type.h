@@ -1,5 +1,5 @@
-#ifndef SMUG_ENGINE_POSITION_OBJECT_TYPE_H
-#define SMUG_ENGINE_POSITION_OBJECT_TYPE_H
+#ifndef SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H
+#define SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H
 
 #include <engine/gameobject.h>
 struct Interpoint;
@@ -11,4 +11,4 @@ typedef struct PositionedObject
     SmugInheritType mPositionInheritance;
 } PositionedObject;
 
-#endif /* SMUG_ENGINE_POSITION_OBJECT_TYPE_H */
+#endif /* SMUG_ENGINE_POSITIONEDOBJECT_TYPE_H */

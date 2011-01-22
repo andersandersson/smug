@@ -1,5 +1,5 @@
-#ifndef SMUG_ENGINE_POSITION_OBJECT_H
-#define SMUG_ENGINE_POSITION_OBJECT_H
+#ifndef SMUG_ENGINE_POSITIONEDOBJECT_H
+#define SMUG_ENGINE_POSITIONEDOBJECT_H
 
 #include <common/common.h>
 
@@ -25,4 +25,4 @@ int PositionedObject_addObjectAt(struct PositionedObject* self, struct Positione
 void PositionedObject_init(struct PositionedObject* self);
 void PositionedObject_deInit(struct PositionedObject* self);
 
-#endif // SMUG_ENGINE_POSITION_OBJECT_H
+#endif // SMUG_ENGINE_POSITIONEDOBJECT_H

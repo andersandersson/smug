@@ -12,8 +12,8 @@
 #include <engine/engine.h>
 #include <engine/gameobject.h>
 #include <engine/gameobjectiterator.h>
-#include <engine/position_object.h>
-#include <engine/position_object_type.h>
+#include <engine/positionedobject.h>
+#include <engine/positionedobject_type.h>
 #include <engine/interpoint.h>
 
 #include <engine/interface.h>

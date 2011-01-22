@@ -33,7 +33,7 @@ LOCAL_SRC_FILES := \
     engine/engine.c \
     engine/gameobject.c \
     engine/gameobjectiterator.c \
-    engine/position_object.c \
+    engine/positionedobject.c \
     engine/interpoint.c \
     graphics/interface.c \
     graphics/camera.c \

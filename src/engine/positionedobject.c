@@ -2,12 +2,12 @@
 
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
-#include <engine/position_object.h>
+#include <engine/positionedobject.h>
 #include <engine/interpoint.h>
 #include <utils/point.h>
 #include <utils/vector_type.h>
 
-#include <engine/position_object_type.h>
+#include <engine/positionedobject_type.h>
 
 
 #define _isPositionInheritType(type) (type == SMUG_POSITION_INHERIT || type == SMUG_POSITION_KEEP || type == SMUG_POSITION_RELATIVE)

@@ -4,7 +4,7 @@
 #include <utils/shapes.h>
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
-#include <engine/position_object.h>
+#include <engine/positionedobject.h>
 #include <graphics/drawable/drawable.h>
 
 #include <graphics/drawable/drawable_type.h>

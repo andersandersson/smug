@@ -2,7 +2,7 @@
 #define SMUG_GRAPHICS_DRAWABLE_DRAWABLE_TYPE_H
 
 #include <graphics/color_type.h>
-#include <engine/position_object_type.h>
+#include <engine/positionedobject_type.h>
 struct GameObject;
 struct _PositionObject;
 struct BatchData;

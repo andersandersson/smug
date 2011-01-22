@@ -9,7 +9,7 @@
 #include <input/input.h>
 #include <engine/world.h>
 #include <engine/gameobject.h>
-#include <engine/position_object.h>
+#include <engine/positionedobject.h>
 
 #include <engine/engine.h>
 

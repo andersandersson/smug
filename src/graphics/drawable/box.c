@@ -8,7 +8,7 @@
 #include <utils/shapes.h>
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
-#include <engine/position_object.h>
+#include <engine/positionedobject.h>
 #include <graphics/color.h>
 #include <graphics/sprite.h>
 #include <graphics/renderer/batchdata.h>
