@@ -6,9 +6,7 @@
 #include <engine/gameobjectiterator.h>
 #include <engine/gameobject.h>
 
-struct GameObject;
-
-GameObjectIterator* GameObject_getIterator(struct GameObject* self, int types)
+GameObjectIterator* GameObject_getIterator(GameObject* self, int types)
 {
     GameObjectIterator* iter = (GameObjectIterator*)malloc(sizeof(GameObjectIterator));
     iter->mChildIterators = LinkedList_new();
@@ -22,7 +20,7 @@ GameObjectIterator* GameObject_getIterator(struct GameObject* self, int types)
     return iter;
 }
 
-struct GameObject* GameObjectIterator_getNext(GameObjectIterator* self)
+GameObject* GameObjectIterator_getNext(GameObjectIterator* self)
 {
     LinkedListIterator* iter = (LinkedListIterator*)LinkedList_getFirst(self->mChildIterators);
     if (!self->mHasReturnedRoot)
@@ -31,7 +29,7 @@ struct GameObject* GameObjectIterator_getNext(GameObjectIterator* self)
         self->mHasReturnedRoot = TRUE;
         return LinkedListIterator_getNext(iter);
     }
-    struct GameObject* obj = (struct GameObject*)LinkedListIterator_getSame(iter);
+    GameObject* obj = (GameObject*)LinkedListIterator_getSame(iter);
     // Check for more child objects:
     if (GameObject_hasChildObjects(obj))
     {
@@ -51,7 +49,7 @@ struct GameObject* GameObjectIterator_getNext(GameObjectIterator* self)
         }
         iter = LinkedList_getFirst(self->mChildIterators);
     }
-    return (struct GameObject*)LinkedListIterator_getNext(iter);
+    return (GameObject*)LinkedListIterator_getNext(iter);
 }
 
 BOOL GameObjectIterator_hasMore(GameObjectIterator* self)
@@ -63,7 +61,7 @@ BOOL GameObjectIterator_hasMore(GameObjectIterator* self)
     }
     LinkedListIterator* metaIterator = LinkedList_getIterator(self->mChildIterators);
     LinkedListIterator* iter = (LinkedListIterator*)(LinkedListIterator_getNext(metaIterator));
-    struct GameObject* obj = (struct GameObject*)LinkedListIterator_getSame(iter);
+    GameObject* obj = (GameObject*)LinkedListIterator_getSame(iter);
     // Check for more child objects:
     if (GameObject_hasChildObjects(obj))
     {

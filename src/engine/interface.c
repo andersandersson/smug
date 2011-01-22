@@ -18,7 +18,7 @@
 
 #include <engine/interface.h>
 
-#define DO_WRONG_TYPE_ERROR(obj, type, func) smug_error(GameObject_isType((struct GameObject*)obj, type), "Wrong type for " #func)
+#define DO_WRONG_TYPE_ERROR(obj, type, func) smug_error(GameObject_isType((GameObject*)obj, type), "Wrong type for " #func)
 
 void smugRunTest(void)
 {
@@ -111,7 +111,7 @@ SMUGEXPORT void smugTerminate(void)
 
 SMUGEXPORT int smugAddObject(SmugObject obj)
 {
-    Engine_addObject((struct GameObject*)obj);
+    Engine_addObject((GameObject*)obj);
     return 0;
 }
 
@@ -177,7 +177,7 @@ SMUGEXPORT float smugObject_getY(SmugObject obj)
 
 SMUGEXPORT void smugObject_addObject(SmugObject obj, SmugObject add)
 {
-    GameObject_addObject((struct GameObject*)obj, (struct GameObject*)add);
+    GameObject_addObject((GameObject*)obj, (GameObject*)add);
 }
 
 SMUGEXPORT void smugObject_addObjectAt(SmugObject obj, SmugObject add, float x, float y)

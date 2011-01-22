@@ -149,7 +149,7 @@ void Engine_terminate(void)
     gInitialized = FALSE;
 }
 
-static void _recursiveAddDrawable(struct GameObject* object)
+static void _recursiveAddDrawable(GameObject* object)
 {
     if (GameObject_isType(object, SMUG_TYPE_DRAWABLE))
     {
@@ -157,7 +157,7 @@ static void _recursiveAddDrawable(struct GameObject* object)
     }
 }
 
-void Engine_addObject(struct GameObject* newObj)
+void Engine_addObject(GameObject* newObj)
 {
     smug_assert(gInitialized);
     LinkedList_addLast(gGameObjects, newObj);
@@ -166,7 +166,7 @@ void Engine_addObject(struct GameObject* newObj)
 
 }
 
-void Engine_removeObject(struct GameObject* obj)
+void Engine_removeObject(GameObject* obj)
 {
     smug_assert(gInitialized);
     LinkedList_removeItem(gGameObjects, obj);
@@ -182,7 +182,7 @@ void Engine_commitPositionChanges(void)
     Node* node;
     for (node = gGameObjects->first; node != NULL; node = node->next)
     {
-        if (GameObject_isType((struct GameObject*)node->item, SMUG_TYPE_POSITIONED))
+        if (GameObject_isType((GameObject*)node->item, SMUG_TYPE_POSITIONED))
         {
             PositionedObject_commitPosition((struct PositionedObject*)node->item);
         }

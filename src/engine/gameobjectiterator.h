@@ -2,8 +2,7 @@
 #define SMUG_ENGINE_GAMEOBJECTITERATOR_H
 
 #include <common/common.h>
-
-struct GameObject;
+#include <engine/gameobject_decl.h>
 struct LinkedList;
 
 typedef struct GameObjectIterator
@@ -14,8 +13,8 @@ typedef struct GameObjectIterator
     struct LinkedList* mRootList;
 } GameObjectIterator;
 
-GameObjectIterator* GameObject_getIterator(struct GameObject* self, int types);
-struct GameObject* GameObjectIterator_getNext(GameObjectIterator* self);
+GameObjectIterator* GameObject_getIterator(GameObject* self, int types);
+GameObject* GameObjectIterator_getNext(GameObjectIterator* self);
 BOOL GameObjectIterator_hasMore(GameObjectIterator* self);
 void GameObjectIterator_delete(GameObjectIterator* self);
 

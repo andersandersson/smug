@@ -3,8 +3,9 @@
 
 #include <common/common.h>
 
+#include <engine/gameobject_decl.h>
+
 struct LinkedListIterator;
-struct GameObject;
 
 #define MAX_INHERITANCE_DEPTH 4
 
@@ -49,27 +50,27 @@ typedef enum SmugInheritType
     SMUG_INHERIT_UNDEFINED
 } SmugInheritType;
 
-int GameObject_addObject(struct GameObject* self, struct GameObject* obj);
-void GameObject_removeObject(struct GameObject* self, struct GameObject* child);
-BOOL GameObject_hasChildObjects(struct GameObject* self);
-int GameObject_nrChildObjects(struct GameObject* self);
-BOOL GameObject_isRootObject(struct GameObject* self);
-struct LinkedListIterator* GameObject_getChildIterator(struct GameObject* self);
-struct GameObject* GameObject_getParent(struct GameObject* self);
+int GameObject_addObject(GameObject* self, GameObject* obj);
+void GameObject_removeObject(GameObject* self, GameObject* child);
+BOOL GameObject_hasChildObjects(GameObject* self);
+int GameObject_nrChildObjects(GameObject* self);
+BOOL GameObject_isRootObject(GameObject* self);
+struct LinkedListIterator* GameObject_getChildIterator(GameObject* self);
+GameObject* GameObject_getParent(GameObject* self);
 
-BOOL GameObject_isType(struct GameObject* self, SmugType type);
-BOOL GameObject_isExactType(struct GameObject* self, SmugType type);
-BOOL GameObject_hasAttribute(struct GameObject* self, SmugAttribute attr);
-BOOL GameObject_inheritAttribute(struct GameObject* self, SmugAttribute attr, SmugInheritType type);
+BOOL GameObject_isType(GameObject* self, SmugType type);
+BOOL GameObject_isExactType(GameObject* self, SmugType type);
+BOOL GameObject_hasAttribute(GameObject* self, SmugAttribute attr);
+BOOL GameObject_inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritType type);
 
-void GameObject_doRecursive(struct GameObject* self, void(*function)(struct GameObject*));
+void GameObject_doRecursive(GameObject* self, void(*function)(GameObject*));
 
 /** Constructor for a generic GameObject. A generic GameObject can only be used to attach other objects to.
   *
   * @relatesalso GameObject
   * @return A pointer to the GameObject just created.
   */
-struct GameObject* GameObject_newGeneric(void);
+GameObject* GameObject_newGeneric(void);
 
 /** Destructor for any GameObject.
   *
