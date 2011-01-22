@@ -8,6 +8,8 @@
 
 #include <graphics/graphics.h>
 
+struct Drawable;
+
 Renderer* sceneRenderer = NULL;
 
 int gVBOSupported = 0;
@@ -139,12 +141,13 @@ void Graphics_render(void)
     // glFinish();
 }
 
-void Graphics_addDrawable(Drawable* d)
+void Graphics_addDrawable(struct Drawable* d)
 {
+    // TODO: Assert right type.
     Renderer_addDrawable(sceneRenderer, d);
 }
 
-void Graphics_removeDrawable(Drawable* d)
+void Graphics_removeDrawable(struct Drawable* d)
 {
     WARNING("Unimplemented function Graphics_removeDrawable");
 }

@@ -5,8 +5,7 @@
 #ifndef GRAPHICS_DRAWABLE_BOX_H
 #define GRAPHICS_DRAWABLE_BOX_H
 
-#include <graphics/drawable/drawable.h>
-#include <graphics/renderer/renderbatch.h>
+struct DrawableShape;
 #include <utils/vector_type.h>
 
 /**
@@ -14,7 +13,7 @@
  * @relatesalso Drawable
  * @return Drawable
  */
-Drawable* Drawable_newBox(void);
+struct DrawableShape* DrawableShape_newBox(void);
 
 /**
  * Creates new box drawable from a rectangle
@@ -22,7 +21,7 @@ Drawable* Drawable_newBox(void);
  * @param rect Rectangle
  * @return Drawable
  */
-Drawable* Drawable_newBoxFromSize(Vector size);
+struct DrawableShape* DrawableShape_newBoxFromSize(Vector size);
 
 #endif //GRAPHICS_DRAWABLE_BOX_H
 

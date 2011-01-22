@@ -31,7 +31,7 @@ Point Interpoint_getPoint(Interpoint* self)
 
 void Interpoint_setTo(Interpoint* self, Point p)
 {
-    // smug_printf("Setting interpoint to %f, %f", Point_getX(p), Point_getY(p));
+    // smug_printf("Setting interpoint %i to %f, %f", self, Point_getX(p), Point_getY(p));
     self->point = p;
     self->oldPoint = p;
     self->pointChangedThisHeartbeat = TRUE;
@@ -41,7 +41,7 @@ void Interpoint_setTo(Interpoint* self, Point p)
 
 void Interpoint_moveTo(Interpoint* self, Point p)
 {
-    // smug_printf("Moving interpoint to %f, %f", Point_getX(p), Point_getY(p));
+    // smug_printf("Moving interpoint %i to %f, %f", self, Point_getX(p), Point_getY(p));
     self->pointChangedThisHeartbeat = TRUE;
     if (self->pointCommitted)
     {
@@ -66,7 +66,7 @@ Point Interpoint_getInterpolated(Interpoint* self)
     static float factor;
     if (Point_equal(self->point, self->oldPoint))
     {
-        // smug_printf("Points equal. Returning %i, %i", Point_getX(self.point), Point_getY(self.point));
+        // smug_printf("Points equal. Returning %i, %i", Point_getX(self->point), Point_getY(self->point));
         return self->point;
     }
     else

@@ -17,6 +17,18 @@ Vector Vector_create2d(float x, float y)
 }
 
 
+Vector* Vector_new2d(float x, float y)
+{
+    Vector* newVector = (Vector*)malloc(sizeof(Vector));
+    *newVector = Vector_create2d(x, y);
+    return newVector;
+}
+
+void Vector_delete2d(void* self)
+{
+    free((Vector*)self);
+}
+
 Vector Vector_crossProduct2d(Vector v)
 {
     return Vector_create2d(-v.d[1], v.d[0]);

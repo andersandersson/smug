@@ -9,8 +9,12 @@
 #include <input/input.h>
 #include <engine/world.h>
 #include <engine/gameobject.h>
+#include <engine/position_object.h>
 
 #include <engine/engine.h>
+
+struct PositionedObject;
+struct Drawable;
 
 Thread* gConsoleThread = NULL;
 
@@ -21,7 +25,7 @@ static LinkedList* gGameObjects = NULL;
 // Checks that all subsystems have been initialized.
 void _assertSubsystemsInitialized(void)
 {
-	smug_assert(Log_isInitialized());
+    smug_assert(Log_isInitialized());
     smug_assert(Platform_isInitialized());
     smug_assert(Signal_isInitialized());
     smug_assert(Input_isInitialized());
@@ -31,7 +35,7 @@ void _assertSubsystemsInitialized(void)
 
 BOOL _subsystemsInitialized(void)
 {
-	return Log_isInitialized() &&
+    return Log_isInitialized() &&
            Platform_isInitialized() &&
            Signal_isInitialized() &&
            Input_isInitialized() &&
@@ -70,8 +74,8 @@ int Engine_init(BOOL verbose, BOOL console)
     if (!Signal_init())
         return 0;
 
-	if (!Input_init())
-		return 0;
+    if (!Input_init())
+        return 0;
 
     if (!Graphics_init())
         return 0;
@@ -132,7 +136,7 @@ void Engine_terminate(void)
 
     Graphics_terminate();
 
-	Input_terminate();
+    Input_terminate();
 
     Signal_terminate();
 
@@ -146,27 +150,32 @@ void Engine_terminate(void)
     gInitialized = FALSE;
 }
 
+static void _recursiveAddDrawable(GameObject* object)
+{
+    if (GameObject_isType(object, SMUG_TYPE_DRAWABLE))
+    {
+        Graphics_addDrawable((struct Drawable*)object);
+    }
+}
+
 void Engine_addObject(GameObject* newObj)
 {
     smug_assert(gInitialized);
     LinkedList_addLast(gGameObjects, newObj);
     // Add all drawables in the object to the graphics engine.
-    Node* node;
-    for (node = newObj->drawables->first; node != NULL; node = node->next)
-    {
-        Graphics_addDrawable((Drawable*)node->item);
-    }
+    GameObject_doRecursive(newObj, _recursiveAddDrawable);
+
 }
 
 void Engine_removeObject(GameObject* obj)
 {
     smug_assert(gInitialized);
     LinkedList_removeItem(gGameObjects, obj);
-    Node* node;
-    for (node = obj->drawables->first; node != NULL; node = node->next)
-    {
-        Graphics_removeDrawable((Drawable*)node->item);
-    }
+    // Node* node;
+    // for (node = obj->drawables->first; node != NULL; node = node->next)
+    // {
+        // Graphics_removeDrawable((Drawable*)node->item);
+    // }
 }
 
 void Engine_commitPositionChanges(void)
@@ -174,6 +183,9 @@ void Engine_commitPositionChanges(void)
     Node* node;
     for (node = gGameObjects->first; node != NULL; node = node->next)
     {
-        GameObject_commitPosition((GameObject*)node->item);
+        if (GameObject_isType((GameObject*)node->item, SMUG_TYPE_POSITIONED))
+        {
+            PositionedObject_commitPosition((struct PositionedObject*)node->item);
+        }
     }
 }

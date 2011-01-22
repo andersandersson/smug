@@ -2,9 +2,9 @@
 #define SMUG_GRAPHICS_RENDERER_LAYER_H
 
 #include <common/common.h>
-#include <graphics/drawable/drawable.h>
 #include <utils/arraylist.h>
-#include <utils/linkedlist.h>
+
+struct Drawable;
 
 /*
  * A layer consists of a list of drawables plus a two-dimensional array
@@ -21,7 +21,7 @@ typedef struct Layer
 Layer* Layer_new(void);
 void Layer_delete(void* layer);
 
-void Layer_addDrawable(Layer* layer, Drawable* drawable);
+void Layer_addDrawable(Layer* layer, struct Drawable* drawable);
 
 void Layer_render(Layer* layer);
 float Layer_getParallax(Layer* layer);

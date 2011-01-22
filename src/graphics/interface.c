@@ -1,4 +1,6 @@
 #include <common/common.h>
+#include <common/error.h>
+#include <engine/gameobject.h>
 #include <utils/rectangle.h>
 #include <graphics/color.h>
 #include <graphics/drawable/box.h>
@@ -6,14 +8,17 @@
 
 #include <graphics/interface.h>
 
-SmugDrawable smugDrawable_newFromRect(SmugRect rect)
+struct Drawable;
+
+SmugObject smugDrawable_newFromRect(SmugRect rect)
 {
-    return Drawable_newBoxFromSize(Rectangle_getSize(rect));
+    return (SmugObject)DrawableShape_newBoxFromSize(Rectangle_getSize(rect));
 }
 
-void smugDrawable_setColor(SmugDrawable drawable, SmugColor color)
+void smugDrawable_setColor(SmugObject drawable, SmugColor color)
 {
-    Drawable_setColor(drawable, color);
+    smug_error(GameObject_isType(drawable, SMUG_TYPE_DRAWABLE), "Wrong type for smugDrawable_setColor!");
+    Drawable_setColor((struct Drawable*)drawable, color);
 }
 
 SmugColor smugColor_create(int r, int g, int b, int a)

@@ -7,16 +7,19 @@
   * @{
   */
 
-#ifndef SMUG_PHYSICS_SHAPES_H
-#define SMUG_PHYSICS_SHAPES_H
+#ifndef SMUG_UTILS_SHAPES_H
+#define SMUG_UTILS_SHAPES_H
 
+#include <common/common.h>
 #include <utils/rectangle_type.h>
 
 /** Describes the type of a Shape */
 typedef unsigned int SHAPE_TYPE;
 
-#define SHAPE_UNKNOWN   0x00
-#define SHAPE_RECTANGLE 0x01
+#define SHAPE_UNKNOWN       0x00
+#define SHAPE_RECTANGLE     0x01
+#define SHAPE_UNFINISHED    0x02
+#define SHAPE_MULTIPOINT    0x03
 
 
 /** Container object for shapes
@@ -60,8 +63,18 @@ void Shape_delete(Shape* shape);
  * @relatesalso Shape
  * @return Shape
  */
-Shape* Shape_createFromRectangle(Rectangle rect);
+Shape* Shape_newFromRectangle(Rectangle rect);
+Rectangle Shape_getAsRectangle(Shape* self);
 
-#endif // SMUG_PHYSICS_SHAPES_H
+Shape* Shape_newMultipoint();
+Shape* Shape_addPoint(Shape* self, Vector point);
+Shape* Shape_finishMultipoint(Shape* self);
+
+Vector Shape_getFirstPoint(Shape* self);
+BOOL Shape_morePoints(Shape* self);
+Vector Shape_getNextPoint(Shape* self);
+int Shape_getNrPoints(Shape* self);
+
+#endif // SMUG_UTILS_SHAPES_H
 
 /**@}*/

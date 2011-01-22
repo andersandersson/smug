@@ -220,12 +220,12 @@ int Platform_init(int width, int height, BOOL fullscreen);
 void Platform_initInput(void);
 
 /**
- * Returns true if the system is initialized
+ * Returns true if the      is initialized
  */
 BOOL Platform_isInitialized(void);
 
 /**
- * Terminate Platform system
+ * Terminate Platform
  */
 void Platform_terminate(void);
 
@@ -265,7 +265,7 @@ void Platform_enableLogicCallback(BOOL enable);
 void Platform_setLogicFps(float fps);
 
 /**
- * Get the current system time
+ * Get the current      time
  */
 TIME Platform_getTime(void);
 

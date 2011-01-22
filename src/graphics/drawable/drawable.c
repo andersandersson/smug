@@ -1,175 +1,186 @@
-#include <stdlib.h>
 #include <smugstd.h>
 
-#include <common/common.h>
-#include <utils/point.h>
-#include <graphics/graphics.h>
 #include <graphics/color.h>
-
+#include <utils/shapes.h>
+#include <engine/gameobject.h>
+#include <engine/gameobject_protected.h>
+#include <engine/position_object.h>
 #include <graphics/drawable/drawable.h>
 
-Drawable* Drawable_new(unsigned int vertexcount)
+#include <graphics/drawable/drawable_type.h>
+
+struct BatchData;
+struct Sprite;
+
+
+#define _isColorInheritType(type) (type == SMUG_COLOR_INHERIT || type == SMUG_COLOR_KEEP || type == SMUG_COLOR_BLEND)
+#define _isOpacityInheritType(type) (type == SMUG_OPACITY_INHERIT || type == SMUG_OPACITY_KEEP)
+#define _isVisibilityInheritType(type) (type == SMUG_VISIBILITY_INHERIT || type == SMUG_VISIBILITY_KEEP)
+
+
+/*************************************************/
+/** Local methods overriding ones in GameObject **/
+/*************************************************/
+
+static BOOL _hasAttribute(GameObject* self, SmugAttribute attr)
 {
-    Drawable* ret = (Drawable*)malloc(sizeof(Drawable));
-    ret->layer = 0;
-    ret->pos = Interpoint_new(Point_createFromXY(0, 0));
-    ret->relativePos = Interpoint_new(Point_createFromXY(0, 0));
-    ret->color = Color_create();
-    ret->followObject = TRUE;
-    ret->vertexcount = vertexcount;
-    ret->vertexOffsets = (Vector*)malloc(sizeof(Vector) * vertexcount);
-    ret->sprite = NULL;
-    ret->type = 0;
-    ret->parent = NULL;
-    return ret;
+    return  attr == SMUG_ATTR_COLOR ||
+            attr == SMUG_ATTR_OPACITY ||
+            attr == SMUG_ATTR_VISIBILITY;
 }
 
-void Drawable_writeBatchData(Drawable* d, BatchData* batchdata, unsigned int start)
+static BOOL _inheritAttribute(GameObject* self, SmugAttribute attr, SmugInheritType type)
 {
-    smug_assert(NULL != d);
-    if (NULL != ((Drawable*)d)->_writeBatchDataFunc)
-        ((Drawable*)d)->_writeBatchDataFunc(d, batchdata, start);
+    switch (attr)
+    {
+        case SMUG_ATTR_COLOR:
+            if (_isColorInheritType(type))
+            {
+                ((Drawable*)self)->mColorInheritance = type;
+                return TRUE;
+            }
+            return FALSE;
+        case SMUG_ATTR_OPACITY:
+            if (_isOpacityInheritType(type))
+            {
+                ((Drawable*)self)->mOpacityInheritance = type;
+                return TRUE;
+            }
+            return FALSE;
+        case SMUG_ATTR_VISIBILITY:
+            if (_isVisibilityInheritType(type))
+            {
+                ((Drawable*)self)->mVisibilityInheritance = type;
+                return TRUE;
+            }
+            return FALSE;
+        default:
+            return FALSE;
+    }
 }
 
-int Drawable_getDataSize(Drawable* d)
+static void _delete(void* self)
 {
-    smug_assert(NULL != d);
-    if (NULL != ((Drawable*)d)->_getDataSizeFunc)
-        return ((Drawable*)d)->_getDataSizeFunc(d);
-
-    return 0;
+	Drawable_deInit((Drawable*)self);
+    free((Drawable*)self);
 }
 
-void Drawable_delete(void* d)
+
+/***************************/
+/** 'Protected' functions **/
+/***************************/
+
+void Drawable_deInit(Drawable* self)
 {
-    smug_assert(NULL != d);
-    free(((Drawable*)d)->vertexOffsets);
-    Interpoint_delete(((Drawable*)d)->pos);
-    Interpoint_delete(((Drawable*)d)->relativePos);
-    free(d);
+    self->mColorInheritance = SMUG_INHERIT_UNDEFINED;
+    self->mVisibilityInheritance = SMUG_INHERIT_UNDEFINED;
+    self->mOpacityInheritance = SMUG_INHERIT_UNDEFINED;
+    self->mType = 0;
+    self->mLayer = 0;
+    self->_writeBatchDataFunc = NULL;
+    self->_getDataSizeFunc = NULL;
+    self->_getObjectSizeFunc = NULL;
+	PositionedObject_deInit((PositionedObject*)self);
 }
 
-void Drawable_setPos(Drawable* d, Point pos)
+void Drawable_init(Drawable* self)
 {
-    smug_assert(NULL != d);
-    Interpoint_setTo(d->pos, pos);
-    d->followObject = FALSE;
+	PositionedObject_init((PositionedObject*)self);
+    ((GameObject*)self)->hasAttribute = _hasAttribute;
+    ((GameObject*)self)->inheritAttribute = _inheritAttribute;
+    ((GameObject*)self)->deleteMe = _delete;
+    ((GameObject*)self)->mTypes |= SMUG_TYPE_DRAWABLE;
+
+    self->mColor = Color_createFromRGBAi(0, 0, 0, 0);
+    self->mColorInheritance = SMUG_COLOR_INHERIT;
+    self->mVisible = TRUE;
+    self->mVisibilityInheritance = SMUG_VISIBILITY_INHERIT;
+    self->mOpacity = 1.0f;
+    self->mOpacityInheritance = SMUG_OPACITY_INHERIT;
+    self->mType = 0;  // TODO: proper value, whatever that is.
+    self->mLayer = 0;
+    self->_writeBatchDataFunc = NULL;
+    self->_getDataSizeFunc = NULL;
+    self->_getObjectSizeFunc = NULL;
 }
 
-void Drawable_moveTo(Drawable* self, Point pos)
+
+/**********************/
+/** public functions **/
+/**********************/
+
+Drawable* Drawable_newGeneric()
+{
+	Drawable* newObj = (Drawable*)malloc(sizeof(Drawable*));
+	Drawable_init(newObj);
+    return newObj;
+}
+
+void Drawable_writeBatchData(Drawable* self, struct BatchData* batchdata, unsigned int start)
 {
     smug_assert(NULL != self);
-    Interpoint_moveTo(self->pos, pos);
-    self->followObject = FALSE;
+    self->_writeBatchDataFunc(self, batchdata, start);
 }
 
-void Drawable_setPosRelative(Drawable* d, Point pos)
+int Drawable_getDataSize(Drawable* self)
 {
-    smug_assert(NULL != d);
-    Interpoint_setTo(d->relativePos, pos);
-    d->followObject = TRUE;
+    smug_assert(NULL != self);
+    return self->_getDataSizeFunc(self);
 }
 
-void Drawable_moveToRelative(Drawable* d, Point pos)
+void Drawable_setLayer(Drawable* self, unsigned int layer)
 {
-    smug_assert(NULL != d);
-    Interpoint_moveTo(d->relativePos, pos);
-    d->followObject = TRUE;
+    smug_assert(NULL != self);
+    self->mLayer = layer;
 }
 
-Point Drawable_getPosForDrawing(Drawable* self)
+unsigned int Drawable_getLayer(Drawable* self)
 {
-    if (self->followObject)
-    {
-        if (self->parent != NULL)
-        {
-            return Point_add(Interpoint_getInterpolated(self->relativePos), GameObject_getPosForDrawing(self->parent));
-        }
-        else
-        {
-            return Interpoint_getInterpolated(self->relativePos);
-        }
-    }
-    else
-    {
-        return Interpoint_getInterpolated(self->pos);
-    }
+    smug_assert(NULL != self);
+    return self->mLayer;
 }
 
-void Drawable_commitPosition(Drawable* self)
+unsigned int Drawable_getObjectSize(Drawable* self)
 {
-    Interpoint_commit(self->pos);
-    Interpoint_commit(self->relativePos);
+    smug_assert(NULL != self);
+    return self->_getObjectSizeFunc(self);
 }
 
-void Drawable_setParent(Drawable* self, GameObject* parent)
+struct Sprite* Drawable_getSprite(Drawable* self)
 {
-    smug_assert(self != NULL);
-    self->parent = parent;
-}
-
-void Drawable_removeParent(Drawable* self)
-{
-    smug_assert(self != NULL);
-    self->parent = NULL;
-}
-
-void Drawable_followObject(Drawable* self, BOOL follow)
-{
-    self->followObject = follow;
-}
-
-void Drawable_setSprite(Drawable* d, Sprite* sprite)
-{
-    smug_assert(NULL != d);
-    d->sprite = sprite;
-}
-
-void Drawable_setLayer(Drawable* d, unsigned int layer)
-{
-    smug_assert(NULL != d);
-    d->layer = layer;
-}
-
-void Drawable_setColor(Drawable* d, Color color)
-{
-	smug_assert(NULL != d);
-	d->color = color;
-}
-
-void Drawable_setOpacity(Drawable* self, float opacity)
-{
-    self->color = Color_setCompAf(self->color, opacity);
-}
-
-unsigned int Drawable_getLayer(Drawable* d)
-{
-    smug_assert(NULL != d);
-    return d->layer;
-}
-
-Texture* Drawable_getTexture(Drawable* d)
-{
-    smug_assert(NULL != d);
-    if (NULL != d->sprite)
-    {
-        return d->sprite->texture;
-    }
     return NULL;
 }
 
-unsigned int Drawable_getTextureID(Drawable* d)
+BOOL Drawable_setColor(Drawable* self, Color c)
 {
-    smug_assert(NULL != d);
-    if (NULL != d->sprite)
-    {
-        return d->sprite->texture->texid;
-    }
-    return 0;
+    self->mColor = c;
+    return TRUE;
 }
 
-unsigned int Drawable_getObjectSize(Drawable* d)
+BOOL Drawable_getColor(Drawable* self, Color* c)
 {
-    smug_assert(NULL != d);
-    return d->vertexcount;
+    *c = self->mColor;
+    return TRUE;
+}
+
+BOOL Drawable_setOpacity(Drawable* self, float opacity)
+{
+    self->mOpacity = opacity;
+    return TRUE;
+}
+
+BOOL Drawable_getOpacity(Drawable* self, float* opacity)
+{
+    *opacity = self->mOpacity;
+    return TRUE;
+}
+
+struct Texture* Drawable_getTexture(struct Drawable* d)
+{
+    return NULL;
+}
+
+unsigned int Drawable_getTextureID(struct Drawable* d)
+{
+    return 0;
 }
