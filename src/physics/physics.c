@@ -118,8 +118,8 @@ static int _compareCollisionData(void* self, void* left, void* right)
       }
 
     // If the pair is already in the collision list, consider them to be the same
-    if(_self->self == _other->self && _self->other == _other->other ||
-       _self->self == _other->other && _self->other == _other->self)
+    if((_self->self == _other->self && _self->other == _other->other) ||
+       (_self->self == _other->other && _self->other == _other->self))
       {
 	return 0;
       }       
@@ -162,6 +162,8 @@ static int _compareCollisionData(void* self, void* left, void* right)
       {
 	return 1;
       }
+	// What should this return as default value?
+	return 0;
 }
 
 
@@ -184,25 +186,25 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
     float self_x_start = Rectangle_getX(self->shape->data) + Point_getX(*self_start);
     float self_x_vel = Vector_getX(self_velocity);
     float self_x_acc = Vector_getX(self_acceleration);
-    float self_x_end = self_x_start + self_x_vel*delta_time + self_x_acc*0.5*delta_time*delta_time;
+    // float self_x_end = self_x_start + self_x_vel*delta_time + self_x_acc*0.5*delta_time*delta_time;
     float self_width = Rectangle_getW(self->shape->data);
 
     float other_x_start = Rectangle_getX(other->shape->data) + Point_getX(*other_start);
     float other_x_vel = Vector_getX(other_velocity);
     float other_x_acc = Vector_getX(other_acceleration);
-    float other_x_end = other_x_start + other_x_vel*delta_time + other_x_acc*0.5*delta_time*delta_time;
+    // float other_x_end = other_x_start + other_x_vel*delta_time + other_x_acc*0.5*delta_time*delta_time;
     float other_width = Rectangle_getW(other->shape->data);
 
     float self_y_start = Rectangle_getY(self->shape->data) + Point_getY(*self_start);
     float self_y_vel = Vector_getY(self_velocity);
     float self_y_acc = Vector_getY(self_acceleration);
-    float self_y_end = self_y_start + self_y_vel*delta_time + self_y_acc*0.5*delta_time*delta_time;
+    // float self_y_end = self_y_start + self_y_vel*delta_time + self_y_acc*0.5*delta_time*delta_time;
     float self_height = Rectangle_getH(self->shape->data);
 
     float other_y_start = Rectangle_getY(other->shape->data) + Point_getY(*other_start);
     float other_y_vel = Vector_getY(other_velocity);
     float other_y_acc = Vector_getY(other_acceleration);
-    float other_y_end = other_y_start + other_y_vel*delta_time + other_y_acc*0.5*delta_time*delta_time;
+    // float other_y_end = other_y_start + other_y_vel*delta_time + other_y_acc*0.5*delta_time*delta_time;
     float other_height = Rectangle_getH(other->shape->data);
 
     float t_x_in[2], t_x_out[2];
@@ -231,7 +233,7 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
     BOOL same_y_speed = FALSE;
 
     int side;
-    float overlap;
+    // float overlap;
     
     side = _collideInterval1D(self_x_start, self_width, other_x_start, other_width, &wayout_x);
     //DEBUG("WO-X: (%f,%f) vs (%f,%f) - %f", self_x_start, self_height, other_x_start, other_height, wayout_y);
@@ -240,7 +242,7 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
 	overlap_x = TRUE;
 	same_x_speed = TRUE;
 	
-	if(side == -1 || side == 0 && self < other)
+	if(side == -1 || (side == 0 && self < other))
 	  {
 	    wayout_x *= -1.0;
 	  }	  
@@ -253,7 +255,7 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
 	overlap_y = TRUE;
 	same_y_speed = TRUE;
 
-	if(side == -1 || side == 0 && self < other)
+	if(side == -1 || (side == 0 && self < other))
 	  {
 	    wayout_y *= -1.0;
 	  }	  
@@ -357,6 +359,8 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
 	      LinkedList_addLast(collisions, collision_data);
 	    }
 	}
+	// TODO: What should this function return?
+	return TRUE;
 }
 
 
@@ -367,10 +371,10 @@ static BOOL _detectCollisions(LinkedList* self, LinkedList* other, TIME delta_ti
     Node* self_node;
     Node* other_node;
 
-    Point self_start;
-    Point self_end;
-    Point other_start;
-    Point other_end;
+    // Point self_start;
+    // Point self_end;
+    // Point other_start;
+    // Point other_end;
 
     BOOL changes_made = FALSE;
 
@@ -498,7 +502,7 @@ int _default_handleEnterCollision(void* lparam, void* rparam)
   Vector velocity_self_n = Vector_projection(self_velocity, data->normal);
   Vector velocity_self_p = Vector_sub(self_velocity, velocity_self_n);
 
-  Vector velocity_other_n = Vector_projection(other_velocity, data->normal);
+  // Vector velocity_other_n = Vector_projection(other_velocity, data->normal);
 
   float v1 = Vector_dotProduct(self_velocity, data->normal);
   float v2 = Vector_dotProduct(other_velocity, data->normal);
@@ -552,7 +556,7 @@ int _default_handleEnterCollision(void* lparam, void* rparam)
 int _default_handleInCollision(void* lparam, void* rparam)
 {
   CollisionData* data = (CollisionData*) rparam;
-  float length = Vector_length(data->wayout);
+  // float length = Vector_length(data->wayout);
   Node* node;
 
   if(data->self->immovable == TRUE)
@@ -589,7 +593,7 @@ int _default_handleInCollision(void* lparam, void* rparam)
 
 int _default_handleExitCollision(void* lparam, void* rparam)
 {
-  CollisionData* data = (CollisionData*) rparam;
+  // CollisionData* data = (CollisionData*) rparam;
   //DEBUG("COLLISION EXIT: %f", data->time);
   return FALSE;
 }
@@ -614,7 +618,7 @@ int Physics_init(void)
 {
     smug_assert(!isInitialized);
 
-    float t;
+    // float t;
     body_map = Map_new();
 
     collision_hooks = Map_new();

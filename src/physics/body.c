@@ -68,7 +68,7 @@ void Body_moveTo(Body* body, float x, float y)
 
 void Body_clearWaypoints(Body* body)
 {
-  Node* node = NULL;
+  // Node* node = NULL;
 
   while(body->waypoints->first != NULL)
     {

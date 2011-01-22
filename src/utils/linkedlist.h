@@ -86,6 +86,11 @@ void LinkedList_insertAfter(LinkedList* self, Node* node, void* item);
 
 void LinkedList_insertBefore(LinkedList* self, Node* node, void* item);
 
+void* LinkedList_getLast(LinkedList* self);
+void* LinkedList_popLast(LinkedList* self);
+void* LinkedList_getFirst(LinkedList* self);
+void* LinkedList_popFirst(LinkedList* self);
+
 BOOL LinkedList_isEmpty(LinkedList* self);
 
 int LinkedList_length(LinkedList* self);
