@@ -54,12 +54,16 @@ LOCAL_SRC_FILES := \
     physics/interface.c \
     physics/physics.c \
     physics/body.c \
-    physics/shapes.c \
+    physics/calc.c \
+    physics/waypoint.c \
     utils/interface.c \
     utils/arraylist.c \
+    utils/binarysearchtree.c \
     utils/hook.c \
     utils/linkedlist.c \
     utils/map.c \
+    utils/orderedset.c \
+    utils/pair.c \
     utils/pathname.c \
     utils/point.c \
     utils/rectangle.c \
