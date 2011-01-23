@@ -152,6 +152,7 @@ void Platform_setLogicFps(float fps)
 {
     gFps = fps;
     JNIEnv* env = getJniEnvironment();
+    gHeartbeatClass = JCALL1(env, FindClass, "se/lolektivet/droidsmug/Heartbeat");
     JCALL3(env, CallStaticVoidMethod, gHeartbeatClass, gHeartbeat_changeFps, (jfloat)fps);
 }
 
