@@ -19,29 +19,33 @@ static BOOL isInitialized = FALSE;
 static void printGLError(void)
 {
     int err = glGetError();
-
-    switch (err)
+    while (err != GL_NO_ERROR)
     {
-        case GL_INVALID_ENUM:
-            ERROR("GL error GL_INVALID_ENUM\n");
-            break;
-        case GL_INVALID_VALUE:
-            ERROR("GL error GL_INVALID_VALUE\n");
-            break;
-        case GL_INVALID_OPERATION:
-            ERROR("GL error GL_INVALID_OPERATION\n");
-            break;
-        case GL_STACK_OVERFLOW:
-            ERROR("GL error GL_STACK_OVERFLOW\n");
-            break;
-        case GL_STACK_UNDERFLOW:
-            ERROR("GL error GL_STACK_UNDERFLOW\n");
-            break;
-        case GL_OUT_OF_MEMORY:
-            ERROR("GL error GL_OUT_OF_MEMORY\n");
-            break;
-        default:
-            break;
+        switch (err)
+        {
+            case GL_INVALID_ENUM:
+                ERROR("GL error GL_INVALID_ENUM");
+                break;
+            case GL_INVALID_VALUE:
+                ERROR("GL error GL_INVALID_VALUE");
+                break;
+            case GL_INVALID_OPERATION:
+                ERROR("GL error GL_INVALID_OPERATION");
+                break;
+            case GL_STACK_OVERFLOW:
+                ERROR("GL error GL_STACK_OVERFLOW");
+                break;
+            case GL_STACK_UNDERFLOW:
+                ERROR("GL error GL_STACK_UNDERFLOW");
+                break;
+            case GL_OUT_OF_MEMORY:
+                ERROR("GL error GL_OUT_OF_MEMORY");
+                break;
+            default:
+                ERROR("GL error of unknown type: %i", err);
+                break;
+        }
+        err = glGetError();
     }
 }
 
@@ -67,7 +71,7 @@ static int setupGL(void)
         WARNING("VBOs are not supported, rendering will use vertex arrays.\n");
     }
 
-    DEBUG("Initializing GL");
+    DEBUG("Initializing GL. Version: %s", glGetString(GL_VERSION));
     glDisable(GL_CULL_FACE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      // 4-byte pixel alignment
 
@@ -90,7 +94,7 @@ static int setupGL(void)
 
 void Graphics_setWindowSize(double w, double h)
 {
-    // glViewport(0, 0, (int)w, (int)h);
+    glViewport(0, 0, (int)w, (int)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 #ifdef SMUG_GLES
@@ -100,6 +104,7 @@ void Graphics_setWindowSize(double w, double h)
 #endif /* SMUG_GLES */
 
     glMatrixMode(GL_MODELVIEW);
+    printGLError();
 }
 
 int Graphics_init(void)
@@ -138,6 +143,7 @@ void Graphics_render(void)
     Renderer_render(sceneRenderer);
     // glFlush();
     // glFinish();
+    // printGLError();
 }
 
 void Graphics_addDrawable(Drawable* d)
