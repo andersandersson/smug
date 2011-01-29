@@ -12,8 +12,8 @@
 #include <engine/engine.h>
 #include <engine/gameobject.h>
 #include <engine/gameobjectiterator.h>
-#include <engine/position_object.h>
-#include <engine/position_object_type.h>
+#include <engine/positionedobject.h>
+#include <engine/positionedobject_type.h>
 #include <engine/interpoint.h>
 
 #include <engine/interface.h>
@@ -111,7 +111,7 @@ SMUGEXPORT void smugTerminate(void)
 
 SMUGEXPORT int smugAddObject(SmugObject obj)
 {
-    Engine_addObject((struct GameObject*)obj);
+    Engine_addObject((GameObject*)obj);
     return 0;
 }
 
@@ -177,7 +177,7 @@ SMUGEXPORT float smugObject_getY(SmugObject obj)
 
 SMUGEXPORT void smugObject_addObject(SmugObject obj, SmugObject add)
 {
-    GameObject_addObject((struct GameObject*)obj, (struct GameObject*)add);
+    GameObject_addObject((GameObject*)obj, (GameObject*)add);
 }
 
 SMUGEXPORT void smugObject_addObjectAt(SmugObject obj, SmugObject add, float x, float y)

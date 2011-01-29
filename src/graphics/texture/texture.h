@@ -3,17 +3,7 @@
 
 #include <common/common.h>
 #include <graphics/image/image.h>
-
-typedef struct Texture
-{
-    Image* image;
-    unsigned int texid;
-    unsigned int width;
-    unsigned int height;
-    float px;
-    float py;
-    BOOL loaded;
-} Texture;
+#include <graphics/texture/texture_type.h>
 
 Texture* Texture_new(unsigned int width, unsigned int height);
 Texture* Texture_newFromImage(Image* image);
@@ -21,5 +11,7 @@ Texture* Texture_newFromImage(Image* image);
 void Texture_release(Texture* texture);
 void Texture_reload(Texture* texture);
 void Texture_delete(void* texture);
+
+unsigned int Texture_getId(Texture* self);
 
 #endif // SMUG_GRAPHICS_TEXTURE_TEXTURE_H

@@ -6,15 +6,13 @@
 #include <platform/console.h>
 #include <physics/physics.h>
 #include <graphics/graphics.h>
+#include <graphics/drawable/drawable_type.h>
 #include <input/input.h>
-#include <engine/world.h>
 #include <engine/gameobject.h>
-#include <engine/position_object.h>
+#include <engine/positionedobject.h>
 
 #include <engine/engine.h>
 
-struct PositionedObject;
-struct Drawable;
 
 Thread* gConsoleThread = NULL;
 
@@ -154,7 +152,7 @@ static void _recursiveAddDrawable(GameObject* object)
 {
     if (GameObject_isType(object, SMUG_TYPE_DRAWABLE))
     {
-        Graphics_addDrawable((struct Drawable*)object);
+        Graphics_addDrawable((Drawable*)object);
     }
 }
 
@@ -185,7 +183,7 @@ void Engine_commitPositionChanges(void)
     {
         if (GameObject_isType((GameObject*)node->item, SMUG_TYPE_POSITIONED))
         {
-            PositionedObject_commitPosition((struct PositionedObject*)node->item);
+            PositionedObject_commitPosition((PositionedObject*)node->item);
         }
     }
 }

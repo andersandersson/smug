@@ -6,14 +6,15 @@ import java.util.TimerTask;
 import java.util.Timer;
 
 import android.app.Activity;
-import android.opengl.GLSurfaceView;
 import android.content.Context;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.OrientationEventListener;
-import android.view.KeyEvent;
+import android.content.res.Resources;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.OrientationEventListener;
+import android.view.View;
 
 public class DroidSmugActivity extends Activity
 {
@@ -43,6 +44,7 @@ public class DroidSmugActivity extends Activity
 
     private void nativeInit()
     {
+        NativeCallbacks.init(getResources());
         NativeFunctions.nativeInit(Heartbeat.getInstance().getFps());
         initGame();
         NativeFunctions.nativeWindowOpened();
@@ -159,6 +161,30 @@ public class DroidSmugActivity extends Activity
     }
 }
 
+class NativeCallbacks
+{
+    private static FileOpener mFileOpener;
+
+    private NativeCallbacks() {}
+
+    public static void init(Resources res)
+    {
+        mFileOpener = new FileOpener(res);
+    }
+
+    /* To be called from native code only. */
+
+    private static void openFile(String fileName)
+    {
+        mFileOpener.openFile(fileName);
+    }
+
+    private static void changeFps(float fps)
+    {
+        Heartbeat.getInstance().changeFps(fps);
+    }
+}
+
 class Printouts
 {
     private static boolean mDoPrintouts = true;
@@ -191,76 +217,6 @@ class OrientationHandler extends OrientationEventListener
     public void onOrientationChanged(int orientation)
     {
         NativeFunctions.nativeOrientationChange(orientation);
-    }
-}
-
-class Heartbeat
-{
-    private static Heartbeat mInstance = null;
-
-    private Timer mUpdateTimer;
-    private HeartbeatTask mTask;
-    private float mFps = 20.0f;
-
-    private class HeartbeatTask extends TimerTask
-    {
-        @Override
-        public void run()
-        {
-            NativeFunctions.nativeHeartbeat();
-        }
-    }
-
-    public static Heartbeat getInstance()
-    {
-        if (mInstance == null)
-        {
-            mInstance = new Heartbeat();
-        }
-        return mInstance;
-    }
-
-    public void start()
-    {
-        if (mUpdateTimer == null)
-        {
-            mUpdateTimer = new Timer();
-            mTask = new HeartbeatTask();
-            mUpdateTimer.schedule(mTask, 0, (int)(1000.0f / mFps));
-        }
-    }
-
-    public void stop()
-    {
-        if (mUpdateTimer != null)
-        {
-            mTask.cancel();
-            mUpdateTimer.cancel();
-            mUpdateTimer.purge();
-            mUpdateTimer = null;
-            mTask = null;
-        }
-    }
-
-    public float getFps()
-    {
-        return mFps;
-    }
-
-    private static void changeFps(float fps)
-    {
-        Heartbeat instance = getInstance();
-        boolean wasStarted = false;
-        if (instance.mUpdateTimer != null)
-        {
-            wasStarted = true;
-            instance.stop();
-        }
-        instance.mFps = fps;
-        if (wasStarted)
-        {
-            instance.start();
-        }
     }
 }
 
@@ -362,27 +318,6 @@ class DroidSmugGLSurfaceView extends GLSurfaceView implements View.OnKeyListener
         }
         return false;
     }
-}
-
-class NativeFunctions
-{
-    public static native void nativeInit(float fps);
-    public static native void nativeResize(int w, int h);
-    public static native void nativeRender();
-    public static native void nativeDeInit();
-    public static native boolean nativeTouchDown();
-    public static native boolean nativeTouchUp();
-    public static native boolean nativeKeyDown(int keyCode);
-    public static native boolean nativeKeyUp(int keyCode);
-    public static native void nativeOrientationChange(int orientation);
-    public static native void nativeHeartbeat();
-
-    public static native void nativeWindowOpened();
-    public static native void nativeWindowRestored();
-    public static native void nativeWindowActivated();
-    public static native void nativeWindowDeactivated();
-    public static native void nativeWindowMinimized();
-    public static native void nativeWindowClosed();
 }
 
 class DroidSmugRenderer implements GLSurfaceView.Renderer

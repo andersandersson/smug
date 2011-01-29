@@ -2,11 +2,11 @@
 #define SMUG_GRAPHICS_RENDERER_RENDERBATCH_H
 
 #include <common/common.h>
-struct LinkedList;
-struct Drawable;
-struct BatchData;
+#include <graphics/drawable/drawable_type.h>
+#include <graphics/texture/texture_type.h>
 
-struct Texture;
+struct LinkedList;
+struct BatchData;
 
 // Holds all data necessary for one render batch
 
@@ -18,9 +18,8 @@ struct Texture;
 
 typedef struct RenderBatch
 {
-    //Texture texture = NULL
     unsigned int objectSize;
-    struct Texture* texture;
+    Texture* texture;
     struct BatchData* data;
     struct LinkedList* drawables;
     unsigned int dataSize;
@@ -29,7 +28,7 @@ typedef struct RenderBatch
     unsigned int textureBufferIndex;
 } RenderBatch;
 
-RenderBatch* RenderBatch_new(unsigned int objectSize, struct Texture* texture, unsigned int initialSize);
+RenderBatch* RenderBatch_new(unsigned int objectSize, Texture* texture, unsigned int initialSize);
 void RenderBatch_delete(void* batch);
 
 unsigned int RenderBatch_getDataSize(RenderBatch* batch);
@@ -37,7 +36,7 @@ unsigned int RenderBatch_getDataSize(RenderBatch* batch);
 void RenderBatch_render(RenderBatch* batch);
 void RenderBatch_write(RenderBatch* batch);
 
-void RenderBatch_addDrawable(RenderBatch* batch, struct Drawable* drawable);
+void RenderBatch_addDrawable(RenderBatch* batch, Drawable* drawable);
 unsigned int RenderBatch_getDrawableCount(RenderBatch* batch);
 
 #endif // SMUG_GRAPHICS_RENDERER_RENDERBATCH_H

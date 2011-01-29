@@ -3,8 +3,7 @@
 
 #include <common/common.h>
 #include <utils/arraylist.h>
-
-struct Drawable;
+#include <graphics/drawable/drawable_type.h>
 
 /*
  * A layer consists of a list of drawables plus a two-dimensional array
@@ -21,7 +20,7 @@ typedef struct Layer
 Layer* Layer_new(void);
 void Layer_delete(void* layer);
 
-void Layer_addDrawable(Layer* layer, struct Drawable* drawable);
+void Layer_addDrawable(Layer* layer, Drawable* drawable);
 
 void Layer_render(Layer* layer);
 float Layer_getParallax(Layer* layer);

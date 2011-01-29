@@ -7,6 +7,7 @@
 #include <graphics/graphics.h>
 #include <input/input.h>
 #include <engine/engine.h>
+#include <platform/file.h>
 
 #include <platform/platform.h>
 
@@ -19,8 +20,9 @@ static void (*gUserLogicCallback)(void) = NULL;
 static void (*gUserKillCallback)(void) = NULL;
 static BOOL gLogicCallbackEnabled = TRUE;
 
-static jclass gHeartbeatClass = NULL;
-static jmethodID gHeartbeat_changeFps = NULL;
+static jclass gNativeCallbacksClass = NULL;
+static jmethodID gNativeCallbacks_openFile = NULL;
+static jmethodID gNativeCallbacks_changeFps = NULL;
 static JavaVM* gJavaVm = NULL;
 
 // Size of window in pixels
@@ -44,9 +46,10 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
 static JNIEnv* getJniEnvironment(void)
 {
     smug_assert(gJavaVm != NULL);
-    JNIEnv* env;
+    JNIEnv* env = NULL;
     if(0 != (*gJavaVm)->AttachCurrentThread(gJavaVm, &env, NULL))
     {
+        ERROR("Could not attach to the Java thread.");
         // Error
     }
     return env;
@@ -66,6 +69,136 @@ static void windowStateChangeCallback(SMUG_WINDOW_STATE_CHANGE state)
     smug_printf("Window state changed: %i", state);
 }
 
+/* Implementation of File class */
+
+struct _File
+{
+    unsigned char* mData;
+    long int mLength;
+    long int mPosition;
+};
+
+static File* gOpeningFile = NULL;
+
+static File* File_new(unsigned char* data, long int length)
+{
+    File* newFile = (File*)malloc(sizeof(File));
+    newFile->mLength = length;
+    newFile->mData = data;
+    newFile->mPosition = 0;
+    smug_assert(data != NULL);
+    // return NULL;
+    return newFile;
+}
+
+File* File_fopen(const char* filename, const char* mode)
+{
+    smug_assert(gOpeningFile == NULL);
+    JNIEnv* env = getJniEnvironment();
+    jstring str = JCALL1(env, NewStringUTF, filename);
+    JCALL3(env, CallStaticVoidMethod, gNativeCallbacksClass, gNativeCallbacks_openFile, str);
+    // smug_assert(gOpeningFile != NULL);
+    if (gOpeningFile == NULL)
+    {
+        WARNING("Could not open file!");
+    }
+    else
+    {
+        NOTIFY("File opened!");
+    }
+    File* retFile = gOpeningFile;
+    gOpeningFile = NULL;
+    return retFile;
+}
+
+int File_fclose(File* self)
+{
+    free(self->mData);
+    return 0;
+}
+
+SMUGEXPORT void JNICALL JAVA_IMPLEMENTATION(nativeOpenFile)
+  (JNIEnv* env, jobject thiz, jbyteArray jdata)
+{
+    // TODO: Error checking, returning null on fail.
+    long int length = (long int)JCALL1(env, GetArrayLength, jdata);
+    jboolean isCopy;
+    unsigned char* data = (unsigned char*)JCALL2(env, GetByteArrayElements, jdata, &isCopy);
+    if (isCopy)
+    {
+        /* JNI_COMMIT copies back the contents of data to jdata, but doesn't free data. This should
+        be cheaper than the case below. */
+        JCALL3(env, ReleaseByteArrayElements, jdata, (jbyte*)data, JNI_COMMIT);
+        gOpeningFile = File_new(data, length);
+    }
+    else
+    {
+        /* JNI_ABORT frees data, and does not copy back data to jdata. */
+        unsigned char* dataCopy = malloc(sizeof(char) * length);
+        memcpy(dataCopy, data, length);
+        JCALL3(env, ReleaseByteArrayElements, jdata, (jbyte*)data, JNI_ABORT);
+        gOpeningFile = File_new(dataCopy, length);
+    }
+}
+
+unsigned char* File_getBuffer(File* self)
+{
+    smug_assert(self != NULL);
+    return self->mData;
+}
+
+void File_freeBuffer(File* self, unsigned char* buffer)
+{
+    smug_assert(self != NULL);
+    // NOOP
+}
+
+size_t File_fread(File* self, void* ptr, size_t size, size_t count)
+{
+    smug_assert(self != NULL);
+    long int read = min(count * size, self->mLength - self->mPosition);
+    memcpy(ptr, self->mData + self->mPosition, read);
+    return read;
+}
+
+int File_fseek(File* self, long int offset, int origin)
+{
+    smug_assert(self != NULL);
+    switch (origin)
+    {
+        case SMUG_SEEK_SET:
+            smug_assert(offset >= 0 && offset <= self->mLength);
+            self->mPosition = offset;
+            break;
+        case SMUG_SEEK_CUR:
+            smug_assert(self->mPosition + offset >= 0 && self->mPosition + offset <= self->mLength);
+            self->mPosition += offset;
+            break;
+        case SMUG_SEEK_END:
+            smug_assert(offset <= 0 && self->mLength + offset >= 0);
+            self->mPosition = self->mLength + offset;
+            break;
+        default:
+            smug_assert(!"Invalid offset parameter to File_fseek!");
+            return 1;
+    }
+    return 0;
+}
+
+long int File_ftell(File* self)
+{
+    smug_assert(self != NULL);
+    return self->mPosition;
+}
+
+long int File_getLength(File* self)
+{
+    smug_assert(self != NULL);
+    return self->mLength;
+}
+
+/* Other platform functions */
+
 int Platform_init(int width, int height, BOOL fullscreen)
 {
     smug_assert(!isInitialized);
@@ -74,8 +207,9 @@ int Platform_init(int width, int height, BOOL fullscreen)
     setWindowSize(width, height);
 
     JNIEnv* env = getJniEnvironment();
-    gHeartbeatClass = JCALL1(env, FindClass, "se/lolektivet/droidsmug/Heartbeat");
-    gHeartbeat_changeFps = JCALL3(env, GetStaticMethodID, gHeartbeatClass, "changeFps", "(F)V");
+    gNativeCallbacksClass = JCALL1(env, FindClass, "se/lolektivet/droidsmug/NativeCallbacks");
+    gNativeCallbacks_openFile = JCALL3(env, GetStaticMethodID, gNativeCallbacksClass, "openFile", "(Ljava/lang/String;)V");
+    gNativeCallbacks_changeFps = JCALL3(env, GetStaticMethodID, gNativeCallbacksClass, "changeFps", "(F)V");
 
     Platform_stepDiscreteTime();
 
@@ -152,7 +286,8 @@ void Platform_setLogicFps(float fps)
 {
     gFps = fps;
     JNIEnv* env = getJniEnvironment();
-    JCALL3(env, CallStaticVoidMethod, gHeartbeatClass, gHeartbeat_changeFps, (jfloat)fps);
+    gNativeCallbacksClass = JCALL1(env, FindClass, "se/lolektivet/droidsmug/NativeCallbacks");
+    JCALL3(env, CallStaticVoidMethod, gNativeCallbacksClass, gNativeCallbacks_changeFps, (jfloat)fps);
 }
 
 void Platform_setTouchEventCallback(void(*callback)(int, int, int))

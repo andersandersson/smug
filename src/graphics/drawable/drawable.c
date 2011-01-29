@@ -4,10 +4,13 @@
 #include <utils/shapes.h>
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
-#include <engine/position_object.h>
-#include <graphics/drawable/drawable.h>
+#include <engine/positionedobject.h>
+#include <engine/positionedobject_type.h>
+#include <graphics/sprite.h>
+#include <graphics/texture/texture.h>
 
-#include <graphics/drawable/drawable_type.h>
+#include <graphics/drawable/drawable.h>
+#include <graphics/drawable/drawable_internal.h>
 
 struct BatchData;
 struct Sprite;
@@ -17,6 +20,12 @@ struct Sprite;
 #define _isOpacityInheritType(type) (type == SMUG_OPACITY_INHERIT || type == SMUG_OPACITY_KEEP)
 #define _isVisibilityInheritType(type) (type == SMUG_VISIBILITY_INHERIT || type == SMUG_VISIBILITY_KEEP)
 
+
+BOOL _invariant(Drawable* self)
+{
+    // smug_assert(self != NULL);
+    return self != NULL;
+}
 
 /*************************************************/
 /** Local methods overriding ones in GameObject **/
@@ -91,14 +100,15 @@ void Drawable_init(Drawable* self)
     ((GameObject*)self)->deleteMe = _delete;
     ((GameObject*)self)->mTypes |= SMUG_TYPE_DRAWABLE;
 
-    self->mColor = Color_createFromRGBAi(0, 0, 0, 0);
+    self->mColor = Color_createFromRGBAi(0, 0, 0, 255);
+    self->mUseColor = FALSE;
     self->mColorInheritance = SMUG_COLOR_INHERIT;
     self->mVisible = TRUE;
     self->mVisibilityInheritance = SMUG_VISIBILITY_INHERIT;
-    self->mOpacity = 1.0f;
     self->mOpacityInheritance = SMUG_OPACITY_INHERIT;
     self->mType = 0;  // TODO: proper value, whatever that is.
     self->mLayer = 0;
+    self->mSprite = NULL;
     self->_writeBatchDataFunc = NULL;
     self->_getDataSizeFunc = NULL;
     self->_getObjectSizeFunc = NULL;
@@ -148,12 +158,21 @@ unsigned int Drawable_getObjectSize(Drawable* self)
 
 struct Sprite* Drawable_getSprite(Drawable* self)
 {
-    return NULL;
+    smug_assert(_invariant(self));
+    return self->mSprite;
+}
+
+void Drawable_setSprite(Drawable* self, struct Sprite* sprite)
+{
+    smug_assert(_invariant(self));
+    self->mSprite = sprite;
+    self->mUseColor = FALSE;
 }
 
 BOOL Drawable_setColor(Drawable* self, Color c)
 {
     self->mColor = c;
+    self->mUseColor = TRUE;
     return TRUE;
 }
 
@@ -163,24 +182,49 @@ BOOL Drawable_getColor(Drawable* self, Color* c)
     return TRUE;
 }
 
+BOOL Drawable_getUseColor(Drawable* self, BOOL* use)
+{
+    *use = self->mUseColor;
+    return TRUE;
+}
+
+BOOL Drawable_setUseColor(Drawable* self, BOOL use)
+{
+    self->mUseColor = use;
+    return TRUE;
+}
+
 BOOL Drawable_setOpacity(Drawable* self, float opacity)
 {
-    self->mOpacity = opacity;
+    // self->mOpacity = opacity;
+    self->mColor = Color_setCompAf(self->mColor, opacity);
     return TRUE;
 }
 
 BOOL Drawable_getOpacity(Drawable* self, float* opacity)
 {
-    *opacity = self->mOpacity;
+    *opacity = Color_Af(self->mColor);
     return TRUE;
 }
 
-struct Texture* Drawable_getTexture(struct Drawable* d)
+Texture* Drawable_getTexture(Drawable* self)
 {
-    return NULL;
+    smug_assert(self != NULL);
+    if (self->mSprite == NULL)
+    {
+        return NULL;
+    }
+    smug_assert(self->mSprite != NULL);
+    return Sprite_getTexture(self->mSprite);
 }
 
-unsigned int Drawable_getTextureID(struct Drawable* d)
+unsigned int Drawable_getTextureID(Drawable* self)
 {
-    return 0;
+    smug_assert(self != NULL);
+    if (self->mSprite == NULL)
+    {
+        return 0;
+    }
+    smug_assert(self->mSprite != NULL);
+    return Sprite_getTextureId(self->mSprite);
 }

@@ -10,8 +10,8 @@
 #endif /* INTERNAL_INCLUDE */
 
 
-struct GameObject;
-typedef struct GameObject* SmugObject;
+struct _GameObject;
+typedef struct _GameObject* SmugObject;
 
 void smugRunTest(void);
 

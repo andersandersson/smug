@@ -2,6 +2,7 @@
 #include <smugstd.h>
 
 #include <graphics/drawable/drawable.h>
+#include <graphics/drawable/drawable_type.h>
 #include <graphics/renderer/renderbatch.h>
 #include <graphics/texture/texture.h>
 #include <graphics/sprite.h>
@@ -11,8 +12,6 @@
 #define OBJECTSIZE_START 4
 #define TEXTURECOUNT_START 4
 #define VERTEXCOUNT_START 100
-
-struct Drawable;
 
 Layer* Layer_new()
 {
@@ -42,7 +41,7 @@ void Layer_delete(void* layer)
     free(thelayer);
 }
 
-void Layer_addDrawable(Layer* layer, struct Drawable* drawable)
+void Layer_addDrawable(Layer* layer, Drawable* drawable)
 {
     smug_assert(NULL != layer);
     smug_assert(NULL != drawable);

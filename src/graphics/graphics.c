@@ -3,12 +3,12 @@
 #include <common/common.h>
 #include <common/log.h>
 #include <platform/opengl/opengl.h>
-#include <graphics/renderer/renderer.h>
 #include <platform/platform.h>
+#include <graphics/renderer/renderer.h>
+#include <graphics/drawable/drawable_type.h>
+#include <graphics/internal.h>
 
 #include <graphics/graphics.h>
-
-struct Drawable;
 
 Renderer* sceneRenderer = NULL;
 
@@ -17,34 +17,6 @@ unsigned int gRenderMode = RENDER_NORMAL;
 
 static BOOL isInitialized = FALSE;
 
-static void printGLError(void)
-{
-    int err = glGetError();
-
-    switch (err)
-    {
-        case GL_INVALID_ENUM:
-            ERROR("GL error GL_INVALID_ENUM\n");
-            break;
-        case GL_INVALID_VALUE:
-            ERROR("GL error GL_INVALID_VALUE\n");
-            break;
-        case GL_INVALID_OPERATION:
-            ERROR("GL error GL_INVALID_OPERATION\n");
-            break;
-        case GL_STACK_OVERFLOW:
-            ERROR("GL error GL_STACK_OVERFLOW\n");
-            break;
-        case GL_STACK_UNDERFLOW:
-            ERROR("GL error GL_STACK_UNDERFLOW\n");
-            break;
-        case GL_OUT_OF_MEMORY:
-            ERROR("GL error GL_OUT_OF_MEMORY\n");
-            break;
-        default:
-            break;
-    }
-}
 
 static int setupGL(void)
 {
@@ -68,7 +40,8 @@ static int setupGL(void)
         WARNING("VBOs are not supported, rendering will use vertex arrays.\n");
     }
 
-    DEBUG("Initializing GL");
+    DEBUG("Initializing GL. Version: %s, Vendor: %s, Renderer: %s", glGetString(GL_VERSION), glGetString(GL_VENDOR), glGetString(GL_RENDERER));
+    DEBUG("GL extensions: %s", glGetString(GL_EXTENSIONS));
     glDisable(GL_CULL_FACE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      // 4-byte pixel alignment
 
@@ -79,7 +52,6 @@ static int setupGL(void)
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
     printGLError();
@@ -91,7 +63,7 @@ static int setupGL(void)
 
 void Graphics_setWindowSize(double w, double h)
 {
-    // glViewport(0, 0, (int)w, (int)h);
+    glViewport(0, 0, (int)w, (int)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 #ifdef SMUG_GLES
@@ -101,6 +73,7 @@ void Graphics_setWindowSize(double w, double h)
 #endif /* SMUG_GLES */
 
     glMatrixMode(GL_MODELVIEW);
+    printGLError();
 }
 
 int Graphics_init(void)
@@ -139,15 +112,16 @@ void Graphics_render(void)
     Renderer_render(sceneRenderer);
     // glFlush();
     // glFinish();
+    // printGLError();
 }
 
-void Graphics_addDrawable(struct Drawable* d)
+void Graphics_addDrawable(Drawable* d)
 {
     // TODO: Assert right type.
     Renderer_addDrawable(sceneRenderer, d);
 }
 
-void Graphics_removeDrawable(struct Drawable* d)
+void Graphics_removeDrawable(Drawable* d)
 {
     WARNING("Unimplemented function Graphics_removeDrawable");
 }

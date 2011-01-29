@@ -13,7 +13,7 @@
 #define SMUG_ENGINE_ENGINE_H
 
 #include <common/common.h>
-#include <engine/gameobject.h>
+#include <engine/gameobject_type.h>
 
 /**
   * Initialize Engine
@@ -45,6 +45,8 @@ void Engine_terminate(void);
   *
   */
 void Engine_addObject(GameObject* newObj);
+
+void Engine_removeObject(GameObject* obj);
 
 /**
  * Called by blocking engine OR platform once after each logic heartbeat.

@@ -12,13 +12,11 @@
 #define SMUG_GRAPHICS_GRAPHICS_H
 
 #include <common/common.h>
-#include <graphics/color_type.h>
 #include <utils/rectangle_type.h>
 #include <utils/vector_type.h>
-#include <graphics/drawable/drawable.h>
+#include <graphics/color_type.h>
+#include <graphics/drawable/drawable_type.h>
 #include <graphics/camera.h>
-
-struct GameObject;
 
 // Predefined rendering modes
 #define RENDER_NONE             0x0000  // nothing
@@ -63,9 +61,9 @@ void Graphics_render(void);
 /**
  * Registers a drawable for rendering.
  */
-void Graphics_addDrawable(struct Drawable* d);
+void Graphics_addDrawable(Drawable* d);
 
-void Graphics_removeDrawable(struct Drawable* d);
+void Graphics_removeDrawable(Drawable* d);
 
 /**
  * Terminate the graphics component of the engine.

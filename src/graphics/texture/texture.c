@@ -4,7 +4,23 @@
 #include <common/common.h>
 #include <common/log.h>
 #include <platform/opengl/opengl.h>
+#include <graphics/internal.h>
+
 #include <graphics/texture/texture.h>
+#include <graphics/texture/texture_type.h>
+#include <graphics/texture/texture_internal.h>
+
+static int getClosestGreaterPowerOfTwo(int number)
+{
+    int n = 0;
+    double power = ldexp(1.0, n);
+    while (power < number)
+    {
+        ++n;
+        power = ldexp(1.0, n);
+    }
+    return floor(power + 0.5);
+}
 
 static Texture* loadTextureFromImage(Texture* tex, Image* image)
 {
@@ -15,15 +31,23 @@ static Texture* loadTextureFromImage(Texture* tex, Image* image)
     glGenTextures(1, &texid);
     glBindTexture(GL_TEXTURE_2D, texid);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width, image->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getClosestGreaterPowerOfTwo(image->width), getClosestGreaterPowerOfTwo(image->height), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data);
+#ifdef SMUG_GLES
+    glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+#endif
+#ifndef SMUG_GLES
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+#endif
 
+#ifndef SMUG_GLES /* OpenGL ES 1.0 does not support glIsTexture */
     if (glIsTexture(texid) != GL_TRUE)
     {
         ERROR("Could not load texture from image.");
         return NULL;
     }
+#endif
 
     tex->texid = texid;
     tex->image = image;
@@ -52,6 +76,7 @@ static BOOL loadEmptyTexture(Texture* tex, unsigned int width, unsigned height)
         ERROR("Could not load empty texture.");
         return FALSE;
     }
+    printGLError();
 
     tex->texid = texid;
     tex->image = NULL;
@@ -89,6 +114,7 @@ Texture* Texture_newFromImage(Image* image)
 void Texture_release(Texture* texture)
 {
 	glDeleteTextures(1, &texture->texid);
+    printGLError();
 	texture->loaded = FALSE;
 }
 
@@ -117,4 +143,9 @@ void Texture_delete(void* texture)
         Texture_release(t);
         free(t);
     }
+}
+
+unsigned int Texture_getId(Texture* self)
+{
+    return self->texid;
 }

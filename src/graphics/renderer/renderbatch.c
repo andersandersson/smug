@@ -4,9 +4,11 @@
 #include <common/common.h>
 #include <utils/linkedlist.h>
 #include <graphics/texture/texture.h>
+#include <graphics/texture/texture_internal.h>
 #include <graphics/drawable/drawable.h>
 #include <platform/opengl/opengl.h>
 #include <graphics/renderer/batchdata.h>
+#include <graphics/internal.h>
 
 #include <graphics/renderer/renderbatch.h>
 
@@ -25,12 +27,16 @@ static void generateBuffer(GLuint* idholder)
 
         }
     }
+    printGLError();
 }
 
 static void freeBuffer(GLuint* idholder)
 {
     if (glIsBuffer(*idholder))
+    {
         glDeleteBuffers(1, idholder);
+    }
+    // printGLError();
 }
 
 RenderBatch* RenderBatch_new(unsigned int objectSize, Texture* texture, unsigned int initialSize)
@@ -76,7 +82,7 @@ unsigned int RenderBatch_getSize(RenderBatch* batch)
     return batch->dataSize;
 }
 
-void RenderBatch_addDrawable(RenderBatch* batch, struct Drawable* drawable)
+void RenderBatch_addDrawable(RenderBatch* batch, Drawable* drawable)
 {
     smug_assert(NULL != batch);
     smug_assert(NULL != drawable);
@@ -131,27 +137,35 @@ void RenderBatch_write(RenderBatch* currentBatch)
 void RenderBatch_render(RenderBatch* currentBatch)
 {
     static BOOL texture_enabled = FALSE;
+    static BOOL use_texture = FALSE;
 
     // int tex = 0;
     if (NULL != currentBatch->texture)
     {
+        use_texture = TRUE;
         if (texture_enabled != TRUE)
         {
             glEnable(GL_TEXTURE_2D);
+            texture_enabled = TRUE;
         }
         glBindTexture(GL_TEXTURE_2D, currentBatch->texture->texid);
     }
     else
     {
+        use_texture = FALSE;
         if (texture_enabled != FALSE)
         {
             glDisable(GL_TEXTURE_2D);
+            texture_enabled = FALSE;
         }
     }
 
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    if (use_texture)
+    {
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 
     unsigned int batchSize = currentBatch->dataSize;
     if(gVBOSupported)
@@ -160,9 +174,12 @@ void RenderBatch_render(RenderBatch* currentBatch)
         glBufferData(GL_ARRAY_BUFFER, batchSize * 2 * sizeof(float), currentBatch->data->vertexData, GL_STATIC_DRAW );
         glVertexPointer( 2, GL_FLOAT, 0, (char*) NULL );
 
-        glBindBuffer(GL_ARRAY_BUFFER, currentBatch->textureBufferIndex);
-        glBufferData(GL_ARRAY_BUFFER, batchSize * 2 * sizeof(float), currentBatch->data->textureData, GL_STATIC_DRAW );
-        glTexCoordPointer( 2, GL_FLOAT, 0, (char*) NULL );
+        if (use_texture)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, currentBatch->textureBufferIndex);
+            glBufferData(GL_ARRAY_BUFFER, batchSize * 2 * sizeof(float), currentBatch->data->textureData, GL_STATIC_DRAW );
+            glTexCoordPointer( 2, GL_FLOAT, 0, (char*) NULL );
+        }
 
         glBindBuffer(GL_ARRAY_BUFFER, currentBatch->colorBufferIndex);
         glBufferData(GL_ARRAY_BUFFER, batchSize * 4 * sizeof(float), currentBatch->data->colorData, GL_STATIC_DRAW );
@@ -171,7 +188,10 @@ void RenderBatch_render(RenderBatch* currentBatch)
     } else
     {
         glVertexPointer( 2, GL_FLOAT, 0, currentBatch->data->vertexData );    // Set The Vertex Pointer To Our Vertex Data
-        glTexCoordPointer( 2, GL_FLOAT, 0, currentBatch->data->textureData );
+        if (use_texture)
+        {
+            glTexCoordPointer( 2, GL_FLOAT, 0, currentBatch->data->textureData );
+        }
         glColorPointer(4, GL_FLOAT, 0, currentBatch->data->colorData);
     }
 
@@ -208,7 +228,12 @@ void RenderBatch_render(RenderBatch* currentBatch)
 
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    if (use_texture)
+    {
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+
+    printGLError();
 
 /*
     glBegin(GL_QUADS);

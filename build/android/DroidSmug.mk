@@ -16,6 +16,7 @@ LOCAL_CFLAGS := -DANDROID_NDK -DHAS_CONFIG_H -Wall -std=c99 -Wno-variadic-macros
 
 ifeq ($(SMUG_DEBUG),true)
 # debug defines
+LOCAL_CFLAGS := $(LOCAL_CFLAGS) -DSMUG_DEBUG
 endif
 
 LOCAL_ALLOW_UNDEFINED_SYMBOLS := false
@@ -33,7 +34,7 @@ LOCAL_SRC_FILES := \
     engine/engine.c \
     engine/gameobject.c \
     engine/gameobjectiterator.c \
-    engine/position_object.c \
+    engine/positionedobject.c \
     engine/interpoint.c \
     graphics/interface.c \
     graphics/camera.c \

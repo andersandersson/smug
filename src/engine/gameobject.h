@@ -3,12 +3,14 @@
 
 #include <common/common.h>
 
-struct LinkedList;
+#include <engine/gameobject_type.h>
+
 struct LinkedListIterator;
 
-typedef unsigned int SmugType;
-
 #define MAX_INHERITANCE_DEPTH 4
+
+
+typedef unsigned int SmugType;
 
 #define SMUG_TYPE_NONE               (0x0)
 #define SMUG_TYPE_OBJECT             (0x0001)
@@ -47,21 +49,6 @@ typedef enum SmugInheritType
     SMUG_WEIGHT_LOCAL,
     SMUG_INHERIT_UNDEFINED
 } SmugInheritType;
-
-struct GameObject;
-typedef struct GameObject InternalGameObject;
-
-typedef struct GameObject
-{
-    struct LinkedList* mSubObjects;
-    struct GameObject* mParent;
-    SmugType mTypes;
-    BOOL (*hasAttribute)(struct GameObject* self, SmugAttribute attr);
-    BOOL (*inheritAttribute)(struct GameObject* self, SmugAttribute attr, SmugInheritType type);
-    void (*deleteMe)(void* data);
-} GameObject;
-
-
 
 int GameObject_addObject(GameObject* self, GameObject* obj);
 void GameObject_removeObject(GameObject* self, GameObject* child);

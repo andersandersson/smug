@@ -11,6 +11,7 @@
 #include <graphics/sprite.h>
 #include <graphics/renderer/renderbatch.h>
 #include <graphics/renderer/layer.h>
+#include <graphics/drawable/drawable.h>
 
 #include <graphics/renderer/renderer.h>
 
@@ -146,7 +147,7 @@ void Renderer_render(Renderer* renderer)
 
 }
 
-void Renderer_addDrawable(Renderer* renderer, struct Drawable* drawable)
+void Renderer_addDrawable(Renderer* renderer, Drawable* drawable)
 {
     smug_assert(NULL != renderer);
     smug_assert(NULL != drawable);

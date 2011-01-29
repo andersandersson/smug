@@ -8,9 +8,11 @@
 #include <utils/shapes.h>
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
-#include <engine/position_object.h>
+#include <engine/positionedobject.h>
 #include <graphics/color.h>
 #include <graphics/sprite.h>
+#include <graphics/texture/texture.h>
+#include <graphics/texture/texture_internal.h>
 #include <graphics/renderer/batchdata.h>
 #include <graphics/drawable/drawable.h>
 #include <graphics/drawable/drawableshape.h>
@@ -52,6 +54,7 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     static Shape* shape;
     static Rectangle box;
     static Color color;
+    static BOOL useColor;
 
     vertexstart = start*2;
     colorstart = start*4;
@@ -61,7 +64,7 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     box = Shape_getAsRectangle(shape);
 
     // write vertices in anti-clockwise order
-    PositionedObject_getPosForDrawing((PositionedObject*)drawable, &dpos);
+    PositionedObject_getPosForDrawing((GameObject*)drawable, &dpos);
     x1 = Point_getX(dpos) + Rectangle_getX(&box);
     y1 = Point_getY(dpos) + Rectangle_getY(&box);
     x2 = Point_getX(dpos) + Rectangle_getW(&box);
@@ -86,12 +89,23 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     batchdata->vertexData[vertexstart + 5 * 2 + 1] = y2;
 #endif /* SMUG_GLES */
 
-    // write colordata
+
+    Drawable_getUseColor(drawable, &useColor);
     Drawable_getColor(drawable, &color);
-    r = Color_Rf(color);
-    g = Color_Gf(color);
-    b = Color_Bf(color);
     a = Color_Af(color);
+    if (useColor)
+    {
+        // write colordata
+        r = Color_Rf(color);
+        g = Color_Gf(color);
+        b = Color_Bf(color);
+    }
+    else
+    {
+        r = 1.0f;
+        g = 1.0f;
+        b = 1.0f;
+    }
 
     batchdata->colorData[colorstart + 0 * 4 + 0] = r;
     batchdata->colorData[colorstart + 0 * 4 + 1] = g;
@@ -126,7 +140,9 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
 
     // write texture data only if sprite exists
     if ((sprite = Drawable_getSprite(drawable)) == NULL)
+    {
         return;
+    }
 
     tx1 = Rectangle_getX(&sprite->rect) * sprite->texture->px;
     ty1 = Rectangle_getY(&sprite->rect) * sprite->texture->py;
