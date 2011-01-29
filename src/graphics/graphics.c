@@ -6,6 +6,7 @@
 #include <platform/platform.h>
 #include <graphics/renderer/renderer.h>
 #include <graphics/drawable/drawable_type.h>
+#include <graphics/internal.h>
 
 #include <graphics/graphics.h>
 
@@ -16,38 +17,6 @@ unsigned int gRenderMode = RENDER_NORMAL;
 
 static BOOL isInitialized = FALSE;
 
-static void printGLError(void)
-{
-    int err = glGetError();
-    while (err != GL_NO_ERROR)
-    {
-        switch (err)
-        {
-            case GL_INVALID_ENUM:
-                ERROR("GL error GL_INVALID_ENUM");
-                break;
-            case GL_INVALID_VALUE:
-                ERROR("GL error GL_INVALID_VALUE");
-                break;
-            case GL_INVALID_OPERATION:
-                ERROR("GL error GL_INVALID_OPERATION");
-                break;
-            case GL_STACK_OVERFLOW:
-                ERROR("GL error GL_STACK_OVERFLOW");
-                break;
-            case GL_STACK_UNDERFLOW:
-                ERROR("GL error GL_STACK_UNDERFLOW");
-                break;
-            case GL_OUT_OF_MEMORY:
-                ERROR("GL error GL_OUT_OF_MEMORY");
-                break;
-            default:
-                ERROR("GL error of unknown type: %i", err);
-                break;
-        }
-        err = glGetError();
-    }
-}
 
 static int setupGL(void)
 {
@@ -71,7 +40,8 @@ static int setupGL(void)
         WARNING("VBOs are not supported, rendering will use vertex arrays.\n");
     }
 
-    DEBUG("Initializing GL. Version: %s", glGetString(GL_VERSION));
+    DEBUG("Initializing GL. Version: %s, Vendor: %s, Renderer: %s", glGetString(GL_VERSION), glGetString(GL_VENDOR), glGetString(GL_RENDERER));
+    DEBUG("GL extensions: %s", glGetString(GL_EXTENSIONS));
     glDisable(GL_CULL_FACE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      // 4-byte pixel alignment
 
@@ -82,7 +52,6 @@ static int setupGL(void)
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
     printGLError();
