@@ -14,7 +14,7 @@
 
 /** The maximum size of a line to print to the console
   */
-#define CONSOLE_PRINT_BUFFER_SIZE 1024
+#define CONSOLE_PRINT_BUFFER_SIZE 10240
 
 /** Write simple unformatted text to the console, ending with newline
  *

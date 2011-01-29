@@ -88,7 +88,7 @@ static int _default_compare(void* self, void* left, void* right);
  * @param element The element to insert
  * @param height The current height of the subtree
  */
-static void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element, int height);
+static BOOL _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element, int height);
 
 
 /** Helper function for removing nodes
@@ -242,6 +242,11 @@ void BinarySearchTree_init(BinarySearchTree* tree)
 
 void BinarySearchTree_delete(BinarySearchTree* tree)
 {
+    if(NULL == tree)
+    {
+        return;
+    }
+
     BinarySearchTreeNode_deleteRecursive(tree->root);
     free(tree);
 }
@@ -254,27 +259,30 @@ void BinarySearchTree_setCompare(BinarySearchTree* tree, void* data, int (*compa
 }
 
 
-void BinarySearchTree_insert(BinarySearchTree* tree, void* element)
+BOOL BinarySearchTree_insert(BinarySearchTree* tree, void* element)
 {
     if(tree->root == NULL)
     {
         tree->root = BinarySearchTreeNode_new();
         tree->root->element = element;
+        return TRUE;
     }
     else
     {
-        _insert_node(tree, tree->root, element, 0);
+        return _insert_node(tree, tree->root, element, 0);
     }
 }
 
-void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element, int height)
+BOOL _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* element, int height)
 {
     // Check the relation between the new element and the current
     int side = tree->compare(tree->compareData, element, node->element);
+    BOOL result = FALSE;
 
     // They are equal, do nothing
     if(0 == side)
     {
+        return FALSE;
     }
     // It is to the left
     else if(-1 == side)
@@ -290,11 +298,13 @@ void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
             node->left = BinarySearchTreeNode_new();
             node->left->element = element;
             node->left->parent = node;
+
+            result = TRUE;
 	}
         // Otherwise, insert the node to the left subtree
         else
 	{
-            _insert_node(tree, node->left, element, height + 1);
+            result = _insert_node(tree, node->left, element, height + 1);
 	}
     }
     // It is to the right
@@ -311,11 +321,13 @@ void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
             node->right = BinarySearchTreeNode_new();
             node->right->element = element;
             node->right->parent = node;
+
+            result = TRUE;
 	}
         // Otherwise, insert the node to the right subtree
         else
 	{
-            _insert_node(tree, node->right, element, height + 1);
+            result = _insert_node(tree, node->right, element, height + 1);
 	}
     }
 
@@ -325,6 +337,8 @@ void _insert_node(BinarySearchTree* tree, BinarySearchTreeNode* node, void* elem
 
     // Set currents node new height
     node->height = max(left_height, right_height);
+
+    return result;
 }
 
 

@@ -96,8 +96,9 @@ void BinarySearchTree_setCompare(BinarySearchTree* tree, void* data, int (*compa
  * @relatesalso BinarySearchTree
  * @param tree    The tree to insert into
  * @param element The element to insert
+ * @return Whether the element was inserted or not
  */
-void BinarySearchTree_insert(BinarySearchTree* tree, void* element);
+BOOL BinarySearchTree_insert(BinarySearchTree* tree, void* element);
 
 
 /** Remove an element from the tree

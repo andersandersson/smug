@@ -21,9 +21,9 @@ void OrderedSet_delete(OrderedSet* set)
     free(set);
 }
 
-void OrderedSet_insert(OrderedSet* set, void* element)
+BOOL OrderedSet_insert(OrderedSet* set, void* element)
 {
-    BinarySearchTree_insert((BinarySearchTree*) set, element);
+    return BinarySearchTree_insert((BinarySearchTree*) set, element);
 }
 
 void OrderedSet_setCompare(OrderedSet* set, int (*compare)(void*, void*, void*))

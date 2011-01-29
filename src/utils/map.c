@@ -71,6 +71,11 @@ void Map_init(Map* map)
 
 void Map_delete(Map* map)
 {
+    if(NULL == map)
+    {
+        return;
+    }
+
     free(map);
 }
 
@@ -158,8 +163,6 @@ void MapIterator_delete(MapIterator* iter)
     {
         return;
     }
-
-    BinarySearchTreeIterator_delete((BinarySearchTreeIterator*) iter);
 
     free(iter);
 }

@@ -90,7 +90,8 @@ Shape* Shape_finishMultipoint(Shape* self)
     smug_assert(nrPoints > 0);
     Vector* points = (Vector*)malloc(sizeof(Vector) * nrPoints);
     int i = 0;
-    for (Node* node = list->first; node != NULL; node = node->next)
+    Node* node;
+    for (node = list->first; node != NULL; node = node->next)
     {
         points[i] = *(Vector*)node->item;
     }

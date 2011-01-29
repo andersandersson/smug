@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include <physics/shapes.h>
+#include <utils/shapes.h>
 #include <physics/physics.h>
 #include <physics/body.h>
 #include <platform/platform.h>
@@ -23,15 +23,15 @@ int main(void)
 {
     if (!Log_init())
         return 0;
-    
+
     if (!Platform_init(640, 480, FALSE))
         return 0;
-        
+
     if (!Input_init())
         return 0;
-    
+
     if (!Physics_init())
-        return 0;       
+        return 0;
 
     if (!Graphics_init())
         return 0;
@@ -58,15 +58,15 @@ int main(void)
     top_wall->immovable = TRUE;
     bottom_wall->immovable = TRUE;
 
-    Body_setShape(left_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 10.0, 480.0)));
-    Body_setShape(right_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 10.0, 480.0)));
-    Body_setShape(top_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 640.0, 10.0)));
-    Body_setShape(bottom_wall, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 640.0, 10.0)));
+    Body_setShape(left_wall, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 10.0, 480.0)));
+    Body_setShape(right_wall, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 10.0, 480.0)));
+    Body_setShape(top_wall, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 640.0, 10.0)));
+    Body_setShape(bottom_wall, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 640.0, 10.0)));
 
-    Body_setPosition(left_wall, Point_createFromXY(0.0, 0.0));
-    Body_setPosition(right_wall, Point_createFromXY(630.0, 0.0));
-    Body_setPosition(top_wall, Point_createFromXY(0.0, 0.0));
-    Body_setPosition(bottom_wall, Point_createFromXY(0.0, 470.0));
+    Body_setPosition(left_wall, Point_createFromXY(-320.0, -240.0));
+    Body_setPosition(right_wall, Point_createFromXY(310.0, -240.0));
+    Body_setPosition(top_wall, Point_createFromXY(-320.0, -240.0));
+    Body_setPosition(bottom_wall, Point_createFromXY(-320.0, 230.0));
 
     Hook* hook = Hook_newFromFunction(NULL, collision_hook);
     //Physics_addCollisionHook(1, 0, hook);
@@ -78,44 +78,49 @@ int main(void)
     Physics_addBody(bottom_wall);
 
     int i;
-    for(i = 0; i < 10; i++)
-      {	
-	int x = i % 10;
-	int y = i / 10;
+    for(i = 0; i < 8; i++)
+    {
+        int x = 8+i%2; //i % 10;
+        int y = i / 4;
 
-	Body* ball = Body_new();
-	Body_setShape(ball, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
-	Body_setPosition(ball, Point_createFromXY(10.0+x*45.0, 110.0+y*45.0));
-	Body_setVelocity(ball, Vector_create2d(pow(1, i)*5.0, 5.0));
-	ball->mass = 1.0;
-	ball->elasticity = 1.0;
+        Body* ball = Body_new();
+        Body_setShape(ball, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
+        Body_setPosition(ball, Point_createFromXY(x*45.0 - 300.0, y*45.0 - 220));
+        Body_setVelocity(ball, Vector_create2d(50.0, 0.0));
+        //Body_setPosition(ball, Point_createFromXY(x*30.0, y*30.0-170));
+        //Body_setVelocity(ball, Vector_create2d(100.0, 0.0));
+        ball->mass = 1.0;
+        ball->elasticity = 0.5;
 	ball->type = 1;
 	Physics_addBody(ball);
-      }
-    
+    }
 
     Body* ball1 = Body_new();
-    Body_setShape(ball1, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
-    Body_setPosition(ball1, Point_createFromXY(534.016724, 439.973694));
-    Body_setVelocity(ball1, Vector_create2d(-5, 0.55177784));
+    Body_setShape(ball1, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
+    Body_setPosition(ball1, Point_createFromXY(0.0, 0.0));
+    Body_setVelocity(ball1, Vector_create2d(10.0, 10.0));
     ball1->mass = 1.0;
     ball1->elasticity = 1.0;
     ball1->type = 1;
     //Physics_addBody(ball1);
 
     Body* ball2 = Body_new();
-    Body_setShape(ball2, Shape_createFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
-    Body_setPosition(ball2, Point_createFromXY(200.0, 434.0));
-    Body_setVelocity(ball2, Vector_create2d(0.0, 10.0));
+    Body_setShape(ball2, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
+    Body_setPosition(ball2, Point_createFromXY(30.0,30.0));
+    Body_setVelocity(ball2, Vector_create2d(-10.0, -10.0));
     ball2->mass = 1.0;
-    ball2->elasticity = 0.9;
+    ball2->elasticity = 1.0;
     ball2->type = 1;
     //Physics_addBody(ball2);
 
     int space_lock = 1;
     BOOL do_update = FALSE;
+    //Body_setVelocity(ball1, Vector_create2d(100.0, 0.0));
     while (1)
-        {   
+        {
+            Physics_update(do_update||TRUE);
+            do_update = FALSE;
+
             if (Input_getKey(KEY_ESC))
                 break;
 
@@ -134,44 +139,50 @@ int main(void)
 
 	    if(Input_getKey(KEY_UP))
 	      {
-		ball1->acceleration = Vector_create2d(0.0, -100.0);
+                ball1->velocity = Vector_add(ball1->velocity, Vector_create2d(0.0, -100.0));
 	      }
 
 	    if(Input_getKey(KEY_DOWN))
-	      {
-		ball1->acceleration = Vector_create2d(0.0, 100.0);
-	      }
+            {
+                ball1->velocity = Vector_add(ball1->velocity, Vector_create2d(0.0, 100.0));
+            }
 
 	    if(Input_getKey(KEY_LEFT))
-	      {
-		ball1->acceleration = Vector_create2d(-100.0, 0.0);
-	      }
+            {
+                ball1->velocity = Vector_add(ball1->velocity, Vector_create2d(-100.0, 0.0));
+            }
 
 	    if(Input_getKey(KEY_RIGHT))
-	      {
-		ball1->acceleration = Vector_create2d(100.0, 0.0);
-	      }
+            {
+                ball1->velocity = Vector_add(ball1->velocity, Vector_create2d(100.0, 0.0));
+            }
+            //Body_setVelocity(ball1, Vector_create2d(100.0, 0.0));
+
+	    if(Input_getKey(KEY_SPACE))
+            {
+                //ball1->velocity = Vector_add(ball1->velocity, Vector_create2d(0.0, -100.0));
+            }
 
             if(t >= next_t)
-                {
-		  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		    Physics_update(t, FALSE == do_update || Input_getKey(KEY_ENTER));
-		    do_update = FALSE;
-                    next_t += 0.03;
-		    Platform_refreshWindow();
-                }
+            {
+                //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                Graphics_render();
+                Physics_checkCollisions(next_t*5, TRUE == do_update || Input_getKey(KEY_ENTER));
+                next_t += 0.03;
+                Platform_refreshWindow();
+            }
 	    Platform_sleep(next_t-t);
         }
 
     Hook_delete(hook);
-    
+
     Graphics_terminate();
 
     Physics_terminate();
-    
+
     Platform_terminate();
-    
+
     Log_terminate();
- 
+
     return 0;
 }

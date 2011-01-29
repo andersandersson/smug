@@ -24,9 +24,10 @@ typedef unsigned int COLLISION_TYPE;
 #define COLLISION_NONE    0x00
 #define COLLISION_ENTER   0x01
 #define COLLISION_PERSIST 0x02
-#define COLLISION_EXIT    0x04
+#define COLLISION_EXIT    0x03
+#define COLLISION_TYPE_LENGTH  0x04
 
-BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* self_velocity, Vector* self_acceleration, 
+BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* self_velocity, Vector* self_acceleration,
 				Body* other, Point* other_start, Vector* other_velocity, Vector* other_acceleration,
 				TIME delta_time, LinkedList* collisions);
 
@@ -42,38 +43,31 @@ typedef struct CollisionData
     /** The kind of collision, entering, exiting, persistent. */
     COLLISION_TYPE type;
 
-    /** The left hand of the collision, and the object to modify position for. */
-    Body* self;
-
-    /** The object we collided with. Should probably not be altered. */
-    Body* other;
+    /** The bodies involved in the collision. */
+    Body* body[2];
 
     /** The normal for the surface of "other" that "self" collided with. */
-    Vector normal;
+    Vector normal[2];
 
-    /** The self objects velocity */  
-    Vector selfVelocity;
+    /** The self objects velocity */
+    Vector velocity[2];
 
-    /** The self starting point. May differ from self->position. */
-    Point selfStart;
-    Vector selfMovement;
-
-    /** The other objects velocity */  
-    Vector otherVelocity;
-
-    Vector wayout;
+    /** The accelerations of the bodies. */
+    Vector acceleration[2];
 
     /** The self starting point. May differ from self->position. */
-    Point otherStart;
-    Vector otherMovement;
+    Point start[2];
+
+    /** The movement made by the bodies. */
+    Vector movement[2];
+
+    /** How to move the object out of collision */
+    Vector wayout[2];
 
     /** A floating point number form 0.0 to 1.0 with the time for when along selfMovement the collision stopped. */
     TIME time;
-
     TIME absoluteTime;
-
     TIME absoluteTimeStart;
-
     TIME deltaTime;
 } CollisionData;
 
@@ -124,16 +118,18 @@ void Physics_addBody(Body* body);
 void Physics_removeBody(Body* body);
 
 
-/** Performe a tick in the engine
+/** Perform a tick in the engine
  *
- * Update the Physics world with a new timestamp. This function
- * will check for collision between all objects and call the
- * related collision hook. Afterwards it will update all objects
- * with their new positions.
+ * This function will check for collision between all objects and
+ * call the related collision hook. Afterwards it will update all
+ * objects with their new positions.
  *
  * @param time Time since application start
  */
-void Physics_update(TIME time, BOOL do_update);
+void Physics_checkCollisions(TIME time, BOOL do_update);
+
+
+void Physics_update(BOOL do_update);
 
 
 /** Add default handler Hook for solid, gliding objects

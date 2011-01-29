@@ -8,18 +8,19 @@ Waypoint* Waypoint_new(void)
 {
     Waypoint* waypoint = malloc(sizeof(Waypoint));
 
-    waypoint->time = 0.0;    
+    waypoint->time = 0.0;
 
     return waypoint;
 }
 
-Waypoint* Waypoint_createFromTimePositionVelocity(float time, Point p, Vector v)
+Waypoint* Waypoint_newFromTPVA(float time, Point p, Vector v, Vector a)
 {
   Waypoint* wp = Waypoint_new();
 
   wp->point = p;
   wp->time = time;
   wp->velocity = v;
+  wp->acceleration = a;
 
   return wp;
 }

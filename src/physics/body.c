@@ -20,7 +20,7 @@ Body* Body_new(void)
     body->elasticity = 0.0;
     body->friction = 1.0;
     body->immovable = FALSE;
-    
+
     body->waypoints = LinkedList_new();
 
     body->_newVelocity = Vector_create2d(0.0, 0.0);
@@ -109,7 +109,7 @@ void Body_dump(Body* body)
 {
   Node* node;
   char buffer[65536];
-  
+
   DEBUG("===================");
   DEBUG("BODY: %d", body);
   DEBUG("-------------------");
@@ -127,7 +127,7 @@ void Body_dump(Body* body)
     {
       Waypoint* wp = (Waypoint*) node->item;
       sprintf(buffer, "%s(%f: %f,%f)", buffer, wp->time, wp->point.v.d[0], wp->point.v.d[1]);
-      
+
       if(NULL != node->next)
 	{
 	  sprintf(buffer, "%s -> ", buffer);
@@ -150,8 +150,8 @@ void Body_dumpWaypoints(Body* body)
   for(node = body->waypoints->first; node != NULL; node = node->next)
     {
       Waypoint* wp = (Waypoint*) node->item;
-      sprintf(buffer, "%s(%f: [%f,%f], [%f,%f])", buffer, wp->time, wp->point.v.d[0], wp->point.v.d[1], wp->velocity.d[0], wp->velocity.d[1]);
-      
+      sprintf(buffer, "%s(%f: [%f,%f], [%f,%f], [%f,%f])\n", buffer, wp->time, wp->point.v.d[0], wp->point.v.d[1], wp->velocity.d[0], wp->velocity.d[1], wp->acceleration.d[0], wp->acceleration.d[1]);
+
       if(NULL != node->next)
 	{
 	  sprintf(buffer, "%s -> ", buffer);
@@ -164,5 +164,5 @@ void Body_dumpWaypoints(Body* body)
 
 void Body_drawBody(Body* body, float time, Color color)
 {
-  Physics_drawShape(body->shape, body->position, color);
+    Physics_drawShape(body->shape, Point_add(body->position, Point_createFromXY(320.0, 240.0)), color);
 }
