@@ -2,6 +2,7 @@
 #define SMUG_ENGINE_GAMEOBJECT_INTERNAL_H
 
 #include <engine/gameobject_type.h>
+#include <engine/gameobject.h>
 
 struct LinkedList;
 
