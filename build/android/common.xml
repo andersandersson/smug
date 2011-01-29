@@ -635,7 +635,7 @@
     <condition property="ndk.verbosity.arg" value="V=1 NDK_LOG=1" else="V=0">
       <istrue value="${verbose}"/>
     </condition>
-    <condition property="ndk.debug.arg" value="DEBUG=true" else="DEBUG=false">
+    <condition property="ndk.debug.arg" value="DEBUG=true SMUG_DEBUG=true" else="DEBUG=false SMUG_DEBUG=false">
       <istrue value="${debug}"/>
     </condition>
     <condition property="ndk.parallel.arg" value="-j${ndk.parallel}" else="">

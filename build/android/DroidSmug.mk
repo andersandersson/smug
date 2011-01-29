@@ -16,6 +16,7 @@ LOCAL_CFLAGS := -DANDROID_NDK -DHAS_CONFIG_H -Wall -std=c99 -Wno-variadic-macros
 
 ifeq ($(SMUG_DEBUG),true)
 # debug defines
+LOCAL_CFLAGS := $(LOCAL_CFLAGS) -DSMUG_DEBUG
 endif
 
 LOCAL_ALLOW_UNDEFINED_SYMBOLS := false
