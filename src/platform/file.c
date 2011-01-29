@@ -1,4 +1,5 @@
 #include <smugstd.h>
+#include <common/common.h>
 #include <platform/file.h>
 
 struct _File
@@ -63,7 +64,7 @@ unsigned char* File_getBuffer(File* self)
     smug_assert(self != NULL);
     long int length = File_getLength(self);
 	unsigned char* buffer = (unsigned char*)malloc(length);
-	if (File_fread(file, buffer, 1, length) != length)
+	if (File_fread(self, buffer, 1, length) != length)
 	{
 		ERROR("Did not read correct amount of bytes.");
 		free(buffer);
