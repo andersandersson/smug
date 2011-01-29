@@ -75,7 +75,7 @@ Shape* Shape_newMultipoint(void)
 Shape* Shape_addPoint(Shape* self, Vector point)
 {
     smug_assert(self != NULL);
-    smug_assert(self->type = SHAPE_UNFINISHED);
+    smug_assert(self->type == SHAPE_UNFINISHED);
     Vector* v = Vector_new2d(Vector_getX(&point), Vector_getY(&point));
     LinkedList_addLast((LinkedList*)self->data, v);
     return self;
@@ -84,7 +84,7 @@ Shape* Shape_addPoint(Shape* self, Vector point)
 Shape* Shape_finishMultipoint(Shape* self)
 {
     smug_assert(self != NULL);
-    smug_assert(self->type = SHAPE_UNFINISHED);
+    smug_assert(self->type == SHAPE_UNFINISHED);
     LinkedList* list = (LinkedList*)self->data;
     int nrPoints = LinkedList_length(list);
     smug_assert(nrPoints > 0);
