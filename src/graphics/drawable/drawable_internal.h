@@ -6,23 +6,24 @@
 #include <graphics/drawable/drawable_type.h>
 
 struct BatchData;
+struct Sprite;
 
 typedef struct _Drawable
 {
     _PositionedObject base; // Inherit from PositionedObject
 
     Color mColor;
+    BOOL mUseColor;
     SmugInheritType mColorInheritance;
 
     BOOL mVisible;
     SmugInheritType mVisibilityInheritance;
 
-    float mOpacity;
     SmugInheritType mOpacityInheritance;
 
     int mType;
     unsigned int mLayer;
-    // Sprite* sprite; // Is NULL for shapes
+    struct Sprite* mSprite;
     // unsigned int vertexcount;
     // Vector* vertexOffsets;
     void (*_writeBatchDataFunc)(Drawable* d, struct BatchData* batch, unsigned int start); /**< Function for writing data */

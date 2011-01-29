@@ -3,6 +3,7 @@
 
 #include <common/common.h>
 #include <common/log.h>
+#include <platform/file.h>
 #include <graphics/image/lodepng/lodepng.h>
 
 #include <graphics/image/image.h>
@@ -56,7 +57,7 @@ void Image_delete(Image* image)
 
 static unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
 {
- 	FILE* file = fopen(filename,"rb");
+ 	File* file = File_fopen(filename,"rb");
 	if (!file)
 	{
 		WARNING("Couldn't locate file '%s'.", filename);
@@ -64,22 +65,22 @@ static unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
 	}
     DEBUG("Successfully opened file '%s'.", filename);
 
-	fseek(file, 0, SEEK_END);
-	int filelen = ftell(file);
-	fseek(file, 0, SEEK_SET);
+	File_fseek(file, 0, SMUG_SEEK_END);
+	int filelen = File_ftell(file);
+	File_fseek(file, 0, SMUG_SEEK_SET);
 
     DEBUG("File length: '%i'.", filelen);
 
 	unsigned char* buffer = (unsigned char*)malloc(filelen);
-	if (fread(buffer, 1, filelen, file) != filelen)
+	if (File_fread(file, buffer, 1, filelen) != filelen)
 	{
 		ERROR("Did not read correct amount of bytes.");
-		fclose(file);
+		File_fclose(file);
 		free(buffer);
         return 0;
 	}
 
-    fclose(file);
+    File_fclose(file);
     *buffersize = filelen;
     return buffer;
 }
@@ -117,7 +118,7 @@ static BOOL _decodePNG(Image* image, unsigned char* buffer, unsigned int buffers
 
     if(decoder.error)
     {
-        ERROR("PNG decoding failed, error: %d\n", decoder.error);
+        ERROR("PNG decoding failed, error: %d", decoder.error);
         return FALSE;
     }
 
@@ -138,7 +139,7 @@ static BOOL _encodePNG(unsigned char** buffer, unsigned int* buffersize, Image* 
 
     if(encoder.error)
     {
-        ERROR("PNG decoding failed, error: %d\n", encoder.error);
+        ERROR("PNG encoding failed, error: %d", encoder.error);
         return FALSE;
     }
 

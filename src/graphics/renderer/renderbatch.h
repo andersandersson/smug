@@ -3,11 +3,10 @@
 
 #include <common/common.h>
 #include <graphics/drawable/drawable_type.h>
+#include <graphics/texture/texture_type.h>
 
 struct LinkedList;
 struct BatchData;
-
-struct Texture;
 
 // Holds all data necessary for one render batch
 
@@ -19,9 +18,8 @@ struct Texture;
 
 typedef struct RenderBatch
 {
-    //Texture texture = NULL
     unsigned int objectSize;
-    struct Texture* texture;
+    Texture* texture;
     struct BatchData* data;
     struct LinkedList* drawables;
     unsigned int dataSize;
@@ -30,7 +28,7 @@ typedef struct RenderBatch
     unsigned int textureBufferIndex;
 } RenderBatch;
 
-RenderBatch* RenderBatch_new(unsigned int objectSize, struct Texture* texture, unsigned int initialSize);
+RenderBatch* RenderBatch_new(unsigned int objectSize, Texture* texture, unsigned int initialSize);
 void RenderBatch_delete(void* batch);
 
 unsigned int RenderBatch_getDataSize(RenderBatch* batch);

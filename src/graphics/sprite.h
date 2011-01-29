@@ -11,9 +11,9 @@
 #define SMUG_GRAPHICS_SPRITE_H
 
 #include <common/common.h>
-#include <graphics/texture/texture.h>
 #include <utils/rectangle_type.h>
 #include <utils/vector_type.h>
+#include <graphics/texture/texture.h>
 
 /**
  * Holds a texture and a rectangular area on it.
@@ -41,6 +41,9 @@ Sprite* Sprite_newFromPixelCoords(Texture* texture, Rectangle rect, Vector offse
  * @param offset offset of the rect
  */
 Sprite* Sprite_newFromTextureCoords(Texture* texture, Rectangle rect, Vector offset);
+
+Texture* Sprite_getTexture(Sprite* self);
+unsigned int Sprite_getTextureId(Sprite* self);
 
 /**
  * Delete sprite

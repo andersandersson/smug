@@ -29,6 +29,8 @@ typedef unsigned char BOOL;
 #define max(x, y) ((x) > (y) ? (x) : (y))
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
+#define SMUG_NOOP() do {} while(0)
+
 void swap_float(float* left, float* right);
 
 typedef double TIME;
