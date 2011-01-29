@@ -61,7 +61,7 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     box = Shape_getAsRectangle(shape);
 
     // write vertices in anti-clockwise order
-    PositionedObject_getPosForDrawing((PositionedObject*)drawable, &dpos);
+    PositionedObject_getPosForDrawing((GameObject*)drawable, &dpos);
     x1 = Point_getX(dpos) + Rectangle_getX(&box);
     y1 = Point_getY(dpos) + Rectangle_getY(&box);
     x2 = Point_getX(dpos) + Rectangle_getW(&box);
@@ -126,7 +126,9 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
 
     // write texture data only if sprite exists
     if ((sprite = Drawable_getSprite(drawable)) == NULL)
+    {
         return;
+    }
 
     tx1 = Rectangle_getX(&sprite->rect) * sprite->texture->px;
     ty1 = Rectangle_getY(&sprite->rect) * sprite->texture->py;

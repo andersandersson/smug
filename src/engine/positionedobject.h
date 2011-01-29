@@ -14,7 +14,8 @@ BOOL PositionedObject_getPos(PositionedObject* self, struct Vector* v);
 BOOL PositionedObject_getX(PositionedObject* self, float* x);
 BOOL PositionedObject_getY(PositionedObject* self, float* y);
 BOOL PositionedObject_moveTo(PositionedObject* self, float x, float y);
-BOOL PositionedObject_getPosForDrawing(PositionedObject* self, struct Point* p);
+BOOL PositionedObject_getPosForDrawing(GameObject* self, struct Point* p);
+
 /**
  * Called by platform when position will not change again during this heartbeat.
  */

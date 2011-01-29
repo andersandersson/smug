@@ -114,9 +114,45 @@ BOOL PositionedObject_moveTo(PositionedObject* self, float x, float y)
     return TRUE;
 }
 
-BOOL PositionedObject_getPosForDrawing(PositionedObject* self, Point* p)
+BOOL PositionedObject_getPosForDrawing(GameObject* self, Point* p)
 {
-    if (self->mPositionInheritance == SMUG_POSITION_RELATIVE
+    if (GameObject_isType(self, SMUG_TYPE_POSITIONED))
+    {
+        Point myPos = Interpoint_getInterpolated(((PositionedObject*)self)->mPosition);
+        if (GameObject_isRootObject(self) || ((PositionedObject*)self)->mPositionInheritance == SMUG_POSITION_KEEP)
+        {
+            *p = myPos;
+            return TRUE;
+        }
+        else
+        {
+            Point pp = Point_createFromXY(0, 0);
+            PositionedObject_getPosForDrawing(GameObject_getParent(self), &pp);
+            if (((PositionedObject*)self)->mPositionInheritance == SMUG_POSITION_INHERIT)
+            {
+                *p = pp;
+                return TRUE;
+            }
+            else
+            {
+                smug_assert(((PositionedObject*)self)->mPositionInheritance == SMUG_POSITION_RELATIVE);
+                *p = Point_add(myPos, pp);
+                return TRUE;
+            }
+        }
+    }
+    else
+    {
+        if (GameObject_isRootObject(self))
+        {
+            return FALSE;
+        }
+        else
+        {
+            return PositionedObject_getPosForDrawing(GameObject_getParent(self), p);
+        }
+    }
+/*     if (self->mPositionInheritance == SMUG_POSITION_RELATIVE
         && !GameObject_isRootObject((GameObject*)self)
         && GameObject_isType(GameObject_getParent((GameObject*)self), SMUG_TYPE_POSITIONED))
     {
@@ -131,7 +167,7 @@ BOOL PositionedObject_getPosForDrawing(PositionedObject* self, Point* p)
         *p = Interpoint_getInterpolated(self->mPosition);
         // smug_printf("Object %i has pos %f, %f", self, Point_getX(*p), Point_getY(*p));
     }
-    return TRUE;
+    return TRUE; */
 }
 
 BOOL PositionedObject_commitPosition(PositionedObject* self)
