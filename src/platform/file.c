@@ -1,5 +1,6 @@
 #include <smugstd.h>
 #include <common/common.h>
+#include <common/log.h>
 #include <platform/file.h>
 
 struct _File
