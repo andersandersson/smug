@@ -11,7 +11,7 @@
 
 SmugObject smugDrawable_newFromRect(SmugRect rect)
 {
-    return (SmugObject)DrawableShape_newBoxFromSize(Rectangle_getSize(rect));
+    return (SmugObject)Drawable_newBoxFromSize(Rectangle_getSize(rect));
 }
 
 void smugDrawable_setColor(SmugObject drawable, SmugColor color)

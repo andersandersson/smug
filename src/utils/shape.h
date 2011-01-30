@@ -12,30 +12,7 @@
 
 #include <common/common.h>
 #include <utils/rectangle_type.h>
-
-/** Describes the type of a Shape */
-typedef unsigned int SHAPE_TYPE;
-
-#define SHAPE_UNKNOWN       0x00
-#define SHAPE_RECTANGLE     0x01
-#define SHAPE_UNFINISHED    0x02
-#define SHAPE_MULTIPOINT    0x03
-
-
-/** Container object for shapes
- *
- * A container object for different shapes. This struct will
- * hide the different shape implementations from the user.
- */
-typedef struct Shape
-{
-    /** The type of the shape, e.g. SHAPE_RECTANGLE */
-    SHAPE_TYPE type;
-    /** Pointer to the real data for the shape */
-    void* data;
-} Shape;
-
-
+#include <utils/shape_type.h>
 
 /** Create a new Shape
  *
@@ -74,6 +51,8 @@ Vector Shape_getFirstPoint(Shape* self);
 BOOL Shape_morePoints(Shape* self);
 Vector Shape_getNextPoint(Shape* self);
 int Shape_getNrPoints(Shape* self);
+
+SHAPE_TYPE Shape_getType(Shape* self);
 
 #endif // SMUG_UTILS_SHAPES_H
 

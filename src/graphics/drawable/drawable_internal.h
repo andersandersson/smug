@@ -3,6 +3,7 @@
 
 #include <graphics/color_type.h>
 #include <engine/positionedobject_internal.h>
+#include <utils/shape_type.h>
 #include <graphics/drawable/drawable_type.h>
 
 struct BatchData;
@@ -15,15 +16,17 @@ typedef struct _Drawable
     Color mColor;
     BOOL mUseColor;
     SmugInheritType mColorInheritance;
+    SmugInheritType mOpacityInheritance;
+
+    Shape* mShape;
+
+    struct Sprite* mSprite;
 
     BOOL mVisible;
     SmugInheritType mVisibilityInheritance;
 
-    SmugInheritType mOpacityInheritance;
-
     int mType;
     unsigned int mLayer;
-    struct Sprite* mSprite;
     // unsigned int vertexcount;
     // Vector* vertexOffsets;
     void (*_writeBatchDataFunc)(Drawable* d, struct BatchData* batch, unsigned int start); /**< Function for writing data */

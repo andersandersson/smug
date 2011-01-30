@@ -5,7 +5,7 @@
 #include <utils/point.h>
 #include <utils/rectangle.h>
 #include <utils/vector.h>
-#include <utils/shapes.h>
+#include <utils/shape.h>
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
 #include <engine/positionedobject.h>
@@ -15,17 +15,16 @@
 #include <graphics/texture/texture_internal.h>
 #include <graphics/renderer/batchdata.h>
 #include <graphics/drawable/drawable.h>
-#include <graphics/drawable/drawableshape.h>
-#include <graphics/drawable/drawableshape_type.h>
+#include <graphics/drawable/drawable_internal.h>
 
 #include <graphics/drawable/box.h>
 
-static BOOL _invariant(DrawableShape* self)
+static BOOL _invariant(Drawable* self)
 {
     smug_assert(self != NULL);
     smug_assert(self->mShape != NULL);
-    smug_assert(self->mShape->type == SHAPE_RECTANGLE);
-    return (self != NULL && self->mShape != NULL && self->mShape->type == SHAPE_RECTANGLE);
+    smug_assert(Shape_getType(self->mShape) == SHAPE_RECTANGLE);
+    return (self != NULL && self->mShape != NULL && Shape_getType(self->mShape) == SHAPE_RECTANGLE);
 }
 
 static int getDataSize(Drawable* self)
@@ -43,7 +42,7 @@ static int getDataSize(Drawable* self)
 
 static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned int start)
 {
-    smug_assert(_invariant((DrawableShape*)drawable));
+    smug_assert(_invariant(drawable));
     smug_assert(GameObject_isType((GameObject*)drawable, SMUG_TYPE_SHAPE));
     static unsigned int vertexstart, colorstart, texturestart;
     static float x1, x2, y1, y2;
@@ -60,7 +59,7 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
     colorstart = start*4;
     texturestart = start*2;
 
-    DrawableShape_getShape((DrawableShape*)drawable, &shape);
+    Drawable_getShape(drawable, &shape);
     box = Shape_getAsRectangle(shape);
 
     // write vertices in anti-clockwise order
@@ -166,17 +165,17 @@ static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned in
 }
 
 
-DrawableShape* DrawableShape_newBox(void)
+Drawable* Drawable_newBox(void)
 {
-    return DrawableShape_newBoxFromSize(Vector_create2d(0,0));
+    return Drawable_newBoxFromSize(Vector_create2d(0,0));
 }
 
-DrawableShape* DrawableShape_newBoxFromSize(Vector size)
+Drawable* Drawable_newBoxFromSize(Vector size)
 {
-    DrawableShape* newObj = (DrawableShape*)malloc(sizeof(DrawableShape));
-    DrawableShape_init(newObj);
-    ((Drawable*)newObj)->_writeBatchDataFunc = writeBatchData;
-    ((Drawable*)newObj)->_getDataSizeFunc = getDataSize;
+    Drawable* newObj = (Drawable*)malloc(sizeof(_Drawable));
+    Drawable_init(newObj);
+    newObj->_writeBatchDataFunc = writeBatchData;
+    newObj->_getDataSizeFunc = getDataSize;
     newObj->mShape = Shape_newFromRectangle(Rectangle_createFromXYWH(0, 0, Vector_getX(&size), Vector_getY(&size)));
     smug_assert(_invariant(newObj));
     return newObj;

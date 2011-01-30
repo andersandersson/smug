@@ -43,7 +43,6 @@ LOCAL_SRC_FILES := \
     graphics/sprite.c \
     graphics/drawable/box.c \
     graphics/drawable/drawable.c \
-    graphics/drawable/drawableshape.c \
     graphics/image/image.c \
     graphics/image/lodepng/lodepng.c \
     graphics/renderer/layer.c \
@@ -72,7 +71,7 @@ LOCAL_SRC_FILES := \
     utils/pathname.c \
     utils/point.c \
     utils/rectangle.c \
-    utils/shapes.c \
+    utils/shape.c \
     utils/sstring.c \
     utils/vector.c \
     platform/interface.c \
@@ -83,6 +82,7 @@ LOCAL_SRC_FILES := \
     platform/android/smugstd.c \
     platform/android/threads.c \
     platform/android/physics_debug.c
+    # graphics/drawable/drawableshape.c \
     # graphics/drawable/drawable.c \
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog

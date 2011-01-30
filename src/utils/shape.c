@@ -6,7 +6,7 @@
 #include <utils/vector.h>
 #include <utils/linkedlist.h>
 
-#include <utils/shapes.h>
+#include <utils/shape.h>
 
 typedef struct Multipoint
 {
@@ -141,4 +141,10 @@ int Shape_getNrPoints(Shape* self)
             smug_assert(!"Bad shape type!");
             return 0;
     }
+}
+
+SHAPE_TYPE Shape_getType(Shape* self)
+{
+    smug_assert(self != NULL);
+    return self->type;
 }

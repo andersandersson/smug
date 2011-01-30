@@ -1,7 +1,7 @@
 #include <smugstd.h>
 
 #include <graphics/color.h>
-#include <utils/shapes.h>
+#include <utils/shape.h>
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
 #include <engine/positionedobject.h>
@@ -86,6 +86,14 @@ void Drawable_deInit(Drawable* self)
     self->mOpacityInheritance = SMUG_INHERIT_UNDEFINED;
     self->mType = 0;
     self->mLayer = 0;
+    if (self->mShape != NULL)
+    {
+        Shape_delete(self->mShape);
+    }
+    if (self->mSprite != NULL)
+    {
+        Sprite_delete(self->mSprite);
+    }
     self->_writeBatchDataFunc = NULL;
     self->_getDataSizeFunc = NULL;
     self->_getObjectSizeFunc = NULL;
@@ -102,13 +110,15 @@ void Drawable_init(Drawable* self)
 
     self->mColor = Color_createFromRGBAi(0, 0, 0, 255);
     self->mUseColor = FALSE;
+    self->mOpacityInheritance = SMUG_OPACITY_INHERIT;
     self->mColorInheritance = SMUG_COLOR_INHERIT;
+    self->mShape = NULL;
+    self->mSprite = NULL;
+
     self->mVisible = TRUE;
     self->mVisibilityInheritance = SMUG_VISIBILITY_INHERIT;
-    self->mOpacityInheritance = SMUG_OPACITY_INHERIT;
     self->mType = 0;  // TODO: proper value, whatever that is.
     self->mLayer = 0;
-    self->mSprite = NULL;
     self->_writeBatchDataFunc = NULL;
     self->_getDataSizeFunc = NULL;
     self->_getObjectSizeFunc = NULL;
@@ -204,6 +214,12 @@ BOOL Drawable_setOpacity(Drawable* self, float opacity)
 BOOL Drawable_getOpacity(Drawable* self, float* opacity)
 {
     *opacity = Color_Af(self->mColor);
+    return TRUE;
+}
+
+BOOL Drawable_getShape(Drawable* self, Shape** shape)
+{
+    *shape = self->mShape;
     return TRUE;
 }
 
