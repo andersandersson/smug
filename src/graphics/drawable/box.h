@@ -7,6 +7,7 @@
 
 #include <utils/vector_type.h>
 #include <graphics/drawable/drawable_type.h>
+#include <graphics/sprite.h>
 
 /**
  * Creates new box drawable
@@ -22,6 +23,8 @@ Drawable* Drawable_newBox(void);
  * @return Drawable
  */
 Drawable* Drawable_newBoxFromSize(Vector size);
+
+Drawable* Drawable_newFromSprite(Sprite* sprite);
 
 #endif //GRAPHICS_DRAWABLE_BOX_H
 

@@ -10,6 +10,12 @@
 #include <graphics/texture/texture_type.h>
 #include <graphics/texture/texture_internal.h>
 
+static BOOL _invariant(Texture* self)
+{
+    smug_assert(self != NULL);
+    return self != NULL;
+}
+
 static int getClosestGreaterPowerOfTwo(int number)
 {
     int n = 0;
@@ -94,6 +100,7 @@ Texture* Texture_new(unsigned int width, unsigned int height)
     Texture* tex = (Texture*)malloc(sizeof(Texture));
     if (loadEmptyTexture(tex, width, height))
     {
+        smug_assert(_invariant(tex));
         return tex;
     }
     free(tex);
@@ -105,41 +112,45 @@ Texture* Texture_newFromImage(Image* image)
     Texture* tex = (Texture*)malloc(sizeof(Texture));
     if (loadTextureFromImage(tex, image))
     {
+        smug_assert(_invariant(tex));
         return tex;
     }
     free(tex);
     return NULL;
 }
 
-void Texture_release(Texture* texture)
+void Texture_release(Texture* self)
 {
-	glDeleteTextures(1, &texture->texid);
+    smug_assert(_invariant(self));
+	glDeleteTextures(1, &self->texid);
     printGLError();
-	texture->loaded = FALSE;
+	self->loaded = FALSE;
 }
 
-void Texture_reload(Texture* texture)
+void Texture_reload(Texture* self)
 {
-    if (FALSE != texture->loaded)
+    smug_assert(_invariant(self));
+    if (FALSE != self->loaded)
     {
-        Texture_release(texture);
+        Texture_release(self);
     }
 
-    if (texture->image != NULL)
+    if (self->image != NULL)
     {
-       loadTextureFromImage(texture, texture->image);
+       loadTextureFromImage(self, self->image);
     }
     else
     {
-        loadEmptyTexture(texture, texture->width, texture->height);
+        loadEmptyTexture(self, self->width, self->height);
     }
 }
 
-void Texture_delete(void* texture)
+void Texture_delete(void* self)
 {
-    if (NULL != texture)
+    if (NULL != self)
     {
-        Texture* t = (Texture*)texture;
+        smug_assert(_invariant(self));
+        Texture* t = (Texture*)self;
         Texture_release(t);
         free(t);
     }
@@ -147,5 +158,18 @@ void Texture_delete(void* texture)
 
 unsigned int Texture_getId(Texture* self)
 {
+    smug_assert(_invariant(self));
     return self->texid;
+}
+
+unsigned int Texture_getWidth(Texture* self)
+{
+    smug_assert(_invariant(self));
+    return self->width;
+}
+
+unsigned int Texture_getHeight(Texture* self)
+{
+    smug_assert(_invariant(self));
+    return self->height;
 }

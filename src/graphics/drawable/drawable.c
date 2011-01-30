@@ -2,6 +2,8 @@
 
 #include <graphics/color.h>
 #include <utils/shape.h>
+#include <utils/vector.h>
+#include <utils/rectangle.h>
 #include <engine/gameobject.h>
 #include <engine/gameobject_protected.h>
 #include <engine/positionedobject.h>
@@ -23,8 +25,9 @@ struct Sprite;
 
 BOOL _invariant(Drawable* self)
 {
-    // smug_assert(self != NULL);
-    return self != NULL;
+    smug_assert(self != NULL);
+    smug_assert(self->mShape != NULL);
+    return self != NULL && self->mShape != NULL;
 }
 
 /*************************************************/
@@ -108,6 +111,7 @@ void Drawable_init(Drawable* self)
     ((GameObject*)self)->deleteMe = _delete;
     ((GameObject*)self)->mTypes |= SMUG_TYPE_DRAWABLE;
 
+    self->mAnchorPoint = Vector_create2d(0, 0);
     self->mColor = Color_createFromRGBAi(0, 0, 0, 255);
     self->mUseColor = FALSE;
     self->mOpacityInheritance = SMUG_OPACITY_INHERIT;
@@ -221,6 +225,68 @@ BOOL Drawable_getShape(Drawable* self, Shape** shape)
 {
     *shape = self->mShape;
     return TRUE;
+}
+
+void Drawable_setAnchorPoint(Drawable* self, Vector point)
+{
+    smug_assert(_invariant(self));
+    if (self->mShape != NULL)
+    {
+        Rectangle rect = Shape_getAsRectangle(self->mShape);
+        smug_printf("Moving shape by vector. Before: (%f, %f, %f, %f)", Rectangle_getX(&rect), Rectangle_getY(&rect), Rectangle_getW(&rect), Rectangle_getH(&rect));
+        smug_printf("New vector: (%f, %f)", Vector_getX(&point), Vector_getY(&point));
+        smug_printf("Old vector: (%f, %f)", Vector_getX(&self->mAnchorPoint), Vector_getY(&self->mAnchorPoint));
+        Vector v = Vector_sub(point, self->mAnchorPoint);
+        smug_printf("Moving by vector: (%f, %f)", Vector_getX(&v), Vector_getY(&v));
+        v = Vector_multiply(v, -1.0);
+        smug_printf("Moving by negative vector: (%f, %f)", Vector_getX(&v), Vector_getY(&v));
+        Shape_moveByVector(self->mShape, v);
+        rect = Shape_getAsRectangle(self->mShape);
+        smug_printf("Moved shape by vector. After: (%f, %f, %f, %f)", Rectangle_getX(&rect), Rectangle_getY(&rect), Rectangle_getW(&rect), Rectangle_getH(&rect));
+        self->mAnchorPoint = point;
+    }
+}
+
+Vector Drawable_getAnchorPoint(Drawable* self)
+{
+    smug_assert(_invariant(self));
+    return self->mAnchorPoint;
+}
+
+void Drawable_scale(Drawable* self, float scale)
+{
+    smug_assert(_invariant(self));
+    if (self->mShape != NULL)
+    {
+        Shape_scale(self->mShape, scale);
+    }
+}
+
+void Drawable_scaleX(Drawable* self, float scale)
+{
+    smug_assert(_invariant(self));
+    if (self->mShape != NULL)
+    {
+        Shape_scaleX(self->mShape, scale);
+    }
+}
+
+void Drawable_scaleY(Drawable* self, float scale)
+{
+    smug_assert(_invariant(self));
+    if (self->mShape != NULL)
+    {
+        Shape_scaleY(self->mShape, scale);
+    }
+}
+
+void Drawable_scaleXY(Drawable* self, Vector scales)
+{
+    smug_assert(_invariant(self));
+    if (self->mShape != NULL)
+    {
+        Shape_scaleXY(self->mShape, scales);
+    }
 }
 
 Texture* Drawable_getTexture(Drawable* self)

@@ -32,6 +32,8 @@ float Rectangle_getY(Rectangle* r);
 float Rectangle_getW(Rectangle* r);
 float Rectangle_getH(Rectangle* r);
 
+void Rectangle_addVector(Rectangle* self, Vector v);
+
 Rectangle Rectangle_multiplyVector(Rectangle r, Vector s);
 
 

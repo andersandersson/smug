@@ -15,6 +15,35 @@ typedef struct Multipoint
     unsigned int pointIndex;    /**<  */
 } Multipoint;
 
+static BOOL _invariant(Shape* self)
+{
+    smug_assert(self != NULL);
+    if (self == NULL)
+    {
+        return FALSE;
+    }
+    BOOL retval = TRUE;
+    switch(self->type)
+    {
+        case SHAPE_RECTANGLE:
+            smug_assert(((Rectangle*)self->data) != NULL);
+            retval = ((Rectangle*)self->data) != NULL;
+            break;
+        case SHAPE_MULTIPOINT:
+            smug_assert(((Multipoint*)self->data) != NULL);
+            retval = (((Multipoint*)self->data) != NULL) ? retval : FALSE;
+            smug_assert((Vector*)(((Multipoint*)self->data)->points) != NULL);
+            retval = ((Vector*)(((Multipoint*)self->data)->points) != NULL) ? retval : FALSE;
+            break;
+        case SHAPE_UNFINISHED:
+            break;
+        default:
+            smug_assert(!"Illegal shape type.");
+            retval = FALSE;
+    }
+    return retval;
+}
+
 Shape* Shape_new(void)
 {
     Shape* shape = malloc(sizeof(Shape));
@@ -147,4 +176,62 @@ SHAPE_TYPE Shape_getType(Shape* self)
 {
     smug_assert(self != NULL);
     return self->type;
+}
+
+void Shape_moveByVector(Shape* self, Vector v)
+{
+    smug_assert(_invariant(self));
+    switch(self->type)
+    {
+        case SHAPE_RECTANGLE:
+            Rectangle_addVector((Rectangle*)self->data, v);
+            break;
+        case SHAPE_MULTIPOINT:
+        {
+            for (int i = 0; i < ((Multipoint*)self->data)->nrPoints; i++)
+            {
+                ((Multipoint*)self->data)->points[i] = Vector_add(((Multipoint*)self->data)->points[i], v);
+            }
+            break;
+        }
+        case SHAPE_UNFINISHED:
+        default:
+            smug_assert(!"Illegal shape type.");
+    }
+}
+
+void Shape_scaleX(Shape* self, float scale)
+{
+    Shape_scaleXY(self, Vector_create2d(scale, 1.0));
+}
+
+void Shape_scaleY(Shape* self, float scale)
+{
+    Shape_scaleXY(self, Vector_create2d(1.0, scale));
+}
+
+void Shape_scale(Shape* self, float scale)
+{
+    Shape_scaleXY(self, Vector_create2d(scale, scale));
+}
+
+void Shape_scaleXY(Shape* self, Vector scales)
+{
+    switch(self->type)
+    {
+        case SHAPE_RECTANGLE:
+            *(Rectangle*)self->data = Rectangle_multiplyVector(*(Rectangle*)self->data, scales);
+            break;
+        case SHAPE_MULTIPOINT:
+        {
+            for (int i = 0; i < ((Multipoint*)self->data)->nrPoints; i++)
+            {
+                ((Multipoint*)self->data)->points[i] = Vector_multiplyVector(((Multipoint*)self->data)->points[i], scales);
+            }
+            break;
+        }
+        case SHAPE_UNFINISHED:
+        default:
+            smug_assert(!"Illegal shape type.");
+    }
 }

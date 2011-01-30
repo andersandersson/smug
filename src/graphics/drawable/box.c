@@ -43,7 +43,7 @@ static int getDataSize(Drawable* self)
 static void writeBatchData(Drawable* drawable, BatchData* batchdata, unsigned int start)
 {
     smug_assert(_invariant(drawable));
-    smug_assert(GameObject_isType((GameObject*)drawable, SMUG_TYPE_SHAPE));
+    smug_assert(GameObject_isType((GameObject*)drawable, SMUG_TYPE_DRAWABLE));
     static unsigned int vertexstart, colorstart, texturestart;
     static float x1, x2, y1, y2;
     static float r, g, b, a;
@@ -184,4 +184,12 @@ Drawable* Drawable_newBoxFromSize(Vector size)
     smug_assert(GameObject_isType(newObj, SMUG_TYPE_DRAWABLE));
     smug_assert(GameObject_isType(newObj, SMUG_TYPE_POSITION));
     smug_assert(GameObject_isType(newObj, SMUG_TYPE_OBJECT)); */
+}
+
+Drawable* Drawable_newFromSprite(Sprite* sprite)
+{
+    Drawable* newObj = Drawable_newBoxFromSize(Vector_create2d(Texture_getWidth(Sprite_getTexture(sprite)), Texture_getHeight(Sprite_getTexture(sprite))));
+    Drawable_setSprite(newObj, sprite);
+    Drawable_setUseColor(newObj, FALSE);
+    return newObj;
 }

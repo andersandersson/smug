@@ -44,6 +44,12 @@ float Rectangle_getH(Rectangle* r)
     return r->size.d[1];
 }
 
+void Rectangle_addVector(Rectangle* self, Vector v)
+{
+    self->pos = Point_addVector(self->pos, v);
+    self->size = Vector_add(self->size, v);
+}
+
 void Rectangle_delete(Rectangle* r)
 {
     free(r);
@@ -52,5 +58,5 @@ void Rectangle_delete(Rectangle* r)
 
 Rectangle Rectangle_multiplyVector(Rectangle r, Vector s)
 {
-    return Rectangle_createFromXYWH(Point_getX(r.pos) * s.d[0], Point_getX(r.pos) * s.d[1], r.size.d[0] * s.d[0], r.size.d[1] * s.d[1]);
+    return Rectangle_createFromXYWH(Point_getX(r.pos) * s.d[0], Point_getY(r.pos) * s.d[1], r.size.d[0] * s.d[0], r.size.d[1] * s.d[1]);
 }

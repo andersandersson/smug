@@ -53,6 +53,11 @@ Vector Shape_getNextPoint(Shape* self);
 int Shape_getNrPoints(Shape* self);
 
 SHAPE_TYPE Shape_getType(Shape* self);
+void Shape_moveByVector(Shape* self, Vector v);
+void Shape_scale(Shape* self, float scale);
+void Shape_scaleX(Shape* self, float scale);
+void Shape_scaleY(Shape* self, float scale);
+void Shape_scaleXY(Shape* self, Vector scales);
 
 #endif // SMUG_UTILS_SHAPES_H
 

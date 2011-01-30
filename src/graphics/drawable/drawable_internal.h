@@ -13,6 +13,8 @@ typedef struct _Drawable
 {
     _PositionedObject base; // Inherit from PositionedObject
 
+    Vector mAnchorPoint;
+
     Color mColor;
     BOOL mUseColor;
     SmugInheritType mColorInheritance;
