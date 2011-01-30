@@ -86,6 +86,6 @@ long int File_getLength(File* self)
     long int oldPos = File_ftell(self);
 	File_fseek(self, 0, SMUG_SEEK_END);
 	long int len = File_ftell(self);
-	File_fseek(file, oldPos, SMUG_SEEK_SET);
+	File_fseek(self, oldPos, SMUG_SEEK_SET);
     return len;
 }

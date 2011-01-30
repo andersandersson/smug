@@ -36,6 +36,24 @@ int main(void)
     if (!Graphics_init())
         return 0;
 
+    Vector self_im = Vector_create2d(0.0, -1.0);
+    Vector other_im = Vector_create2d(0.0, -1.0);
+    Vector wayout = Vector_create2d(0.0, 10.0);
+    wayout = Vector_multiply(wayout, 0.5);
+    wayout = Vector_sub(wayout, Vector_projection(wayout, self_im));
+    wayout = Vector_add(wayout, Vector_projection(wayout, other_im));
+    Vector_print(wayout);
+
+    Vector self_im2 = Vector_create2d(0.0, -1.0);
+    Vector other_im2 = Vector_create2d(0.0, 0.0);
+    Vector wayout2 = Vector_create2d(0.0, -10.0);
+    wayout2 = Vector_multiply(wayout2, 0.5);
+    wayout2 = Vector_sub(wayout2, Vector_projection(wayout2, self_im2));
+    wayout2 = Vector_add(wayout2, Vector_projection(wayout2, other_im2));
+    Vector_print(wayout2);
+
+    Vector_print(Vector_sub(wayout, wayout2));
+
     TIME t, next_t;
     t = Platform_getTime();
     next_t = t;
@@ -80,8 +98,8 @@ int main(void)
     int i;
     for(i = 0; i < 8; i++)
     {
-        int x = 8+i%2; //i % 10;
-        int y = i / 4;
+        int x = 0;//8+i%2; //i % 10;
+        int y = i / 1;
 
         Body* ball = Body_new();
         Body_setShape(ball, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
@@ -97,8 +115,8 @@ int main(void)
 
     Body* ball1 = Body_new();
     Body_setShape(ball1, Shape_newFromRectangle(Rectangle_createFromXYWH(0.0, 0.0, 30.0, 30.0)));
-    Body_setPosition(ball1, Point_createFromXY(0.0, 0.0));
-    Body_setVelocity(ball1, Vector_create2d(10.0, 10.0));
+    Body_setPosition(ball1, Point_createFromXY(0.0, 210.0));
+    Body_setVelocity(ball1, Vector_create2d(10.0, 0.0));
     ball1->mass = 1.0;
     ball1->elasticity = 1.0;
     ball1->type = 1;

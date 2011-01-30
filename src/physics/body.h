@@ -35,6 +35,9 @@ typedef struct Body
 
     LinkedList* waypoints;
 
+    Vector immovableNormal;
+    float  immovableWeight;
+
     Vector _newVelocity;
 } Body;
 

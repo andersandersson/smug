@@ -15,7 +15,7 @@ noinst_LTLIBRARIES = libsmug.la
 libsmug_la_SOURCES =  interface.c interface.h\
 engine.c engine.h\
 gameobject.c gameobject.h\
-position_object.c position_object.h\
+positionedobject.c positionedobject.h\
 interpoint.c interpoint.h\
 blocking_engine.c blocking_engine.h
 

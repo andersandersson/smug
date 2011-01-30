@@ -20,7 +20,7 @@ int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_
       *width = i2;
       return 1;
     }
-  else 
+  else
     {
       *width = i1;
       return 0;
@@ -57,8 +57,8 @@ int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_
 	else if(p*p == 4.0*q)
 	  {
 	    *t1 = -p/2.0;
-	    *t2 = FP_NAN;
-	    result = 1;
+	    *t2 = -p/2.0;
+	    result = 2;
 	  }
 	else
 	  {
@@ -99,7 +99,7 @@ int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_
 
 /** Find the collision time for two moving intervals in 1 dimension.
  *
- * Given two intervals on the X-axis, we will find when (if) they collide. 
+ * Given two intervals on the X-axis, we will find when (if) they collide.
  * This is done by comparing the collision times of the moving ending points
  * for each interval.
  *
@@ -131,7 +131,7 @@ int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_
 			      float* t1_in, float* t1_out, float* t2_in, float* t2_out)
 {
     float t_left_1, t_left_2, t_right_1, t_right_2;
-    int num1; 
+    int num1;
     int num2;
 
     // Check the first intervals right point against the second intervals left point
@@ -178,10 +178,13 @@ int _collideInterval1D(float x1_start, float x1_width, float x2_start, float x2_
 
 	return 1;
       }
+    else if(2 == num1 && 1 == num2)
+    {
+    }
 
     *t1_in = FP_NAN;
     *t1_out = FP_NAN;
-    
+
     *t2_in = FP_NAN;
     *t2_out = FP_NAN;
 

@@ -302,6 +302,7 @@ static BOOL _collideRectangleRectangle(Body* self, Point* self_start, Vector* se
 
 	collision_data->time = 0.0;
 	collision_data->type = COLLISION_PERSIST;
+
 	LinkedList_addLast(collisions, collision_data);
     }
 
@@ -439,22 +440,19 @@ static BOOL _detectCollisions(LinkedList* self, LinkedList* other, TIME delta_ti
 
                 if(t_start != t_end)
                 {
-                    Vector self_velocity = self_left_wp->velocity;
-                    Vector other_velocity = other_left_wp->velocity;
-
                     float self_delta_time = t_start - self_left_wp->time;
                     float other_delta_time = t_start - other_left_wp->time;
 
                     Point self_start = Point_addVector(self_left_wp->point, Vector_add(Vector_multiply(self_left_wp->velocity, self_delta_time),
-                                                                                       Vector_multiply(self_body->acceleration, self_delta_time*self_delta_time*0.5)));
+                                                                                       Vector_multiply(self_left_wp->acceleration, self_delta_time*self_delta_time*0.5)));
                     Point other_start = Point_addVector(other_left_wp->point, Vector_add(Vector_multiply(other_left_wp->velocity, other_delta_time),
-                                                                                         Vector_multiply(other_body->acceleration, other_delta_time*other_delta_time*0.5)));
+                                                                                         Vector_multiply(other_left_wp->acceleration, other_delta_time*other_delta_time*0.5)));
 
                     if(SHAPE_RECTANGLE == self_body->shape->type &&
                        SHAPE_RECTANGLE == other_body->shape->type)
                     {
-                        if(TRUE == _collideRectangleRectangle(self_body, &self_start, &self_velocity, &self_body->acceleration,
-                                                              other_body, &other_start, &other_velocity, &other_body->acceleration,
+                        if(TRUE == _collideRectangleRectangle(self_body, &self_start, &self_left_wp->velocity, &self_left_wp->acceleration,
+                                                              other_body, &other_start, &other_left_wp->velocity, &other_left_wp->acceleration,
                                                               t_end - t_start, new_collisions))
                         {
                             changes_made = TRUE;
@@ -584,7 +582,6 @@ int _default_handleEnterCollision(void* lparam, void* rparam)
 
             Body_addWaypoint(data->body[self], Waypoint_newFromTPVA(data->absoluteTime, new_position, new_velocity, new_acceleration));
             Body_addWaypoint(data->body[self], Waypoint_newFromTPVA(data->deltaTime, next_position, next_velocity, new_acceleration));
-            //Body_dumpWaypoints(data->body[self]);
         }
 
         result |= (i+1);
@@ -599,7 +596,7 @@ int _default_handleInCollision(void* lparam, void* rparam)
     Node* node;
 
     int result = 0;
-
+    DEBUG("======================================");
     int i = 0;
     for(i = 0; i<2; i++)
     {
@@ -608,6 +605,11 @@ int _default_handleInCollision(void* lparam, void* rparam)
 
         Vector wayout = data->wayout[self];
 
+        if(Vector_length(wayout) < P_EPSILON)
+        {
+            continue;
+        }
+
         if(data->body[self]->immovable == TRUE)
         {
             continue;
@@ -615,7 +617,21 @@ int _default_handleInCollision(void* lparam, void* rparam)
 
         if(data->body[other]->immovable == FALSE)
         {
-            wayout = Vector_multiply(data->wayout[self], 0.5);
+            Vector_print(wayout);
+            wayout = Vector_multiply(wayout, 0.5);
+            wayout = Vector_sub(wayout, Vector_projection(data->wayout[self], data->body[self]->immovableNormal));
+            wayout = Vector_add(wayout, Vector_projection(data->wayout[self], data->body[other]->immovableNormal));
+
+            Vector_print(wayout);
+
+            if(Vector_length(data->body[other]->immovableNormal) > Vector_length(data->body[self]->immovableNormal))
+            {
+                data->body[self]->immovableNormal = data->body[other]->immovableNormal;
+            }
+        }
+        else
+        {
+            data->body[self]->immovableNormal = Vector_normalize(wayout);
         }
 
         Body_removeWaypointsAfterTime(data->body[self], data->absoluteTime);
@@ -642,15 +658,21 @@ int _default_handleExitCollision(void* lparam, void* rparam)
     return FALSE;
 }
 
-static BOOL _isBodyInvolved(void* body, void* data)
+static BOOL _isBodyInvolved(void* self, void* data)
 {
-    Body* _body = (Body*) body;
-
+    CollisionData* _self = (CollisionData*) self;
     CollisionData* _data = (CollisionData*) data;
 
-    if(_data->body[0] == _body || _data->body[1] == _body)
+    // If they have any in common
+    if(_self->body[0] == _data->body[0] ||
+       _self->body[0] == _data->body[1] ||
+       _self->body[1] == _data->body[0] ||
+       _self->body[1] == _data->body[1])
     {
-        return TRUE;
+        if(_self->absoluteTime < _data->absoluteTime)
+        {
+            return TRUE;
+        }
     }
 
     return FALSE;
@@ -800,7 +822,7 @@ void _Physics_drawBodies(Map* bodies, float time, Color color)
 	    {
                 Waypoint* wp = (Waypoint*) wp_node->item;
                 Color w = Color_createFromRGBAf(1.0, 0.0, 0.0, 1.0);
-                //Physics_drawShape(body->shape, Point_add(wp->point, Point_createFromXY(320.0, 240.0)), w);
+                Physics_drawShape(body->shape, Point_add(wp->point, Point_createFromXY(320.0, 240.0)), w);
 	    }
 
             Body_drawBody(body, time, color);
@@ -835,6 +857,8 @@ void Physics_update(BOOL do_update)
 
                     if(TRUE == do_update)
                     {
+                        body->immovableNormal = Vector_create2d(0.0, 0.0);
+                        body->immovableWeight = 1.0;
                         body->position = wp->point;
                         body->velocity = wp->velocity;
                         body->acceleration = Vector_create2d(0.0, 100.0);
@@ -984,14 +1008,14 @@ void Physics_checkCollisions(TIME time, BOOL do_update)
 
                     if(hook_result & 1)
                     {
-                        OrderedSet_removeIf(collisions, _isBodyInvolved, data->body[0]);
                         LinkedList_addLast(recheck_list, data->body[0]);
+                        OrderedSet_removeIf(collisions, _isBodyInvolved, data);
                     }
 
                     if(hook_result & 2)
                     {
-                        OrderedSet_removeIf(collisions, _isBodyInvolved, data->body[1]);
                         LinkedList_addLast(recheck_list, data->body[1]);
+                        OrderedSet_removeIf(collisions, _isBodyInvolved, data);
                     }
                 }
             }

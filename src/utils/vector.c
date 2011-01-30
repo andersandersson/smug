@@ -154,7 +154,15 @@ Vector Vector_projectionPlane(Vector v, Vector n)
 
 Vector Vector_projection(Vector v, Vector w)
 {
-  return Vector_multiply(w, Vector_dotProduct(v, w) / Vector_squareLength(w));
+    float length = Vector_squareLength(w);
+    if(length > 0)
+    {
+        return Vector_multiply(w, Vector_dotProduct(v, w) / length);
+    }
+    else
+    {
+        return Vector_multiply(w, 0.0);
+    }
 }
 
 
@@ -192,7 +200,7 @@ void Vector_print(Vector v)
     smug_printf("[");
 
     for(i=0; i < v.size; i++) {
-        smug_printf("%.2f", v.d[i]);
+        smug_printf("%.4f", v.d[i]);
 
         if(v.size - i > 1) {
             smug_printf(", ");
