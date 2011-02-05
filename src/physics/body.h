@@ -43,13 +43,13 @@ typedef struct Body
 
 
 /** Create a new Body object
- * @relatesalso Body
+ * @relates Body
  */
 Body* Body_new(void);
 
 
 /** Free memory used by a Body object
- * @relatesalso Body
+ * @relates Body
  * @param body The Body to free
  */
 void Body_delete(Body* body);
@@ -60,7 +60,7 @@ void Body_delete(Body* body);
  * This function will set the Shape to use for the
  * object.
  *
- * @relatesalso Body
+ * @relates Body
  * @param body The Body to change
  * @param shape The Shape to set
  */
@@ -68,25 +68,25 @@ void Body_setShape(Body* body, Shape* shape);
 
 /** Set the Bodys position wihtout collision handling
  *
- * @relatesalso Body
+ * @relates Body
  */
 void Body_setPosition(Body* body, Point position);
 
 /** Set the Bodys velocity
  *
- * @relatesalso Body
+ * @relates Body
  */
 void Body_setVelocity(Body* body, Vector velocity);
 
 /** Move the Body in the given direction
  *
- * @relatesalso Body
+ * @relates Body
  */
 void Body_move(Body* body, float x, float y);
 
 /** Move the Body to the given position
  *
- * @relatesalso Body
+ * @relates Body
  */
 void Body_moveTo(Body* body, float x, float y);
 

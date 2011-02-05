@@ -39,20 +39,20 @@ Image* Image_newFromData(unsigned char* data, unsigned int size, unsigned int wi
     return ret;
 }
 
-void Image_delete(Image* image)
+void Image_delete(Image* self)
 {
-    if (image->data)
+    if (self->data)
     {
-        free(image->data);
-        image->data = NULL;
+        free(self->data);
+        self->data = NULL;
     }
-    if (image->file)
+    if (self->file)
     {
-        free(image->file);
-        image->file = NULL;
+        free(self->file);
+        self->file = NULL;
     }
 
-    free(image);
+    free(self);
 }
 
 static unsigned char* _loadFile(const char* filename, unsigned int* buffersize)
@@ -148,7 +148,7 @@ static BOOL _encodePNG(unsigned char** buffer, unsigned int* buffersize, Image* 
     return TRUE;
 }
 
-BOOL Image_loadFromFile(Image* image, const char* filename)
+BOOL Image_loadFromFile(Image* self, const char* filename)
 {
     unsigned char* buffer = NULL;
 
@@ -168,12 +168,12 @@ BOOL Image_loadFromFile(Image* image, const char* filename)
     if (0 == strncmp(&filename[len-4], ".png", 3))
     {
         DEBUG("Decoding image as PNG");
-        retval = _decodePNG(image, buffer, buffersize);
+        retval = _decodePNG(self, buffer, buffersize);
     }
     else
     {
         DEBUG("No known file format, decoding image as PNG");
-        retval = _decodePNG(image, buffer, buffersize);
+        retval = _decodePNG(self, buffer, buffersize);
     }
 
     if (!retval)
@@ -186,7 +186,7 @@ BOOL Image_loadFromFile(Image* image, const char* filename)
     return TRUE;
 }
 
-BOOL Image_saveToFile(Image* image, const char* filename)
+BOOL Image_saveToFile(Image* self, const char* filename)
 {
     unsigned char* buffer = NULL;
     unsigned int buffersize;
@@ -199,12 +199,12 @@ BOOL Image_saveToFile(Image* image, const char* filename)
     if (0 == strncmp(&filename[len-4], ".png", 3))
     {
         DEBUG("Encoding image as PNG");
-        retval = _encodePNG(&buffer, &buffersize, image);
+        retval = _encodePNG(&buffer, &buffersize, self);
     }
     else
     {
         DEBUG("No known file format, encoding image as PNG");
-        retval = _encodePNG(&buffer, &buffersize, image);
+        retval = _encodePNG(&buffer, &buffersize, self);
     }
 
     if (!retval || NULL == buffer)

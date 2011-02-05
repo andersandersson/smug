@@ -1,12 +1,13 @@
-/** @file calc.h
-  * @brief Calc calculations for the physics
-  * @ingroup smug_physics
-  */
+/**
+ * @file calc.h
+ * @brief Calc calculations for the physics
+ * @ingroup smug_physics
+ */
 
-/** @defgroup smug_physics Calc
-  *
-  * @{
-  */
+/**
+ * @addtogroup smug_physics
+ * @{
+ */
 
 #ifndef SMUG_PHYSICS_CALC_H
 #define SMUG_PHYSICS_CALC_H

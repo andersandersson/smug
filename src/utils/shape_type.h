@@ -1,11 +1,11 @@
-/** @file shapes.h
-  * @brief
-  * @ingroup smug_physics
-  */
+/** @file shape_type.h
+ * @brief
+ * @ingroup smug_utils
+ */
 
-/** @addtogroup smug_physics
-  * @{
-  */
+/** @addtogroup smug_utils
+ * @{
+ */
 
 #ifndef SMUG_UTILS_SHAPES_TYPE_H
 #define SMUG_UTILS_SHAPES_TYPE_H

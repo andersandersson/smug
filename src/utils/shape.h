@@ -1,11 +1,11 @@
-/** @file shapes.h
-  * @brief
-  * @ingroup smug_physics
-  */
+/** @file shape.h
+ * @brief Define the functions related to the Shape type.
+ * @ingroup smug_utils
+ */
 
-/** @addtogroup smug_physics
-  * @{
-  */
+/** @addtogroup smug_utils
+ * @{
+ */
 
 #ifndef SMUG_UTILS_SHAPES_H
 #define SMUG_UTILS_SHAPES_H
@@ -41,22 +41,83 @@ void Shape_delete(Shape* shape);
  * @return Shape
  */
 Shape* Shape_newFromRectangle(Rectangle rect);
+
+/**
+ * Get the shape as a rectangle.
+ * @pre The shape must be of type SHAPE_RECTANGLE
+ */
 Rectangle Shape_getAsRectangle(Shape* self);
 
+/**
+ * Create a new multipoint shape. Its type will be SHAPE_UNFINISHED until Shape_finishMultipoint is
+ * called on it.
+ */
 Shape* Shape_newMultipoint(void);
+
+/**
+ * Add a point to an unfinished multipoint.
+ * @pre The type of the shape must be SHAPE_UNFINISHED.
+ */
 Shape* Shape_addPoint(Shape* self, Vector point);
+
+/**
+ * Finish an unfinished multipoint. Its type will be set to SHAPE_MULTIPOINT.
+ * @pre The type of the shape must be SHAPE_UNFINISHED.
+ */
 Shape* Shape_finishMultipoint(Shape* self);
 
+/**
+ * Get thefirst point in a multipoint shape.
+ * @pre The type of the shape must be SHAPE_MULTIPOINT.
+ */
 Vector Shape_getFirstPoint(Shape* self);
+
+/**
+ * Check if a multipoint shape has more points.
+ * @pre The type of the shape must be SHAPE_MULTIPOINT.
+ */
 BOOL Shape_morePoints(Shape* self);
+
+/**
+ * Get the next point in a multipoint shape.
+ * @pre The type of the shape must be SHAPE_MULTIPOINT.
+ */
 Vector Shape_getNextPoint(Shape* self);
+
+/**
+ * Get the number of points in a multipoint shape.
+ * @pre The type of the shape must be SHAPE_MULTIPOINT.
+ */
 int Shape_getNrPoints(Shape* self);
 
+/**
+ * Get the type of a shape.
+ */
 SHAPE_TYPE Shape_getType(Shape* self);
+
+/**
+ * Move all points in a shape by a vector.
+ */
 void Shape_moveByVector(Shape* self, Vector v);
+
+/**
+ * Scale all points in a shape by a number.
+ */
 void Shape_scale(Shape* self, float scale);
+
+/**
+ * Scale all points in a shape by a number (along the X axis).
+ */
 void Shape_scaleX(Shape* self, float scale);
+
+/**
+ * Scale all points in a shape by a number (along the Y axis).
+ */
 void Shape_scaleY(Shape* self, float scale);
+
+/**
+ * Scale all points in a shape by a number (separate numbers along the X and Y axis).
+ */
 void Shape_scaleXY(Shape* self, Vector scales);
 
 #endif // SMUG_UTILS_SHAPES_H

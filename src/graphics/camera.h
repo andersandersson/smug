@@ -1,11 +1,13 @@
-/** @file camera.h
-  * @brief Defines the Camera type.
-  * @ingroup smug_graphics
-  */
+/**
+ * @file camera.h
+ * @brief Defines the Camera type and related functions.
+ * @ingroup smug_graphics
+ */
 
-/** @addtogroup smug_graphics
-  * @{
-  */
+/**
+ * @addtogroup smug_graphics
+ * @{
+ */
 
 #ifndef SMUG_GRAPHICS_CAMERA_H
 #define SMUG_GRAPHICS_CAMERA_H
@@ -28,26 +30,31 @@ typedef struct Camera
 
 /**
  * Create new Camera
+ * @relates Camera
  */
 Camera* Camera_new(Vector center);
 
 /**
  * Delete Camera
+ * @relates Camera
  */
 void Camera_delete(void* camera);
 
 /**
  * Set position of a Camera
+ * @relates Camera
  */
 void Camera_setPosition(Camera* camera, Point p);
 
 /**
  * Set rotation angle of a Camera
+ * @relates Camera
  */
 void Camera_setRotation(Camera* camera, float r);
 
 /**
  * Set zoom-level of a Camera
+ * @relates Camera
  */
 void Camera_setZoom(Camera* camera, float zoom);
 

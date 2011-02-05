@@ -1,12 +1,14 @@
-/** @file graphics.h
-  * @brief Contains functions to control graphics.
-  * @ingroup smug_graphics
-  */
+/**
+ * @file graphics.h
+ * @brief Contains functions to control graphics.
+ * @ingroup smug_graphics
+ */
 
-/** @defgroup smug_graphics Graphics
-  * The Graphics module handles all graphics in Smug.
-  * @{
-  */
+/**
+ * @defgroup smug_graphics Graphics
+ * The Graphics module handles all graphics in Smug.
+ * @{
+ */
 
 #ifndef SMUG_GRAPHICS_GRAPHICS_H
 #define SMUG_GRAPHICS_GRAPHICS_H
@@ -49,7 +51,8 @@ int Graphics_init(void);
  */
 BOOL Graphics_isInitialized(void);
 
-/** For setting the window size internally. This function should not be visible to user code.
+/**
+ * For setting the window size internally. This function should not be visible to user code.
  */
 void Graphics_setWindowSize(double w, double h);
 
@@ -63,6 +66,9 @@ void Graphics_render(void);
  */
 void Graphics_addDrawable(Drawable* d);
 
+/**
+ * Removes a drawable from graphics engine.
+ */
 void Graphics_removeDrawable(Drawable* d);
 
 /**
