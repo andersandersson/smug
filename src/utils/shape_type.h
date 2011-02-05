@@ -1,9 +1,11 @@
-/** @file shape_type.h
+/**
+ * @file shape_type.h
  * @brief
  * @ingroup smug_utils
  */
 
-/** @addtogroup smug_utils
+/**
+ * @addtogroup smug_utils
  * @{
  */
 
@@ -21,7 +23,8 @@ typedef unsigned int SHAPE_TYPE;
 #define SHAPE_UNFINISHED    0x02
 #define SHAPE_MULTIPOINT    0x03
 
-/** Container object for shapes
+/**
+ * Container object for shapes
  *
  * A container object for different shapes. This struct will
  * hide the different shape implementations from the user.

@@ -1,11 +1,13 @@
-/** @file vector_type.h
-  * @brief Defines the Vector type.
-  * @ingroup smug_utils
-  */
+/**
+ * @file vector_type.h
+ * @brief Defines the Vector type.
+ * @ingroup smug_utils
+ */
 
-/** @addtogroup smug_utils
-  * @{
-  */
+/**
+ * @addtogroup smug_utils
+ * @{
+ */
 
 #ifndef SMUG_UTILS_VECTOR_TYPE_H
 #define SMUG_UTILS_VECTOR_TYPE_H
