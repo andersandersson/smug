@@ -47,7 +47,6 @@ float Rectangle_getH(Rectangle* r)
 void Rectangle_addVector(Rectangle* self, Vector v)
 {
     self->pos = Point_addVector(self->pos, v);
-    self->size = Vector_add(self->size, v);
 }
 
 void Rectangle_delete(Rectangle* r)
