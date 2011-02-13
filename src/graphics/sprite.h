@@ -1,7 +1,9 @@
 /**
  * @file sprite.h
  * @brief Defines the Sprite type and related functions.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**

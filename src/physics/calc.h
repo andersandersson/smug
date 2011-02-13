@@ -1,7 +1,9 @@
 /**
  * @file calc.h
  * @brief Calc calculations for the physics
+ * @if doc_files
  * @ingroup smug_physics
+ * @endif
  */
 
 /**

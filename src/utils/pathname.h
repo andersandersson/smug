@@ -1,7 +1,9 @@
 /**
  * @file pathname.h
  * @brief Defines a pathname type and related functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

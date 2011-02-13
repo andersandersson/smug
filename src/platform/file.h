@@ -1,3 +1,16 @@
+/**
+ * @file file.h
+ * @brief Defines file IO functions.
+ * @if doc_files
+ * @ingroup smug_platform
+ * @endif
+ */
+
+/**
+ * @addtogroup smug_platform
+ * @{
+ */
+
 #ifndef SMUG_PLATFORM_FILE_H
 #define SMUG_PLATFORM_FILE_H
 
@@ -20,3 +33,5 @@ void File_freeBuffer(File* self, unsigned char* buffer);
 long int File_getLength(File* self);
 
 #endif /* SMUG_PLATFORM_FILE_H */
+
+/**@}*/

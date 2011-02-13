@@ -1,12 +1,15 @@
-/** @file physics.h
-  * @brief Main file of the physics module. Collision detection etc.
-  * @ingroup smug_physics
-  */
+/**
+ * @file physics.h
+ * @brief Main file of the physics module. Collision detection etc.
+ * @if doc_files
+ * @ingroup smug_physics
+ * @endif
+ */
 
-/** @defgroup smug_physics Physics
-  *
-  * @{
-  */
+/**
+ * @defgroup smug_physics Physics
+ * @{
+ */
 
 #ifndef SMUG_PHYSICS_PHYSICS_H
 #define SMUG_PHYSICS_PHYSICS_H
@@ -73,13 +76,13 @@ typedef struct CollisionData
 
 
 /** Allocate memory for a new CollisionData object
- * @relatesalso CollisionData
+ * @relates CollisionData
  */
 CollisionData* CollisionData_new(void);
 
 
 /** Free the memory for a CollisionData object
- * @relatesalso CollisionData
+ * @relates CollisionData
  */
 void CollisionData_delete(CollisionData* data);
 

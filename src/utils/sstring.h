@@ -1,7 +1,9 @@
 /**
  * @file sstring.h
  * @brief Defines a string type and related functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

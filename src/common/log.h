@@ -1,11 +1,15 @@
-/** @file log.h
-  * @brief Contains functions for logging engine messages.
-  * @ingroup smug_common
-  */
+/**
+ * @file log.h
+ * @brief Contains functions for logging engine messages.
+ * @if doc_files
+ * @ingroup smug_common
+ * @endif
+ */
 
-/** @addtogroup smug_common
-  * @{
-  */
+/**
+ * @addtogroup smug_common
+ * @{
+ */
 
 #ifndef SMUG_COMMON_LOG_H
 #define SMUG_COMMON_LOG_H

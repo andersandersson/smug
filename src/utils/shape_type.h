@@ -1,7 +1,9 @@
 /**
  * @file shape_type.h
  * @brief
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

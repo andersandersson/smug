@@ -1,7 +1,9 @@
 /**
  * @file arraylist.h
  * @brief Defines the ArrayList data structure and related functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

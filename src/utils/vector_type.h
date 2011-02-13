@@ -1,7 +1,9 @@
 /**
  * @file vector_type.h
  * @brief Defines the Vector type.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

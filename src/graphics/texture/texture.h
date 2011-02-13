@@ -1,7 +1,9 @@
 /**
  * @file texture.h
  * @brief Defines the Texture type functions.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**

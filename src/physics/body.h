@@ -1,11 +1,15 @@
-/** @file body.h
-  * @brief
-  * @ingroup smug_physics
-  */
+/**
+ * @file body.h
+ * @brief
+ * @if doc_files
+ * @ingroup smug_physics
+ * @endif
+ */
 
-/** @addtogroup smug_physics
-  * @{
-  */
+/**
+ * @addtogroup smug_physics
+ * @{
+ */
 
 #ifndef SMUG_PHYSICS_BODY_H
 #define SMUG_PHYSICS_BODY_H

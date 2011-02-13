@@ -1,3 +1,16 @@
+/**
+ * @file interpoint.h
+ * @brief Defines the Interpoint type and functions.
+ * @if doc_files
+ * @ingroup smug_engine
+ * @endif
+ */
+
+/**
+ * @addtogroup smug_engine
+ * @{
+ */
+
 #ifndef SMUG_ENGINE_INTERPOINT_H
 #define SMUG_ENGINE_INTERPOINT_H
 
@@ -27,3 +40,5 @@ void Interpoint_commit(Interpoint* self);
 Point Interpoint_getInterpolated(Interpoint* self);
 
 #endif /* SMUG_ENGINE_INTERPOINT_H */
+
+/**@}*/

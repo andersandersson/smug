@@ -1,12 +1,15 @@
-/** @file platform.h
-  * @brief Main file of platform module.
-  * @ingroup smug_platform
-  */
+/**
+ * @file platform.h
+ * @brief Main file of platform module.
+ * @if doc_files
+ * @ingroup smug_platform
+ * @endif
+ */
 
-/** @defgroup smug_platform Platform
-  *
-  * @{
-  */
+/**
+ * @defgroup smug_platform Platform
+ * @{
+ */
 
 #ifndef SMUG_PLATFORM_PLATFORM_H
 #define SMUG_PLATFORM_PLATFORM_H

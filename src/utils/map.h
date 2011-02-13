@@ -1,7 +1,9 @@
 /**
  * @file map.h
  * @brief Defines a map type and related functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

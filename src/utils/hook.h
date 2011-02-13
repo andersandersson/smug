@@ -1,7 +1,9 @@
 /**
  * @file hook.h
  * @brief Holds a simple struct for callable objects
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

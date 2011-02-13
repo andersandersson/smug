@@ -1,7 +1,9 @@
 /**
  * @file box.h
  * @brief Defines functions to create Drawables that are boxes.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**

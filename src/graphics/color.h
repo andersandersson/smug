@@ -1,7 +1,9 @@
 /**
  * @file color.h
  * @brief Defines the Color type functions.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**

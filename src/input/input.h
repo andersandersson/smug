@@ -1,12 +1,15 @@
-/** @file input.h
-  * @brief Contains functions to handle user input.
-  * @ingroup smug_input
-  */
+/**
+ * @file input.h
+ * @brief Contains functions to handle user input.
+ * @if doc_files
+ * @ingroup smug_input
+ * @endif
+ */
 
-/** @defgroup smug_input Input
-  *
-  * @{
-  */
+/**
+ * @defgroup smug_input Input
+ * @{
+ */
 
 #ifndef SMUG_INPUT_INPUT_H
 #define SMUG_INPUT_INPUT_H

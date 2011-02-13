@@ -1,7 +1,9 @@
 /**
  * @file orderedset.h
  * @brief Defines an ordered set data structure and related functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

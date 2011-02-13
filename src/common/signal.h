@@ -1,11 +1,15 @@
-/** @file signal.h
-  * @brief Header file for signaling system
-  * @ingroup smug_common
-  */
+/**
+ * @file signal.h
+ * @brief Header file for signaling system
+ * @if doc_files
+ * @ingroup smug_common
+ * @endif
+ */
 
-/** @addtogroup smug_common
-  * @{
-  */
+/**
+ * @addtogroup smug_common
+ * @{
+ */
 
 #ifndef SMUG_COMMON_SIGNAL_H
 #define SMUG_COMMON_SIGNAL_H

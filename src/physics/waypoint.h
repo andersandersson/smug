@@ -1,9 +1,13 @@
-/** @file waypoint.h
+/**
+ * @file waypoint.h
  * @brief
+ * @if doc_files
  * @ingroup smug_physics
+ * @endif
  */
 
-/** @addtogroup smug_physics
+/**
+ * @addtogroup smug_physics
  * @{
  */
 

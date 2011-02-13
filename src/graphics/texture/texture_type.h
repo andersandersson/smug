@@ -2,7 +2,9 @@
  * @file texture_type.h
  * @brief Predeclares the Texture type.
  * This will be included from header files using the Texture type in their function declarations.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**

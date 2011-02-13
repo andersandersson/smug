@@ -1,7 +1,9 @@
 /**
  * @file binarysearchtree.h
  * @brief Defines a binary search tree type, node and iterator
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

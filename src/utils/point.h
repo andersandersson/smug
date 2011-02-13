@@ -1,7 +1,9 @@
 /**
  * @file point.h
  * @brief Defines the point functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

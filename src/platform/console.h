@@ -1,11 +1,15 @@
-/** @file console.h
-  * @brief Defines a debug console
-  * @ingroup smug_common
-  */
+/**
+ * @file console.h
+ * @brief Defines a debug console
+ * @if doc_files
+ * @ingroup smug_platform
+ * @endif
+ */
 
-/** @addtogroup smug_common
-  * @{
-  */
+/**
+ * @addtogroup smug_platform
+ * @{
+ */
 
 #ifndef SMUG_PLATFORM_CONSOLE_H
 #define SMUG_PLATFORM_CONSOLE_H

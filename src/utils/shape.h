@@ -1,7 +1,9 @@
 /**
  * @file shape.h
  * @brief Define the functions related to the Shape type.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

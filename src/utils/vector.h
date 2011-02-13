@@ -1,7 +1,9 @@
 /**
  * @file vector.h
  * @brief Defines the Vector functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

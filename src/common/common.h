@@ -1,11 +1,15 @@
-/** @file common.h
-  * @brief Header file for common declarations
-  * @ingroup smug_common
-  */
+/**
+ * @file common.h
+ * @brief Header file for common declarations
+ * @if doc_files
+ * @ingroup smug_common
+ * @endif
+ */
 
-/** @defgroup smug_common Common
-  * @{
-  */
+/**
+ * @defgroup smug_common Common
+ * @{
+ */
 
 #ifndef SMUG_COMMON_COMMON_H
 #define SMUG_COMMON_COMMON_H

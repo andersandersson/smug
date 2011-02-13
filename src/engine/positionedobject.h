@@ -1,3 +1,16 @@
+/**
+ * @file interpoint.h
+ * @brief Defines the PositionedObject functions.
+ * @if doc_files
+ * @ingroup smug_engine
+ * @endif
+ */
+
+/**
+ * @addtogroup smug_engine
+ * @{
+ */
+
 #ifndef SMUG_ENGINE_POSITIONEDOBJECT_H
 #define SMUG_ENGINE_POSITIONEDOBJECT_H
 
@@ -27,3 +40,5 @@ void PositionedObject_init(PositionedObject* self);
 void PositionedObject_deInit(PositionedObject* self);
 
 #endif // SMUG_ENGINE_POSITIONEDOBJECT_H
+
+/**@}*/

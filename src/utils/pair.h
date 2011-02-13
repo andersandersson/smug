@@ -1,7 +1,9 @@
 /**
  * @file pair.h
  * @brief Defines a pair type nad related functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

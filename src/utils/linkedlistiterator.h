@@ -1,7 +1,9 @@
 /**
  * @file linkedlistiterator.h
  * @brief Defines an iterator for the linked list.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

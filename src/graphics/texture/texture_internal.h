@@ -2,7 +2,9 @@
  * @file texture_internal.h
  * @brief Defines the Texture type.
  * This will be included from files working directly with the internals of the Texture type.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**

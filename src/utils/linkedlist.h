@@ -1,7 +1,9 @@
 /**
  * @file linkedlist.h
  * @brief Defines a regular linked list type (and a node type for it).
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

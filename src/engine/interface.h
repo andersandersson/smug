@@ -1,6 +1,7 @@
-/** @file interface.h
-  * @brief API for engine module
-  */
+/**
+ * @file engine/interface.h
+ * @brief API for engine module
+ */
 
 #ifndef SMUG_ENGINE_INTERFACE_H
 #define SMUG_ENGINE_INTERFACE_H
@@ -15,20 +16,20 @@ typedef struct _GameObject* SmugObject;
 
 void smugRunTest(void);
 
-/** Initialize Engine
-  *
-  * @return Returns zero on error, non-zero on success.
-  */
+/**
+ * Initialize Engine
+ * @return Returns zero on error, non-zero on success.
+ */
 SMUGEXPORT int smugInit(void);
 
 /**
-  * Close down Engine
-  */
+ * Close down Engine
+ */
 SMUGEXPORT void smugTerminate(void);
 
 /**
-  * Run the engine,
-  */
+ * Run the engine,
+ */
 /* See note in interface.c */
 /* void smugRun(void); */
 

@@ -1,3 +1,16 @@
+/**
+ * @file gameobject.h
+ * @brief Defines the GameObject functions.
+ * @if doc_files
+ * @ingroup smug_engine
+ * @endif
+ */
+
+/**
+ * @addtogroup smug_engine
+ * @{
+ */
+
 #ifndef SMUG_ENGINE_GAMEOBJECT_H
 #define SMUG_ENGINE_GAMEOBJECT_H
 
@@ -66,17 +79,19 @@ BOOL GameObject_inheritAttribute(GameObject* self, SmugAttribute attr, SmugInher
 void GameObject_doRecursive(GameObject* self, void(*function)(GameObject*));
 
 /** Constructor for a generic GameObject. A generic GameObject can only be used to attach other objects to.
-  *
-  * @relatesalso GameObject
-  * @return A pointer to the GameObject just created.
-  */
+ *
+ * @relates GameObject
+ * @return A pointer to the GameObject just created.
+ */
 GameObject* GameObject_newGeneric(void);
 
 /** Destructor for any GameObject.
-  *
-  * @relatesalso GameObject
-  * @param self A pointer to the GameObject to be deleted.
-  */
+ *
+ * @relates GameObject
+ * @param self A pointer to the GameObject to be deleted.
+ */
 void GameObject_delete(void* self);
 
 #endif //SMUG_ENGINE_GAMEOBJECT_H
+
+/**@}*/

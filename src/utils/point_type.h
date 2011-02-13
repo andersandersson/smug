@@ -1,7 +1,9 @@
 /**
  * @file point_type.h
  * @brief Defines a rectangle type.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

@@ -1,7 +1,9 @@
 /**
  * @file rectangle.h
  * @brief Defines the rectangle functions.
+ * @if doc_files
  * @ingroup smug_utils
+ * @endif
  */
 
 /**

@@ -1,7 +1,9 @@
 /**
  * @file image.h
  * @brief Defines the Image type and related functions.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**

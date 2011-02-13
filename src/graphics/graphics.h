@@ -1,7 +1,9 @@
 /**
  * @file graphics.h
  * @brief Contains functions to control graphics.
+ * @if doc_files
  * @ingroup smug_graphics
+ * @endif
  */
 
 /**
